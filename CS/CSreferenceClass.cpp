@@ -26,7 +26,7 @@
  * File Name: CSreferenceClass.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e4a 02-September-2014
+ * Project Version: 3e5a 03-September-2014
  *
  *******************************************************************************/
 
@@ -90,6 +90,8 @@ CSfunctionReference::CSfunctionReference(void)
 	#endif
 	#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST
 	string functionText;
+	firstReferenceInFunctionReferenceListRepeats = NULL;
+	functionReferenceCharacterIndex = 0;
 	#endif
 	#ifdef CS_GENERATE_CPP_CLASSES 
 	functionTextRaw = "";
@@ -119,6 +121,16 @@ CSfunctionReference::~CSfunctionReference(void)
 	{
 		delete firstReferenceContainerInAboveReferenceList;
 	}
+	if(firstReferenceInFunctionReferenceList != NULL)
+	{
+		delete firstReferenceInFunctionReferenceList;	//added 3e5a
+	}
+	#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST
+	if(firstReferenceInFunctionReferenceListRepeats != NULL)
+	{
+		delete firstReferenceInFunctionReferenceListRepeats;	//added 3e5a
+	}
+	#endif
 }
 
 

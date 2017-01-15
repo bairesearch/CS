@@ -26,7 +26,7 @@
  * File Name: CSreferenceClass.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e4a 02-September-2014
+ * Project Version: 3e5a 03-September-2014
  *
  *******************************************************************************/
 
@@ -119,6 +119,8 @@ public:
 	#endif
 	#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST
 	string functionText;
+	CSfunctionReference * firstReferenceInFunctionReferenceListRepeats;
+	int functionReferenceCharacterIndex;	
 	#endif
 	#ifdef CS_GENERATE_CPP_CLASSES 
 	string functionTextRaw;	//function contents without comments

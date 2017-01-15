@@ -26,7 +26,7 @@
  * File Name: CSoperations.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e4a 02-September-2014
+ * Project Version: 3e5a 03-September-2014
  *
  *******************************************************************************/
 
@@ -139,13 +139,13 @@ bool getIncludeFileNamesFromCorHfile(CSfileReference * firstReferenceInIncludeFi
 				{
 					readingLargeComment = true;
 				}
-				else if(c == '/')
+				else if(tempChar == '/')
 				{
 					//single line comment found
 					waitingForNewLine = true;
 
 				}
-				else if(c == '\n')
+				else if(tempChar == '\n')
 				{
 					lineCount++;
 					waitingForNewLine = false;
@@ -469,13 +469,13 @@ bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunctionReference * first
 				{
 					readingLargeComment = true;
 				}
-				else if(c == '/')
+				else if(tempChar == '/')
 				{
 					//single line comment found
 					waitingForNewLine = true;
 
 				}
-				else if(c == '\n')
+				else if(tempChar == '\n')
 				{
 					lineCount++;
 					waitingForNewLine = false;
@@ -592,7 +592,7 @@ bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunctionReference * first
 					//not a function, restart function name fill;
 					functionName = "";
 				}
-				else if((readingBeforeOpeningBracket) && (c == '('))
+				else if(c == '(')
 				{
 					functionNameFull = functionNameFull + c;
 
@@ -668,7 +668,9 @@ bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunctionReference * first
 						currentReferenceInFunctionList->isFunctionReference = true;
 						currentReferenceInFunctionList->name = functionName;
 						currentReferenceInFunctionList->nameFull = functionNameFull;
+						#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION
 						currentReferenceInFunctionList->functionReferenceIndentation = functionReferenceIndentationInHfileTemp;
+						#endif
 						CSfunctionReference * newCSReference = new CSfunctionReference();
 						currentReferenceInFunctionList->next = newCSReference;
 
@@ -825,6 +827,7 @@ void getFunctionReferenceNamesFromFunctionsInCfile(CSfileReference * firstRefere
 								if(waitingForNewLine)
 								{
 									waitingForNewLine = false;
+									functionContentsString = functionContentsString + c;	//added CS 3e5a - new lines are required to be stored to recalculate indentation
 								}
 								else
 								{
@@ -841,6 +844,7 @@ void getFunctionReferenceNamesFromFunctionsInCfile(CSfileReference * firstRefere
 							if(c == '\n')
 							{
 								waitingForNewLine = false;
+								functionContentsString = functionContentsString + c;	//added CS 3e5a - new lines are required to be stored to recalculate indentation
 							}
 							else
 							{
@@ -944,7 +948,13 @@ void getFunctionReferenceNamesFromFunctionsInCfile(CSfileReference * firstRefere
 					//3. search the functionContentsString for any of the function (not full function names) across all include/header files
 					CSfunctionReference * newfirstReferenceInFunctionReferenceList = new CSfunctionReference();
 					currentReference->firstReferenceInFunctionReferenceList = newfirstReferenceInFunctionReferenceList;
-
+					CSfunctionReference * currentReferenceInFunctionReferenceList = currentReference->firstReferenceInFunctionReferenceList;
+					#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST
+					CSfunctionReference * newfirstReferenceInFunctionReferenceListRepeats = new CSfunctionReference();
+					currentReference->firstReferenceInFunctionReferenceListRepeats = newfirstReferenceInFunctionReferenceListRepeats;
+					CSfunctionReference * currentReferenceInFunctionReferenceListRepeats = currentReference->firstReferenceInFunctionReferenceListRepeats;
+					#endif
+					
 					#ifdef CS_DEBUG
 					/*
 					cout << "file topLevelFileName = " << topLevelFileName << endl;
@@ -962,14 +972,16 @@ void getFunctionReferenceNamesFromFunctionsInCfile(CSfileReference * firstRefere
 					*/
 					#endif
 
-					CSfunctionReference * currentReferenceInFunctionReferenceList = currentReference->firstReferenceInFunctionReferenceList;
 					//cout << "search current file for function references;" << endl;
 					#ifdef CS_DEBUG
 					//cout << "firstReferenceInIncludeFileList->name = " << firstReferenceInIncludeFileList->name << endl;
 					#endif
 					//search current file for function references;
-					currentReferenceInFunctionReferenceList = searchFunctionStringForFunctionReferences(firstReferenceInIncludeFileList, topLevelReference, currentReferenceInFunctionReferenceList, functionContentsString);
-
+					if(!searchFunctionStringForFunctionReferences(firstReferenceInIncludeFileList, topLevelReference, &currentReferenceInFunctionReferenceList, &currentReferenceInFunctionReferenceListRepeats, functionContentsString))
+					{
+					
+					}
+					
 					#ifdef CS_DEBUG
 					/*
 					CSfunctionReference * temp1acurrentReferenceInFunctionList = currentReference->firstReferenceInFunctionReferenceList;
@@ -991,8 +1003,11 @@ void getFunctionReferenceNamesFromFunctionsInCfile(CSfileReference * firstRefere
 					//cout << "firstReferenceInIncludeFileList->name = " << firstReferenceInIncludeFileList->name << endl;
 					#endif
 					//search include files for function references;
-					currentReferenceInFunctionReferenceList = searchFunctionStringForFunctionReferencesRecursive(firstReferenceInIncludeFileList, topLevelReference->firstReferenceInBelowList, currentReferenceInFunctionReferenceList, functionContentsString);
-
+					if(!searchFunctionStringForFunctionReferencesRecursive(firstReferenceInIncludeFileList, topLevelReference->firstReferenceInBelowList, &currentReferenceInFunctionReferenceList, &currentReferenceInFunctionReferenceListRepeats, functionContentsString))
+					{
+					
+					}
+					
 					#ifdef CS_DEBUG
 					/*
 					CSfunctionReference * temp1bcurrentReferenceInFunctionList = currentReference->firstReferenceInFunctionReferenceList;
@@ -1028,31 +1043,36 @@ void getFunctionReferenceNamesFromFunctionsInCfile(CSfileReference * firstRefere
 	*/
 }
 
-CSfunctionReference * searchFunctionStringForFunctionReferencesRecursive(CSfileReference * firstReferenceInIncludeFileList, CSfileReference * firstFileNameInLayerContainingFunctionReferencesToSearchFor, CSfunctionReference * firstReferenceInFunctionReferenceList, string functionContentsString)
+bool searchFunctionStringForFunctionReferencesRecursive(CSfileReference * firstReferenceInIncludeFileList, CSfileReference * firstFileNameInLayerContainingFunctionReferencesToSearchFor, CSfunctionReference ** currentReferenceInFunctionReferenceList, CSfunctionReference ** currentReferenceInFunctionReferenceListRepeats, string functionContentsString)
 {
-	CSfunctionReference * currentReferenceInFunctionReferenceList = firstReferenceInFunctionReferenceList;
+	bool result = true;
+	
 	CSfileReference * currentReference = firstFileNameInLayerContainingFunctionReferencesToSearchFor;
 
 	while(currentReference->next != NULL)
 	{
-		currentReferenceInFunctionReferenceList = searchFunctionStringForFunctionReferences(firstReferenceInIncludeFileList, currentReference, currentReferenceInFunctionReferenceList, functionContentsString);
+		searchFunctionStringForFunctionReferences(firstReferenceInIncludeFileList, currentReference, currentReferenceInFunctionReferenceList, currentReferenceInFunctionReferenceListRepeats, functionContentsString);
 
 		if(currentReference->firstReferenceInBelowList != NULL)
 		{
-			currentReferenceInFunctionReferenceList = searchFunctionStringForFunctionReferencesRecursive(firstReferenceInIncludeFileList, currentReference->firstReferenceInBelowList, currentReferenceInFunctionReferenceList, functionContentsString);
+			if(!searchFunctionStringForFunctionReferencesRecursive(firstReferenceInIncludeFileList, currentReference->firstReferenceInBelowList, currentReferenceInFunctionReferenceList, currentReferenceInFunctionReferenceListRepeats, functionContentsString))
+			{
+				result = false;
+			}		
 		}
 
 		currentReference = currentReference->next;
 	}
-
-	return currentReferenceInFunctionReferenceList;
+	
+	return result;
+	
 }
 
-CSfunctionReference * searchFunctionStringForFunctionReferences(CSfileReference * firstReferenceInIncludeFileList, CSfileReference * fileNameContainingFunctionReferencesToSearchFor, CSfunctionReference * firstReferenceInFunctionReferenceList, string functionContentsString)
+bool searchFunctionStringForFunctionReferences(CSfileReference * firstReferenceInIncludeFileList, CSfileReference * fileNameContainingFunctionReferencesToSearchFor, CSfunctionReference ** currentReferenceInFunctionReferenceList, CSfunctionReference ** currentReferenceInFunctionReferenceListRepeats, string functionContentsString)
 {
+	bool result = true;
+	
 	//only search those file names which include topLevelReference.h
-
-	CSfunctionReference * currentReferenceInFunctionReferenceList = firstReferenceInFunctionReferenceList;
 
 	//find reference to this file
 
@@ -1071,28 +1091,15 @@ CSfunctionReference * searchFunctionStringForFunctionReferences(CSfileReference 
 		#endif
 
 		//now search the function string for this function reference;
-		int indexToFunctionReference  = functionContentsString.find((currentFunction->name + '('));
-		if(indexToFunctionReference != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+		
+		int startPosOfFunctionReferenceInFunction = 0;
+		bool firstTimeFound = true;
+		//cout << "function->functionText = " << function->functionText << endl;
+		while(CPP_STRING_FIND_RESULT_FAIL_VALUE != (startPosOfFunctionReferenceInFunction = functionContentsString.find((currentFunction->name + '('), startPosOfFunctionReferenceInFunction)))
 		{
-			#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST
-			int indexOfFunctionReferenceStartOfLine = functionContentsString.rfind("\n", indexToFunctionReference);
-			string functionReferenceWholeLine = functionContentsString.substr(indexOfFunctionReferenceStartOfLine, indexToFunctionReference-indexOfFunctionReferenceStartOfLine);
-			int functionReferenceIndentationInCfileTemp = 0;
-
-			for(int i=0; i<functionReferenceWholeLine.length(); i++)
-			{
-				if(functionReferenceWholeLine[i] == CS_SOURCE_FILE_INDENTATION_CHARACTER)
-				{
-					functionReferenceIndentationInCfileTemp++;
-				}
-			}
-			currentReferenceInFunctionReferenceList->functionReferenceIndentation = functionReferenceIndentationInCfileTemp;
-			#endif
+			//cout << "startPosOfFunctionReferenceInFunction = " << startPosOfFunctionReferenceInFunction << endl;
 
 			//function reference found, add it to the function reference list of the funciton;
-
-			currentReferenceInFunctionReferenceList->name = currentFunction->name;
-			currentReferenceInFunctionReferenceList->isFunctionReferenceReference = true;
 			#ifdef CS_DEBUG
 			/*
 			cout << "\t\tadding function reference;" << endl;
@@ -1102,15 +1109,49 @@ CSfunctionReference * searchFunctionStringForFunctionReferences(CSfileReference 
 			*/
 			#endif
 
-			CSfunctionReference * newfirstReferenceInFunctionReferenceList = new CSfunctionReference();
-			currentReferenceInFunctionReferenceList->next = newfirstReferenceInFunctionReferenceList;
-			currentReferenceInFunctionReferenceList = currentReferenceInFunctionReferenceList->next;
+			if(firstTimeFound)
+			{
+				(*currentReferenceInFunctionReferenceList)->name = currentFunction->name;
+				(*currentReferenceInFunctionReferenceList)->isFunctionReferenceReference = true;
+				
+				CSfunctionReference * newfirstReferenceInFunctionReferenceList = new CSfunctionReference();
+				(*currentReferenceInFunctionReferenceList)->next = newfirstReferenceInFunctionReferenceList;
+				(*currentReferenceInFunctionReferenceList) = (*currentReferenceInFunctionReferenceList)->next;
+				
+				firstTimeFound = false;
+			}
+			
+			#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST
+			(*currentReferenceInFunctionReferenceListRepeats)->name = currentFunction->name;
+			(*currentReferenceInFunctionReferenceListRepeats)->isFunctionReferenceReference = true;
+			
+			int indexToFunctionReference = startPosOfFunctionReferenceInFunction;
+			int indexOfFunctionReferenceStartOfLine = functionContentsString.rfind("\n", indexToFunctionReference);
+			string functionReferenceStartLine = functionContentsString.substr(indexOfFunctionReferenceStartOfLine, indexToFunctionReference-indexOfFunctionReferenceStartOfLine);
+			int functionReferenceIndentationInCfileTemp = 0;
+			for(int i=0; i<functionReferenceStartLine.length(); i++)
+			{
+				if(functionReferenceStartLine[i] == CS_SOURCE_FILE_INDENTATION_CHARACTER)
+				{
+					functionReferenceIndentationInCfileTemp++;
+				}
+			}			
+			(*currentReferenceInFunctionReferenceListRepeats)->functionReferenceIndentation = functionReferenceIndentationInCfileTemp;
+			(*currentReferenceInFunctionReferenceListRepeats)->functionReferenceCharacterIndex = indexToFunctionReference;
+
+			CSfunctionReference * newfirstReferenceInFunctionReferenceListRepeats = new CSfunctionReference();
+			(*currentReferenceInFunctionReferenceListRepeats)->next = newfirstReferenceInFunctionReferenceListRepeats;
+			(*currentReferenceInFunctionReferenceListRepeats) = (*currentReferenceInFunctionReferenceListRepeats)->next;	
+			
+			#endif		
+			
+			startPosOfFunctionReferenceInFunction++;
 		}
 
 		currentFunction = currentFunction->next;
 	}
 
-	return currentReferenceInFunctionReferenceList;
+	return result;
 }
 
 
