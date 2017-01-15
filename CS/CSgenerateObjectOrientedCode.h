@@ -21,7 +21,7 @@
  * File Name: CSgenerateObjectOrientedCode.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h3b 30-November-2015
+ * Project Version: 3h4a 01-December-2015
  *
  *******************************************************************************/
 

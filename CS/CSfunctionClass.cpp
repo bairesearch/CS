@@ -26,7 +26,7 @@
  * File Name: CSfunctionClass.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h3b 30-November-2015
+ * Project Version: 3h4a 01-December-2015
  *
  *******************************************************************************/
 
@@ -37,6 +37,7 @@
 #ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
 CSfunctionArgument::CSfunctionArgument(void)
 {
+	argument = "";
 	argumentName = "";
 	argumentType = "";
 	isNotConst = false;
@@ -81,6 +82,9 @@ CSfunction::CSfunction(void)
 	nameFull = "";
 	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
 	firstFunctionArgumentInFunction = new CSfunctionArgument();
+	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_ASSIGNMENT_OF_DOUBLE_POINTERS_TO_CONST_POINTERS
+	parseDoublePointers = false;
+	#endif
 	#endif
 		
 	//function only
