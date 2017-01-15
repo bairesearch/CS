@@ -23,7 +23,7 @@
  * File Name: CSexecflow.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c3e 17-November-2012
+ * Project Version: 3c3f 17-November-2012
  *
  *******************************************************************************/
 
@@ -177,7 +177,7 @@ void printCS(string topLevelFileName, string topLevelFunctionName, int width, in
 				
 				if(useOutputHTMLfile)
 				{//use single html file for project (rather than unique html file per file in project)
-					string HTMLdocumentationHeader = generateHTMLdocumentationHeader("Software Project", true);					
+					string HTMLdocumentationHeader = generateHTMLdocumentationHeader("Software Project", true, false);					
 					string HTMLdocumentationFooter = generateHTMLdocumentationFooter(true);
 					string HTMLdocumentation = HTMLdocumentationHeader + HTMLdocumentationBody + HTMLdocumentationFooter;
 					ofstream writeFileObjectHTML(outputHTMLfileName.c_str());
@@ -251,16 +251,23 @@ void printCS(string topLevelFileName, string topLevelFunctionName, int width, in
 
 }
 
-string generateHTMLdocumentationHeader(string name, bool htmlFileHeader)
+string generateHTMLdocumentationHeader(string name, bool htmlHeader, bool isFile)
 {
 	string HTMLdocumentationHeader = "";
-	if(htmlFileHeader)
+	if(htmlHeader)
 	{
-		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h2>" + name + " Documentation</h2><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3c3e 17-November-2012<p>\n";
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h2>" + name + " Documentation</h2><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3c3f 17-November-2012<p>\n";
 	}
 	else
 	{
 		HTMLdocumentationHeader = HTMLdocumentationHeader + "<h2>" + name + " Documentation</h2>\n";	
+	}
+	if(isFile)
+	{
+		int indexOfFileExtension = name.find(".");
+		string fileNameWithoutExtension = name.substr(0, indexOfFileExtension);
+		string HTMLdocumentationFileDescription = createDescriptionFromCaseSensitiveMultiwordString(fileNameWithoutExtension);	
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<p><b>File description:</b> " + HTMLdocumentationFileDescription + "</p>";
 	}
 	return HTMLdocumentationHeader;
 }
@@ -311,7 +318,7 @@ void generateHTMLdocumentationForAllFunctions(CSfileReference * firstReferenceIn
 				}
 				string HTMLdocumentationFileBody = "";
 				#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION
-				string HTMLdocumentationFileFunctionList = "<p>\n<b>Function List</b>\n<ul><li>";
+				string HTMLdocumentationFileFunctionList = "<p>\n<b>File function List</b>\n<ul><li>";
 				int previousIndentation = 0;
 				bool previousIndentationFirst = true;
 				#endif
@@ -372,7 +379,7 @@ void generateHTMLdocumentationForAllFunctions(CSfileReference * firstReferenceIn
 				HTMLdocumentationFileBody = HTMLdocumentationFileFunctionList + HTMLdocumentationFileBody;
 				#endif
 								
-				string HTMLdocumentationFileHeader = generateHTMLdocumentationHeader(currentFileReference->name, !useOutputHTMLfile);					
+				string HTMLdocumentationFileHeader = generateHTMLdocumentationHeader(currentFileReference->name, !useOutputHTMLfile, true);					
 				string HTMLdocumentationFileFooter = generateHTMLdocumentationFooter(!useOutputHTMLfile);
 				string HTMLdocumentationFile = "";
 				HTMLdocumentationFile = HTMLdocumentationFile + HTMLdocumentationFileHeader + HTMLdocumentationFileBody + HTMLdocumentationFileFooter;
@@ -458,7 +465,7 @@ void generateHTMLdocumentationForFunction(Reference * currentReferenceInPrintLis
 				
 		if(useOutputHTMLfile)
 		{//use single html file for function
-			string HTMLdocumentationFunctionHeader = generateHTMLdocumentationHeader(bottomLevelFunctionToTraceUpwards->name, true);					
+			string HTMLdocumentationFunctionHeader = generateHTMLdocumentationHeader(bottomLevelFunctionToTraceUpwards->name, true, false);					
 			string HTMLdocumentationFunctionFooter = generateHTMLdocumentationFooter(true);	
 			string HTMLdocumentationFunction = HTMLdocumentationFunctionHeader + *HTMLdocumentationFunctionBody + HTMLdocumentationFunctionFooter;
 
@@ -639,26 +646,34 @@ string createDescriptionFromCaseSensitiveMultiwordString(string str)
 	string description = "";
 	for(int i=0; i<str.length(); i++)
 	{
+		bool removeLowerCase = false;
 		if(i >= 2)
 		{
 			string alreadyExtractedDescription = description.substr(0, i-2);
 			char currentChar1 = str[i];
 			char currentChar2 = str[i-1];
 			char currentChar3 = str[i-2];
-			bool currentChar1IsUpper = bool(isupper(currentChar1));
-			bool currentChar2IsUpper = bool(isupper(currentChar2));
-			bool currentChar3IsUpper = bool(isupper(currentChar3));
+			bool currentChar1IsUpper = !(bool(islower(currentChar1)));	//Changed 19 November 2012: consider numbers as upper case also (http://www.cplusplus.com/reference/clibrary/cctype/islower/)
+			bool currentChar2IsUpper = !(bool(islower(currentChar2)));	//Changed 19 November 2012: consider numbers as upper case also (http://www.cplusplus.com/reference/clibrary/cctype/islower/)
+			bool currentChar3IsUpper = !(bool(islower(currentChar3)));	//Changed 19 November 2012: consider numbers as upper case also (http://www.cplusplus.com/reference/clibrary/cctype/islower/)
 			if(currentChar1IsUpper && !currentChar2IsUpper)
 			{
+				//aA
 				description = description + CHAR_SPACE;
+				removeLowerCase = true;
 			}
 			else if(!currentChar1IsUpper && currentChar2IsUpper && currentChar3IsUpper)
 			{
+				//ABa
 				description = description + CHAR_SPACE;
 			}
 		}
-		description = description + str[i];
-		
+		char characterToAdd = str[i];
+		if(removeLowerCase)
+		{
+			characterToAdd = tolower(characterToAdd); 	//Changed 19 November 2012: reduce all non abbreviations to lower case (ie all strings that do not wholy consist of uppercase/numerical characters)
+		}
+		description = description + characterToAdd;
 	}
 	return description;	
 }

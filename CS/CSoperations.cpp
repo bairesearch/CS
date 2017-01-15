@@ -23,7 +23,7 @@
  * File Name: CSoperations.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c3e 17-November-2012
+ * Project Version: 3c3f 17-November-2012
  *
  *******************************************************************************/
 
@@ -249,9 +249,9 @@ bool getIncludeFileNamesFromCorHFile(CSfileReference * firstReferenceInIncludeFi
 						char hashIncludeFileNameCFile[100];
 						strcpy(hashIncludeFileNameCFile, hashIncludeFileName);
 						int stringLength = strlen(hashIncludeFileNameCFile);
-						hashIncludeFileNameCFile[stringLength-1] = 'c';
-						hashIncludeFileNameCFile[stringLength+0] = 'p';
-						hashIncludeFileNameCFile[stringLength+1] = 'p';
+						hashIncludeFileNameCFile[stringLength-1] = CS_SOURCE_FILE_EXTENSION_CHARACTER_1;
+						hashIncludeFileNameCFile[stringLength+0] = CS_SOURCE_FILE_EXTENSION_CHARACTER_2;
+						hashIncludeFileNameCFile[stringLength+1] = CS_SOURCE_FILE_EXTENSION_CHARACTER_3;
 						hashIncludeFileNameCFile[stringLength+2] = '\0';
 
 						currentReferenceInIncludeFileList->name = hashIncludeFileName;

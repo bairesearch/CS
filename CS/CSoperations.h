@@ -23,7 +23,7 @@
  * File Name: CSoperations.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c3e 17-November-2012
+ * Project Version: 3c3f 17-November-2012
  *
  *******************************************************************************/
 
@@ -34,8 +34,9 @@
 #include "CSglobalDefs.h"
 #include "CSreferenceClass.h"
 
-
-
+#define CS_SOURCE_FILE_EXTENSION_CHARACTER_1 'c'
+#define CS_SOURCE_FILE_EXTENSION_CHARACTER_2 'p'
+#define CS_SOURCE_FILE_EXTENSION_CHARACTER_3 'p'
 
 bool getIncludeFileNamesFromCorHFile(CSfileReference * firstReferenceInIncludeFileList, CSfileReference * topLevelReference, string topLevelReferenceName, int level);
 	bool getFunctionNamesFromFunctionDeclarationsInHFile(CSfunctionReference * firstReferenceInFunctionList, string topLevelFileName, int level);
