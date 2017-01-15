@@ -23,7 +23,7 @@
  * File Name: CSdraw.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3a12a 31-July-2012
+ * Project Version: 3b2a 28-September-2012
  *
  *******************************************************************************/
 
@@ -1316,7 +1316,7 @@ CSReference * findPrintedFunctionReferenceWithName(string name, CSReference * re
 	return updatedFunctionReference;
 }
 
-Reference * traceFunctionsUpwardsAndDrawOrHighLightThese(Reference * currentReferenceInPrintList, CSReference * firstReferenceInTopLevelBelowList, CSReference * currentFunctionBeingTraced, ofstream * writeFileObject, string topLevelFunctionName)
+Reference * traceFunctionsUpwardsAndDrawOrHighLightThese(Reference * currentReferenceInPrintList, CSReference * firstReferenceInTopLevelBelowList, CSReference * currentFunctionBeingTraced, ofstream * writeFileObject, string topLevelFunctionName, int generateHTMLdocumentationMode, string * HTMLdocumentationFunctionTraceTableRows)
 {
 	Reference * newCurrentReferenceInPrintList = currentReferenceInPrintList;
 
@@ -1350,7 +1350,7 @@ Reference * traceFunctionsUpwardsAndDrawOrHighLightThese(Reference * currentRefe
 	#endif
 
 	currentFunctionBeingTraced->printedTrace = true;
-
+	currentFunctionBeingTraced->printedTraceReset = false;
 
 	//add currentReferenceInAboveList to reference's above list for reverse lookup / function upwards trace
 
@@ -1368,9 +1368,18 @@ Reference * traceFunctionsUpwardsAndDrawOrHighLightThese(Reference * currentRefe
 			if(higherLevelFunction->printedTrace == false)
 			{
 				//cout << "higherLevelFunctionFound, " << higherLevelFunction->name << endl;
-
-				cout << "Trace upwards: \t\t" << fileNameHoldingFunction << "\t\t" << currentFunctionBeingTraced->name << "()" << endl;
-
+				if(generateHTMLdocumentationMode == CS_GENERATE_HTML_DOCUMENTATION_MODE_OFF)
+				{
+					#ifdef CS_DISPLAY_INCLUDE_FILE_PARSING
+					cout << "Trace upwards: \t\t" << fileNameHoldingFunction << "\t\t" << currentFunctionBeingTraced->name << "()" << endl;
+					#endif
+				}
+				else if(generateHTMLdocumentationMode == CS_GENERATE_HTML_DOCUMENTATION_MODE_ON)
+				{
+					string HTMLdocumentationFunctionTraceTableRow = "\t\t<tr><td>" + fileNameHoldingFunction + "</td><td>" + currentFunctionBeingTraced->name + "</td></tr>\n";
+					*HTMLdocumentationFunctionTraceTableRows = *HTMLdocumentationFunctionTraceTableRows + HTMLdocumentationFunctionTraceTableRow;
+				}
+				
 				//print function connection;
 				int functionConnectionColour;
 				#ifdef CS_DO_NOT_DRAW_ALL_FUNCTION_CONNECTIONS_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
@@ -1385,7 +1394,7 @@ Reference * traceFunctionsUpwardsAndDrawOrHighLightThese(Reference * currentRefe
 				#endif
 				newCurrentReferenceInPrintList = createFileOrFunctionReferenceConnection(newCurrentReferenceInPrintList, currentFunctionBeingTraced, higherLevelFunction, functionConnectionColour, false, false, writeFileObject);
 
-				newCurrentReferenceInPrintList = traceFunctionsUpwardsAndDrawOrHighLightThese(newCurrentReferenceInPrintList, firstReferenceInTopLevelBelowList, higherLevelFunction, writeFileObject, topLevelFunctionName);
+				newCurrentReferenceInPrintList = traceFunctionsUpwardsAndDrawOrHighLightThese(newCurrentReferenceInPrintList, firstReferenceInTopLevelBelowList, higherLevelFunction, writeFileObject, topLevelFunctionName, generateHTMLdocumentationMode, HTMLdocumentationFunctionTraceTableRows);
 			}
 		}
 		else
@@ -1399,6 +1408,43 @@ Reference * traceFunctionsUpwardsAndDrawOrHighLightThese(Reference * currentRefe
 
 	return newCurrentReferenceInPrintList;
 }
+
+
+
+void traceFunctionsUpwardsAndDrawOrHighLightTheseReset(CSReference * firstReferenceInTopLevelBelowList, CSReference * currentFunctionBeingTraced, string topLevelFunctionName)
+{
+	currentFunctionBeingTraced->printedTrace = false;
+	currentFunctionBeingTraced->printedTraceReset = true;
+
+	//add currentReferenceInAboveList to reference's above list for reverse lookup / function upwards trace
+
+	CSReferenceContainer * currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList = currentFunctionBeingTraced->firstReferenceContainerInAboveFileOrFunctionReferenceList;
+	while(currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList->next != NULL)	// && (currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList->name != "main")
+	{
+		//cout << "currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList->name = " << currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList->name << endl;
+
+		bool higherLevelFunctionFound = false;
+		string fileNameHoldingFunction = "";
+		CSReference * higherLevelFunction = findPrintedFunctionReferenceWithName(currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList->name, NULL, firstReferenceInTopLevelBelowList, &higherLevelFunctionFound, &fileNameHoldingFunction);
+
+		if(higherLevelFunctionFound)
+		{
+			if(higherLevelFunction->printedTraceReset == false)
+			{
+				traceFunctionsUpwardsAndDrawOrHighLightTheseReset(firstReferenceInTopLevelBelowList, higherLevelFunction, topLevelFunctionName);
+			}
+		}
+		else
+		{
+			cout << "error: traceFunctionsUpwardsAndDrawOrHighLightThese(): higherLevelFunctionFound " << currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList->name << " cannot be found" << endl;
+			exit(0);
+		}
+
+		currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList = currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList->next;
+	}
+}
+
+
 
 
 void writeFileOrFunctionSVGBox(ofstream * writeFileObject, vec * pos, int textLength, double scaleFactor, double maxTextLength, int col, double boxOutlineWidth)

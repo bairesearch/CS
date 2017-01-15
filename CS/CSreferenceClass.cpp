@@ -23,7 +23,7 @@
  * File Name: CSreferenceClass.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3a12a 31-July-2012
+ * Project Version: 3b2a 28-September-2012
  *
  *******************************************************************************/
 
@@ -46,12 +46,14 @@ CSReference::CSReference(void)
 	printYIndex = 0;
 	printTextX = 0;
 	printTextY = 0;
-
+	HTMLgenerated = false;
+	
 	next = NULL;
 	previous = NULL;
 	firstReferenceContainerInAboveFileOrFunctionReferenceList = new CSReferenceContainer();
 	printedTrace = false;
-
+	printedTraceReset = false;
+	
 	//file reference only
 	firstReferenceInAboveList = NULL;
 	firstReferenceInBelowList = NULL;
@@ -125,8 +127,9 @@ void printCSReference(CSReference * ref)
 
 
 
+/*
+//these functions are not being used:
 
-	//not used;
 void addReferenceToReferenceList(CSReference * reference, CSReference * firstReferenceInList)
 {
 	CSReference * currentReferenceInIncludeFileList = firstReferenceInList;
@@ -166,20 +169,13 @@ void mergeIncludeFileReferences(CSReference * firstReferenceInIncludeFileList, C
 
 	while(currentReferenceInIncludeFileList->next != NULL)
 	{
-
-
 		findAndMergeAllIndenticalFileReferences(currentReferenceInIncludeFileList, firstReferenceInTopLevelBelowList);
-
 
 		if(currentReferenceInIncludeFileList->firstReferenceInBelowList != NULL)
 		{
 			mergeIncludeFileReferences(currentReferenceInIncludeFileList->firstReferenceInBelowList, firstReferenceInTopLevelBelowList);
 		}
 		currentReferenceInIncludeFileList = currentReferenceInIncludeFileList->next;
-
-		//cout << "h1" << endl;
-		//exit(0);
-
 	}
 }
 
@@ -190,7 +186,7 @@ void findAndMergeAllIndenticalFileReferences(CSReference * reference, CSReferenc
 
 	while(currentReference->next != NULL)
 	{
-		/*
+		#ifdef CS_DEBUG
 		if(currentReference->name != "")
 		{
 			for(int i= 0; i<currentReference->level; i++)
@@ -198,13 +194,9 @@ void findAndMergeAllIndenticalFileReferences(CSReference * reference, CSReferenc
 				cout << "\t";
 			}
 			cout << "currentReference->name = " << currentReference->name << endl;
-			cout << "here" << endl;
-
 			//cout << "currentReference->firstReferenceInBelowList->name = " << currentReference->firstReferenceInBelowList->name << endl;
 		}
-		*/
-
-
+		#endif
 
 		if(currentReference->name == reference->name)
 		{//identical file reference found;
@@ -222,10 +214,6 @@ void findAndMergeAllIndenticalFileReferences(CSReference * reference, CSReferenc
 					cout << "\t";
 				}
 				cout << "currentReference->name = " << currentReference->name << endl;
-				cout << "here2" << endl;
-
-				cout << "sq" << endl;
-
 
 				if(reference->level < currentReference->level)
 				{
@@ -239,9 +227,6 @@ void findAndMergeAllIndenticalFileReferences(CSReference * reference, CSReferenc
 
 					mergeReferenceLists(reference->firstReferenceInAboveList, currentReference->firstReferenceInAboveList);
 				}
-
-				cout << "sq2" << endl;
-				//exit(0);
 
 				currentReference->previous->next = currentReference->next;
 				delete currentReference;
@@ -304,6 +289,7 @@ void mergeReferenceLists(CSReference * firstReferenceInList, CSReference * first
 	}
 }
 
+*/
 
 
 
