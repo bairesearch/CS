@@ -26,7 +26,7 @@
  * File Name: CSreferenceClass.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3f5a 21-July-2015
+ * Project Version: 3f5b 21-July-2015
  *
  *******************************************************************************/
 
@@ -124,7 +124,6 @@ public:
 	int col;		//	file/function colour + connection colour to all children
 	bool printed;		//file/function printed
 	bool printedFileConnections;	//file/function connections printed
-	bool printedFileConnection;
 	int printX;		//file/function printX
 	int printY;		//file/function printY
 	int printXIndex;	//file/function printXIndex

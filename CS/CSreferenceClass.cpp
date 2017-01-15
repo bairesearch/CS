@@ -26,7 +26,7 @@
  * File Name: CSreferenceClass.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3f5a 21-July-2015
+ * Project Version: 3f5b 21-July-2015
  *
  *******************************************************************************/
 
@@ -127,7 +127,6 @@ CSfileReference::CSfileReference(void)
 	col = 0;
 	printed = false;
 	printedFileConnections = false;
-	printedFileConnection = false;
 	printX = 0;
 	printY = 0;
 	printXIndex = 0;

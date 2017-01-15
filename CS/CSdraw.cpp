@@ -26,7 +26,7 @@
  * File Name: CSdraw.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3f5a 21-July-2015
+ * Project Version: 3f5b 21-July-2015
  *
  *******************************************************************************/
 
@@ -632,7 +632,7 @@ LDreference* createFileReferenceListBoxes(LDreference* currentReferenceInPrintLi
 
 
 
-LDreference* createFileReferenceListConnections(LDreference* currentReferenceInPrintList, CSfileReferenceContainer* firstReferenceInAboveLevelBelowListContainer, CSfileReferenceContainer* firstReferenceInTopLevelBelowListContainer, XMLparserTag** currentTag, bool traceFunctionUpwards)
+LDreference* createFileReferenceListConnections(LDreference* currentReferenceInPrintList, CSfileReferenceContainer* firstReferenceInAboveLevelBelowListContainer, CSfileReference* aboveLevelReference, XMLparserTag** currentTag, bool traceFunctionUpwards)
 {
 	LDreference* newCurrentReferenceInPrintList = currentReferenceInPrintList;
 	CSfileReferenceContainer* currentReferenceContainer = firstReferenceInAboveLevelBelowListContainer;
@@ -641,131 +641,37 @@ LDreference* createFileReferenceListConnections(LDreference* currentReferenceInP
 	{
 		CSfileReference* currentReference = currentReferenceContainer->fileReference;
 
-		bool aPreviousReferenceWithThisNameHasbeenPrintedConnections = previousFileReferenceWithThisNameHasPrintedFileConnections(currentReference->name, firstReferenceInTopLevelBelowListContainer);
-		if(!aPreviousReferenceWithThisNameHasbeenPrintedConnections)	//added CS 3d2g 
+		//print connections
+		if(currentReference->printed)
+		{//only create connections to printed boxes
+
+			//cout << "aboveLevelReference->name = " << aboveLevelReference->name << endl;
+			#ifdef CS_USE_RAINBOW_COLOURS_FOR_FILE_BOXES
+			int colour = calculateCSBoxAndConnectionColourBasedUponLevel(aboveLevelReference->printYIndex);
+			#else
+			int colour = calculateCSBoxAndConnectionColourBasedUponFileName(aboveLevelReference);
+			#endif
+
+			newCurrentReferenceInPrintList = createFileReferenceConnection(newCurrentReferenceInPrintList, currentReference, aboveLevelReference, colour, traceFunctionUpwards, currentTag);	//add line
+		}
+
+		if(currentReference->firstReferenceInBelowListContainer != NULL)
 		{
-			currentReference->printedFileConnections = true;
-			//cout << "CSfileReference currentReference = " << currentReference->name << endl;
-
-			//print connections
-			if(currentReference->printed)
-			{//only create connections to printed boxes
-				newCurrentReferenceInPrintList = findAndLinkAllFileReferencesWithSameName(newCurrentReferenceInPrintList, currentReference, firstReferenceInTopLevelBelowListContainer, firstReferenceInTopLevelBelowListContainer, currentTag, traceFunctionUpwards);
-			}
-			resetPrintedFileConnection(firstReferenceInTopLevelBelowListContainer);
-
-
-			if(currentReference->firstReferenceInBelowListContainer != NULL)
+			if(!(currentReference->printedFileConnections))
 			{
-				newCurrentReferenceInPrintList = createFileReferenceListConnections(newCurrentReferenceInPrintList, currentReference->firstReferenceInBelowListContainer, firstReferenceInTopLevelBelowListContainer, currentTag, traceFunctionUpwards);
+				newCurrentReferenceInPrintList = createFileReferenceListConnections(newCurrentReferenceInPrintList, currentReference->firstReferenceInBelowListContainer, currentReference, currentTag, traceFunctionUpwards);
 			}
 		}
 
 		currentReferenceContainer = currentReferenceContainer->next;
 	}
-
+	
+	aboveLevelReference->printedFileConnections = true;
+	
 	return newCurrentReferenceInPrintList;
 }
 
-bool previousFileReferenceWithThisNameHasPrintedFileConnections(string name, CSfileReferenceContainer* firstReferenceInAboveLevelBelowListContainer)
-{
-	bool aPreviousReferenceWithThisNameHasbeenPrinted = false;
 
-	CSfileReferenceContainer* currentReferenceContainer = firstReferenceInAboveLevelBelowListContainer;
-
-	while(currentReferenceContainer->next != NULL)
-	{
-		CSfileReference* currentReference = currentReferenceContainer->fileReference;
-
-		if(currentReference->name == name)
-		{
-			if(currentReference->printedFileConnections)
-			{
-				aPreviousReferenceWithThisNameHasbeenPrinted = true;
-			}
-		}
-
-		if(currentReference->firstReferenceInBelowListContainer != NULL)
-		{
-			if(previousFileReferenceWithThisNameHasPrintedFileConnections(name, currentReference->firstReferenceInBelowListContainer))
-			{
-				aPreviousReferenceWithThisNameHasbeenPrinted = true;
-			}
-		}
-
-		currentReferenceContainer = currentReferenceContainer->next;
-	}
-
-	return aPreviousReferenceWithThisNameHasbeenPrinted;
-}
-
-void resetPrintedFileConnection(CSfileReferenceContainer* firstReferenceInAboveLevelBelowListContainer)
-{
-	CSfileReferenceContainer* currentReferenceContainer = firstReferenceInAboveLevelBelowListContainer;
-
-	while(currentReferenceContainer->next != NULL)
-	{
-		CSfileReference* currentReference = currentReferenceContainer->fileReference;
-		
-		currentReference->printedFileConnection = false;
-
-		if(currentReference->firstReferenceInBelowListContainer != NULL)
-		{
-			resetPrintedFileConnection(currentReference->firstReferenceInBelowListContainer);
-		}
-
-		currentReferenceContainer = currentReferenceContainer->next;
-	}
-}
-
-
-
-
-LDreference* findAndLinkAllFileReferencesWithSameName(LDreference* currentReferenceInPrintList, CSfileReference* reference, CSfileReferenceContainer* firstReferenceInAboveLevelBelowListContainer, CSfileReferenceContainer* firstReferenceInTopLevelBelowListContainer, XMLparserTag** currentTag, bool traceFunctionUpwards)
-{
-	LDreference* newCurrentReferenceInPrintList = currentReferenceInPrintList;
-	CSfileReferenceContainer* currentReferenceContainer = firstReferenceInAboveLevelBelowListContainer;
-
-	while(currentReferenceContainer->next != NULL)
-	{
-		CSfileReference* currentReference = currentReferenceContainer->fileReference;
-		
-		if(currentReference->name == reference->name)
-		{
-			//if(currentReference->printed)
-			//{//only create connections to printed boxes
-
-			if(currentReferenceContainer->aboveLevelReference != NULL)
-			{
-				//cout << "currentReference->aboveLevelReference->name = " << currentReference->aboveLevelReference->name << endl;
-				if(!(currentReferenceContainer->aboveLevelReference->printedFileConnection))
-				{
-					currentReferenceContainer->aboveLevelReference->printedFileConnection = true;
-
-					//cout << "currentReference->aboveLevelReference->name = " << currentReference->aboveLevelReference->name << endl;
-					#ifdef CS_USE_RAINBOW_COLOURS_FOR_FILE_BOXES
-					int colour = calculateCSBoxAndConnectionColourBasedUponLevel(currentReference->aboveLevelReference->printYIndex);
-					#else
-					int colour = calculateCSBoxAndConnectionColourBasedUponFileName(currentReferenceContainer->aboveLevelReference);
-					#endif
-
-					newCurrentReferenceInPrintList = createFileReferenceConnection(newCurrentReferenceInPrintList, reference, currentReferenceContainer->aboveLevelReference, colour, traceFunctionUpwards, currentTag);	//add line
-				}
-			}
-			//}
-
-		}
-
-		if(currentReference->firstReferenceInBelowListContainer != NULL)
-		{
-			newCurrentReferenceInPrintList = findAndLinkAllFileReferencesWithSameName(newCurrentReferenceInPrintList, reference, currentReference->firstReferenceInBelowListContainer, firstReferenceInTopLevelBelowListContainer, currentTag, traceFunctionUpwards);
-		}
-
-		currentReferenceContainer = currentReferenceContainer->next;
-	}
-
-	return newCurrentReferenceInPrintList;
-}
 
 
 
@@ -1415,7 +1321,7 @@ LDreference* createFileOrFunctionReferenceBox(LDreference* currentReferenceInPri
 }
 
 
-LDreference* createFileReferenceConnection(LDreference* currentReferenceInPrintList, CSfileReference* reference,  CSfileReference* currentReferenceInAboveList, int colour, bool traceAFunctionUpwardsAndNotCurrentlyTracing, XMLparserTag** currentTag)
+LDreference* createFileReferenceConnection(LDreference* currentReferenceInPrintList, CSfileReference* reference, CSfileReference* currentReferenceInAboveList, int colour, bool traceAFunctionUpwardsAndNotCurrentlyTracing, XMLparserTag** currentTag)
 {
 	//cout << "h1" << endl;
 	//add currentReferenceInAboveList to reference's above list for reverse lookup / function upwards trace

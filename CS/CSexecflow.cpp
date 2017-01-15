@@ -26,7 +26,7 @@
  * File Name: CSexecflow.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3f5a 21-July-2015
+ * Project Version: 3f5b 21-July-2015
  *
  *******************************************************************************/
 
@@ -137,7 +137,7 @@ void generateCodeStructure(string topLevelFileName, int width, int height, strin
 	LDreference* currentReferenceInPrintList = createFileReferenceListBoxes(firstReferenceInPrintList, firstReferenceInTopLevelBelowListContainer, firstReferenceInTopLevelBelowListContainer, &currentTagInSVGFile, outputFunctionsConnectivity, traceFunctionUpwards, firstTagInGridTag, usePredefinedGrid);
 	if(outputFileConnections)
 	{
-		currentReferenceInPrintList = createFileReferenceListConnections(currentReferenceInPrintList, firstReferenceInTopLevelBelowListContainer, firstReferenceInTopLevelBelowListContainer, &currentTagInSVGFile, traceFunctionUpwards);
+		currentReferenceInPrintList = createFileReferenceListConnections(currentReferenceInPrintList, firstReferenceInTopLevelBelowListContainer, topLevelReferenceInList, &currentTagInSVGFile, traceFunctionUpwards);
 	}
 	if(outputFunctionsConnectivity)
 	{
