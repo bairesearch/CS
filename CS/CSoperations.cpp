@@ -291,9 +291,11 @@ bool getIncludeFileNamesFromCorHfile(CSfileReference * firstReferenceInIncludeFi
 						#endif
 
 						//parse into .h file;
-						string referenceName = hashIncludeFileName;
+						string referenceName = hashIncludeFileName;	//hashIncludeFileName is the current filename being parsed by this instance of getIncludeFileNamesFromCorHfile, ie "x.h" in "#include x.h" [and will recurse]
+						//getIncludeFileNamesFromCorHfile(): this will add the include file references (filenames) within the .h file in "#include x.h" to currentReferenceInIncludeFileList->firstReferenceInBelowList
 						bool hFileFound = getIncludeFileNamesFromCorHfile(currentReferenceInIncludeFileList->firstReferenceInBelowList, currentReferenceInIncludeFileList, referenceName, level+1);
-
+						
+						
 						if(hFileFound)
 						{
 							//parse into .cpp file;
@@ -303,14 +305,18 @@ bool getIncludeFileNamesFromCorHfile(CSfileReference * firstReferenceInIncludeFi
 								lastReferenceInBelowList = lastReferenceInBelowList->next;
 							}
 							string referenceNameCFile = hashIncludeFileNameCFile;
+							//getIncludeFileNamesFromCorHfile(): this will add (append) the include file references (filenames) within the .c equivalent (ie x.c) of the .h file in "#include x.h" to currentReferenceInIncludeFileList->firstReferenceInBelowList [and will recurse]
 							bool cFileFound = getIncludeFileNamesFromCorHfile(lastReferenceInBelowList, currentReferenceInIncludeFileList, referenceNameCFile, level+1);
-
+	
 							if(cFileFound)
 							{
+								//parse the new file reference only if both its ".h" and ".c" file are found
+								
 								//fill function and function reference list using .h file;
 								CSfunctionReference * newfirstReferenceInFunctionList = new CSfunctionReference();
 								currentReferenceInIncludeFileList->firstReferenceInFunctionList = newfirstReferenceInFunctionList;
 
+								//getFunctionNamesFromFunctionDeclarationsInHfile(): this opens the .h file hashIncludeFileName and extracts its function declarations (hashIncludeFileName is the current filename being parsed by this instance of getIncludeFileNamesFromCorHfile, ie "x.h" in "#include x.h")
 								bool hFileFound2 = getFunctionNamesFromFunctionDeclarationsInHfile(currentReferenceInIncludeFileList->firstReferenceInFunctionList, referenceName, level);
 								if(hFileFound2)
 								{
@@ -319,6 +325,7 @@ bool getIncludeFileNamesFromCorHfile(CSfileReference * firstReferenceInIncludeFi
 									//cout << "topLevelReferenceName = " << topLevelReferenceName << endl;
 									//cout << "getFunctionReferenceNamesFromFunctionsInCfile()" << endl;
 									#endif
+									//getFunctionReferenceNamesFromFunctionsInCfile(): this opens the .c file (hashIncludeFileName equivalent) and locates all the functions corresponding to those declared in its .h file
 									getFunctionReferenceNamesFromFunctionsInCfile(firstReferenceInIncludeFileList, currentReferenceInIncludeFileList->firstReferenceInFunctionList, currentReferenceInIncludeFileList, referenceNameCFile, level);
 
 								}
@@ -764,7 +771,7 @@ void getFunctionReferenceNamesFromFunctionsInCfile(CSfileReference * firstRefere
 	{
 		CSfunctionReference * currentReference = firstReferenceInFunctionList;
 
-		//0. for each fullfilename [identified in header];
+		//0. for each fullfilename [declared in the header file];
 
 		while(currentReference->next != NULL)
 		{
@@ -952,7 +959,7 @@ void getFunctionReferenceNamesFromFunctionsInCfile(CSfileReference * firstRefere
 					#endif
 
 
-					//3. search this string for any of the function (not full function names) across all include/header files
+					//3. search the functionContentsString for any of the function (not full function names) across all include/header files
 					CSfunctionReference * newfirstReferenceInFunctionReferenceList = new CSfunctionReference();
 					currentReference->firstReferenceInFunctionReferenceList = newfirstReferenceInFunctionReferenceList;
 
