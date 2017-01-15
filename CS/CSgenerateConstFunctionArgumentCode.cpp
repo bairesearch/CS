@@ -50,7 +50,7 @@ bool generateConstFunctionArgumentsRecurse(CSfileContainer* firstObjectInAboveLe
 {
 	bool result = true;
 
-	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
 	cout << "generateConstFunctionArgumentsRecurse{}" << endl;
 	#endif
 
@@ -82,7 +82,7 @@ bool generateConstFunctionArgumentsRecurse(CSfileContainer* firstObjectInAboveLe
 					}
 					if(headerExists || sourceExists)
 					{
-						#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+						#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
 						//cout << "generateConstFunctionArgumentsRecurse{}: currentFileObject->sourceFileName = " << currentFileObject->sourceFileName << endl;
 						//cout << "generateConstFunctionArgumentsRecurse{}: currentFileObject->headerFileName = " << currentFileObject->headerFileName << endl;
 						#endif
@@ -104,7 +104,7 @@ bool generateConstFunctionArgumentsRecurse(CSfileContainer* firstObjectInAboveLe
 		currentFileObjectContainer = currentFileObjectContainer->next;
 	}
 
-	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
 	cout << "end generateConstFunctionArgumentsRecurse{}" << endl;
 	#endif
 
@@ -114,7 +114,7 @@ bool generateConstFunctionArgumentsRecurse(CSfileContainer* firstObjectInAboveLe
 bool generateConstFunctionArgumentsFile(CSfile* currentFileObject)
 {
 	bool result = true;
-	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
 	cout << "generateConstFunctionArgumentsFile{}: currentFileObject->name = " << currentFileObject->name << endl;
 	#endif
 
@@ -149,7 +149,7 @@ bool generateConstFunctionArgumentsFile(CSfile* currentFileObject)
 
 					string argument = currentFunctionArgumentInFunction->argument + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_FUNCTION_ARGUMENT_DELIMITER;
 					string argumentWithConsts = constString + argument;
-					#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+					#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
 					cout << "argument = " << currentFunctionArgumentInFunction->argument << endl;
 					cout << "argumentWithConsts = " << argumentWithConsts << endl;
 					#endif
@@ -157,7 +157,7 @@ bool generateConstFunctionArgumentsFile(CSfile* currentFileObject)
 
 					argument = currentFunctionArgumentInFunction->argument + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_FUNCTION_CLOSE;
 					argumentWithConsts = constString + argument;
-					#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+					#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
 					cout << "argument = " << currentFunctionArgumentInFunction->argument << endl;
 					cout << "argumentWithConsts = " << argumentWithConsts << endl;
 					#endif
@@ -215,7 +215,7 @@ bool generateConstFunctionArgumentsFile(CSfile* currentFileObject)
 	}
 
 	#ifndef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DISABLE_OUTPUT
-	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
 	cout << "currentFileObject->headerFileText = \n" << currentFileObject->headerFileText << endl;
 	cout << "currentFileObject->sourceFileText = \n" << currentFileObject->sourceFileText << endl;
 	#endif
@@ -234,7 +234,7 @@ bool generateConstFunctionArgumentsFile(CSfile* currentFileObject)
 	#endif
 	#endif
 
-	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
 	cout << "end generateConstFunctionArgumentsFile{}: currentFileObject->name = " << currentFileObject->name << endl;
 	#endif
 
@@ -309,14 +309,14 @@ bool generateConstFunctionArgumentsFunction(CSfunction* currentFunctionObject)
 
 	if(!(currentFunctionObject->functionArgumentConstsIdentified))
 	{
-		#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+		#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
 		cout << "generateConstFunctionArgumentsFunction{}: currentFunctionObject->name = " << currentFunctionObject->name << endl;
 		#endif
 
 		currentFunctionObject->functionArgumentConstsIdentified = true;		//moved condition CS3h1d; ignore recursive function references
 
 		string functionNameFull = currentFunctionObject->nameFull;
-		#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+		#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
 		cout << "functionNameFull = " << functionNameFull << endl;
 		#endif
 		string functionNameFullUpdated = "";
@@ -372,7 +372,7 @@ bool generateConstFunctionArgumentsFunction(CSfunction* currentFunctionObject)
 		}
 	}
 
-	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
 	cout << "end generateConstFunctionArgumentsFunction{}: currentFunctionObject->name = " << currentFunctionObject->name << endl;
 	#endif
 
@@ -382,7 +382,7 @@ bool generateConstFunctionArgumentsFunction(CSfunction* currentFunctionObject)
 //CS_GENERATE_CONST_FUNCTION_ARGUMENTS_PARSE_LISTS: limitation: trace secondary assignments of iterator (limitation: can only trace immediate secondary assignments of iterator variables)
 bool generateConstFunctionArgumentAndSearchForSecondaryReferences(CSfunction* currentFunctionObject, CSfunctionArgument* currentFunctionArgumentInFunction, string functionDeclarationArgument)
 {
-	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
 	cout << "generateConstFunctionArgumentAndSearchForSecondaryReferences{}: currentFunctionObject->name = " << currentFunctionObject->name << endl;
 	cout << "generateConstFunctionArgumentAndSearchForSecondaryReferences{}: currentFunctionArgumentInFunction->argumentName = " << currentFunctionArgumentInFunction->argumentName << endl;
 	cout << "generateConstFunctionArgumentAndSearchForSecondaryReferences{}: functionDeclarationArgument = " << functionDeclarationArgument << endl;
@@ -438,7 +438,7 @@ bool generateConstFunctionArgumentAndSearchForSecondaryReferences(CSfunction* cu
 								if(functionText->substr(indexOfStartOfSecondaryAssignment-string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_POINTER_TYPE).length(), string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_POINTER_TYPE).length()) == CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_POINTER_TYPE)
 								{
 									foundGenericSecondaryAssignment = true;
-									#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+									#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
 									cout << "generateConstFunctionArgumentAndSearchForSecondaryReferences{}: foundGenericSecondaryAssignment" << endl;
 									cout << "generateConstFunctionArgumentAndSearchForSecondaryReferences{}: currentFunctionArgumentInFunction->argumentName = " << currentFunctionArgumentInFunction->argumentName << endl;
 									cout << "generateConstFunctionArgumentAndSearchForSecondaryReferences{}: functionDeclarationArgument = " << functionDeclarationArgument << endl;
@@ -487,7 +487,7 @@ bool generateConstFunctionArgumentAndSearchForSecondaryReferences(CSfunction* cu
 										if((indexOfBeginPointerBeingReferenced > functionDeclarationArgument.length()) && (indexOfBeginPointerBeingReferenced < indexOfEndOfCommand))
 										{
 											functionDeclarationArgumentHasBeginPointerBeingReferenced = true;
-											#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+											#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
 											cout << "functionDeclarationArgumentHasBeginPointerBeingReferenced" << endl;
 											#endif
 										}
@@ -501,7 +501,7 @@ bool generateConstFunctionArgumentAndSearchForSecondaryReferences(CSfunction* cu
 										if((indexOfFindPointerBeingReferenced > functionDeclarationArgument.length()) && (indexOfFindPointerBeingReferenced < indexOfEndOfCommand))
 										{
 											functionDeclarationArgumentHasFindPointerBeingReferenced = true;
-											#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+											#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
 											cout << "functionDeclarationArgumentHasFindPointerBeingReferenced" << endl;
 											#endif
 										}
@@ -512,7 +512,7 @@ bool generateConstFunctionArgumentAndSearchForSecondaryReferences(CSfunction* cu
 									{
 										string iteratorName = extractFullVariableName(functionText, indexOfIteratorType+iterType.length());
 
-										#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+										#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
 										cout << "generateConstFunctionArgumentAndSearchForSecondaryReferences{}: found for loop vector/map iterator" << endl;
 										cout << "iteratorName = " << iteratorName << endl;
 										#endif
@@ -539,7 +539,7 @@ bool generateConstFunctionArgumentAndSearchForSecondaryReferences(CSfunction* cu
 												int indexOfStartOfSecondaryAssignmentOfIterator;
 												string secondaryAssignmentOfIterator = extractFullVariableNameReverse(functionText, indexOfFollowingLineHypotheticalMatch-1, &indexOfStartOfSecondaryAssignmentOfIterator);
 
-												#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+												#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
 												cout << "found iterator secondary assignment" << endl;
 												#endif
 												if(generateConstFunctionArgumentAndSearchForSecondaryReferences(currentFunctionObject, currentFunctionArgumentInFunction, secondaryAssignmentOfIterator))
@@ -560,7 +560,7 @@ bool generateConstFunctionArgumentAndSearchForSecondaryReferences(CSfunction* cu
 		}
 	}
 
-	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
 	cout << "end generateConstFunctionArgumentAndSearchForSecondaryReferences{}: functionDeclarationArgument = " << functionDeclarationArgument << endl;
 	#endif
 
@@ -570,7 +570,7 @@ bool generateConstFunctionArgumentAndSearchForSecondaryReferences(CSfunction* cu
 
 bool generateConstFunctionArgument(CSfunction* currentFunctionObject, CSfunctionArgument* currentFunctionArgumentInFunction, string functionDeclarationArgument)
 {
-	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
 	cout << "generateConstFunctionArgument{}:" << endl;
 	cout << "currentFunctionObject->name = " << currentFunctionObject->name << endl;
 	cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
@@ -674,7 +674,7 @@ bool generateConstFunctionArgument(CSfunction* currentFunctionObject, CSfunction
 	}
 	#endif
 
-	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
 	cout << "end generateConstFunctionArgument{}: functionDeclarationArgument = " << functionDeclarationArgument << endl;
 	#endif
 }
@@ -682,7 +682,7 @@ bool generateConstFunctionArgument(CSfunction* currentFunctionObject, CSfunction
 
 void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject, CSfunctionArgument* currentFunctionArgumentInFunction, string functionDeclarationArgument, bool* isNotConst, bool* isConstEffective)
 {
-	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
 	cout << "checkIfVariableIsBeingModifiedInFunction{}: functionDeclarationArgument = " << functionDeclarationArgument << endl;
 	#endif
 
@@ -1021,14 +1021,14 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 								#else
 								*isNotConst = true;
 								#endif
-								#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+								#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
 								cout << "checkIfVariableIsBeingModifiedInFunction{}: inverseNonConstAssignmentDetected: isNotConst = true" << endl;
 								#endif
 							}
 							if(inverseNonConstAssignmentDetectedAlias)
 							{
 								*isNotConst = true;
-								#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+								#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
 								cout << "checkIfVariableIsBeingModifiedInFunction{}: inverseNonConstAssignmentDetected: isNotConst = true" << endl;
 								#endif
 							}
@@ -1199,7 +1199,7 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 	}
 	#endif
 
-	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
 	cout << "end checkIfVariableIsBeingModifiedInFunction{}: functionDeclarationArgument = " << functionDeclarationArgument << endl;
 	#endif
 }

@@ -1213,7 +1213,7 @@ bool searchFunctionStringForFunctionReferences(CSfile* firstFileInIncludeFileLis
 
 					#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
 					identifyFunctionReferenceArguments((*currentReferenceInFunctionReferenceListRepeats), functionContentsString, startPosOfFunctionReferenceInFunction);
-					#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+					#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS1
 					cout << "(*currentReferenceInFunctionReferenceListRepeats)->nameFull = " << (*currentReferenceInFunctionReferenceListRepeats)->nameFull << endl;
 					#endif
 					#endif
@@ -1247,7 +1247,7 @@ void identifyFunctionReferenceArguments(CSfunction* currentReferenceInFunctionRe
 {
 	//designed to support embedded function references (although this is not currently used by CSgenerateConstFunctionArgumentCode)
 
-	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS1
 	cout << "start identifyFunctionReferenceArguments{}..." << endl;
 	cout << "currentReferenceInFunctionReferenceList->name = " << currentReferenceInFunctionReferenceList->name << endl;
 	cout << "functionContentsString = " << *functionContentsString << endl;
@@ -1287,7 +1287,7 @@ void identifyFunctionReferenceArguments(CSfunction* currentReferenceInFunctionRe
 				{
 					string argument = functionContentsString->substr(posStartOfFunctionArgument, pos-posStartOfFunctionArgument);
 					currentFunctionArgumentInFunctionReference->argument = removePrependedWhiteSpace(argument);
-					#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+					#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS1
 					cout << "identifyFunctionReferenceArguments{}: currentFunctionArgumentInFunctionReference->argument = " << currentFunctionArgumentInFunctionReference->argument << endl;
 					#endif
 					currentFunctionArgumentInFunctionReference->next = new CSfunctionArgument();
@@ -1323,7 +1323,7 @@ void identifyFunctionReferenceArguments(CSfunction* currentReferenceInFunctionRe
 	{
 		currentReferenceInFunctionReferenceList->nameFull = functionContentsString->substr(indexToFunctionObject, endPositionOfFunctionBracketsTemp-indexToFunctionObject+1);
 	}
-	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS1
 	cout << "identifyFunctionReferenceArguments{}: currentReferenceInFunctionReferenceList->nameFull = " << currentReferenceInFunctionReferenceList->nameFull << endl;
 	cout << "end identifyFunctionReferenceArguments{}..." << endl;
 	#endif
@@ -1370,7 +1370,7 @@ void identifyFunctionDeclarationArguments(CSfunction* currentReferenceInFunction
 	}
 	if(functionHasArguments)
 	{
-		#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+		#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS1
 		cout << "functionHasArguments: functionNameFull = " <<* functionNameFull << endl;
 		#endif
 
@@ -1407,7 +1407,7 @@ void identifyFunctionDeclarationArguments(CSfunction* currentReferenceInFunction
 			string currentArgumentName = extractFunctionArgumentName(&currentArgument, startPositionOfArgumentName);	//updated CS3h9b - this is required to support array arguments eg "typeX* arrayName[]"
 			string currentArgumentType = currentArgument.substr(0, startPositionOfArgumentName);
 
-			#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+			#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS1
 			cout << "identifyFunctionDeclarationArguments{}: functionNameFull = " << *functionNameFull << endl;
 			cout << "identifyFunctionDeclarationArguments{}: currentArgument = " << currentArgument << endl;
 			cout << "identifyFunctionDeclarationArguments{}: currentArgumentName = " << currentArgumentName << endl;
