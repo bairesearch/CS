@@ -80,6 +80,7 @@
 		<file name="NLCpreprocessorMathLogicalConditions.h" x="2" y="4" />
 		<file name="NLCpreprocessorSentenceClass.h" x="2" y="5" />
 		<file name="NLCtranslator.h" x="4" y="2" />
+		<file name="NLCapi.h" x="6" y="2" />
 		<file name="NLCprint.h" x="8" y="2" />
 		<file name="NLCtranslatorCodeBlocks.h" x="4" y="3" />
 		<file name="NLCtranslatorCodeBlocksLogicalConditions.h" x="4" y="4" />
