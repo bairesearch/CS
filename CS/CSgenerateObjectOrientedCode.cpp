@@ -26,7 +26,7 @@
  * File Name: CSgenerateObjectOrientedCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e1c 27-August-2014
+ * Project Version: 3e1d 27-August-2014
  *
  *******************************************************************************/
 
@@ -115,7 +115,8 @@ bool generateCPPclassesFile(CSfileReference * currentFileReference, CSfileRefere
 	string className = generateClassName(currentFileReference->name);
 	ReferencedClass * firstReferencedClassInList = new ReferencedClass();
 	ReferencedClass * currentReferencedClassInList = firstReferencedClassInList;
-				
+	bool fileHasFunctions = false;
+		
 	CSfunctionReference * currentFunctionReference = currentFileReference->firstReferenceInFunctionList;
 	while(currentFunctionReference->next != NULL)
 	{
@@ -123,7 +124,9 @@ bool generateCPPclassesFile(CSfileReference * currentFileReference, CSfileRefere
 		//{//only create connections to printed boxes (is this required?)
 			if(currentFileReference->name != CS_GENERATE_CPP_CLASSES_FUNCTION_MAIN_NAME)
 			{//do not modifier main function
-
+				
+				fileHasFunctions = true;
+				
 				bool foundPublicReference = false;
 				isFunctionBeingReferencedPublicallyRecurse(currentFunctionReference->name, currentFileReference->name, firstReferenceInTopLevelBelowList, &foundPublicReference);
 
@@ -230,58 +233,59 @@ bool generateCPPclassesFile(CSfileReference * currentFileReference, CSfileRefere
 		currentFunctionReference = currentFunctionReference->next;	
 	}
 	
-	//CHECK THIS QUICK CODING;
+	if(fileHasFunctions)
+	{
 	
-	//3. add class wrapper header to class function declarations in class header file
-	//4. add referenced classes to source file
-	//find location of first function in source
-	string firstFunctionNameFull = currentFileReference->firstReferenceInFunctionList->headerFunctionNameFullUpdated;
-	int positionOfFirstFunctionReferenceInHeader = currentFileReference->headerFileText.find(firstFunctionNameFull);
-	if(positionOfFirstFunctionReferenceInHeader != CPP_STRING_FIND_RESULT_FAIL_VALUE)
-	{
-		string classDeclarationHeader = string(CS_GENERATE_CPP_CLASSES_CLASS_HEADER_PART1) + generateClassDeclarationName(className) + string(CS_GENERATE_CPP_CLASSES_CLASS_HEADER_PART2);	//class xClass{
-		string referencedClassesDeclarations = generateReferencedClassesDeclarations(firstReferencedClassInList);	//ie private: xClass x; private: yClass y;
-		
-		currentFileReference->headerFileText = currentFileReference->headerFileText.substr(0, positionOfFirstFunctionReferenceInHeader) + classDeclarationHeader + referencedClassesDeclarations + currentFileReference->headerFileText.substr(positionOfFirstFunctionReferenceInHeader, currentFileReference->headerFileText.length()-positionOfFirstFunctionReferenceInHeader);
-	}
-	else
-	{
-		cout << "error: (positionOfFirstFunctionReferenceInHeader == CPP_STRING_FIND_RESULT_FAIL_VALUE" << endl;
-		exit(0);
-	}
-	
-		
-	//5. add class wrapper footer to class function declarations in class header file
-	//find location of last function reference in header	
-	currentFunctionReference = currentFileReference->firstReferenceInFunctionList;
-	CSfunctionReference * lastFunctionReference = currentFunctionReference;
-	while(currentFunctionReference->next != NULL)
-	{
-		lastFunctionReference = currentFunctionReference;
-		currentFunctionReference = currentFunctionReference->next;
-	}
-	string lastFunctionNameFull = lastFunctionReference->headerFunctionNameFullUpdated;
-	int positionOfLastFunctionReferenceInHeader = currentFileReference->headerFileText.find(lastFunctionNameFull);
-	if(positionOfFirstFunctionReferenceInHeader != CPP_STRING_FIND_RESULT_FAIL_VALUE)
-	{
-		string classDeclarationFooter = CS_GENERATE_CPP_CLASSES_CLASS_FOOTER;	//};
-		int lastFunctionNameFullLength = (lastFunctionReference->headerFunctionNameFullUpdated).length();
-		int positionOfLastFunctionReferenceInHeaderEnd = positionOfLastFunctionReferenceInHeader + lastFunctionNameFullLength;
-		currentFileReference->headerFileText = currentFileReference->headerFileText.substr(0, positionOfLastFunctionReferenceInHeaderEnd+1) + classDeclarationFooter + currentFileReference->headerFileText.substr(positionOfLastFunctionReferenceInHeaderEnd+1, currentFileReference->headerFileText.length()-positionOfLastFunctionReferenceInHeaderEnd);	//+1 for trailing CHAR_SEMICOLON
-	}
-	else
-	{
-		cout << "error: (positionOfFirstFunctionReferenceInHeader == CPP_STRING_FIND_RESULT_FAIL_VALUE" << endl;
-		exit(0);
-	}
-	
-	//6. add move source include file statements to header (required for referenced class declarations)
-	if(!moveIncludeFileStatementsToHeader(currentFileReference))
-	{
-		result = false;
-	}	
+		//3. add class wrapper header to class function declarations in class header file
+		//4. add referenced classes to source file
+		//find location of first function in source
+		string firstFunctionNameFull = currentFileReference->firstReferenceInFunctionList->headerFunctionNameFullUpdated;
+		int positionOfFirstFunctionReferenceInHeader = currentFileReference->headerFileText.find(firstFunctionNameFull);
+		if(positionOfFirstFunctionReferenceInHeader != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+		{
+			string classDeclarationHeader = string(CS_GENERATE_CPP_CLASSES_CLASS_HEADER_PART1) + generateClassDeclarationName(className) + string(CS_GENERATE_CPP_CLASSES_CLASS_HEADER_PART2);	//class xClass{
+			string referencedClassesDeclarations = generateReferencedClassesDeclarations(firstReferencedClassInList);	//ie private: xClass x; private: yClass y;
 
-	
+			currentFileReference->headerFileText = currentFileReference->headerFileText.substr(0, positionOfFirstFunctionReferenceInHeader) + classDeclarationHeader + referencedClassesDeclarations + currentFileReference->headerFileText.substr(positionOfFirstFunctionReferenceInHeader, currentFileReference->headerFileText.length()-positionOfFirstFunctionReferenceInHeader);
+		}
+		else
+		{
+			cout << "error: (positionOfFirstFunctionReferenceInHeader == CPP_STRING_FIND_RESULT_FAIL_VALUE" << endl;
+			exit(0);
+		}
+
+
+		//5. add class wrapper footer to class function declarations in class header file
+		//find location of last function reference in header	
+		currentFunctionReference = currentFileReference->firstReferenceInFunctionList;
+		CSfunctionReference * lastFunctionReference = currentFunctionReference;
+		while(currentFunctionReference->next != NULL)
+		{
+			lastFunctionReference = currentFunctionReference;
+			currentFunctionReference = currentFunctionReference->next;
+		}
+		string lastFunctionNameFull = lastFunctionReference->headerFunctionNameFullUpdated;
+		int positionOfLastFunctionReferenceInHeader = currentFileReference->headerFileText.find(lastFunctionNameFull);
+		if(positionOfFirstFunctionReferenceInHeader != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+		{
+			string classDeclarationFooter = CS_GENERATE_CPP_CLASSES_CLASS_FOOTER;	//};
+			int lastFunctionNameFullLength = (lastFunctionReference->headerFunctionNameFullUpdated).length();
+			int positionOfLastFunctionReferenceInHeaderEnd = positionOfLastFunctionReferenceInHeader + lastFunctionNameFullLength;
+			currentFileReference->headerFileText = currentFileReference->headerFileText.substr(0, positionOfLastFunctionReferenceInHeaderEnd+1) + classDeclarationFooter + currentFileReference->headerFileText.substr(positionOfLastFunctionReferenceInHeaderEnd+1, currentFileReference->headerFileText.length()-positionOfLastFunctionReferenceInHeaderEnd);	//+1 for trailing CHAR_SEMICOLON
+		}
+		else
+		{
+			cout << "error: (positionOfFirstFunctionReferenceInHeader == CPP_STRING_FIND_RESULT_FAIL_VALUE" << endl;
+			exit(0);
+		}
+
+		//6. add move source include file statements to header (required for referenced class declarations)
+		if(!moveIncludeFileStatementsToHeader(currentFileReference))
+		{
+			result = false;
+		}	
+	}
+
 	#ifndef CS_GENERATE_CPP_CLASSES_DISABLE_OUTPUT
 	#ifdef CS_DEBUG_GENERATE_OBJECT_ORIENTED_CODE
 	cout << "currentFileReference->headerFileText = \n" << currentFileReference->headerFileText << endl;
@@ -588,7 +592,7 @@ bool moveIncludeFileStatementsToHeader(CSfileReference * firstReferenceInAboveLe
 			//no include file statements found in header - take the line of the first include file statment in source instead (as this should coincide with the appropriate place for include files in the header also, assuming they are formatted the same)
 			int lineHeader = 0;
 			bool stillFindingLines = true;
-			while((lineHeader < lineOfFirstIncludeStatementEndInSource) && stillFindingLines)
+			while((lineHeader < lineOfFirstIncludeStatementEndInSource+1) && stillFindingLines)
 			{
 				if(positionInHeader < firstReferenceInAboveLevelBelowList->headerFileText.length())
 				{
