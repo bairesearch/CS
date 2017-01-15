@@ -26,7 +26,7 @@
  * File Name: CSexecflow.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e3a 01-September-2014
+ * Project Version: 3e3b 01-September-2014
  *
  *******************************************************************************/
 
@@ -299,6 +299,11 @@ void generateCodeStructure(string topLevelFileName, int width, int height, strin
 			//must use an external program to view the .ldr file (Eg LDView)
 		}
 	}
+	
+	if(display)
+	{
+		exitOpenGL();
+	}	
 
 }
 
