@@ -26,7 +26,7 @@
  * File Name: CSglobalsDefs.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e2c 29-August-2014
+ * Project Version: 3e2d 29-August-2014
  * Description: CS specific global definitions
  *
  *******************************************************************************/
@@ -126,11 +126,16 @@
 #define HTML_EXTENSION ".html"
 #define SVG_EXTENSION ".svg"
 
-#ifdef CS_GENERATE_CPP_CLASSES_DISABLE_OUTPUT
-	#define CS_SOURCE_FILE_EXTENSION "cpp"
+#ifdef CS_GENERATE_CPP_CLASSES
+	#ifdef CS_GENERATE_CPP_CLASSES_DISABLE_OUTPUT
+		#define CS_SOURCE_FILE_EXTENSION "cpp"
+	#else
+		#define CS_SOURCE_FILE_EXTENSION "c"
+	#endif
 #else
-	#define CS_SOURCE_FILE_EXTENSION "c"
+	#define CS_SOURCE_FILE_EXTENSION "cpp"
 #endif
+
 #define CS_SOURCE_FILE_INDENTATION_CHARACTER '\t'
 
 #endif

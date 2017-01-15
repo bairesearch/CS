@@ -26,7 +26,7 @@
  * File Name: CSreferenceClass.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e2c 29-August-2014
+ * Project Version: 3e2d 29-August-2014
  *
  *******************************************************************************/
 
@@ -93,18 +93,14 @@ CSfunctionReference::CSfunctionReference(void)
 	#endif
 	#ifdef CS_GENERATE_CPP_CLASSES 
 	functionTextRaw = "";
+	headerFunctionNameFullUpdated = "";
+	sourceFunctionNameFullUpdated = "";
 	#endif
 	
 	for(int i=0; i<MAX_INCLUDE_DEPTH_FUNCTION; i++)
 	{
 		maxFunctionPrintXAtAParticularY[i] = 0;
 	}
-	
-	#ifdef CS_GENERATE_CPP_CLASSES
-	headerFunctionNameFullUpdated = "";
-	sourceFunctionNameFullUpdated = "";
-	#endif
-
 }
 
 CSfunctionReference::~CSfunctionReference(void)
@@ -175,8 +171,8 @@ CSfileReference::CSfileReference(void)
 		maxFunctionPrintXAtAParticularY[i] = 0;
 	}
 	
-	sourceFileNameOrig = "";
 	#ifdef CS_GENERATE_CPP_CLASSES
+	sourceFileNameOrig = "";
 	sourceFileTextOrig = "";
 	headerFileTextOrig = "";
 	headerFileName = "";

@@ -26,7 +26,7 @@
  * File Name: CSmain.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e2c 29-August-2014
+ * Project Version: 3e2d 29-August-2014
  *
  *******************************************************************************/
 
@@ -36,6 +36,7 @@
 #include "CSdataflow.h"
 #include "CSpreprocessorFilter.h"
 #include "CSdraw.h"
+#include "CSgenerateHTMLdocumentation.h"
 #include "XMLrulesClass.h"
 #include "LDsprite.h"
 
@@ -280,7 +281,7 @@ int main(int argc,char **argv)
 
 	if(argumentExists(argc,argv,"-version"))
 	{
-		cout << "OpenCS.exe - Project Version: 3e2c 29-August-2014" << endl;
+		cout << "OpenCS.exe - Project Version: 3e2d 29-August-2014" << endl;
 		exit(1);
 	}
 
