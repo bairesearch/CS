@@ -26,7 +26,7 @@
  * File Name: CSoperations.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3g1a 14-October-2015
+ * Project Version: 3h1a 14-November-2015
  *
  *******************************************************************************/
 
@@ -36,21 +36,26 @@
 
 #include "LDreferenceClass.h"
 #include "CSglobalDefs.h"
-#include "CSreferenceClass.h"
 #include "CSreferenceContainerClass.h"
 
-bool getIncludeFileNamesFromCorHfile(CSfileReferenceContainer* firstReferenceInIncludeFileListContainer, CSfileReferenceContainer* topLevelReferenceContainer, CSfileReference* aboveLevelReference, string topLevelReferenceName, int level);
-	bool findFileReferenceInFileReferenceContainerList(CSfileReferenceContainer* firstReferenceContainerInLevel, string fileReferenceName, CSfileReference** fileReferenceFound);
-	bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunctionReference* firstReferenceInFunctionList, string topLevelFileName, int level);
-	void getFunctionReferenceNamesFromFunctionsInCfile(CSfileReference* firstReferenceInIncludeFileList, CSfunctionReference* firstReferenceInFunctionList, CSfileReference* aboveLevelReference, string topLevelFileName, int level);
-		bool searchFunctionStringForFunctionReferencesRecursive(CSfileReference* firstReferenceInIncludeFileList, CSfileReferenceContainer* firstFileNameInLayerContainingFunctionReferencesToSearchFor, CSfunctionReference** currentReferenceInFunctionReferenceList, CSfunctionReference** currentReferenceInFunctionReferenceListRepeats, string functionContentsString);
-			bool searchFunctionStringForFunctionReferences(CSfileReference* firstReferenceInIncludeFileList, CSfileReference* fileNameContainingFunctionReferencesToSearchFor, CSfunctionReference** currentReferenceInFunctionReferenceList, CSfunctionReference** currentReferenceInFunctionReferenceListRepeats, string functionContentsString);
+bool getIncludeFileNamesFromCorHfile(CSfileContainer* firstReferenceInIncludeFileListContainer, CSfileContainer* topLevelReferenceContainer, CSfile* aboveLevelObject, string topLevelReferenceName, int level);
+	bool findFileObjectInFileObjectContainerList(CSfileContainer* firstReferenceContainerInLevel, string fileReferenceName, CSfile** fileReferenceFound);
+	bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunction* firstFunctionInFunctionList, string topLevelFileName, int level);
+	void getFunctionObjectNamesFromFunctionsInCfile(CSfile* firstFileInIncludeFileList, CSfunction* firstFunctionInFunctionList, CSfile* aboveLevelObject, string topLevelFileName, int level);
+		bool searchFunctionStringForFunctionReferencesRecursive(CSfile* firstFileInIncludeFileList, CSfileContainer* firstFileNameInLayerContainingFunctionReferencesToSearchFor, CSfunction** currentReferenceInFunctionReferenceList, CSfunction** currentReferenceInFunctionReferenceListRepeats, string* functionContentsString);
+			bool searchFunctionStringForFunctionReferences(CSfile* firstFileInIncludeFileList, CSfile* fileNameContainingFunctionReferencesToSearchFor, CSfunction** currentReferenceInFunctionReferenceList, CSfunction** currentReferenceInFunctionReferenceListRepeats, string* functionContentsString);
+				#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
+				void identifyFunctionReferenceArguments(CSfunction* currentReferenceInFunctionReferenceListRepeats, string* functionContentsString, int indexToFunctionObject);
+				void identifyFunctionDeclarationArguments(CSfunction* currentReferenceInFunctionReferenceList, string* functionNameFull);
+				#endif
 
 /*
-CSfileReference* findReferenceInIncludeFileList(CSfileReference* firstReferenceInAboveLevelBelowList, string referenceName, CSfileReference* foundReference, bool* referenceFound);
+CSfile* findReferenceInIncludeFileList(CSfile* firstReferenceInAboveLevelBelowList, string referenceName, CSfile* foundReference, bool* referenceFound);
 */
 
 string generateSourceFileNameFromHeaderFileName(string headerFileName, string sourceFileNameExtension);
+
+void attachFunctionReferenceTargets(CSfileContainer* firstObjectInAboveLevelBelowListContainer);
 
 #endif
 

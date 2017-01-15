@@ -26,7 +26,7 @@
  * File Name: CSmain.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3g1a 14-October-2015
+ * Project Version: 3h1a 14-November-2015
  *
  *******************************************************************************/
 
@@ -69,6 +69,9 @@ static char errmessage[] = "Usage:  OpenCS.exe [options]"
 "\n\t-html                   : generate html documentation (user must specify tracefunction, else will document all functions)"
 #ifdef CS_GENERATE_CPP_CLASSES
 "\n\t-generateoo             : generate object oriented C++ code (must specify tempfolder else input files will be overwritten)"
+#endif
+#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
+"\n\t-generateconst          : generate const function arguments code (must specify tempfolder else input files will be overwritten)"
 #endif
 "\n"
 "\n\t-workingfolder [string] : working directory name for input files (def: same as exe)"
@@ -125,6 +128,9 @@ int main(int argc,char* *argv)
 
 	//#ifdef CS_GENERATE_CPP_CLASSES
 	bool generateOOcode = false;
+	//#endif
+	//#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
+	bool generateConstFunctionArgumentsCode = false;
 	//#endif
 	
 	bool passInputReq = true;
@@ -249,6 +255,12 @@ int main(int argc,char* *argv)
 	{
 		generateOOcode = true;
 	}
+	#endif	
+	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
+	if(argumentExists(argc,argv,"-generateconst"))
+	{
+		generateConstFunctionArgumentsCode = true;
+	}
 	#endif		
 
 	string currentFolder = getCurrentDirectory();
@@ -282,7 +294,7 @@ int main(int argc,char* *argv)
 
 	if(argumentExists(argc,argv,"-version"))
 	{
-		cout << "OpenCS.exe - Project Version: 3g1a 14-October-2015" << endl;
+		cout << "OpenCS.exe - Project Version: 3h1a 14-November-2015" << endl;
 		exit(1);
 	}
 
@@ -361,7 +373,7 @@ int main(int argc,char* *argv)
 
 	if(mode == CS_MODE_OUTPUT_EXECUTION_FLOW)
 	{
-		generateCodeStructure(topLevelFileName, rasterImageWidth, rasterImageHeight, outputLDRfileName, outputSVGfileName, outputPPMfileName, outputHTMLfileName, useOutputLDRfile, useOutputPPMfile, useOutputHTMLfile, generateHTMLdocumentationMode, displayInOpenGLAndOutputScreenshot, outputFunctionsConnectivity, traceFunctionUpwards, bottomLevelFunctionNameToTraceUpwards, outputFileConnections, topLevelFunctionName, generateOOcode);
+		generateCodeStructure(topLevelFileName, rasterImageWidth, rasterImageHeight, outputLDRfileName, outputSVGfileName, outputPPMfileName, outputHTMLfileName, useOutputLDRfile, useOutputPPMfile, useOutputHTMLfile, generateHTMLdocumentationMode, displayInOpenGLAndOutputScreenshot, outputFunctionsConnectivity, traceFunctionUpwards, bottomLevelFunctionNameToTraceUpwards, outputFileConnections, topLevelFunctionName, generateOOcode, generateConstFunctionArgumentsCode);
 	}
 	else if(mode == CS_MODE_OUTPUT_DATA_FLOW)
 	{

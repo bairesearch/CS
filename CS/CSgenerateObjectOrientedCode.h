@@ -21,7 +21,7 @@
  * File Name: CSgenerateObjectOrientedCode.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3g1a 14-October-2015
+ * Project Version: 3h1a 14-November-2015
  *
  *******************************************************************************/
 
@@ -29,7 +29,7 @@
 #ifndef HEADER_CS_GENERATE_OBJECT_ORIENTED_CODE
 #define HEADER_CS_GENERATE_OBJECT_ORIENTED_CODE
 
-#include "CSreferenceClass.h"
+#include "CSreferenceContainerClass.h"
 #include "CSglobalDefs.h"
 
 #ifdef CS_GENERATE_CPP_CLASSES
@@ -43,11 +43,11 @@ public:
 };
 
 
-bool generateCPPclasses(CSfileReferenceContainer* firstReferenceInTopLevelBelowListContainer);
-	bool generateCPPclassesRecurse(CSfileReferenceContainer* firstReferenceInAboveLevelBelowListContainer, CSfileReferenceContainer* firstReferenceInTopLevelBelowListContainer);
-		bool generateCPPclassesFile(CSfileReference* currentFileReference, CSfileReferenceContainer* firstReferenceInTopLevelBelowListContainer);
-			string replaceAllOccurancesOfFunctionReferenceReferenceNameInFunction(string* functionTextOrig, string functionReferenceReferenceName, string functionReferenceReferenceNameUpdated, bool* foundAtLeastOneInstance);
-			void isFunctionBeingReferencedPublicallyRecurse(string functionName, string fileName, CSfileReferenceContainer* firstReferenceInAboveLevelBelowListContainer, bool* foundPublicReference);
+bool generateCPPclasses(CSfileContainer* firstObjectInTopLevelBelowListContainer);
+	bool generateCPPclassesRecurse(CSfileContainer* firstObjectInAboveLevelBelowListContainer, CSfileContainer* firstObjectInTopLevelBelowListContainer);
+		bool generateCPPclassesFile(CSfile* currentFileObject, CSfileContainer* firstObjectInTopLevelBelowListContainer);
+			string replaceAllOccurancesOfFunctionObjectReferenceNameInFunction(string* functionTextOrig, string functionReferenceName, string functionReferenceNameUpdated, bool* foundAtLeastOneInstance);
+			void isFunctionBeingReferencedPublicallyRecurse(string functionName, string fileName, CSfileContainer* firstObjectInAboveLevelBelowListContainer, bool* foundPublicReference);
 			string generateClassName(string headerFileName);
 				string generateClassDeclarationName(string className);
 				string generateClassObjectName(string className);
@@ -55,8 +55,7 @@ bool generateCPPclasses(CSfileReferenceContainer* firstReferenceInTopLevelBelowL
 			string convertFunctionNameToClassFunctionNameHeader(string fullFunctionName, string functionName, string className, bool foundPublicReference, bool foundStaticReference);
 			string generateReferencedClassesDeclarations(ReferencedClass* firstReferencedClassInList);
 			bool findReferencedClassInList(ReferencedClass* firstReferencedClassInList, string classNameToFind);
-			bool moveIncludeFileStatementsToHeader(CSfileReference* firstReferenceInAboveLevelBelowList);
-bool findFunctionReferenceWithName(string name, CSfileReferenceContainer* firstReferenceInAboveLevelBelowListContainer, CSfileReference** fileReferenceHoldingFunction, CSfunctionReference** updatedFunctionReference);
+			bool moveIncludeFileStatementsToHeader(CSfile* firstReferenceInAboveLevelBelowList);
 
 
 #endif

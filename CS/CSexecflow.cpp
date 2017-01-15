@@ -26,7 +26,7 @@
  * File Name: CSexecflow.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3g1a 14-October-2015
+ * Project Version: 3h1a 14-November-2015
  *
  *******************************************************************************/
 
@@ -45,6 +45,9 @@
 #ifdef CS_GENERATE_CPP_CLASSES
 #include "CSgenerateObjectOrientedCode.h"
 #endif
+#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
+#include "CSgenerateConstFunctionArgumentCode.h"
+#endif
 
 #ifndef LINUX
 	#include <windows.h>
@@ -53,7 +56,7 @@
 
 
 
-void generateCodeStructure(string topLevelFileName, int width, int height, string outputLDRfileName, string outputSVGfileName, string outputPPMfileName, string outputHTMLfileName, bool useOutputLDRfile, bool useOutputPPMfile, bool useOutputHTMLfile, int generateHTMLdocumentationMode, bool display, bool outputFunctionsConnectivity, bool traceFunctionUpwards, string bottomLevelFunctionNameToTraceUpwards, bool outputFileConnections, string topLevelFunctionName, bool generateOOcode)
+void generateCodeStructure(string topLevelFileName, int width, int height, string outputLDRfileName, string outputSVGfileName, string outputPPMfileName, string outputHTMLfileName, bool useOutputLDRfile, bool useOutputPPMfile, bool useOutputHTMLfile, int generateHTMLdocumentationMode, bool display, bool outputFunctionsConnectivity, bool traceFunctionUpwards, string bottomLevelFunctionNameToTraceUpwards, bool outputFileConnections, string topLevelFunctionName, bool generateOOcode, bool generateConstFunctionArgumentsCode)
 {
 	bool result = true;
 
@@ -81,22 +84,24 @@ void generateCodeStructure(string topLevelFileName, int width, int height, strin
 	//for every reference
 		//for every reference, and merge all
 
-	CSfileReferenceContainer* topLevelReferenceInListContainer = new CSfileReferenceContainer();
-	CSfileReference* topLevelReferenceInList = new CSfileReference();
+	CSfileContainer* topLevelReferenceInListContainer = new CSfileContainer();
+	CSfile* topLevelReferenceInList = new CSfile();
 	topLevelReferenceInList->name = topLevelFileName;
-	topLevelReferenceInListContainer->fileReference = topLevelReferenceInList;
-	CSfileReferenceContainer* firstReferenceInTopLevelBelowListContainer = new CSfileReferenceContainer();
-	topLevelReferenceInList->firstReferenceInBelowListContainer = firstReferenceInTopLevelBelowListContainer;
+	topLevelReferenceInListContainer->fileObject = topLevelReferenceInList;
+	CSfileContainer* firstObjectInTopLevelBelowListContainer = new CSfileContainer();
+	topLevelReferenceInList->firstFileInBelowListContainer = firstObjectInTopLevelBelowListContainer;
 
 	//cout << "start getIncludeFileNamesFromCorHfile{}" << endl;
-	bool hFileFound = getIncludeFileNamesFromCorHfile(firstReferenceInTopLevelBelowListContainer, topLevelReferenceInListContainer, topLevelReferenceInList, topLevelFileName, 0);
+	bool hFileFound = getIncludeFileNamesFromCorHfile(firstObjectInTopLevelBelowListContainer, topLevelReferenceInListContainer, topLevelReferenceInList, topLevelFileName, 0);
 	//cout << "finish getIncludeFileNamesFromCorHfile{}" << endl;
 	if(!hFileFound)
 	{
 		cout << "generateCodeStructure{} error: !hFileFound: " << topLevelFileName << endl;
 	}
 	
-	CSfileReference* firstReferenceInTopLevelBelowList = firstReferenceInTopLevelBelowListContainer->fileReference;
+	CSfile* firstReferenceInTopLevelBelowList = firstObjectInTopLevelBelowListContainer->fileObject;
+
+	attachFunctionReferenceTargets(firstObjectInTopLevelBelowListContainer);	//added 3h1a
 
 	initiateMaxXatParticularY();
 	LDreference* firstReferenceInPrintList = new LDreference();
@@ -134,58 +139,58 @@ void generateCodeStructure(string topLevelFileName, int width, int height, strin
 	}
 	#endif
 
-	LDreference* currentReferenceInPrintList = createFileReferenceListBoxes(firstReferenceInPrintList, firstReferenceInTopLevelBelowListContainer, firstReferenceInTopLevelBelowListContainer, &currentTagInSVGFile, outputFunctionsConnectivity, traceFunctionUpwards, firstTagInGridTag, usePredefinedGrid);
+	LDreference* currentReferenceInPrintList = createFileObjectListBoxes(firstReferenceInPrintList, firstObjectInTopLevelBelowListContainer, firstObjectInTopLevelBelowListContainer, &currentTagInSVGFile, outputFunctionsConnectivity, traceFunctionUpwards, firstTagInGridTag, usePredefinedGrid);
 	if(outputFileConnections)
 	{
-		currentReferenceInPrintList = createFileReferenceListConnections(currentReferenceInPrintList, firstReferenceInTopLevelBelowListContainer, NULL, &currentTagInSVGFile, traceFunctionUpwards);
+		currentReferenceInPrintList = createFileObjectListConnections(currentReferenceInPrintList, firstObjectInTopLevelBelowListContainer, NULL, &currentTagInSVGFile, traceFunctionUpwards);
 	}
 	if(outputFunctionsConnectivity)
 	{
-		CSfunctionReference* currentReferenceInTopLevelBelowList = firstReferenceInTopLevelBelowList->firstReferenceInFunctionList;
+		CSfunction* currentReferenceInTopLevelBelowList = firstReferenceInTopLevelBelowList->firstFunctionInFunctionList;
 		bool topLevelFunctionNameFound = false;
-		CSfunctionReference* topLevelFunctionReference = NULL;
+		CSfunction* topLevelFunctionObject = NULL;
 		while(currentReferenceInTopLevelBelowList->next != NULL)
 		{
 			//cout << "currentReferenceInTopLevelBelowList->name = " << currentReferenceInTopLevelBelowList->name << endl;
 			if(currentReferenceInTopLevelBelowList->name == topLevelFunctionName)
 			{
-				topLevelFunctionReference = currentReferenceInTopLevelBelowList;
+				topLevelFunctionObject = currentReferenceInTopLevelBelowList;
 				topLevelFunctionNameFound = true;
 			}
 			currentReferenceInTopLevelBelowList = currentReferenceInTopLevelBelowList->next;
 		}
 		if(topLevelFunctionNameFound)
 		{
-			//CSfunctionReference* topLevelFunctionReference = firstReferenceInTopLevelBelowList->firstReferenceInFunctionList;
-			topLevelFunctionReference->printX = firstReferenceInTopLevelBelowList->printX;
-			topLevelFunctionReference->printY = firstReferenceInTopLevelBelowList->printY;
-			topLevelFunctionReference->col = firstReferenceInTopLevelBelowList->col;
+			//CSfunction* topLevelFunctionObject = firstReferenceInTopLevelBelowList->firstFunctionInFunctionList;
+			topLevelFunctionObject->printX = firstReferenceInTopLevelBelowList->printX;
+			topLevelFunctionObject->printY = firstReferenceInTopLevelBelowList->printY;
+			topLevelFunctionObject->col = firstReferenceInTopLevelBelowList->col;
 
 			firstReferenceInTopLevelBelowList->maxFunctionPrintXAtAParticularY[0] = firstReferenceInTopLevelBelowList->maxFunctionPrintXAtAParticularY[0] + 1;
-			topLevelFunctionReference->printed = true;
+			topLevelFunctionObject->printed = true;
 			if(!(firstReferenceInTopLevelBelowList->printed))
 			{
 				cout << "error" << endl;
 				exit(0);
 			}
 
-			CSfunctionReference* currentReferenceInFunctionReferenceList = topLevelFunctionReference->firstReferenceInFunctionReferenceList;
+			CSfunction* currentReferenceInFunctionReferenceList = topLevelFunctionObject->firstReferenceInFunctionReferenceList;
 			while(currentReferenceInFunctionReferenceList->next != NULL)
 			{
-				currentReferenceInPrintList = createFunctionReferenceListBoxesAndConnections(currentReferenceInPrintList, firstReferenceInTopLevelBelowList, topLevelFunctionReference, firstReferenceInTopLevelBelowListContainer, 0, currentReferenceInFunctionReferenceList->name, &currentTagInSVGFile, traceFunctionUpwards, false, NULL, usePredefinedGrid);
+				currentReferenceInPrintList = createFunctionObjectListBoxesAndConnections(currentReferenceInPrintList, firstReferenceInTopLevelBelowList, topLevelFunctionObject, firstObjectInTopLevelBelowListContainer, 0, currentReferenceInFunctionReferenceList->name, &currentTagInSVGFile, traceFunctionUpwards, false, NULL, usePredefinedGrid);
 				currentReferenceInFunctionReferenceList = currentReferenceInFunctionReferenceList->next;
 			}
-			resetPrintedFunctionConnections(firstReferenceInTopLevelBelowList, topLevelFunctionReference, false, NULL);
+			resetPrintedFunctionConnections(firstReferenceInTopLevelBelowList, topLevelFunctionObject, false, NULL);
 
 			if(traceFunctionUpwards && (bottomLevelFunctionNameToTraceUpwards != ""))
 			{
-				CSfileReference* fileReferenceHoldingFunction = NULL;
-				CSfunctionReference* bottomLevelFunctionToTraceUpwards = NULL;
-				bool foundBottomLevelFunctionRef = findPrintedFunctionReferenceWithName(bottomLevelFunctionNameToTraceUpwards, firstReferenceInTopLevelBelowListContainer, &fileReferenceHoldingFunction, &bottomLevelFunctionToTraceUpwards);
+				CSfile* fileObjectHoldingFunction = NULL;
+				CSfunction* bottomLevelFunctionToTraceUpwards = NULL;
+				bool foundBottomLevelFunctionRef = findPrintedFunctionObjectWithName(bottomLevelFunctionNameToTraceUpwards, firstObjectInTopLevelBelowListContainer, &fileObjectHoldingFunction, &bottomLevelFunctionToTraceUpwards);
 				
 				if(foundBottomLevelFunctionRef)
 				{
-					string fileNameHoldingFunction = fileReferenceHoldingFunction->name;
+					string fileNameHoldingFunction = fileObjectHoldingFunction->name;
 
 					if(generateHTMLdocumentationMode == CS_GENERATE_HTML_DOCUMENTATION_MODE_ON)
 					{
@@ -196,7 +201,7 @@ void generateCodeStructure(string topLevelFileName, int width, int height, strin
 						}
 					}
 					string HTMLdocumentationFunctionNOTUSED = "";
-					generateHTMLdocumentationForFunction(currentReferenceInPrintList, firstReferenceInTopLevelBelowListContainer, bottomLevelFunctionToTraceUpwards, fileNameHoldingFunction, &currentTagInSVGFile, generateHTMLdocumentationMode, &HTMLdocumentationFunctionNOTUSED, &outputSVGfileName, useOutputHTMLfile, outputHTMLfileName, traceFunctionUpwards);
+					generateHTMLdocumentationForFunction(currentReferenceInPrintList, firstObjectInTopLevelBelowListContainer, bottomLevelFunctionToTraceUpwards, fileNameHoldingFunction, &currentTagInSVGFile, generateHTMLdocumentationMode, &HTMLdocumentationFunctionNOTUSED, &outputSVGfileName, useOutputHTMLfile, outputHTMLfileName, traceFunctionUpwards);
 				}
 				else
 				{
@@ -208,7 +213,7 @@ void generateCodeStructure(string topLevelFileName, int width, int height, strin
 			{
 				if(generateHTMLdocumentationMode == CS_GENERATE_HTML_DOCUMENTATION_MODE_ON)
 				{//generate documentation for all functions...
-					generateHTMLdocumentationFunctions(firstTagInSVGFile, firstReferenceInTopLevelBelowListContainer, generateHTMLdocumentationMode, useOutputHTMLfile, traceFunctionUpwards, usePredefinedGrid, outputHTMLfileName);
+					generateHTMLdocumentationFunctions(firstTagInSVGFile, firstObjectInTopLevelBelowListContainer, generateHTMLdocumentationMode, useOutputHTMLfile, traceFunctionUpwards, usePredefinedGrid, outputHTMLfileName);
 					htmlDocumentationGenerationPreventsDisplay = true;	//cannot display in OpenGL/save to file, as LD vector graphics references have been deleted
 				}
 			}
@@ -223,12 +228,22 @@ void generateCodeStructure(string topLevelFileName, int width, int height, strin
 	#ifdef CS_GENERATE_CPP_CLASSES
 	if(generateOOcode)
 	{
-		if(!generateCPPclasses(firstReferenceInTopLevelBelowListContainer))
+		if(!generateCPPclasses(firstObjectInTopLevelBelowListContainer))
 		{
 			result = false;
 		}
 	}
 	#endif
+	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
+	if(generateConstFunctionArgumentsCode)
+	{
+		if(!generateConstFunctionArguments(firstObjectInTopLevelBelowListContainer))
+		{
+			result = false;
+		}
+	}
+	#endif	
+	
 	
 	if(!htmlDocumentationGenerationPreventsDisplay)
 	{//do not display if generating html (unless tracing single file)

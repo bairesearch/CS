@@ -26,7 +26,7 @@
  * File Name: CSreferenceContainerClass.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3g1a 14-October-2015
+ * Project Version: 3h1a 14-November-2015
  *
  *******************************************************************************/
 
@@ -35,40 +35,44 @@
 #define HEADER_CS_REFERENCE_CONTAINER_CLASS
 
 #include "CSglobalDefs.h"
-#include "CSreferenceClass.h"
+#include "CSfileClass.h"
+#include "CSfunctionClass.h"
 
-
-class functionReference;
-class CSfunctionReferenceContainer{
+class CSfunctionContainer{
 private:
 	/*There are currently no private attributes of this class*/
 public:
 
-	CSfunctionReferenceContainer(void); // constructor declaration
-	~CSfunctionReferenceContainer();	//  and destructor.
+	CSfunctionContainer(void); // constructor declaration
+	~CSfunctionContainer();	//  and destructor.
 
-	CSfunctionReferenceContainer* next;
-	CSfunctionReferenceContainer* previous;
+	CSfunctionContainer* next;
+	CSfunctionContainer* previous;
 	
-	CSfunctionReference* functionReference;
-	CSfileReference* fileReferenceHoldingFunction;	//this should really be moved to CSfunctionReference (but is added to CSfunctionReferenceContainer instead to prevent CSfileReference/CSfunctionReference from bidirectionally accessing each other)
+	CSfunction* functionObject;
+	CSfile* fileObjectHoldingFunction;	//this should really be moved to CSfunction (but is added to CSfunctionContainer instead to prevent CSfile/CSfunction from bidirectionally accessing each other)
 };
 
-class fileReference;
-class CSfileReferenceContainer{
+class CSfileContainer{
 private:
 	/*There are currently no private attributes of this class*/
 public:
 
-	CSfileReferenceContainer(void); // constructor declaration
-	~CSfileReferenceContainer();	//  and destructor.
+	CSfileContainer(void); // constructor declaration
+	~CSfileContainer();	//  and destructor.
 
-	CSfileReferenceContainer* next;
-	CSfileReferenceContainer* previous;
+	CSfileContainer* next;
+	CSfileContainer* previous;
 	
-	CSfileReference* fileReference;
-	CSfileReference* aboveLevelReference;
+	CSfile* fileObject;
+	CSfile* aboveLevelObject;
 };
+
+int findEndPositionOfArgument(string* functionArgumentsRaw, int startPositionOfArgument, bool* lastArgument);
+	
+bool findFunctionObjectWithName(string name, CSfile* currentFileObject, CSfile** fileObjectHoldingFunction, CSfunction** updatedFunctionObject);
+	bool findFunctionObjectWithNameRecurse(string name, CSfileContainer* firstObjectInAboveLevelBelowListContainer, CSfile** fileObjectHoldingFunction, CSfunction** updatedFunctionObject);
+
 
 #endif
 

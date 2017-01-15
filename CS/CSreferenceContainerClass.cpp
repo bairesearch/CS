@@ -26,7 +26,7 @@
  * File Name: CSreferenceContainerClass.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3g1a 14-October-2015
+ * Project Version: 3h1a 14-November-2015
  *
  *******************************************************************************/
 
@@ -35,43 +35,214 @@
 
 
 
-CSfunctionReferenceContainer::CSfunctionReferenceContainer(void)
+CSfunctionContainer::CSfunctionContainer(void)
 {
 	next = NULL;
-	functionReference = NULL;
-	fileReferenceHoldingFunction = NULL;
+	functionObject = NULL;
+	fileObjectHoldingFunction = NULL;
 }
 
-CSfunctionReferenceContainer::~CSfunctionReferenceContainer(void)
+CSfunctionContainer::~CSfunctionContainer(void)
 {
 	if(next != NULL)
 	{
 		delete next;
 	}
-	if(functionReference != NULL)
+	if(functionObject != NULL)
 	{
-		delete functionReference;
+		delete functionObject;
 	}
 }
 
-CSfileReferenceContainer::CSfileReferenceContainer(void)
+CSfileContainer::CSfileContainer(void)
 {
 	next = NULL;
-	fileReference = NULL;
-	aboveLevelReference = NULL;
+	fileObject = NULL;
+	aboveLevelObject = NULL;
 }
 
-CSfileReferenceContainer::~CSfileReferenceContainer(void)
+CSfileContainer::~CSfileContainer(void)
 {
 	if(next != NULL)
 	{
 		delete next;
 	}
-	if(fileReference != NULL)
+	if(fileObject != NULL)
 	{
-		delete fileReference;
+		delete fileObject;
 	}
 }
 
+
+
+
+
+//CHECKTHIS;
+int findEndPositionOfArgument(string* functionArgumentsRaw, int startPositionOfArgument, bool* lastArgument)
+{
+	//cout << "functionArgumentsRaw = " << *functionArgumentsRaw << endl;
+	int endPositionOfArgument = -1;
+	int bracketLevel = 1;
+	int pos = startPositionOfArgument;
+	bool stillFindingEndPositionOfArgument = true;
+	while(stillFindingEndPositionOfArgument)
+	{
+		char c = (*functionArgumentsRaw)[pos];
+		if(bracketLevel == 1)
+		{//only detect base level function reference commas (not commas for embedded function reference arguments)
+			if((c == CS_GENERATE_CONST_FUNCTION_ARGUMENTS_FUNCTION_ARGUMENT_DELIMITER) || (c == CHAR_CLOSE_BRACKET))
+			{
+				endPositionOfArgument = pos;
+				stillFindingEndPositionOfArgument = false;
+				if(c == CHAR_CLOSE_BRACKET)
+				{
+					*lastArgument = true;
+				}
+			}
+		}
+		if(c == CLASS_TYPE_OPEN_TAG)
+		{
+			bracketLevel++;
+		}
+		else if(c == CLASS_TYPE_CLOSE_TAG)
+		{
+			bracketLevel--;
+		}	
+		pos++;
+	}
+	return endPositionOfArgument;
+
+}
+
+/*
+//limitation; only supports a single level of class type assignment (ie, multiple <> tags not supported in a given variable type, eg <><>)
+int findEndPositionOfArgument(string* functionArgumentsRaw, int startPositionOfArgument)
+{
+	#ifdef CS_DEBUG_HTML_DOCUMENTATION
+	//cout << "functionArgumentsRaw = " <<* functionArgumentsRaw << endl;
+	//cout << "startPositionOfArgument = " << startPositionOfArgument << endl;
+	#endif
+
+	int startPositionOfArgumentTemp = startPositionOfArgument;
+	bool stillFindingEndPositionOfArgument = true;
+	int endPositionOfArgument = -1;
+	while(stillFindingEndPositionOfArgument)
+	{
+		endPositionOfArgument = functionArgumentsRaw->find(CHAR_COMMA, startPositionOfArgumentTemp);	//find next comma
+		#ifdef CS_DEBUG_HTML_DOCUMENTATION
+		//cout << "endPositionOfArgument = " << endPositionOfArgument << endl;
+		#endif
+
+		if(endPositionOfArgument == CPP_STRING_FIND_RESULT_FAIL_VALUE)
+		{
+			stillFindingEndPositionOfArgument = false;
+		}
+		else
+		{
+			int nextPositionOfClassTypeOpenTag = functionArgumentsRaw->find(CLASS_TYPE_OPEN_TAG, startPositionOfArgumentTemp);	//find next comma
+			int nextPositionOfClassTypeCloseTag = functionArgumentsRaw->find(CLASS_TYPE_CLOSE_TAG, startPositionOfArgumentTemp);	//find next comma
+			if(nextPositionOfClassTypeOpenTag == CPP_STRING_FIND_RESULT_FAIL_VALUE)
+			{
+				stillFindingEndPositionOfArgument = false;
+			}
+			else
+			{
+				if(nextPositionOfClassTypeOpenTag < endPositionOfArgument)
+				{
+					bool foundCloseTag = false;
+
+					if(nextPositionOfClassTypeCloseTag != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+					{
+						if(nextPositionOfClassTypeCloseTag < endPositionOfArgument)
+						{
+							foundCloseTag = true;
+						}
+					}
+					if(!foundCloseTag)
+					{
+						startPositionOfArgumentTemp = endPositionOfArgument+1;
+						#ifdef CS_DEBUG_HTML_DOCUMENTATION
+						//cout << "startPositionOfArgumentTemp = " << startPositionOfArgumentTemp << endl;
+						#endif
+					}
+					else
+					{
+						stillFindingEndPositionOfArgument = false;
+					}
+				}
+				else
+				{
+					stillFindingEndPositionOfArgument = false;
+				}
+			}
+		}
+	}
+	return endPositionOfArgument;
+}
+*/
+
+
+bool findFunctionObjectWithName(string name, CSfile* currentFileObject, CSfile** fileObjectHoldingFunction, CSfunction** updatedFunctionObject)
+{
+	bool foundPrintedReferenceWithName = false;
+	
+	CSfunction* currentFunctionObject = currentFileObject->firstFunctionInFunctionList;
+	while(currentFunctionObject->next != NULL)
+	{
+		if(currentFunctionObject->name == name)
+		{
+			*updatedFunctionObject = currentFunctionObject;
+			foundPrintedReferenceWithName = true;
+			*fileObjectHoldingFunction = currentFileObject;
+		}
+		currentFunctionObject = currentFunctionObject->next;
+	}
+
+	if(currentFileObject->firstFileInBelowListContainer != NULL)
+	{
+		if(findFunctionObjectWithNameRecurse(name, currentFileObject->firstFileInBelowListContainer, fileObjectHoldingFunction, updatedFunctionObject))
+		{
+			foundPrintedReferenceWithName = true;
+		}
+	}
+
+	return foundPrintedReferenceWithName;
+}
+
+bool findFunctionObjectWithNameRecurse(string name, CSfileContainer* firstObjectInAboveLevelBelowListContainer, CSfile** fileObjectHoldingFunction, CSfunction** updatedFunctionObject)
+{
+	bool foundPrintedReferenceWithName = false;
+	
+	CSfileContainer* currentFileObjectContainer = firstObjectInAboveLevelBelowListContainer;
+
+	while(currentFileObjectContainer->next != NULL)
+	{
+		CSfile* currentFileObject = currentFileObjectContainer->fileObject;
+		
+		CSfunction* currentFunctionObject = currentFileObject->firstFunctionInFunctionList;
+		while(currentFunctionObject->next != NULL)
+		{
+			if(currentFunctionObject->name == name)
+			{
+				*updatedFunctionObject = currentFunctionObject;
+				foundPrintedReferenceWithName = true;
+				*fileObjectHoldingFunction = currentFileObject;
+			}
+			currentFunctionObject = currentFunctionObject->next;
+		}
+
+		if(currentFileObject->firstFileInBelowListContainer != NULL)
+		{
+			if(findFunctionObjectWithNameRecurse(name, currentFileObject->firstFileInBelowListContainer, fileObjectHoldingFunction, updatedFunctionObject))
+			{
+				foundPrintedReferenceWithName = true;
+			}
+		}
+
+		currentFileObjectContainer = currentFileObjectContainer->next;
+	}
+
+	return foundPrintedReferenceWithName;
+}
 
 
