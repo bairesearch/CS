@@ -26,7 +26,7 @@
  * File Name: CSglobalsDefs.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h12a 11-December-2015
+ * Project Version: 3h12b 11-December-2015
  * Description: CS specific global definitions
  *
  *******************************************************************************/
@@ -47,13 +47,13 @@
 	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
 				
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DISABLE_OUTPUT	//safe for debug (no source/header file overwrites)
-	
+			
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_PERFORM_SEPARATE_PASSES_TO_SUPPORT_RECURSION	//3h12a
 	
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_NON_CONST_GLOBAL_ASSIGNMENTS	//3h11c
 		#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_NON_CONST_GLOBAL_ASSIGNMENTS
-			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_NON_CONST_GLOBAL_ASSIGNMENTS_NUMBER_OF_TYPES (7)
-			static string specialCaseTextForAssignmentOfNonConstGlobal[CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_NON_CONST_GLOBAL_ASSIGNMENTS_NUMBER_OF_TYPES] = {"entityNodesActiveListComplete", "entityNodesActiveListConcepts", "entityNodesActiveListSubstances", "entityNodesActiveListActions", "entityNodesActiveListConditions", "entityNodesActiveListCompleteFastIndex", "comparisonVariableNode"};					
+			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_NON_CONST_GLOBAL_ASSIGNMENTS_NUMBER_OF_TYPES (11)
+			static string specialCaseTextForAssignmentOfNonConstGlobal[CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_NON_CONST_GLOBAL_ASSIGNMENTS_NUMBER_OF_TYPES] = {"entityNodesActiveListComplete", "entityNodesActiveListConcepts", "entityNodesActiveListSubstances", "entityNodesActiveListActions", "entityNodesActiveListConditions", "entityNodesActiveListCompleteFastIndex", "comparisonVariableNode", "DBconceptEntityNodesLoadedList", "DBconceptEntityNodesLoadedList", "entityNodesActiveListCompleteFastIndexDBcache", "entityNodesActiveListCompleteFastIndexDBactive"};					
 		#endif
 		
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_TEMPLATE_USE_OPEN '<'
@@ -61,8 +61,8 @@
 		
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_NONCONST_BASED_ON_EXISTENCE_OF_ARBITRARY_SPECIAL_CASE_TEXT	//3h11a
 		#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_NONCONST_BASED_ON_EXISTENCE_OF_ARBITRARY_SPECIAL_CASE_TEXT
-			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_SPECIAL_CASES_NUMBER_OF_TYPES (2)
-			static string specialCaseTextForAssignmentOfNonConst[CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_SPECIAL_CASES_NUMBER_OF_TYPES] = {"GIAgenericEntityInterpretationParameters param(", "GIAgenericDepRelInterpretationParameters param("};			
+			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_SPECIAL_CASES_NUMBER_OF_TYPES (4)
+			static string specialCaseTextForAssignmentOfNonConst[CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_SPECIAL_CASES_NUMBER_OF_TYPES] = {"GIAgenericEntityInterpretationParameters param(", "GIAgenericDepRelInterpretationParameters param(", "GIAgenericEntityInterpretationParameters paramEntity(", "GIAgenericDepRelInterpretationParameters paramDepRel("};			
 		#endif
 		
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_MAKE_ALL_POINTER_ARRAY_TYPES_NON_CONST	//3h10a //make all function argument pointer array types (typeX* argumentname[]) non const (as GCC/VS compiler interprets them as double pointers, and compiler can't convert typeX** to const typeX**)
@@ -76,6 +76,9 @@
 			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_RETURN "\treturn "
 		#endif
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_OBJECT_FUNCTION_EXECUTIONS	//3h7a
+		#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_OBJECT_FUNCTION_EXECUTIONS
+			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_OBJECT_FUNCTION_EXECUTIONS_DETECT_PARAMETERS_FUNCTION_ARGUMENTS_OR_SECONDARY_ASSIGNMENTS	//3h12b
+		#endif
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_CSTDLIB_NON_OBJECT_FUNCTION_EXECUTIONS	//3h8a
 		#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_CSTDLIB_NON_OBJECT_FUNCTION_EXECUTIONS
 			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_CSTDLIB_NON_OBJECT_FUNCTIONS_NUMBER_OF_TYPES (2)

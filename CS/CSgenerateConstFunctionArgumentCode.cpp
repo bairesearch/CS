@@ -21,7 +21,7 @@
  * File Name: CSgenerateConstFunctionArgumentCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h12a 11-December-2015
+ * Project Version: 3h12b 11-December-2015
  *
  *******************************************************************************/
 
@@ -762,10 +762,48 @@ bool checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 										if(functionText->substr(indexOfObjectFunctionName-codeReference[i].length(), codeReference[i].length()) == codeReference[i])
 										{
 											//detect execution of object functions: e.g. "functionArgument->WHOLEWORDFUNCTIONNAME(" / "functionArgument->someIntermediaryObject[].WHOLEWORDFUNCTIONNAME("
-											//cout << "objectFunctionName = " << objectFunctionName << endl;
-											//cout << "currentLine = " << currentLine << endl;
-											//exit(0);
-											isNotConst = true;				
+											isNotConst = true;	
+											
+											#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_OBJECT_FUNCTION_EXECUTIONS_DETECT_PARAMETERS_FUNCTION_ARGUMENTS_OR_SECONDARY_ASSIGNMENTS
+											CSfunctionArgument* currentFunctionArgumentInFunctionTemp = currentFunctionObject->firstFunctionArgumentInFunction;
+											while(currentFunctionArgumentInFunctionTemp->next != NULL)
+											{
+												int indexOfFunctionArgumentTemp = indexOfObjectFunctionName+objectFunctionName.length()-1;
+												while((indexOfFunctionArgumentTemp = functionText->find(currentFunctionArgumentInFunctionTemp->argumentName, indexOfFunctionArgumentTemp+1)) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+												{
+													if((indexOfFunctionArgumentTemp != CPP_STRING_FIND_RESULT_FAIL_VALUE) && (indexOfFunctionArgumentTemp < indexOfEndOfLine))
+													{
+														if(functionArgumentReferenceWholeWordCheck(functionText, currentFunctionArgumentInFunctionTemp->argumentName, indexOfFunctionArgumentTemp))
+														{
+															//e.g. "entityNodesActiveListCompleteFastIndex->insert(pair<string, GIAentityNode*>(entityNodesTempActiveListCompleteIndex, entityNode));"
+															currentFunctionArgumentInFunctionTemp->isNotConst = true;
+														}
+													}
+												}
+												#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_ASSIGNMENT_OF_ALIASES
+												//preconditions: argumentNameAliasList has already been filled for all function arguments
+												for(vector<string>::iterator argumentNameAliasListIter = currentFunctionArgumentInFunctionTemp->argumentNameAliasList.begin(); argumentNameAliasListIter < currentFunctionArgumentInFunctionTemp->argumentNameAliasList.end(); argumentNameAliasListIter++)
+												{
+													//cout << "argumentNameAliasListIter = " << *argumentNameAliasListIter << endl;
+													string functionArgumentSecondaryAssignmentName = *argumentNameAliasListIter;
+													int indexOfFunctionArgumentSecondaryAssignment = indexOfObjectFunctionName+objectFunctionName.length()-1;
+													while((indexOfFunctionArgumentSecondaryAssignment = functionText->find(currentFunctionArgumentInFunctionTemp->argumentName, indexOfFunctionArgumentSecondaryAssignment+1)) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+													{
+														if((indexOfFunctionArgumentSecondaryAssignment != CPP_STRING_FIND_RESULT_FAIL_VALUE) && (indexOfFunctionArgumentSecondaryAssignment < indexOfEndOfLine))
+														{
+															if(functionArgumentReferenceWholeWordCheck(functionText, functionArgumentSecondaryAssignmentName, indexOfFunctionArgumentSecondaryAssignment))
+															{
+																//e.g. "entityNodesActiveListCompleteFastIndex->insert(pair<string, GIAentityNode*>(entityNodesTempActiveListCompleteIndex, entityNode));"
+																currentFunctionArgumentInFunctionTemp->isNotConst = true;
+															}
+														}
+													}
+												}
+												#endif
+
+												currentFunctionArgumentInFunctionTemp = currentFunctionArgumentInFunctionTemp->next;
+											}
+											#endif
 										}									
 									}
 								}
