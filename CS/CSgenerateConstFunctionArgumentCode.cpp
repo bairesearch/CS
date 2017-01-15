@@ -21,7 +21,7 @@
  * File Name: CSgenerateConstFunctionArgumentCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h8c 08-December-2015
+ * Project Version: 3h9a 09-December-2015
  *
  *******************************************************************************/
 
@@ -61,18 +61,31 @@ bool generateConstFunctionArgumentsRecurse(CSfileContainer* firstObjectInAboveLe
 			{
 				if(currentFileObject->printed)	//now redundant
 				{//only create new code for printed boxes
-					currentFileObject->headerFileTextOrig = getFileContents(currentFileObject->name);	//headerFileNameOrig
-					currentFileObject->sourceFileTextOrig = getFileContents(currentFileObject->sourceFileNameOrig);
-					currentFileObject->headerFileText = currentFileObject->headerFileTextOrig;	//initialise with same source code as original file
-					currentFileObject->sourceFileText = currentFileObject->sourceFileTextOrig;	//initialise with same source code as original file
-
-					#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
-					//cout << "generateConstFunctionArgumentsRecurse{}: currentFileObject->sourceFileName = " << currentFileObject->sourceFileName << endl;
-					//cout << "generateConstFunctionArgumentsRecurse{}: currentFileObject->headerFileName = " << currentFileObject->headerFileName << endl;
-					#endif
-					if(!generateConstFunctionArgumentsFile(currentFileObject))
+				
+					bool headerExists = false;
+					bool sourceExists = false;
+					if(fileExists(currentFileObject->name))
 					{
-						result = false;
+						currentFileObject->headerFileTextOrig = getFileContents(currentFileObject->name);	//headerFileNameOrig
+						currentFileObject->headerFileText = currentFileObject->headerFileTextOrig;	//initialise with same source code as original file
+						headerExists = true;
+					}
+					if(fileExists(currentFileObject->sourceFileNameOrig))
+					{
+						currentFileObject->sourceFileTextOrig = getFileContents(currentFileObject->sourceFileNameOrig);
+						currentFileObject->sourceFileText = currentFileObject->sourceFileTextOrig;	//initialise with same source code as original file
+						sourceExists = true;
+					}
+					if(headerExists || sourceExists)
+					{
+						#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+						//cout << "generateConstFunctionArgumentsRecurse{}: currentFileObject->sourceFileName = " << currentFileObject->sourceFileName << endl;
+						//cout << "generateConstFunctionArgumentsRecurse{}: currentFileObject->headerFileName = " << currentFileObject->headerFileName << endl;
+						#endif
+						if(!generateConstFunctionArgumentsFile(currentFileObject))
+						{
+							result = false;
+						}
 					}
 					currentFileObject->printedCodeGeneric = true;
 				}
@@ -182,8 +195,14 @@ bool generateConstFunctionArgumentsFile(CSfile* currentFileObject)
 	cout << "currentFileObject->headerFileText = \n" << currentFileObject->headerFileText << endl;
 	cout << "currentFileObject->sourceFileText = \n" << currentFileObject->sourceFileText << endl;	
 	#endif
-	writeStringToFile(currentFileObject->headerFileName, &(currentFileObject->headerFileText));
-	writeStringToFile(currentFileObject->sourceFileName, &(currentFileObject->sourceFileText));
+	if(currentFileObject->headerFileText != "")
+	{
+		writeStringToFile(currentFileObject->headerFileName, &(currentFileObject->headerFileText));
+	}
+	if(currentFileObject->sourceFileText != "")
+	{
+		writeStringToFile(currentFileObject->sourceFileName, &(currentFileObject->sourceFileText));
+	}
 	#else
 	cout << "currentFileObject->headerFileText = \n" << currentFileObject->headerFileText << endl;
 	cout << "currentFileObject->sourceFileText = \n" << currentFileObject->sourceFileText << endl;	

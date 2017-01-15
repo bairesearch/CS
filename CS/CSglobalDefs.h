@@ -26,7 +26,7 @@
  * File Name: CSglobalsDefs.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h8c 08-December-2015
+ * Project Version: 3h9a 09-December-2015
  * Description: CS specific global definitions
  *
  *******************************************************************************/
@@ -43,7 +43,7 @@
 	
 	#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS	//added 3h1a/14-November-2014	//requires CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST
 	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
-		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DISABLE_OUTPUT	//safe for debug (no source/header file overwrites)
+		//#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DISABLE_OUTPUT	//safe for debug (no source/header file overwrites)
 		
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_RETURN_OBJECTS	//3h7a
 		#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_RETURN_OBJECTS
