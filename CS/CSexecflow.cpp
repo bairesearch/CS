@@ -26,7 +26,7 @@
  * File Name: CSexecflow.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e1b 27-August-2014
+ * Project Version: 3e1c 27-August-2014
  *
  *******************************************************************************/
 
@@ -223,7 +223,7 @@ void generateCodeStructure(string topLevelFileName, int width, int height, strin
 		}
 		else
 		{
-			cout << "error: !topLevelFunctionNameFound" << endl;
+			cout << "error: !topLevelFunctionNameFound: " << topLevelFunctionName << endl;
 			exit(0);
 		}
 	}

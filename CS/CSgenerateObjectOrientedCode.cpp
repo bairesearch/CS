@@ -26,7 +26,7 @@
  * File Name: CSgenerateObjectOrientedCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e1b 27-August-2014
+ * Project Version: 3e1c 27-August-2014
  *
  *******************************************************************************/
 
@@ -251,7 +251,7 @@ bool generateCPPclassesFile(CSfileReference * currentFileReference, CSfileRefere
 	}
 	
 		
-	//5. add class wrapper erfoot to class function declarations in class header file
+	//5. add class wrapper footer to class function declarations in class header file
 	//find location of last function reference in header	
 	currentFunctionReference = currentFileReference->firstReferenceInFunctionList;
 	CSfunctionReference * lastFunctionReference = currentFunctionReference;
@@ -275,14 +275,25 @@ bool generateCPPclassesFile(CSfileReference * currentFileReference, CSfileRefere
 		exit(0);
 	}
 	
+	//6. add move source include file statements to header (required for referenced class declarations)
+	if(!moveIncludeFileStatementsToHeader(currentFileReference))
+	{
+		result = false;
+	}	
+
+	
+	#ifndef CS_GENERATE_CPP_CLASSES_DISABLE_OUTPUT
 	#ifdef CS_DEBUG_GENERATE_OBJECT_ORIENTED_CODE
 	cout << "currentFileReference->headerFileText = \n" << currentFileReference->headerFileText << endl;
-	cout << "currentFileReference->sourceFileText = \n" << currentFileReference->sourceFileText << endl;
+	cout << "currentFileReference->sourceFileText = \n" << currentFileReference->sourceFileText << endl;	
 	#endif
-	
 	writeStringToFile(&(currentFileReference->headerFileName), &(currentFileReference->headerFileText));
 	writeStringToFile(&(currentFileReference->sourceFileName), &(currentFileReference->sourceFileText));
-		
+	#else
+	cout << "currentFileReference->headerFileText = \n" << currentFileReference->headerFileText << endl;
+	cout << "currentFileReference->sourceFileText = \n" << currentFileReference->sourceFileText << endl;	
+	#endif
+	
 	return result;
 }
 		
@@ -470,6 +481,140 @@ void writeStringToFile(string * fileName, string * s)
 	}
 
 	writeFileObject.close();
+}
+
+
+bool moveIncludeFileStatementsToHeader(CSfileReference * firstReferenceInAboveLevelBelowList)	
+{
+	bool result = true;
+	string includeStatementsHeaderNew = "";
+	
+	CSfileReference * currentFileReference = firstReferenceInAboveLevelBelowList->firstReferenceInBelowList;
+	int positionOfLastIncludeStatementEndInHeader = CPP_STRING_FIND_RESULT_FAIL_VALUE;
+	int lineOfFirstIncludeStatementEndInSource = REALLY_LARGE_INT;
+	while(currentFileReference->next != NULL)
+	{
+		//if(currentFileReference->name != firstReferenceInAboveLevelBelowList->name){	//do not modify include .h of .c file - not required because of "if(hashIncludeFileName != topLevelReference->name)	//this is added so that do not parse method.h from within method.cpp!"
+		string includeStatement = string(CS_GENERATE_CPP_CLASSES_INCLUDE_START) + currentFileReference->name + CS_GENERATE_CPP_CLASSES_INCLUDE_END;
+		
+		int positionOfIncludeStatementHeader = firstReferenceInAboveLevelBelowList->headerFileText.find(includeStatement);
+		int positionOfIncludeStatementSource = firstReferenceInAboveLevelBelowList->sourceFileText.find(includeStatement);
+		bool foundIncludeFileInHeader = false;
+		bool foundIncludeFileInSource = false;
+		string includeStatementFullLineHeader = "";
+		string includeStatementFullLineSource = "";
+		
+		int posStartOfLineHeader = CPP_STRING_FIND_RESULT_FAIL_VALUE;
+		int posEndOfLineHeader = CPP_STRING_FIND_RESULT_FAIL_VALUE;		
+		if(positionOfIncludeStatementHeader != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+		{
+			//cout << "foundIncludeFileInHeader" << endl;
+			
+			foundIncludeFileInHeader = true;
+			posStartOfLineHeader = firstReferenceInAboveLevelBelowList->headerFileText.rfind(CHAR_NEWLINE, positionOfIncludeStatementHeader);
+			posEndOfLineHeader = firstReferenceInAboveLevelBelowList->headerFileText.find(CHAR_NEWLINE, positionOfIncludeStatementHeader);
+			if((posStartOfLineHeader != CPP_STRING_FIND_RESULT_FAIL_VALUE) && (posEndOfLineHeader != CPP_STRING_FIND_RESULT_FAIL_VALUE))
+			{
+				includeStatementFullLineHeader = firstReferenceInAboveLevelBelowList->headerFileText.substr(posStartOfLineHeader, posEndOfLineHeader-posStartOfLineHeader);
+				//cout << "includeStatementFullLineHeader = " << includeStatementFullLineHeader << endl;
+				//exit(0);
+				
+				if(posEndOfLineHeader > positionOfLastIncludeStatementEndInHeader)
+				{
+					positionOfLastIncludeStatementEndInHeader = posEndOfLineHeader;
+				}
+			}	
+			else
+			{
+				cout << "moveIncludeFileStatementsToHeader() error: ((posStartOfLineHeader != CPP_STRING_FIND_RESULT_FAIL_VALUE) && (posEndOfLineHeader != CPP_STRING_FIND_RESULT_FAIL_VALUE))" << endl;
+			}	
+		}
+		int posStartOfLineSource = CPP_STRING_FIND_RESULT_FAIL_VALUE;
+		int posEndOfLineSource = CPP_STRING_FIND_RESULT_FAIL_VALUE;
+		if(positionOfIncludeStatementSource != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+		{
+			//cout << "foundIncludeFileInSource" << endl;
+					
+			foundIncludeFileInSource = true;
+			posStartOfLineSource = firstReferenceInAboveLevelBelowList->sourceFileText.rfind(CHAR_NEWLINE, positionOfIncludeStatementSource);
+			posEndOfLineSource = firstReferenceInAboveLevelBelowList->sourceFileText.find(CHAR_NEWLINE, positionOfIncludeStatementSource);
+			if((posStartOfLineSource != CPP_STRING_FIND_RESULT_FAIL_VALUE) && (posEndOfLineSource != CPP_STRING_FIND_RESULT_FAIL_VALUE))
+			{
+				includeStatementFullLineSource = firstReferenceInAboveLevelBelowList->sourceFileText.substr(posStartOfLineSource, posEndOfLineSource-posStartOfLineSource);
+				//cout << "includeStatementFullLineSource = " << includeStatementFullLineSource << endl;
+				//exit(0);
+				
+				int lineStartOfLineSource = 0;
+				for(int i=0; i<posStartOfLineSource; i++)
+				{
+					if(firstReferenceInAboveLevelBelowList->sourceFileText[i] == CHAR_NEWLINE)
+					{
+						lineStartOfLineSource++;
+					}
+				}
+				if(lineStartOfLineSource < lineOfFirstIncludeStatementEndInSource)
+				{
+					lineOfFirstIncludeStatementEndInSource = lineStartOfLineSource;
+				}				
+			}	
+			else
+			{
+				cout << "moveIncludeFileStatementsToSource() error: ((posStartOfLineSource != CPP_STRING_FIND_RESULT_FAIL_VALUE) && (posEndOfLineSource != CPP_STRING_FIND_RESULT_FAIL_VALUE))" << endl;
+			}		
+		}
+		
+		if(foundIncludeFileInSource)
+		{
+			//cout << "foundIncludeFileInSource = " << foundIncludeFileInSource << endl;
+			//remove from source;
+			firstReferenceInAboveLevelBelowList->sourceFileText = firstReferenceInAboveLevelBelowList->sourceFileText.substr(0, posStartOfLineSource) + firstReferenceInAboveLevelBelowList->sourceFileText.substr(posEndOfLineSource, firstReferenceInAboveLevelBelowList->sourceFileText.length()-posEndOfLineSource);
+			if(!foundIncludeFileInHeader)
+			{
+				includeStatementsHeaderNew = includeStatementsHeaderNew + includeStatementFullLineSource;
+			}
+		}
+				
+		currentFileReference = currentFileReference->next;
+	}
+	
+	if(includeStatementsHeaderNew != "")
+	{
+		includeStatementsHeaderNew + includeStatementsHeaderNew + CHAR_NEWLINE;
+		//cout << "includeStatementsHeaderNew = " << endl;
+		
+		int positionInHeader = 0;
+		if(positionOfLastIncludeStatementEndInHeader == CPP_STRING_FIND_RESULT_FAIL_VALUE)
+		{
+			//no include file statements found in header - take the line of the first include file statment in source instead (as this should coincide with the appropriate place for include files in the header also, assuming they are formatted the same)
+			int lineHeader = 0;
+			bool stillFindingLines = true;
+			while((lineHeader < lineOfFirstIncludeStatementEndInSource) && stillFindingLines)
+			{
+				if(positionInHeader < firstReferenceInAboveLevelBelowList->headerFileText.length())
+				{
+					if(firstReferenceInAboveLevelBelowList->headerFileText[positionInHeader] == CHAR_NEWLINE)
+					{
+						lineHeader++;
+					}
+				}
+				else
+				{
+					stillFindingLines = false;
+				}
+				positionInHeader++;
+			}
+		}
+		else
+		{
+			positionInHeader = positionOfLastIncludeStatementEndInHeader;
+		}
+		firstReferenceInAboveLevelBelowList->headerFileText = firstReferenceInAboveLevelBelowList->headerFileText.substr(0, positionInHeader) + includeStatementsHeaderNew + firstReferenceInAboveLevelBelowList->headerFileText.substr(positionInHeader, includeStatementsHeaderNew.length()-positionInHeader);
+		
+		//cout << "firstReferenceInAboveLevelBelowList->headerFileText = " << firstReferenceInAboveLevelBelowList->headerFileText << endl;
+		//exit(0);
+	}
+	
+	return result;
 }
 
 
