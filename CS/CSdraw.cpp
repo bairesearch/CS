@@ -26,7 +26,7 @@
  * File Name: CSdraw.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3f3a 10-July-2015
+ * Project Version: 3f4a 11-July-2015
  *
  *******************************************************************************/
 
@@ -443,12 +443,12 @@ LDreference* createFileReferenceListBoxes(LDreference* currentReferenceInPrintLi
 							{
 								if(currentAttributeTag->name == RULES_XML_ATTRIBUTE_x)
 								{
-									xPos = atoi(currentAttributeTag->value.c_str());
+									xPos = convertStringToInt(currentAttributeTag->value);
 									//cout << "xPos = " << xPos << endl;
 								}
 								if(currentAttributeTag->name == RULES_XML_ATTRIBUTE_y)
 								{
-									maxYPos = atoi(currentAttributeTag->value.c_str());
+									maxYPos = convertStringToInt(currentAttributeTag->value);
 									//cout << "maxYPos = " << maxYPos << endl;
 								}
 								currentAttributeTag = currentAttributeTag->nextAttribute;
@@ -1978,15 +1978,8 @@ void writeFileOrFunctionSVGboxTransparent(XMLparserTag** currentTag, vec* pos, i
 string createGroupID(string objectName, int printX, int printY)
 {
 	string groupID = "";
-	groupID = groupID + objectName + intToString(printX) + intToString(printY);
-	//groupID = groupID + intToString(printX) + intToString(printY);
+	groupID = groupID + objectName + convertIntToString(printX) + convertIntToString(printY);
+	//groupID = groupID + convertIntToString(printX) + convertIntToString(printY);
 	return groupID;
-}
-
-string intToString(int integer)
-{
-	char stringCharStar[100];
-	sprintf(stringCharStar, "%d", integer);
-	return string(stringCharStar);
 }
 

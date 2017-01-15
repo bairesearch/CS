@@ -26,7 +26,7 @@
  * File Name: CSoperations.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3f3a 10-July-2015
+ * Project Version: 3f4a 11-July-2015
  *
  *******************************************************************************/
 
@@ -428,7 +428,7 @@ bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunctionReference* firstR
 	CSfunctionReference* currentReferenceInFunctionList = firstReferenceInFunctionList;
 	CSfunctionReference* currentReferenceInFunctionReferenceList = NULL;
 
-	if(!parseFileObject.rdbuf( )->is_open( ))
+	if(!parseFileObject.rdbuf()->is_open())
 	{
 		//cout << "CS error - file not found, " << parseFileName << endl;
 	}

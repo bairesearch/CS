@@ -26,7 +26,7 @@
  * File Name: CSgenerateObjectOrientedCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3f3a 10-July-2015
+ * Project Version: 3f4a 11-July-2015
  *
  *******************************************************************************/
 
@@ -311,8 +311,8 @@ bool generateCPPclassesFile(CSfileReference* currentFileReference, CSfileReferen
 	cout << "currentFileReference->headerFileText = \n" << currentFileReference->headerFileText << endl;
 	cout << "currentFileReference->sourceFileText = \n" << currentFileReference->sourceFileText << endl;	
 	#endif
-	writeStringToFile(&(currentFileReference->headerFileName), &(currentFileReference->headerFileText));
-	writeStringToFile(&(currentFileReference->sourceFileName), &(currentFileReference->sourceFileText));
+	writeStringToFile(currentFileReference->headerFileName, &(currentFileReference->headerFileText));
+	writeStringToFile(currentFileReference->sourceFileName, &(currentFileReference->sourceFileText));
 	#else
 	cout << "currentFileReference->headerFileText = \n" << currentFileReference->headerFileText << endl;
 	cout << "currentFileReference->sourceFileText = \n" << currentFileReference->sourceFileText << endl;	
