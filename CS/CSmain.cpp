@@ -23,7 +23,7 @@
  * File Name: CSmain.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c3f 17-November-2012
+ * Project Version: 3c3g 18-November-2012
  *
  *******************************************************************************/
 
@@ -256,7 +256,7 @@ int main(int argc,char **argv)
 
 	if(argumentExists(argc,argv,"-version"))
 	{
-		cout << "OpenCS.exe - Project Version: 3c3f 17-November-2012" << endl;
+		cout << "OpenCS.exe - Project Version: 3c3g 18-November-2012" << endl;
 		exit(1);
 	}
 
@@ -269,7 +269,7 @@ int main(int argc,char **argv)
 		cout << "CS does not support commenting (illegal functions and include files have to be be removed completely)" << endl;	//CS has been upgraded to support commenting (previously illegal functions and include files had to be be removed completely) - however this feature has not yet been debugged and so has been disabled at present
 		cout << "function definitions in .cpp files must not have leading white space, and should be contained on a single line" << endl;
 		cout << "function definitions in .cpp files must end with a } without any leading white space" << endl;
-		cout << "function declarations for functions that wish to be parsed/added to tree must be contained in .h files, can have preceeding white space, but must be contained on a single line" << endl;
+		cout << "function declarations for functions that wish to be parsed/added to tree must be contained in .h files, can have preceding white space, but must be contained on a single line" << endl;
 		cout << "CS does not support relative paths in #include." << endl;
 		cout << "CS requires include/header files that wish to be parsed/added to tree to to be delimited with " " rather than < >" << endl;
 		cout << "CS requires a single space between #include and \"this.h\"" << endl;

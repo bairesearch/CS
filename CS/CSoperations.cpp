@@ -23,7 +23,7 @@
  * File Name: CSoperations.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c3f 17-November-2012
+ * Project Version: 3c3g 18-November-2012
  *
  *******************************************************************************/
 
@@ -52,7 +52,7 @@ using namespace std;
 
 
 
-bool getIncludeFileNamesFromCorHFile(CSfileReference * firstReferenceInIncludeFileList, CSfileReference * topLevelReference, string topLevelReferenceName, int level)
+bool getIncludeFileNamesFromCorHfile(CSfileReference * firstReferenceInIncludeFileList, CSfileReference * topLevelReference, string topLevelReferenceName, int level)
 {
 	bool fileFound = false;
 
@@ -286,7 +286,7 @@ bool getIncludeFileNamesFromCorHFile(CSfileReference * firstReferenceInIncludeFi
 
 						//parse into .h file;
 						string referenceName = hashIncludeFileName;
-						bool hFileFound = getIncludeFileNamesFromCorHFile(currentReferenceInIncludeFileList->firstReferenceInBelowList, currentReferenceInIncludeFileList, referenceName, level+1);
+						bool hFileFound = getIncludeFileNamesFromCorHfile(currentReferenceInIncludeFileList->firstReferenceInBelowList, currentReferenceInIncludeFileList, referenceName, level+1);
 
 						if(hFileFound)
 						{
@@ -297,7 +297,7 @@ bool getIncludeFileNamesFromCorHFile(CSfileReference * firstReferenceInIncludeFi
 								lastReferenceInBelowList = lastReferenceInBelowList->next;
 							}
 							string referenceNameCFile = hashIncludeFileNameCFile;
-							bool cFileFound = getIncludeFileNamesFromCorHFile(lastReferenceInBelowList, currentReferenceInIncludeFileList, referenceNameCFile, level+1);
+							bool cFileFound = getIncludeFileNamesFromCorHfile(lastReferenceInBelowList, currentReferenceInIncludeFileList, referenceNameCFile, level+1);
 
 							if(cFileFound)
 							{
@@ -305,15 +305,15 @@ bool getIncludeFileNamesFromCorHFile(CSfileReference * firstReferenceInIncludeFi
 								CSfunctionReference * newfirstReferenceInFunctionList = new CSfunctionReference();
 								currentReferenceInIncludeFileList->firstReferenceInFunctionList = newfirstReferenceInFunctionList;
 
-								bool hFileFound2 = getFunctionNamesFromFunctionDeclarationsInHFile(currentReferenceInIncludeFileList->firstReferenceInFunctionList, referenceName, level);
+								bool hFileFound2 = getFunctionNamesFromFunctionDeclarationsInHfile(currentReferenceInIncludeFileList->firstReferenceInFunctionList, referenceName, level);
 								if(hFileFound2)
 								{
 									#ifdef CS_DEBUG
 									//cout << "currentReferenceInIncludeFileList->firstReferenceInFunctionList->name = " << currentReferenceInIncludeFileList->firstReferenceInFunctionList->name << endl;
 									//cout << "topLevelReferenceName = " << topLevelReferenceName << endl;
-									//cout << "getFunctionReferenceNamesFromFunctionsInCFile()" << endl;
+									//cout << "getFunctionReferenceNamesFromFunctionsInCfile()" << endl;
 									#endif
-									getFunctionReferenceNamesFromFunctionsInCFile(firstReferenceInIncludeFileList, currentReferenceInIncludeFileList->firstReferenceInFunctionList, currentReferenceInIncludeFileList, referenceNameCFile, level);
+									getFunctionReferenceNamesFromFunctionsInCfile(firstReferenceInIncludeFileList, currentReferenceInIncludeFileList->firstReferenceInFunctionList, currentReferenceInIncludeFileList, referenceNameCFile, level);
 
 								}
 								else
@@ -369,7 +369,7 @@ bool getIncludeFileNamesFromCorHFile(CSfileReference * firstReferenceInIncludeFi
 			}
 			else
 			{
-				cout << "getIncludeFileNamesFromCorHFile: token error" << endl;
+				cout << "getIncludeFileNamesFromCorHfile: token error" << endl;
 				cout << "char = " << c << endl;
 				cout << "parseFileNamecharstar = " << parseFileNamecharstar << endl;
 				cout << "lineCount = " << lineCount << endl;
@@ -383,7 +383,7 @@ bool getIncludeFileNamesFromCorHFile(CSfileReference * firstReferenceInIncludeFi
 }
 
 
-bool getFunctionNamesFromFunctionDeclarationsInHFile(CSfunctionReference * firstReferenceInFunctionList, string topLevelFileName, int level)
+bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunctionReference * firstReferenceInFunctionList, string topLevelFileName, int level)
 {
 	bool fileFound = false;
 
@@ -509,7 +509,7 @@ bool getFunctionNamesFromFunctionDeclarationsInHFile(CSfunctionReference * first
 				if((c == ' ') || (c == '\t'))
 				{
 					#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION	
-					if(c == '\t')
+					if(c == CS_SOURCE_FILE_INDENTATION_CHARACTER)
 					{
 						functionReferenceIndentationInHfileTemp++;
 					}
@@ -676,7 +676,7 @@ bool getFunctionNamesFromFunctionDeclarationsInHFile(CSfunctionReference * first
 						currentReferenceInFunctionList->isFunctionReference = true;
 						currentReferenceInFunctionList->name = functionNameCpp;
 						currentReferenceInFunctionList->nameFull = functionNameFull;
-						currentReferenceInFunctionList->functionReferenceIndentationInHfile = functionReferenceIndentationInHfileTemp;
+						currentReferenceInFunctionList->functionReferenceIndentation = functionReferenceIndentationInHfileTemp;
 						CSfunctionReference * newCSReference = new CSfunctionReference();
 						currentReferenceInFunctionList->next = newCSReference;
 
@@ -721,7 +721,7 @@ bool getFunctionNamesFromFunctionDeclarationsInHFile(CSfunctionReference * first
 			}
 			else
 			{
-				cout << "getFunctionNamesFromFunctionDeclarationsInHFile: token error" << endl;
+				cout << "getFunctionNamesFromFunctionDeclarationsInHfile: token error" << endl;
 				cout << "char = " << c << endl;
 				cout << "parseFileNamecharstar = " << parseFileNamecharstar << endl;
 				cout << "lineCount = " << lineCount << endl;
@@ -738,7 +738,7 @@ bool getFunctionNamesFromFunctionDeclarationsInHFile(CSfunctionReference * first
 
 #define MAX_CODE_FILE_SIZE (1000000)
 
-void getFunctionReferenceNamesFromFunctionsInCFile(CSfileReference * firstReferenceInIncludeFileList, CSfunctionReference * firstReferenceInFunctionList, CSfileReference * topLevelReference, string topLevelFileName, int level)
+void getFunctionReferenceNamesFromFunctionsInCfile(CSfileReference * firstReferenceInIncludeFileList, CSfunctionReference * firstReferenceInFunctionList, CSfileReference * topLevelReference, string topLevelFileName, int level)
 {
 	string codeFileName = topLevelFileName;
 	char * codeFileNamecharstar = const_cast<char*>(codeFileName.c_str());
@@ -910,7 +910,7 @@ void getFunctionReferenceNamesFromFunctionsInCFile(CSfileReference * firstRefere
 
 					if(currentIndexInFunction > CS_MAX_NUM_CHARACTERS_PER_FUNCTION)
 					{
-						cout << "getFunctionReferenceNamesFromFunctionsInCFile() error: function definitions in .cpp files must end with a } without any leading white space" << endl;
+						cout << "getFunctionReferenceNamesFromFunctionsInCfile() error: function definitions in .cpp files must end with a } without any leading white space" << endl;
 						exit(0);
 					}
 
@@ -1049,6 +1049,21 @@ CSfunctionReference * searchFunctionStringForFunctionReferences(CSfileReference 
 		int indexToFunctionReference  = functionContentsString.find((currentFunction->name + '('));
 		if(indexToFunctionReference != -1)
 		{
+			#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST
+			int indexOfFunctionReferenceStartOfLine = functionContentsString.rfind("\n", indexToFunctionReference);
+			string functionReferenceWholeLine = functionContentsString.substr(indexOfFunctionReferenceStartOfLine, indexToFunctionReference-indexOfFunctionReferenceStartOfLine);
+			int functionReferenceIndentationInCfileTemp = 0;
+			
+			for(int i=0; i<functionReferenceWholeLine.length(); i++)
+			{
+				if(functionReferenceWholeLine[i] == CS_SOURCE_FILE_INDENTATION_CHARACTER)
+				{
+					functionReferenceIndentationInCfileTemp++;
+				}
+			}
+			currentReferenceInFunctionReferenceList->functionReferenceIndentation = functionReferenceIndentationInCfileTemp;
+			#endif
+
 			//function reference found, add it to the function reference list of the funciton;
 
 			currentReferenceInFunctionReferenceList->name = currentFunction->name;

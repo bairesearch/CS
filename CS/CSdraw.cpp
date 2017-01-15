@@ -23,7 +23,7 @@
  * File Name: CSdraw.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c3f 17-November-2012
+ * Project Version: 3c3g 18-November-2012
  *
  *******************************************************************************/
 
@@ -324,7 +324,7 @@ void fillInCSrulesExternVariables()
 
 int maxXAtAParticularY[MAX_INCLUDE_DEPTH];
 
-void initiateMaxXAtAParticularY()
+void initiateMaxXatParticularY()
 {
 	//now print based upon above lists;
 	for(int i=0; i<MAX_INCLUDE_DEPTH; i++)
@@ -361,7 +361,7 @@ Reference * createFileReferenceListBoxes(Reference * currentReferenceInPrintList
 
 
 		int maxYPos = 0;	//always print boxes with max Y pos...
-		bool aPreviousReferenceWithThisNameHasbeenPrinted = hasAPreviousReferenceWithThisNameHasbeenPrinted(currentFileReference->name, firstReferenceInTopLevelBelowList, &maxYPos);
+		bool aPreviousReferenceWithThisNameHasbeenPrinted = hasPreviousReferenceWithThisNameHasbeenPrinted(currentFileReference->name, firstReferenceInTopLevelBelowList, &maxYPos);
 		int xPos = maxXAtAParticularY[maxYPos];
 
 		if(!aPreviousReferenceWithThisNameHasbeenPrinted)
@@ -430,7 +430,7 @@ Reference * createFileReferenceListBoxes(Reference * currentReferenceInPrintList
 				pos.z = currentFileReference->printY;	
 				newCurrentReferenceInPrintList = createFileOrFunctionReferenceBox(newCurrentReferenceInPrintList, &pos, &(currentFileReference->name), vectorObjectsScaleFactor, colour, CS_FILE_MAX_TEXT_LENGTH, CS_OUTPUT_Z_POSITION_FILE_BOX);	//add box
 
-				writeFileOrFunctionSVGBox(currentTag, &pos, currentFileReference->name.length(), vectorObjectsScaleFactor, CS_FILE_MAX_TEXT_LENGTH, colour, CS_FILE_TEXT_BOX_OUTLINE_WIDTH_SVG);
+				writeFileOrFunctionSVGbox(currentTag, &pos, currentFileReference->name.length(), vectorObjectsScaleFactor, CS_FILE_MAX_TEXT_LENGTH, colour, CS_FILE_TEXT_BOX_OUTLINE_WIDTH_SVG);
 			#ifdef CS_DO_NOT_DRAW_ALL_FILE_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
 			}
 			#endif
@@ -487,7 +487,7 @@ Reference * createFileReferenceListBoxes(Reference * currentReferenceInPrintList
 	return newCurrentReferenceInPrintList;
 }
 
-bool hasAPreviousReferenceWithThisNameHasbeenPrinted(string name, CSfileReference * firstReferenceInAboveLevelBelowList, int *maxYPos)
+bool hasPreviousReferenceWithThisNameHasbeenPrinted(string name, CSfileReference * firstReferenceInAboveLevelBelowList, int *maxYPos)
 {
 	bool aPreviousReferenceWithThisNameHasbeenPrinted = false;
 
@@ -511,7 +511,7 @@ bool hasAPreviousReferenceWithThisNameHasbeenPrinted(string name, CSfileReferenc
 
 		if(currentReference->firstReferenceInBelowList != NULL)
 		{
-			if(hasAPreviousReferenceWithThisNameHasbeenPrinted(name, currentReference->firstReferenceInBelowList, maxYPos))
+			if(hasPreviousReferenceWithThisNameHasbeenPrinted(name, currentReference->firstReferenceInBelowList, maxYPos))
 			{
 				aPreviousReferenceWithThisNameHasbeenPrinted = true;
 			}
@@ -751,7 +751,7 @@ Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentRe
 		#ifdef CS_DRAW_APPLY_EVEN_ODD_X_OFFSET
 		if((newFunctionLevel % 2) == 0)
 		{
-			xOffset = (fileReference->maxFunctionPrintXAtAParticularY[newFunctionLevel])*CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR/0.5 / 2.0;
+			xOffset = CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR/0.5 / 2.0;
 		}
 		#endif	
 		functionReference->printX = fileReference->printX + (fileReference->maxFunctionPrintXAtAParticularY[newFunctionLevel])*CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR/0.5 + xOffset - (CS_FILE_FUNCTIONS_ENABLED_VECTOROBJECTS_SCALE_FACTOR*0.5 * CS_FILE_FUNCTIONS_ENABLED_LARGE_BOX_SCALE_FACTOR_X * 0.5);
@@ -801,7 +801,7 @@ Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentRe
 			pos.y = functionReference->printY;			
 			newCurrentReferenceInPrintList = createFileOrFunctionReferenceBox(newCurrentReferenceInPrintList, &pos, &(functionReference->name), CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR, colour, CS_FUNCTION_MAX_TEXT_LENGTH, CS_OUTPUT_Z_POSITION_FUNCTION_BOX);	//add box
 
-			writeFileOrFunctionSVGBox(currentTag, &pos, functionReference->name.length(), CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR, CS_FUNCTION_MAX_TEXT_LENGTH, colour, CS_FUNCTION_TEXT_BOX_OUTLINE_WIDTH_SVG);
+			writeFileOrFunctionSVGbox(currentTag, &pos, functionReference->name.length(), CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR, CS_FUNCTION_MAX_TEXT_LENGTH, colour, CS_FUNCTION_TEXT_BOX_OUTLINE_WIDTH_SVG);
 		#ifdef CS_DO_NOT_DRAW_ALL_FUNCTION_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
 		}
 		#endif
@@ -1392,7 +1392,7 @@ Reference * traceFunctionsUpwardsAndDrawOrHighLightThese(Reference * currentRefe
 	pos.y = currentFunctionBeingTraced->printY;
 	newCurrentReferenceInPrintList = createFileOrFunctionReferenceBox(newCurrentReferenceInPrintList, &pos, &(currentFunctionBeingTraced->name), CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR, functionBoxColour, CS_FUNCTION_MAX_TEXT_LENGTH, CS_OUTPUT_Z_POSITION_FUNCTION_TRACE_BOX);	//add box
 
-	writeFileOrFunctionSVGBoxTransparent(currentTag, &pos, currentFunctionBeingTraced->name.length(), CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR, CS_FUNCTION_MAX_TEXT_LENGTH, functionBoxColour, CS_FUNCTION_TEXT_BOX_OUTLINE_WIDTH_SVG, 0.5);
+	writeFileOrFunctionSVGboxTransparent(currentTag, &pos, currentFunctionBeingTraced->name.length(), CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR, CS_FUNCTION_MAX_TEXT_LENGTH, functionBoxColour, CS_FUNCTION_TEXT_BOX_OUTLINE_WIDTH_SVG, 0.5);
 
 	//print function text;
 	#ifdef CS_DO_NOT_DRAW_ALL_FUNCTION_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
@@ -1507,7 +1507,7 @@ void traceFunctionsUpwardsAndDrawOrHighLightTheseReset(CSfileReference * firstRe
 
 
 
-void writeFileOrFunctionSVGBox(XMLparserTag ** currentTag, vec * pos, int textLength, double scaleFactor, double maxTextLength, int col, double boxOutlineWidth)
+void writeFileOrFunctionSVGbox(XMLparserTag ** currentTag, vec * pos, int textLength, double scaleFactor, double maxTextLength, int col, double boxOutlineWidth)
 {
 #ifdef CS_CENTRE_BOXES
 	double width = CS_FILE_OR_FUNCTION_TEXT_BOX_BOX_SCALE_FACTOR_X_SPACING_FRACTION_SVG*scaleFactor*(double)textLength/maxTextLength;
@@ -1519,7 +1519,7 @@ void writeFileOrFunctionSVGBox(XMLparserTag ** currentTag, vec * pos, int textLe
 	writeSVGbox(currentTag,  pos, width, height, col, boxOutlineWidth, false);
 }
 
-void writeFileOrFunctionSVGBoxTransparent(XMLparserTag ** currentTag, vec * pos, int textLength, double scaleFactor, double maxTextLength, int col, double boxOutlineWidth, double fillOpacity)
+void writeFileOrFunctionSVGboxTransparent(XMLparserTag ** currentTag, vec * pos, int textLength, double scaleFactor, double maxTextLength, int col, double boxOutlineWidth, double fillOpacity)
 {
 #ifdef CS_CENTRE_BOXES
 	double width = CS_FILE_OR_FUNCTION_TEXT_BOX_BOX_SCALE_FACTOR_X_SPACING_FRACTION_SVG*scaleFactor*(double)textLength/maxTextLength;

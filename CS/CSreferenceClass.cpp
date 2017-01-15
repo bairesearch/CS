@@ -23,7 +23,7 @@
  * File Name: CSreferenceClass.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c3f 17-November-2012
+ * Project Version: 3c3g 18-November-2012
  *
  *******************************************************************************/
 
@@ -141,8 +141,8 @@ CSfunctionReference::CSfunctionReference(void)
 	isFunctionReference = false;
 	isFunctionReferenceReference = false;
 	numTopLevelFunctionsInFileAlreadyPrinted = 0;
-	#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION
-	functionReferenceIndentationInHfile = 0;
+	#ifdef CS_HTML_DOCUMENTATION_RECORD_FUNCTION_INDENTATION
+	functionReferenceIndentation = 0;
 	#endif
 	
 	for(int i=0; i<MAX_INCLUDE_DEPTH_FUNCTION; i++)
