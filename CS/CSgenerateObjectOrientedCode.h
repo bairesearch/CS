@@ -51,6 +51,7 @@ public:
 bool generateCPPclasses(CSfileReferenceContainer* firstReferenceInTopLevelBelowListContainer);
 	bool generateCPPclassesRecurse(CSfileReferenceContainer* firstReferenceInAboveLevelBelowListContainer, CSfileReferenceContainer* firstReferenceInTopLevelBelowListContainer);
 		bool generateCPPclassesFile(CSfileReference* currentFileReference, CSfileReferenceContainer* firstReferenceInTopLevelBelowListContainer);
+			string replaceAllOccurancesOfFunctionReferenceReferenceNameInFunction(string* functionTextOrig, string functionReferenceReferenceName, string functionReferenceReferenceNameUpdated, bool* foundAtLeastOneInstance);
 			void isFunctionBeingReferencedPublicallyRecurse(string functionName, string fileName, CSfileReferenceContainer* firstReferenceInAboveLevelBelowListContainer, bool* foundPublicReference);
 			string generateClassName(string headerFileName);
 				string generateClassDeclarationName(string className);

@@ -88,9 +88,9 @@ void generateCodeStructure(string topLevelFileName, int width, int height, strin
 	CSfileReferenceContainer* firstReferenceInTopLevelBelowListContainer = new CSfileReferenceContainer();
 	topLevelReferenceInList->firstReferenceInBelowListContainer = firstReferenceInTopLevelBelowListContainer;
 
-	//cout << "start getIncludeFileNamesFromCorHfile()" << endl;
+	//cout << "start getIncludeFileNamesFromCorHfile{}" << endl;
 	bool hFileFound = getIncludeFileNamesFromCorHfile(firstReferenceInTopLevelBelowListContainer, topLevelReferenceInListContainer, topLevelReferenceInList, topLevelFileName, 0);
-	//cout << "finish getIncludeFileNamesFromCorHfile()" << endl;
+	//cout << "finish getIncludeFileNamesFromCorHfile{}" << endl;
 	if(!hFileFound)
 	{
 		cout << "generateCodeStructure() error: !hFileFound: " << topLevelFileName << endl;

@@ -304,6 +304,9 @@ int main(int argc,char* *argv)
 		cout << "CS is not designed to operate with function pointers (and object orientated code) - it is argued that code is easier to read without function pointers and should only be used where heavy optimisation is required" << endl;
 		cout << "the first include file in the top level source file (eg PROJECTmain.cpp) must declare the top level function name (eg main)" << endl;
 		cout << "make sure the temp folder is clear of all output files (ie svg/html files of the same name as expected output files)" << endl;
+		cout << "function contents cannot include a reference to themselves in comments of their contents (required for HTML generation function reference list and generateoo)" << endl;
+		cout << "CS does not support 2 identical function declarations (with identical arguments) for a single function in a header file (separated by preprocessor definitions)" << endl;
+		cout << "CS does not support 2 function declarations with different arguments for a single function in a header file (separated by preprocessor defintions)" << endl;
 		cout << "****************************" << endl;
 		exit(0);
 	}

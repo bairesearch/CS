@@ -1389,7 +1389,7 @@ LDreference* createFileOrFunctionReferenceBox(LDreference* currentReferenceInPri
 	newCurrentReferenceInPrintList->vertex4relativePosition.z = zPosition;
 
 	/*
-	cout << "createFileOrFunctionReferenceBox():" << endl;
+	cout << "createFileOrFunctionReferenceBox{}:" << endl;
 	cout << "referenceName = " <<* referenceName << endl;
 	cout << "newCurrentReferenceInPrintList->type = " << newCurrentReferenceInPrintList->type << endl;
 	cout << "newCurrentReferenceInPrintList->colour = " << newCurrentReferenceInPrintList->colour << endl;
@@ -1539,7 +1539,7 @@ LDreference* configureFileOrFunctionReferenceConnection(LDreference* currentRefe
 			newCurrentReferenceInPrintList->vertex2relativePosition.z = CS_OUTPUT_Z_POSITION_FUNCTION_CONNECTIONS;	//why doesnt this work
 		}
 		/*
-		cout << "configureFileOrFunctionReferenceConnection():" << endl;
+		cout << "configureFileOrFunctionReferenceConnection{}:" << endl;
 		cout << "currentReferenceInAboveList->name = " << currentReferenceInAboveList->name << endl;
 		cout << "newCurrentReferenceInPrintList->type = " << newCurrentReferenceInPrintList->type << endl;
 		cout << "newCurrentReferenceInPrintList->colour = " << newCurrentReferenceInPrintList->colour << endl;
@@ -1608,7 +1608,7 @@ LDreference* createBox(LDreference* currentReferenceInPrintList, vec* vect, doub
 	newCurrentReferenceInPrintList->vertex4relativePosition.z = vect->z;
 
 	/*
-	cout << "createFileOrFunctionReferenceBox():" << endl;
+	cout << "createFileOrFunctionReferenceBox{}:" << endl;
 	cout << "reference->name = " << reference->name << endl;
 	cout << "newCurrentReferenceInPrintList->type = " << newCurrentReferenceInPrintList->type << endl;
 	cout << "newCurrentReferenceInPrintList->colour = " << newCurrentReferenceInPrintList->colour << endl;
@@ -1883,7 +1883,7 @@ LDreference* traceFunctionsUpwardsAndDrawOrHighLightThese(LDreference* currentRe
 					if(generateHTMLdocumentationMode == CS_GENERATE_HTML_DOCUMENTATION_MODE_OFF)
 					{
 						#ifdef CS_DISPLAY_INCLUDE_FILE_PARSING
-						cout << "Trace upwards: \t\t" << fileNameHoldingFunction << "\t\t" << currentFunctionBeingTraced->name << "()" << endl;
+						cout << "Trace upwards: \t\t" << fileNameHoldingFunction << "\t\t" << currentFunctionBeingTraced->name << "{}" << endl;
 						#endif
 					}
 					else if(generateHTMLdocumentationMode == CS_GENERATE_HTML_DOCUMENTATION_MODE_ON)
@@ -1897,7 +1897,7 @@ LDreference* traceFunctionsUpwardsAndDrawOrHighLightThese(LDreference* currentRe
 			}
 			else
 			{
-				cout << "error: traceFunctionsUpwardsAndDrawOrHighLightThese(): higherLevelFunctionFound " << currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList->functionReference->name << " cannot be found" << endl;
+				cout << "error: traceFunctionsUpwardsAndDrawOrHighLightThese{}: higherLevelFunctionFound " << currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList->functionReference->name << " cannot be found" << endl;
 				exit(0);
 			}
 
@@ -1939,7 +1939,7 @@ void traceFunctionsUpwardsAndDrawOrHighLightTheseReset(CSfileReferenceContainer*
 			}
 			else
 			{
-				cout << "error: traceFunctionsUpwardsAndDrawOrHighLightThese(): higherLevelFunctionFound " << currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList->functionReference->name << " cannot be found" << endl;
+				cout << "error: traceFunctionsUpwardsAndDrawOrHighLightThese{}: higherLevelFunctionFound " << currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList->functionReference->name << " cannot be found" << endl;
 				exit(0);
 			}
 

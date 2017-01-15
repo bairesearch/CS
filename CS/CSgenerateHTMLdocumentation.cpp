@@ -255,7 +255,7 @@ void generateHTMLdocumentationForFunction(LDreference* currentReferenceInPrintLi
 	if(generateHTMLdocumentationMode == CS_GENERATE_HTML_DOCUMENTATION_MODE_OFF)
 	{
 		#ifdef CS_DISPLAY_INCLUDE_FILE_PARSING
-		cout << "\nStart Trace upwards: \t\t" << fileNameHoldingFunction << "\t\t" << bottomLevelFunctionToTraceUpwards->name << "()" << endl;
+		cout << "\nStart Trace upwards: \t\t" << fileNameHoldingFunction << "\t\t" << bottomLevelFunctionToTraceUpwards->name << "{}" << endl;
 		cout << bottomLevelFunctionToTraceUpwards->nameFull << endl;
 		#endif
 	}
@@ -603,7 +603,7 @@ void generateHTMLdocumentationFunctionReferenceList(CSfunctionReference* functio
 	//generate list
 
 	*HTMLdocumentationFunctionReferenceList = "";
-	*HTMLdocumentationFunctionReferenceList = *HTMLdocumentationFunctionReferenceList + "\t<p><b>Function LDreference List</b><br />\n";
+	*HTMLdocumentationFunctionReferenceList = *HTMLdocumentationFunctionReferenceList + "\t<p><b>Function reference List</b><br />\n";
 	CSfunctionReference* currentReferenceInFunctionReferenceListRepeats = function->firstReferenceInFunctionReferenceListRepeats;
 	string HTMLdocumentationFunctionReferenceListBody = "\t<ul>\n";
 	#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST_WITH_INDENTATION_ADVANCED
@@ -702,7 +702,7 @@ string generateHTMLdocumentationImagePlaceHolder(string* traceImageFileName, str
 
 void addToHTMLdocumentationIndentedList(string currentFunctionReferenceName, int currentFunctionReferenceIndentation, string* HTMLdocumentationFileFunctionList, int* previousIndentation, bool* previousIndentationFirst)
 {
-	string functionNameCompact = currentFunctionReferenceName;	// + "()";
+	string functionNameCompact = currentFunctionReferenceName;	// + "{}";
 
 	int differenceBetweenPreviousIndentation = currentFunctionReferenceIndentation -* previousIndentation;
 	string rawIndentationText = "\n";
