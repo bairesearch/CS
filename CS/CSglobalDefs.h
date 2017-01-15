@@ -26,7 +26,7 @@
  * File Name: CSglobalsDefs.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h11b 10-December-2015
+ * Project Version: 3h11c 10-December-2015
  * Description: CS specific global definitions
  *
  *******************************************************************************/
@@ -47,13 +47,19 @@
 	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DISABLE_OUTPUT	//safe for debug (no source/header file overwrites)
 		
+		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_NON_CONST_GLOBAL_ASSIGNMENTS	//3h11c
+		#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_NON_CONST_GLOBAL_ASSIGNMENTS
+			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_NON_CONST_GLOBAL_ASSIGNMENTS_NUMBER_OF_TYPES (7)
+			static string specialCaseTextForAssignmentOfNonConstGlobal[CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_NON_CONST_GLOBAL_ASSIGNMENTS_NUMBER_OF_TYPES] = {"entityNodesActiveListComplete", "entityNodesActiveListConcepts", "entityNodesActiveListSubstances", "entityNodesActiveListActions", "entityNodesActiveListConditions", "entityNodesActiveListCompleteFastIndex", "comparisonVariableNode"};					
+		#endif
+		
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_TEMPLATE_USE_OPEN '<'
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_TEMPLATE_USE_CLOSE '>'
 		
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_NONCONST_BASED_ON_EXISTENCE_OF_ARBITRARY_SPECIAL_CASE_TEXT	//3h11a
 		#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_NONCONST_BASED_ON_EXISTENCE_OF_ARBITRARY_SPECIAL_CASE_TEXT
-			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_SPECIAL_CASES_NUMBER_OF_TYPES (1)
-			static string specialCaseTextForAssignmentOfNonConst[CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_SPECIAL_CASES_NUMBER_OF_TYPES] = {"GIAgenericEntityInterpretationParameters param("};			
+			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_SPECIAL_CASES_NUMBER_OF_TYPES (2)
+			static string specialCaseTextForAssignmentOfNonConst[CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_SPECIAL_CASES_NUMBER_OF_TYPES] = {"GIAgenericEntityInterpretationParameters param(", "GIAgenericDepRelInterpretationParameters param("};			
 		#endif
 		
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_MAKE_ALL_POINTER_ARRAY_TYPES_NON_CONST	//3h10a //make all function argument pointer array types (typeX* argumentname[]) non const (as GCC/VS compiler interprets them as double pointers, and compiler can't convert typeX** to const typeX**)

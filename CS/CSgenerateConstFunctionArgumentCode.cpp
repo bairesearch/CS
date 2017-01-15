@@ -21,7 +21,7 @@
  * File Name: CSgenerateConstFunctionArgumentCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h11b 10-December-2015
+ * Project Version: 3h11c 10-December-2015
  *
  *******************************************************************************/
 
@@ -411,14 +411,6 @@ bool generateConstFunctionArgumentAndSearchForSecondaryReferences(CSfunction* cu
 									cout << "generateConstFunctionArgumentAndSearchForSecondaryReferences{}: functionDeclarationArgument = " << functionDeclarationArgument << endl;
 									cout << "generateConstFunctionArgumentAndSearchForSecondaryReferences{}: secondaryAssignmentName = " << secondaryAssignmentName << endl;
 									#endif
-									
-									/*
-									if(currentFunctionObject->name == "findFunctionReferenceTargetRecurse")
-									{
-										cout << "\tfunctionDeclarationArgument = " << functionDeclarationArgument << endl;
-										cout << "\tsecondaryAssignmentName = " << secondaryAssignmentName << endl;
-									}
-									*/
 								
 									if(generateConstFunctionArgumentAndSearchForSecondaryReferences(currentFunctionObject, currentFunctionArgumentInFunction, secondaryAssignmentName, true))
 									{
@@ -885,11 +877,39 @@ bool checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 					}
 				}
 				#endif
+				
+				/*
+				#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_RETURN_OBJECTS_ALTERNATE
+				//NB this alternate implementation requires standard string/double secondary assignments to be recorded by CS (not just typeX*)
+				//see generateConstFunctionArgumentAndSearchForSecondaryReferences{} code (identification of CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_POINTER_TYPE)
+			
+				//see if can locate the string "return functionDeclarationArgument;" in the function
+				string returnTextHypothetical = string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_RETURN) + functionDeclarationArgument + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_END_OF_COMMAND;
+				if(functionText->find(returnTextHypothetical) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+				{
+					isNotConst = true;
+					//cout << "returnTextHypothetical = " << returnTextHypothetical << endl;
+				}
+				#endif
+				*/
+				
+				#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_NON_CONST_GLOBAL_ASSIGNMENTS
+				for(int i=0; i<CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_NON_CONST_GLOBAL_ASSIGNMENTS_NUMBER_OF_TYPES; i++)
+				{
+					string nonConstGlobalAssignmentHypothetical = specialCaseTextForAssignmentOfNonConstGlobal[i] + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET + functionDeclarationArgument + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_END_OF_COMMAND;	//e.g. entityNodesActiveListComplete = newEntityNodesCompleteList;
+					if(functionText->find(nonConstGlobalAssignmentHypothetical) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+					{
+						isNotConst = true;
+						//cout << "nonConstGlobalAssignmentHypothetical = " << nonConstGlobalAssignmentHypothetical << endl;
+					}
+				}	
+				#endif
 			}
 		}
 	}
 	
 	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_RETURN_OBJECTS
+	//NB this implementation is non-standard because it has to support return of both typeX* and standard types (eg string/double); and string/double secondary assignments are not currently recorded by
 	int indexOfReturn = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_RETURN);
 	if(indexOfReturn != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 	{
