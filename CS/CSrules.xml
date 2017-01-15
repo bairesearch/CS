@@ -127,10 +127,10 @@
 		<file name="GIAwordnet.h" x="9" y="11" />
 		<file name="GIAxmlConversion.h" x="12" y="10" />
 
-		<file name="GIAcorpus.h" x="8" y="13" />
-		<file name="GIAcorpusTranslator.h" x="8" y="14" />
-		<file name="GIAcorpusOperations.h" x="8" y="15" />
-		<file name="GIAcorpusDatabase.h" x="8" y="16" />
+		<file name="GIAsemanticParser.h" x="8" y="13" />
+		<file name="GIAsemanticParserTranslator.h" x="8" y="14" />
+		<file name="GIAsemanticParserOperations.h" x="8" y="15" />
+		<file name="GIAsemanticParserDatabase.h" x="8" y="16" />
 
 		<file name="wn.h" x="4" y="19" />
 		<file name="math.h" x="5" y="19" />

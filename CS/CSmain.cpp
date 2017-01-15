@@ -26,7 +26,7 @@
  * File Name: CSmain.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3f4a 11-July-2015
+ * Project Version: 3f5a 21-July-2015
  *
  *******************************************************************************/
 
@@ -59,8 +59,8 @@ static char errmessage[] = "Usage:  OpenCS.exe [options]"
 "\n\t-file [string]          : top level source file name (eg, main.cpp) [compulsory]"
 "\n\t-function [string]      : top level function name referenced within file {recommended: not defined in file, declared within include h file} (eg, x for int x()) [compulsory]"
 "\n\t-notshow                : do not display output in opengl"
-"\n\t-width [int]            : raster graphics width in pixels (def: 640)"
-"\n\t-height [int]           : raster graphics height in pixels (def: 480)"
+"\n\t-width [int]            : raster graphics width in pixels (def: 1600)"
+"\n\t-height [int]           : raster graphics height in pixels (def: 1000)"
 "\n\t-enablefunctions        : output function connectivity on top of file connectivity"
 "\n\t-disablefileconnections : disable output of file connections"
 "\n\t-mode [int]             : mode (1: execution flow, 2: data flow, 3: filter code based upon preprocessor definitions) (def: 1)"
@@ -72,7 +72,7 @@ static char errmessage[] = "Usage:  OpenCS.exe [options]"
 #endif
 "\n"
 "\n\t-workingfolder [string] : working directory name for input files (def: same as exe)"
-"\n\t-exefolder [string]     : exe directory name for executables OpenCS.exe and (def: same as exe)"
+"\n\t-exefolder [string]     : exe directory name for executables; OpenCS.exe (def: same as exe)"
 "\n\t-tempfolder [string]    : temp directory name for temporary and output files (def: same as exe)"
 "\n"
 "\n\t-version                : print version"
@@ -282,7 +282,7 @@ int main(int argc,char* *argv)
 
 	if(argumentExists(argc,argv,"-version"))
 	{
-		cout << "OpenCS.exe - Project Version: 3f4a 11-July-2015" << endl;
+		cout << "OpenCS.exe - Project Version: 3f5a 21-July-2015" << endl;
 		exit(1);
 	}
 
