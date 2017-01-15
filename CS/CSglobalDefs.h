@@ -23,7 +23,7 @@
  * File Name: CSglobalsDefs.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c3a 16-November-2012
+ * Project Version: 3c3b 16-November-2012
  * Description: CS specific global definitions
  *
  *******************************************************************************/
@@ -32,6 +32,8 @@
 #define HEADER_CS_GLOBAL_DEFS
 
 #include "SHAREDglobalDefs.h"
+
+#define CS_DRAW_APPLY_EVEN_ODD_X_OFFSET
 
 //#define CS_DEBUG
 //#define CS_DEBUG_HTML_DOCUMENTATION

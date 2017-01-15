@@ -23,7 +23,7 @@
  * File Name: CSdraw.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c3a 16-November-2012
+ * Project Version: 3c3b 16-November-2012
  *
  *******************************************************************************/
 
@@ -373,14 +373,28 @@ Reference * createFileReferenceListBoxes(Reference * currentReferenceInPrintList
 			double vectorObjectsScaleFactor;
 			if(outputFunctionsConnectivity)
 			{
-				vectorObjectsScaleFactor = CS_FILE_FUNCTIONS_ENABLED_VECTOROBJECTS_SCALE_FACTOR;
-				currentFileReference->printX = xPos * (vectorObjectsScaleFactor * CS_FILE_FUNCTIONS_ENABLED_TEXT_BOX_SCALE_FACTOR_X_SPACING_FRACTION * CS_FILE_FUNCTIONS_ENABLED_LARGE_BOX_SCALE_FACTOR_X);
+				vectorObjectsScaleFactor = CS_FILE_FUNCTIONS_ENABLED_VECTOROBJECTS_SCALE_FACTOR;			
+				double xOffset = 0.0;
+				#ifdef CS_DRAW_APPLY_EVEN_ODD_X_OFFSET
+				if((maxYPos % 2) == 0)
+				{
+					xOffset = (vectorObjectsScaleFactor * CS_FILE_FUNCTIONS_ENABLED_TEXT_BOX_SCALE_FACTOR_X_SPACING_FRACTION * CS_FILE_FUNCTIONS_ENABLED_LARGE_BOX_SCALE_FACTOR_X) / 2.0;
+				}
+				#endif
+				currentFileReference->printX = xPos * (vectorObjectsScaleFactor * CS_FILE_FUNCTIONS_ENABLED_TEXT_BOX_SCALE_FACTOR_X_SPACING_FRACTION * CS_FILE_FUNCTIONS_ENABLED_LARGE_BOX_SCALE_FACTOR_X) + xOffset;
 				currentFileReference->printY = (double)maxYPos * (vectorObjectsScaleFactor * CS_FILE_FUNCTIONS_ENABLED_TEXT_BOX_SCALE_FACTOR_Y_SPACING_FRACTION);
 			}
 			else
 			{
-				vectorObjectsScaleFactor = CS_FILE_FUNCTIONS_DISABLED_VECTOROBJECTS_SCALE_FACTOR;
-				currentFileReference->printX = xPos * (vectorObjectsScaleFactor * CS_FILE_FUNCTIONS_DISABLED_TEXT_BOX_SCALE_FACTOR_X_SPACING_FRACTION);
+				vectorObjectsScaleFactor = CS_FILE_FUNCTIONS_DISABLED_VECTOROBJECTS_SCALE_FACTOR;			
+				double xOffset = 0.0;
+				#ifdef CS_DRAW_APPLY_EVEN_ODD_X_OFFSET
+				if((maxYPos % 2) == 0)
+				{
+					xOffset = (vectorObjectsScaleFactor * CS_FILE_FUNCTIONS_DISABLED_TEXT_BOX_SCALE_FACTOR_X_SPACING_FRACTION) / 2.0;
+				}
+				#endif				
+				currentFileReference->printX = xPos * (vectorObjectsScaleFactor * CS_FILE_FUNCTIONS_DISABLED_TEXT_BOX_SCALE_FACTOR_X_SPACING_FRACTION) + xOffset;
 				currentFileReference->printY = (vectorObjectsScaleFactor * CS_FILE_FUNCTIONS_DISABLED_TEXT_BOX_SCALE_FACTOR_Y_SPACING_FRACTION) * (double)maxYPos;
 			}
 
@@ -393,8 +407,7 @@ Reference * createFileReferenceListBoxes(Reference * currentReferenceInPrintList
 				bigFileBoxPosition.y = currentFileReference->printY + ((vectorObjectsScaleFactor*CS_FILE_FUNCTIONS_ENABLED_LARGE_BOX_SCALE_FACTOR_Y_SPACING_FRACTION_B) * CS_FILE_FUNCTIONS_ENABLED_LARGE_BOX_SCALE_FACTOR_Y_SPACING_FRACTION_C);
 				newCurrentReferenceInPrintList = createBox(newCurrentReferenceInPrintList, &bigFileBoxPosition, vectorObjectsScaleFactor*CS_FILE_FUNCTIONS_ENABLED_LARGE_BOX_SCALE_FACTOR_X_SPACING_FRACTION_B * CS_FILE_FUNCTIONS_ENABLED_LARGE_BOX_SCALE_FACTOR_X, vectorObjectsScaleFactor*CS_FILE_FUNCTIONS_ENABLED_LARGE_BOX_SCALE_FACTOR_Y_SPACING_FRACTION_B, DAT_FILE_COLOUR_LIGHTGREY);	//add box
 
-					writeSVGBox(currentTag, &bigFileBoxPosition, vectorObjectsScaleFactor*CS_FILE_FUNCTIONS_ENABLED_LARGE_BOX_SCALE_FACTOR_X_SPACING_FRACTION_B * CS_FILE_FUNCTIONS_ENABLED_LARGE_BOX_SCALE_FACTOR_X, vectorObjectsScaleFactor*CS_FILE_FUNCTIONS_ENABLED_LARGE_BOX_SCALE_FACTOR_Y_SPACING_FRACTION_B, DAT_FILE_COLOUR_LIGHTGREY, CS_FILE_TEXT_BOX_OUTLINE_WIDTH_SVG, false);
-
+				writeSVGBox(currentTag, &bigFileBoxPosition, vectorObjectsScaleFactor*CS_FILE_FUNCTIONS_ENABLED_LARGE_BOX_SCALE_FACTOR_X_SPACING_FRACTION_B * CS_FILE_FUNCTIONS_ENABLED_LARGE_BOX_SCALE_FACTOR_X, vectorObjectsScaleFactor*CS_FILE_FUNCTIONS_ENABLED_LARGE_BOX_SCALE_FACTOR_Y_SPACING_FRACTION_B, DAT_FILE_COLOUR_LIGHTGREY, CS_FILE_TEXT_BOX_OUTLINE_WIDTH_SVG, false);
 			}
 
 
@@ -412,10 +425,10 @@ Reference * createFileReferenceListBoxes(Reference * currentReferenceInPrintList
 			{//only print connections when not tracing a bottom level function upwards - saves space
 			#endif
 				newCurrentReferenceInPrintList = createFileOrFunctionReferenceBox(newCurrentReferenceInPrintList, currentFileReference, vectorObjectsScaleFactor, colour, CS_FILE_MAX_TEXT_LENGTH, CS_OUTPUT_Z_POSITION_FILE_BOX);	//add box
-					vec pos;
-					pos.x = currentFileReference->printX;
-					pos.y = currentFileReference->printY;
-					writeFileOrFunctionSVGBox(currentTag, &pos, currentFileReference->name.length(), vectorObjectsScaleFactor, CS_FILE_MAX_TEXT_LENGTH, colour, CS_FILE_TEXT_BOX_OUTLINE_WIDTH_SVG);
+				vec pos;
+				pos.x = currentFileReference->printX;
+				pos.y = currentFileReference->printY;
+				writeFileOrFunctionSVGBox(currentTag, &pos, currentFileReference->name.length(), vectorObjectsScaleFactor, CS_FILE_MAX_TEXT_LENGTH, colour, CS_FILE_TEXT_BOX_OUTLINE_WIDTH_SVG);
 			#ifdef CS_DO_NOT_DRAW_ALL_FILE_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
 			}
 			#endif
@@ -444,8 +457,8 @@ Reference * createFileReferenceListBoxes(Reference * currentReferenceInPrintList
 
 				newCurrentReferenceInPrintList = LDaddBasicTextualSpriteStringToReferenceList(&(currentFileReference->name), newCurrentReferenceInPrintList, &position, &numSpritesAdded, false, DAT_FILE_COLOUR_WHITE, vectorObjectsScaleFactor/CS_FILE_FUNCTIONS_ENABLED_VECTOROBJECTS_SCALE_FACTOR);	//add sprite text within box	//
 
-					position.y = position.y + CS_FILE_OR_FUNCTION_TEXT_BOX_TEXT_SCALE_FACTOR_Y_SVG*vectorObjectsScaleFactor;
-					writeSVGText(currentTag, (currentFileReference->name), &position, vectorObjectsScaleFactor/15, DAT_FILE_COLOUR_BLACK);
+				position.y = position.y + CS_FILE_OR_FUNCTION_TEXT_BOX_TEXT_SCALE_FACTOR_Y_SVG*vectorObjectsScaleFactor;
+				writeSVGText(currentTag, (currentFileReference->name), &position, vectorObjectsScaleFactor/15, DAT_FILE_COLOUR_BLACK);
 			#ifdef CS_DO_NOT_DRAW_ALL_FILE_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
 			}
 			#endif
@@ -732,7 +745,14 @@ Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentRe
 		functionReference->printXIndex = (fileReference->maxFunctionPrintXAtAParticularY[newFunctionLevel]);
 		functionReference->printYIndex = newFunctionLevel;
 
-		functionReference->printX = fileReference->printX + (fileReference->maxFunctionPrintXAtAParticularY[newFunctionLevel])*CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR/0.5 - (CS_FILE_FUNCTIONS_ENABLED_VECTOROBJECTS_SCALE_FACTOR*0.5 * CS_FILE_FUNCTIONS_ENABLED_LARGE_BOX_SCALE_FACTOR_X * 0.5);
+		double xOffset = 0.0;
+		#ifdef CS_DRAW_APPLY_EVEN_ODD_X_OFFSET
+		if((newFunctionLevel % 2) == 0)
+		{
+			xOffset = (fileReference->maxFunctionPrintXAtAParticularY[newFunctionLevel])*CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR/0.5 / 2.0;
+		}
+		#endif	
+		functionReference->printX = fileReference->printX + (fileReference->maxFunctionPrintXAtAParticularY[newFunctionLevel])*CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR/0.5 + xOffset - (CS_FILE_FUNCTIONS_ENABLED_VECTOROBJECTS_SCALE_FACTOR*0.5 * CS_FILE_FUNCTIONS_ENABLED_LARGE_BOX_SCALE_FACTOR_X * 0.5);
 		functionReference->printY = fileReference->printY + (1+newFunctionLevel)*CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR*CS_FUNCTION_TEXT_BOX_SCALE_FACTOR_Y_SPACING_FRACTION;
 		fileReference->maxFunctionPrintXAtAParticularY[newFunctionLevel] = fileReference->maxFunctionPrintXAtAParticularY[newFunctionLevel] + 1;
 
