@@ -26,7 +26,7 @@
  * File Name: CSgenerateHTMLdocumentation.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h1c 14-November-2015
+ * Project Version: 3h1d 14-November-2015
  *
  *******************************************************************************/
 
@@ -69,7 +69,7 @@ string generateHTMLdocumentationHeader(string name, bool htmlHeader, bool isFile
 	string HTMLdocumentationHeader = "";
 	if(htmlHeader)
 	{
-		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3h1c 14-November-2015<p>\n";
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3h1d 14-November-2015<p>\n";
 	}
 	else
 	{
@@ -285,12 +285,12 @@ void generateHTMLdocumentationForFunction(LDreference* currentReferenceInPrintLi
 		string HTMLdocumentationFunctionInputArguments = "";
 		generateHTMLdocumentationFunctionInputArguments(&(bottomLevelFunctionToTraceUpwards->name), &(bottomLevelFunctionToTraceUpwards->nameFull), &HTMLdocumentationFunctionInputArguments);
 
-		string HTMLdocumentationFunctionObjectList = "";
+		string HTMLdocumentationFunctionReferenceList = "";
 		#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST
-		generateHTMLdocumentationFunctionObjectList(bottomLevelFunctionToTraceUpwards, &HTMLdocumentationFunctionObjectList);
+		generateHTMLdocumentationFunctionReferenceList(bottomLevelFunctionToTraceUpwards, &HTMLdocumentationFunctionReferenceList);
 		#endif
 
-		*HTMLdocumentationFunctionBody = *HTMLdocumentationFunctionBody + HTMLdocumentationFunctionTitle + HTMLdocumentationFunctionSummary + HTMLdocumentationFunctionInputArguments + HTMLdocumentationFunctionObjectList + "<br />";
+		*HTMLdocumentationFunctionBody = *HTMLdocumentationFunctionBody + HTMLdocumentationFunctionTitle + HTMLdocumentationFunctionSummary + HTMLdocumentationFunctionInputArguments + HTMLdocumentationFunctionReferenceList + "<br />";
 
 		if(traceFunctionUpwards)
 		{
@@ -512,12 +512,12 @@ string createDescriptionFromCaseSensitiveMultiwordString(string str)
 
 
 
-void generateHTMLdocumentationFunctionObjectList(CSfunction* function, string* HTMLdocumentationFunctionObjectList)
+void generateHTMLdocumentationFunctionReferenceList(CSfunction* function, string* HTMLdocumentationFunctionReferenceList)
 {
 	//generate list
 
-	*HTMLdocumentationFunctionObjectList = "";
-	*HTMLdocumentationFunctionObjectList = *HTMLdocumentationFunctionObjectList + "\t<p><b>Function reference List</b><br />\n";
+	*HTMLdocumentationFunctionReferenceList = "";
+	*HTMLdocumentationFunctionReferenceList = *HTMLdocumentationFunctionReferenceList + "\t<p><b>Function reference List</b><br />\n";
 	CSfunction* currentReferenceInFunctionReferenceListRepeats = function->firstReferenceInFunctionReferenceListRepeats;
 	string HTMLdocumentationFunctionObjectListBody = "\t<ul>\n";
 	#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST_WITH_INDENTATION_ADVANCED
@@ -560,7 +560,7 @@ void generateHTMLdocumentationFunctionObjectList(CSfunction* function, string* H
 		*/
 		addToHTMLdocumentationFileFunctionList(currentReferenceInFunctionReferenceList, &HTMLdocumentationFunctionObjectListBody, &previousIndentation, &previousIndentationFirst);
 		//cout << "currentReferenceInFunctionReferenceList->name = " << currentReferenceInFunctionReferenceList->name << endl;
-		//cout << "HTMLdocumentationFunctionObjectList = " <<* HTMLdocumentationFunctionObjectList << endl;
+		//cout << "HTMLdocumentationFunctionReferenceList = " <<* HTMLdocumentationFunctionReferenceList << endl;
 	#else
 		#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST_WITH_INDENTATION
 		HTMLdocumentationFunctionObjectListBody = HTMLdocumentationFunctionObjectListBody + "\t\t<li>";
@@ -593,16 +593,16 @@ void generateHTMLdocumentationFunctionObjectList(CSfunction* function, string* H
 
 	if(foundReferences)
 	{
-		*HTMLdocumentationFunctionObjectList = *HTMLdocumentationFunctionObjectList + HTMLdocumentationFunctionObjectListBody;
+		*HTMLdocumentationFunctionReferenceList = *HTMLdocumentationFunctionReferenceList + HTMLdocumentationFunctionObjectListBody;
 	}
 	else
 	{
-		*HTMLdocumentationFunctionObjectList = *HTMLdocumentationFunctionObjectList + "N/A";
+		*HTMLdocumentationFunctionReferenceList = *HTMLdocumentationFunctionReferenceList + "N/A";
 	}
-	*HTMLdocumentationFunctionObjectList = *HTMLdocumentationFunctionObjectList + "</p>\n";
+	*HTMLdocumentationFunctionReferenceList = *HTMLdocumentationFunctionReferenceList + "</p>\n";
 
 	#ifdef CS_DEBUG_HTML_DOCUMENTATION
-	cout << "HTMLdocumentationFunctionObjectList: " <<* HTMLdocumentationFunctionObjectList << endl;
+	cout << "HTMLdocumentationFunctionReferenceList: " <<* HTMLdocumentationFunctionReferenceList << endl;
 	#endif
 }
 

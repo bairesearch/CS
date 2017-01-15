@@ -21,7 +21,7 @@
  * File Name: CSgenerateObjectOrientedCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h1c 14-November-2015
+ * Project Version: 3h1d 14-November-2015
  *
  *******************************************************************************/
 
@@ -166,17 +166,17 @@ bool generateCPPclassesFile(CSfile* currentFileObject, CSfileContainer* firstObj
 					if(foundStaticReference)
 					{
 						//create a new temporary object pertaining to the functionReference's class
-						functionReferenceNameUpdated = functionReferenceNameUpdated + CHAR_OPEN_BRACKET + CS_GENERATE_CPP_CLASSES_NEW + CHAR_SPACE + generateClassDeclarationName(classHoldingFunction) + CHAR_CLOSE_BRACKET + CS_GENERATE_CPP_CLASSES_FUNCTION_REFERENCE_CONTEXT_DELIMITER_POINTER + functionReferenceName;	//eg (new chickenClass)->function
+						functionReferenceNameUpdated = functionReferenceNameUpdated + CHAR_OPEN_BRACKET + CS_GENERATE_CPP_CLASSES_TEXT_NEW + CHAR_SPACE + generateClassDeclarationName(classHoldingFunction) + CHAR_CLOSE_BRACKET + CS_GENERATE_CPP_CLASSES_TEXT_FUNCTION_REFERENCE_CONTEXT_DELIMITER_POINTER + functionReferenceName;	//eg (new chickenClass)->function
 					}
 					else
 					{
 						if(fileNameHoldingFunction == currentFileObject->name)
 						{
-							functionReferenceNameUpdated = string(CS_GENERATE_CPP_CLASSES_FUNCTION_REFERENCE_CONTEXT_LOCAL) + string(CS_GENERATE_CPP_CLASSES_FUNCTION_REFERENCE_CONTEXT_DELIMITER_POINTER) + functionReferenceName;
+							functionReferenceNameUpdated = string(CS_GENERATE_CPP_CLASSES_TEXT_FUNCTION_REFERENCE_CONTEXT_LOCAL) + string(CS_GENERATE_CPP_CLASSES_TEXT_FUNCTION_REFERENCE_CONTEXT_DELIMITER_POINTER) + functionReferenceName;
 						}
 						else
 						{
-							functionReferenceNameUpdated = generateClassObjectName(classHoldingFunction) + CS_GENERATE_CPP_CLASSES_FUNCTION_REFERENCE_CONTEXT_DELIMITER + functionReferenceName;
+							functionReferenceNameUpdated = generateClassObjectName(classHoldingFunction) + CS_GENERATE_CPP_CLASSES_TEXT_FUNCTION_REFERENCE_CONTEXT_DELIMITER + functionReferenceName;
 
 							//cout << "classHoldingFunction = " << classHoldingFunction << endl;
 							bool foundReferencedClass = findReferencedClassInList(firstReferencedClassInList, classHoldingFunction);
@@ -257,7 +257,7 @@ bool generateCPPclassesFile(CSfile* currentFileObject, CSfileContainer* firstObj
 		int positionOfFirstFunctionObjectInHeader = currentFileObject->headerFileText.find(firstFunctionNameFull);
 		if(positionOfFirstFunctionObjectInHeader != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 		{
-			string classDeclarationHeader = string(CS_GENERATE_CPP_CLASSES_CLASS_HEADER_PART1) + generateClassDeclarationName(className) + string(CS_GENERATE_CPP_CLASSES_CLASS_HEADER_PART2);	//class xClass{
+			string classDeclarationHeader = string(CS_GENERATE_CPP_CLASSES_TEXT_CLASS_HEADER_PART1) + generateClassDeclarationName(className) + string(CS_GENERATE_CPP_CLASSES_TEXT_CLASS_HEADER_PART2);	//class xClass{
 			string referencedClassesDeclarations = generateReferencedClassesDeclarations(firstReferencedClassInList);	//ie private: xClass x; private: yClass y;
 
 			currentFileObject->headerFileText = currentFileObject->headerFileText.substr(0, positionOfFirstFunctionObjectInHeader) + classDeclarationHeader + referencedClassesDeclarations + currentFileObject->headerFileText.substr(positionOfFirstFunctionObjectInHeader, currentFileObject->headerFileText.length()-positionOfFirstFunctionObjectInHeader);
@@ -282,7 +282,7 @@ bool generateCPPclassesFile(CSfile* currentFileObject, CSfileContainer* firstObj
 		int positionOfLastFunctionObjectInHeader = currentFileObject->headerFileText.find(lastFunctionNameFull);
 		if(positionOfFirstFunctionObjectInHeader != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 		{
-			string classDeclarationFooter = CS_GENERATE_CPP_CLASSES_CLASS_FOOTER;	//};
+			string classDeclarationFooter = CS_GENERATE_CPP_CLASSES_TEXT_CLASS_FOOTER;	//};
 			int lastFunctionNameFullLength = (lastFunctionObject->headerFunctionNameFullUpdated).length();
 			int positionOfLastFunctionObjectInHeaderEnd = positionOfLastFunctionObjectInHeader + lastFunctionNameFullLength;
 			currentFileObject->headerFileText = currentFileObject->headerFileText.substr(0, positionOfLastFunctionObjectInHeaderEnd+1) + classDeclarationFooter + currentFileObject->headerFileText.substr(positionOfLastFunctionObjectInHeaderEnd+1, currentFileObject->headerFileText.length()-positionOfLastFunctionObjectInHeaderEnd);	//+1 for trailing CHAR_SEMICOLON
@@ -404,12 +404,12 @@ string generateClassName(string headerFileName)
 
 string generateClassDeclarationName(string className)
 {
-	return className + CS_GENERATE_CPP_CLASSES_CLASS_DECLARATION_APPENDITION;
+	return className + CS_GENERATE_CPP_CLASSES_TEXT_CLASS_DECLARATION_APPENDITION;
 }
 
 string generateClassObjectName(string className)	
 {
-	return className + CS_GENERATE_CPP_CLASSES_CLASS_OBJECT_APPENDITION;
+	return className + CS_GENERATE_CPP_CLASSES_TEXT_CLASS_OBJECT_APPENDITION;
 }
 
 
@@ -426,11 +426,11 @@ string convertFunctionNameToClassFunctionNameHeader(string fullFunctionName, str
 	{
 		if(foundPublicReference)
 		{
-			permissionsString = string(CS_GENERATE_CPP_CLASSES_FUNCTION_PUBLIC);
+			permissionsString = string(CS_GENERATE_CPP_CLASSES_TEXT_FUNCTION_PUBLIC);
 		}
 		else
 		{
-			permissionsString = string(CS_GENERATE_CPP_CLASSES_FUNCTION_PRIVATE);
+			permissionsString = string(CS_GENERATE_CPP_CLASSES_TEXT_FUNCTION_PRIVATE);
 		}
 	}
 	
@@ -455,15 +455,15 @@ string convertFunctionNameToClassFunctionNameSource(string fullFunctionName, str
 		fullFunctionNamePart2 = fullFunctionName.substr(positionOfFunctionName, fullFunctionName.length());
 
 		//detect static functions and do not add context to these - added 3e2b
-		int positionOfStaticIdentifier = fullFunctionNamePart1.find(CS_GENERATE_CPP_CLASSES_STATIC);
-		if((positionOfStaticIdentifier != CPP_STRING_FIND_RESULT_FAIL_VALUE) || (functionName == CS_GENERATE_CPP_CLASSES_FUNCTION_MAIN_NAME))
+		int positionOfStaticIdentifier = fullFunctionNamePart1.find(CS_GENERATE_CPP_CLASSES_TEXT_STATIC);
+		if((positionOfStaticIdentifier != CPP_STRING_FIND_RESULT_FAIL_VALUE) || (functionName == CS_GENERATE_CPP_CLASSES_TEXT_FUNCTION_MAIN_NAME))
 		{
 			classFullFunctionName = fullFunctionName;	//do not add class context to static functions	//do not add class context to main functions
 			*foundStaticReference = true;
 		}
 		else
 		{
-			classFullFunctionName = fullFunctionNamePart1 + generateClassDeclarationName(className) + string(CS_GENERATE_CPP_CLASSES_CLASS_PERMISSIONS_IDENTIFIER) + fullFunctionNamePart2;
+			classFullFunctionName = fullFunctionNamePart1 + generateClassDeclarationName(className) + string(CS_GENERATE_CPP_CLASSES_TEXT_CLASS_PERMISSIONS_IDENTIFIER) + fullFunctionNamePart2;
 		}
 		
 		#ifdef CS_DEBUG_GENERATE_OBJECT_ORIENTED_CODE
@@ -502,7 +502,7 @@ string generateReferencedClassesDeclarations(ReferencedClass* firstReferencedCla
 	ReferencedClass* currentReferencedClassInList = firstReferencedClassInList;
 	while(currentReferencedClassInList->next != NULL)
 	{
-		referencedClassesDeclarations = referencedClassesDeclarations + CHAR_TAB + CS_GENERATE_CPP_CLASSES_FUNCTION_PRIVATE + generateClassDeclarationName(currentReferencedClassInList->className) + CHAR_SPACE + generateClassObjectName(currentReferencedClassInList->className) + CHAR_SEMICOLON + CHAR_NEWLINE; 	//ie private: xClass x;
+		referencedClassesDeclarations = referencedClassesDeclarations + CHAR_TAB + CS_GENERATE_CPP_CLASSES_TEXT_FUNCTION_PRIVATE + generateClassDeclarationName(currentReferencedClassInList->className) + CHAR_SPACE + generateClassObjectName(currentReferencedClassInList->className) + CHAR_SEMICOLON + CHAR_NEWLINE; 	//ie private: xClass x;
 		//cout << "referencedClassesDeclarations = " << referencedClassesDeclarations << endl;
 		currentReferencedClassInList = currentReferencedClassInList->next;
 	}
@@ -525,7 +525,7 @@ bool moveIncludeFileStatementsToHeader(CSfile* firstReferenceInAboveLevelBelowLi
 		//if(currentFileObject->name != firstReferenceInAboveLevelBelowList->name){	
 		//do not modify include .h of .c file - not required because of "if(hashIncludeFileName != topLevelReference->name)	//this is added so that do not parse method.h from within method.cpp!"
 		*/
-		string includeStatement = string(CS_GENERATE_CPP_CLASSES_INCLUDE_START) + currentFileObject->name + CS_GENERATE_CPP_CLASSES_INCLUDE_END;
+		string includeStatement = string(CS_GENERATE_CPP_CLASSES_TEXT_INCLUDE_START) + currentFileObject->name + CS_GENERATE_CPP_CLASSES_TEXT_INCLUDE_END;
 		
 		int positionOfIncludeStatementHeader = firstReferenceInAboveLevelBelowList->headerFileText.find(includeStatement);
 		int positionOfIncludeStatementSource = firstReferenceInAboveLevelBelowList->sourceFileText.find(includeStatement);

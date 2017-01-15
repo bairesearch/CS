@@ -26,7 +26,7 @@
  * File Name: CSoperations.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h1c 14-November-2015
+ * Project Version: 3h1d 14-November-2015
  *
  *******************************************************************************/
 
@@ -1235,7 +1235,7 @@ void identifyFunctionReferenceArguments(CSfunction* currentReferenceInFunctionRe
 			char c = (*functionContentsString)[pos];
 			if(bracketLevel == 1)
 			{//only detect base level function reference commas (not commas for embedded function reference arguments)
-				if((c == CS_GENERATE_CONST_FUNCTION_ARGUMENTS_FUNCTION_ARGUMENT_DELIMITER) || (c == CHAR_CLOSE_BRACKET))
+				if((c == CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_FUNCTION_ARGUMENT_DELIMITER) || (c == CHAR_CLOSE_BRACKET))
 				{
 					string argument = functionContentsString->substr(posStartOfFunctionArgument, pos-posStartOfFunctionArgument);
 					currentFunctionArgumentInFunctionReference->argument = removePrependedWhiteSpace(argument);
@@ -1261,7 +1261,7 @@ void identifyFunctionReferenceArguments(CSfunction* currentReferenceInFunctionRe
 			}
 			else if(c == CLASS_TYPE_CLOSE_TAG)
 			{
-				if(cPrevious != string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_OBJECT_REFERENCE_DELIMITER)[0])
+				if(cPrevious != string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_OBJECT_REFERENCE_DELIMITER)[0])
 				{
 					bracketLevel--;
 				}
