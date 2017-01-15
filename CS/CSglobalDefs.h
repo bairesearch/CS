@@ -26,7 +26,7 @@
  * File Name: CSglobalsDefs.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h13a 11-December-2015
+ * Project Version: 3h13b 11-December-2015
  * Description: CS specific global definitions
  *
  *******************************************************************************/
@@ -39,7 +39,6 @@
 #define CS_MATCH_FUNCTION_REFERENCES_WITH_CORRECT_NUMBER_OF_ARGUMENTS		//added 3h1e
 
 #define CS_SUPPORT_POINTER_TYPE_DECLARATIONS_WITH_SPACE_BEFORE_RATHER_THAN_AFTER_ASTERIX	//3h9b	//not disabling this can serve presentation lint purposes
-#define constPseudo ""
 
 #define CS_GENERATE_CODE_GENERIC
 #ifdef CS_GENERATE_CODE_GENERIC
@@ -49,7 +48,7 @@
 				
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DISABLE_OUTPUT	//safe for debug (no source/header file overwrites)
 			
-		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_SUPPORT_PSEUDO_CONSTS	//2h13a		//user must manually replace all instances of "constPseudo " with "" before compiling code	//NOTPOSSIBLE: #define constPseudo ""	
+		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_SUPPORT_PSEUDO_CONSTS	//2h13a		//user must manually replace all instances of "constEffective " with "" before compiling code	//NOTPOSSIBLE: #define constEffective ""	
 		//#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_SUPPORT_PSEUDO_CONSTS
 			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_CONST_EFFECTIVE "constEffective "
 		//#endif
