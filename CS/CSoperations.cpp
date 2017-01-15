@@ -26,7 +26,7 @@
  * File Name: CSoperations.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2016 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3i18c 21-September-2016
+ * Project Version: 3i19a 15-December-2016
  *
  *******************************************************************************/
 
@@ -72,23 +72,11 @@ bool getIncludeFileNamesFromCorHfile(CSfileContainer* firstReferenceInIncludeFil
 		//bool readingLineComment = false;	//same as waitingForNewLine
 		bool readingLargeComment = false;
 
-		/*//this implementation will use up too much memory
-		#ifdef CS_GENERATE_CODE_GENERIC
-		string fileContentsString = "";
-		#endif
-		*/
-
 		while(parseFileObject.get(c))
 		{
 			#ifdef CS_DEBUG_VERBOSE
 			//cout << c;
 			#endif
-
-			/*//this implementation will use up too much memory
-			#ifdef CS_GENERATE_CODE_GENERIC
-			fileContentsString = fileContentsString + c;
-			#endif
-			*/
 
 			charCount++;
 
@@ -247,11 +235,17 @@ bool getIncludeFileNamesFromCorHfile(CSfileContainer* firstReferenceInIncludeFil
 							currentReferenceInIncludeFileList = new CSfile();
 							currentReferenceInIncludeFileListContainer->fileObject = currentReferenceInIncludeFileList;
 							currentReferenceInIncludeFileList->name = hashIncludeFileName;
-							string hashIncludeFileNameCFile = generateSourceFileNameFromHeaderFileName(hashIncludeFileName, CS_SOURCE_FILE_EXTENSION);
+							string hashIncludeFileNameCFile = generateSourceFileNameFromHeaderFileName(hashIncludeFileName, CS_GENERATE_CODE_GENERIC_SOURCE_FILE_EXTENSION);
 							#ifdef CS_GENERATE_CODE_GENERIC
 							currentReferenceInIncludeFileList->sourceFileNameOrig = hashIncludeFileNameCFile;
 							currentReferenceInIncludeFileList->headerFileName = generateSourceFileNameFromHeaderFileName(currentReferenceInIncludeFileList->name, CS_GENERATE_CODE_GENERIC_HEADER_FILE_EXTENSION);
 							currentReferenceInIncludeFileList->sourceFileName = generateSourceFileNameFromHeaderFileName(currentReferenceInIncludeFileList->sourceFileNameOrig, CS_GENERATE_CODE_GENERIC_SOURCE_FILE_EXTENSION);
+							currentReferenceInIncludeFileList->headerFileTextOrig = getFileContents(currentReferenceInIncludeFileList->name);	//headerFileNameOrig
+							currentReferenceInIncludeFileList->sourceFileTextOrig = getFileContents(currentReferenceInIncludeFileList->sourceFileNameOrig);
+							currentReferenceInIncludeFileList->headerFileText = currentReferenceInIncludeFileList->headerFileTextOrig;	//initialise with same source code as original file
+							currentReferenceInIncludeFileList->sourceFileText = currentReferenceInIncludeFileList->sourceFileTextOrig;	//initialise with same source code as original file
+							//cout << "getIncludeFileNamesFromCorHfile{}: currentReferenceInIncludeFileList->name = " << currentReferenceInIncludeFileList->name << endl;
+							//cout << "getIncludeFileNamesFromCorHfile{}: currentReferenceInIncludeFileList->sourceFileNameOrig = " << currentReferenceInIncludeFileList->sourceFileNameOrig << endl;
 							#endif
 							currentReferenceInIncludeFileList->id = id;
 							currentReferenceInIncludeFileList->level = level;
@@ -379,25 +373,36 @@ bool getIncludeFileNamesFromCorHfile(CSfileContainer* firstReferenceInIncludeFil
 			}
 		}
 		parseFileObject.close();
-
-		/*//this implementation will use up too much memory
-		#ifdef CS_GENERATE_CODE_GENERIC
-		if(isHeader)
-		{
-			aboveLevelObject->headerFileText = fileContentsString;
-		}
-		else
-		{
-			aboveLevelObject->sourceFileText = fileContentsString;
-		}
-		#endif
-		*/
 	}
 
 	return fileFound;
 }
 
-
+#ifdef CS_GENERATE_CODE_GENERIC
+bool fileIsHeader(string parseFileName)
+{
+	bool isHeader = false;
+	string headerFileExtension = string(STRING_FULLSTOP) + CS_GENERATE_CODE_GENERIC_HEADER_FILE_EXTENSION;
+	string sourceFileExtension = string(STRING_FULLSTOP) + CS_GENERATE_CODE_GENERIC_SOURCE_FILE_EXTENSION;
+	int positionOfHeaderFileExtension = parseFileName.rfind(headerFileExtension);
+	int positionOfSourceFileExtension = parseFileName.rfind(sourceFileExtension);
+	if(positionOfHeaderFileExtension == parseFileName.length()-headerFileExtension.length())
+	{
+		isHeader = true;
+	}
+	else if(positionOfSourceFileExtension == parseFileName.length()-sourceFileExtension.length())
+	{
+	
+	}
+	else
+	{
+		cout << "fileIsHeader{} error: parseFileName is not CS_GENERATE_CODE_GENERIC_HEADER_FILE_EXTENSION or CS_GENERATE_CODE_GENERIC_SOURCE_FILE_EXTENSION" << endl;
+	}
+	
+	return isHeader;
+}
+#endif
+		
 bool findFileObjectInFileObjectContainerList(CSfileContainer* firstReferenceContainerInLevel, string fileReferenceName, CSfile** fileReferenceFound)
 {
 	bool foundFileObject = false;

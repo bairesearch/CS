@@ -26,7 +26,7 @@
  * File Name: CSoperations.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2016 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3i18c 21-September-2016
+ * Project Version: 3i19a 15-December-2016
  *
  *******************************************************************************/
 
@@ -39,6 +39,9 @@
 #include "CSreferenceContainerClass.h"
 
 bool getIncludeFileNamesFromCorHfile(CSfileContainer* firstReferenceInIncludeFileListContainer, CSfileContainer* topLevelReferenceContainer, CSfile* aboveLevelObject, string topLevelReferenceName, int level);
+	#ifdef CS_GENERATE_CODE_GENERIC
+	bool fileIsHeader(string parseFileName);
+	#endif
 	bool findFileObjectInFileObjectContainerList(CSfileContainer* firstReferenceContainerInLevel, string fileReferenceName, CSfile** fileReferenceFound);
 	bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunction* firstFunctionInFunctionList, string topLevelFileName, int level);
 	void getFunctionObjectNamesFromFunctionsInCfile(CSfile* firstFileInIncludeFileList, CSfunction* firstFunctionInFunctionList, CSfile* aboveLevelObject, string topLevelFileName, int level);

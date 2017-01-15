@@ -26,7 +26,7 @@
  * File Name: CSglobalsDefs.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2016 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3i18c 21-September-2016
+ * Project Version: 3i19a 15-December-2016
  * Description: CS specific global definitions
  *
  *******************************************************************************/
@@ -49,7 +49,7 @@
 	#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS	//added 3h1a/14-November-2014	//requires CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST
 	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
 
-		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DISABLE_OUTPUT	//safe for debug (no source/header file overwrites)
+		//#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DISABLE_OUTPUT	//safe for debug (no source/header file overwrites)
 
 		#define CS_IDENTIFY_FUNCTION_DECLARATION_ARGUMENTS	//changed requirements 3i17a
 
@@ -153,7 +153,7 @@
 
 	#define CS_GENERATE_CPP_CLASSES	//added 3e1a/27-August-2014
 	#ifdef CS_GENERATE_CPP_CLASSES
-		#define CS_GENERATE_CPP_CLASSES_DISABLE_OUTPUT	//safe for debug (no source/header file overwrites)
+		//#define CS_GENERATE_CPP_CLASSES_DISABLE_OUTPUT	//safe for debug (no source/header file overwrites)
 		#define CS_GENERATE_CPP_CLASSES_TEXT_FUNCTION_PRIVATE "private: "
 		#define CS_GENERATE_CPP_CLASSES_TEXT_FUNCTION_PUBLIC "public: "
 		#define CS_GENERATE_CPP_CLASSES_TEXT_CLASS_PERMISSIONS_IDENTIFIER "::"	//class membership
@@ -260,16 +260,6 @@
 
 #define HTML_EXTENSION ".html"
 #define SVG_EXTENSION ".svg"
-
-#ifdef CS_GENERATE_CPP_CLASSES
-	#ifdef CS_GENERATE_CPP_CLASSES_DISABLE_OUTPUT
-		#define CS_SOURCE_FILE_EXTENSION "cpp"
-	#else
-		#define CS_SOURCE_FILE_EXTENSION "c"
-	#endif
-#else
-	#define CS_SOURCE_FILE_EXTENSION "cpp"
-#endif
 
 #define CS_SOURCE_FILE_INDENTATION_CHARACTER '\t'
 

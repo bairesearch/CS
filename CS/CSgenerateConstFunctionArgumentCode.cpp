@@ -21,7 +21,7 @@
  * File Name: CSgenerateConstFunctionArgumentCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2016 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3i18c 21-September-2016
+ * Project Version: 3i19a 15-December-2016
  *
  *******************************************************************************/
 
@@ -70,14 +70,14 @@ bool generateConstFunctionArgumentsRecurse(CSfileContainer* firstObjectInAboveLe
 					bool sourceExists = false;
 					if(fileExists(currentFileObject->name))
 					{
-						currentFileObject->headerFileTextOrig = getFileContents(currentFileObject->name);	//headerFileNameOrig
-						currentFileObject->headerFileText = currentFileObject->headerFileTextOrig;	//initialise with same source code as original file
+						//currentFileObject->headerFileTextOrig = getFileContents(currentFileObject->name);	//headerFileNameOrig
+						//currentFileObject->headerFileText = currentFileObject->headerFileTextOrig;	//initialise with same source code as original file
 						headerExists = true;
 					}
 					if(fileExists(currentFileObject->sourceFileNameOrig))
 					{
-						currentFileObject->sourceFileTextOrig = getFileContents(currentFileObject->sourceFileNameOrig);
-						currentFileObject->sourceFileText = currentFileObject->sourceFileTextOrig;	//initialise with same source code as original file
+						//currentFileObject->sourceFileTextOrig = getFileContents(currentFileObject->sourceFileNameOrig);
+						//currentFileObject->sourceFileText = currentFileObject->sourceFileTextOrig;	//initialise with same source code as original file
 						sourceExists = true;
 					}
 					if(headerExists || sourceExists)

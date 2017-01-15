@@ -21,7 +21,7 @@
  * File Name: CSgenerateObjectOrientedCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2016 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3i18c 21-September-2016
+ * Project Version: 3i19a 15-December-2016
  *
  *******************************************************************************/
 
@@ -66,11 +66,19 @@ bool generateCPPclassesRecurse(CSfileContainer* firstObjectInAboveLevelBelowList
 			{
 				if(currentFileObject->printed)	//now redundant
 				{//only create object oriented code for printed boxes
+					/*
 					currentFileObject->headerFileTextOrig = getFileContents(currentFileObject->name);	//headerFileNameOrig
 					currentFileObject->sourceFileTextOrig = getFileContents(currentFileObject->sourceFileNameOrig);
 					currentFileObject->headerFileText = currentFileObject->headerFileTextOrig;	//initialise with same source code as original file
 					currentFileObject->sourceFileText = currentFileObject->sourceFileTextOrig;	//initialise with same source code as original file
-
+					*/					
+					/*
+					cout << "generateCPPclassesRecurse{}: currentFileObject->name = " << currentFileObject->name << endl;
+					cout << "generateCPPclassesRecurse{}: currentFileObject->sourceFileNameOrig = " << currentFileObject->sourceFileNameOrig << endl;
+					cout << "generateCPPclassesRecurse{}: currentFileObject->headerFileText = " << currentFileObject->headerFileText << endl;
+					cout << "generateCPPclassesRecurse{}: currentFileObject->sourceFileText = " << currentFileObject->sourceFileText << endl;
+					*/
+					
 					#ifdef CS_DEBUG_GENERATE_OBJECT_ORIENTED_CODE
 					//cout << "generateCPPclassesRecurse{}: currentFileObject->sourceFileName = " << currentFileObject->sourceFileName << endl;
 					//cout << "generateCPPclassesRecurse{}: currentFileObject->headerFileName = " << currentFileObject->headerFileName << endl;
