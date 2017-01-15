@@ -26,7 +26,7 @@
  * File Name: CSexecflow.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e1f 27-August-2014
+ * Project Version: 3e1g 27-August-2014
  *
  *******************************************************************************/
 
@@ -187,9 +187,9 @@ void generateCodeStructure(string topLevelFileName, int width, int height, strin
 
 			if(traceFunctionUpwards && (bottomLevelFunctionNameToTraceUpwards != ""))
 			{
-				bool foundBottomLevelFunctionRef = false;
 				CSfileReference * fileReferenceHoldingFunction = NULL;
-				CSfunctionReference * bottomLevelFunctionToTraceUpwards = findPrintedFunctionReferenceWithName(bottomLevelFunctionNameToTraceUpwards, NULL, firstReferenceInTopLevelBelowList, &foundBottomLevelFunctionRef, &fileReferenceHoldingFunction);
+				CSfunctionReference * bottomLevelFunctionToTraceUpwards = NULL;
+				bool foundBottomLevelFunctionRef = findPrintedFunctionReferenceWithName(bottomLevelFunctionNameToTraceUpwards, firstReferenceInTopLevelBelowList, &fileReferenceHoldingFunction, &bottomLevelFunctionToTraceUpwards);
 				
 				if(foundBottomLevelFunctionRef)
 				{

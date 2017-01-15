@@ -26,7 +26,7 @@
  * File Name: CSgenerateObjectOrientedCode.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e1f 27-August-2014
+ * Project Version: 3e1g 27-August-2014
  *
  *******************************************************************************/
 
@@ -62,6 +62,7 @@ bool generateCPPclasses(CSfileReference * firstReferenceInTopLevelBelowList);
 			bool findReferencedClassInList(ReferencedClass * firstReferencedClassInList, string classNameToFind);
 			void writeStringToFile(string * fileName, string * s);
 			bool moveIncludeFileStatementsToHeader(CSfileReference * firstReferenceInAboveLevelBelowList);
+bool findFunctionReferenceWithName(string name, CSfileReference * firstReferenceInAboveLevelBelowList, CSfileReference ** fileReferenceHoldingFunction, CSfunctionReference ** updatedFunctionReference);
 
 
 #endif

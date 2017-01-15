@@ -26,7 +26,7 @@
  * File Name: CSgenerateObjectOrientedCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e1f 27-August-2014
+ * Project Version: 3e1g 27-August-2014
  *
  *******************************************************************************/
 
@@ -162,8 +162,8 @@ bool generateCPPclassesFile(CSfileReference * currentFileReference, CSfileRefere
 
 					string functionReferenceContext = "";
 					CSfileReference * fileReferenceHoldingFunction = NULL;
-					bool referencedFunctionFound = false;
-					CSfunctionReference * referencedFunction = findPrintedFunctionReferenceWithName(functionReferenceReferenceName, NULL, firstReferenceInTopLevelBelowList, &referencedFunctionFound, &fileReferenceHoldingFunction);
+					CSfunctionReference * referencedFunction = NULL;
+					bool referencedFunctionFound = findFunctionReferenceWithName(functionReferenceReferenceName, firstReferenceInTopLevelBelowList, &fileReferenceHoldingFunction, &referencedFunction);
 					if(referencedFunctionFound)
 					{
 						string fileNameHoldingFunction = fileReferenceHoldingFunction->name;
@@ -220,6 +220,14 @@ bool generateCPPclassesFile(CSfileReference * currentFileReference, CSfileRefere
 								exit(0); 
 							}
 						}
+					}
+					else
+					{
+						cout << "generateCPPclassesFile() error: !referencedFunctionFound, functionReferenceReferenceName = " << functionReferenceReferenceName << endl;
+						cout << "currentFileReference->name = " << currentFileReference->name << endl;
+						cout << "currentFunctionReference->nameFull = " << currentFunctionReference->nameFull << endl;
+						cout << "currentFunctionReference->name = " << currentFunctionReference->name << endl;
+						exit(0);
 					}
 
 					#ifdef CS_DEBUG_GENERATE_OBJECT_ORIENTED_CODE
@@ -619,6 +627,41 @@ bool moveIncludeFileStatementsToHeader(CSfileReference * firstReferenceInAboveLe
 	}
 	
 	return result;
+}
+
+
+bool findFunctionReferenceWithName(string name, CSfileReference * firstReferenceInAboveLevelBelowList, CSfileReference ** fileReferenceHoldingFunction, CSfunctionReference ** updatedFunctionReference)
+{
+	bool foundPrintedReferenceWithName = false;
+	
+	CSfileReference * currentFileReference = firstReferenceInAboveLevelBelowList;
+
+	while(currentFileReference->next != NULL)
+	{
+		CSfunctionReference * currentFunctionReference = currentFileReference->firstReferenceInFunctionList;
+		while(currentFunctionReference->next != NULL)
+		{
+			if(currentFunctionReference->name == name)
+			{
+				*updatedFunctionReference = currentFunctionReference;
+				foundPrintedReferenceWithName = true;
+				*fileReferenceHoldingFunction = currentFileReference;
+			}
+			currentFunctionReference = currentFunctionReference->next;
+		}
+
+		if(currentFileReference->firstReferenceInBelowList != NULL)
+		{
+			if(findFunctionReferenceWithName(name, currentFileReference->firstReferenceInBelowList, fileReferenceHoldingFunction, updatedFunctionReference))
+			{
+				foundPrintedReferenceWithName = true;
+			}
+		}
+
+		currentFileReference = currentFileReference->next;
+	}
+
+	return foundPrintedReferenceWithName;
 }
 
 

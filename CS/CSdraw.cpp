@@ -26,7 +26,7 @@
  * File Name: CSdraw.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e1f 27-August-2014
+ * Project Version: 3e1g 27-August-2014
  *
  *******************************************************************************/
 
@@ -1863,9 +1863,10 @@ int calculateCSBoxAndConnectionColourBasedUponFileName(CSfileReference * current
 
 
 
-CSfunctionReference * findPrintedFunctionReferenceWithName(string name, CSfunctionReference * reference, CSfileReference * firstReferenceInAboveLevelBelowList, bool * foundPrintedReferenceWithName, CSfileReference ** fileReferenceHoldingFunction)
+bool findPrintedFunctionReferenceWithName(string name, CSfileReference * firstReferenceInAboveLevelBelowList, CSfileReference ** fileReferenceHoldingFunction, CSfunctionReference ** updatedFunctionReference)
 {
-	CSfunctionReference * updatedFunctionReference = reference;
+	bool foundPrintedReferenceWithName = false;
+	
 	CSfileReference * currentFileReference = firstReferenceInAboveLevelBelowList;
 
 	while(currentFileReference->next != NULL)
@@ -1878,8 +1879,8 @@ CSfunctionReference * findPrintedFunctionReferenceWithName(string name, CSfuncti
 				if(currentFunctionReference->printed)
 				{//only create connections to printed boxes
 
-					updatedFunctionReference = currentFunctionReference;
-					*foundPrintedReferenceWithName = true;
+					*updatedFunctionReference = currentFunctionReference;
+					foundPrintedReferenceWithName = true;
 					*fileReferenceHoldingFunction = currentFileReference;
 				}
 			}
@@ -1888,13 +1889,16 @@ CSfunctionReference * findPrintedFunctionReferenceWithName(string name, CSfuncti
 
 		if(currentFileReference->firstReferenceInBelowList != NULL)
 		{
-			updatedFunctionReference = findPrintedFunctionReferenceWithName(name, updatedFunctionReference, currentFileReference->firstReferenceInBelowList, foundPrintedReferenceWithName, fileReferenceHoldingFunction);
+			if(findPrintedFunctionReferenceWithName(name, currentFileReference->firstReferenceInBelowList, fileReferenceHoldingFunction, updatedFunctionReference))
+			{
+				foundPrintedReferenceWithName = true;
+			}
 		}
 
 		currentFileReference = currentFileReference->next;
 	}
 
-	return updatedFunctionReference;
+	return foundPrintedReferenceWithName;
 }
 
 Reference * traceFunctionsUpwardsAndDrawOrHighLightThese(Reference * currentReferenceInPrintList, CSfileReference * firstReferenceInTopLevelBelowList, CSfunctionReference * currentFunctionBeingTraced, XMLparserTag ** currentTag, int generateHTMLdocumentationMode, string * HTMLdocumentationFunctionTraceTableRows)
@@ -1942,9 +1946,9 @@ Reference * traceFunctionsUpwardsAndDrawOrHighLightThese(Reference * currentRefe
 		//cout << "currentFunctionBeingTraced->name = " << currentFunctionBeingTraced->name << endl;
 		//cout << "\tcurrentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList->name = " << currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList->name << endl;
 
-		bool higherLevelFunctionFound = false;
 		CSfileReference * fileReferenceHoldingFunction = NULL;
-		CSfunctionReference * higherLevelFunction = findPrintedFunctionReferenceWithName(currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList->name, NULL, firstReferenceInTopLevelBelowList, &higherLevelFunctionFound, &fileReferenceHoldingFunction);
+		CSfunctionReference * higherLevelFunction = NULL;
+		bool higherLevelFunctionFound = findPrintedFunctionReferenceWithName(currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList->name, firstReferenceInTopLevelBelowList, &fileReferenceHoldingFunction, &higherLevelFunction);
 		
 		if(higherLevelFunctionFound)
 		{
@@ -2013,9 +2017,9 @@ void traceFunctionsUpwardsAndDrawOrHighLightTheseReset(CSfileReference * firstRe
 	{
 		//cout << "currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList->name = " << currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList->name << endl;
 
-		bool higherLevelFunctionFound = false;
 		CSfileReference * fileReferenceHoldingFunction = NULL;
-		CSfunctionReference * higherLevelFunction = findPrintedFunctionReferenceWithName(currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList->name, NULL, firstReferenceInTopLevelBelowList, &higherLevelFunctionFound, &fileReferenceHoldingFunction);
+		CSfunctionReference * higherLevelFunction = NULL;
+		bool higherLevelFunctionFound = findPrintedFunctionReferenceWithName(currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList->name, firstReferenceInTopLevelBelowList, &fileReferenceHoldingFunction, &higherLevelFunction);
 		
 		if(higherLevelFunctionFound)
 		{
