@@ -73,4 +73,104 @@
 		<miscellaneousItem name="CS_FUNCTION_BOX_HIGHLIGHT_COLOUR" stringValue="" fractionalValue="5" />
 		
 	</draw>
+	<grid>
+		<file name="GIAbot.h" x="5" y="4" />
+		<file name="GIAconditionNodeClass.h" x="3" y="9" />
+		<file name="GIAcxlConversion.h" x="13" y="2" />
+		<file name="GIAdatabase.h" x="6" y="7" />
+		<file name="GIAdraw.h" x="11" y="2" />
+		<file name="GIAentityConnectionClass.h" x="4" y="8" />
+		<file name="GIAentityNodeClass.h" x="3" y="8" />
+		<file name="GIAglobalDefs.h" x="3" y="10" />
+		<file name="GIAlrp.h" x="1" y="2" />
+		<file name="GIAmain.h" x="4" y="1" />
+		<file name="GIAnlg.h" x="10" y="2" />
+		<file name="GIAnlp.h" x="2" y="2" />
+		<file name="GIAparser.h" x="2" y="3" />
+		<file name="GIAquery.h" x="9" y="2" />
+		<file name="GIAsentenceClass.h" x="3" y="7" />
+		<file name="GIAtranslatorApplyAdvancedFeatures.h" x="8" y="3" />
+		<file name="GIAtranslatorDefineGrammar.h" x="3" y="3" />
+		<file name="GIAtranslatorDefineReferencing.h" x="5" y="3" />
+		<file name="GIAtranslatorDefineSubstances.h" x="6" y="3" />
+		<file name="GIAtranslator.h" x="5" y="2" />
+		<file name="GIAtranslatorLinkEntities.h" x="7" y="3" />
+		<file name="GIAtranslatorOperations.h" x="3" y="6" />
+		<file name="GIAtranslatorRedistributeRelexRelations.h" x="4" y="3" />
+		<file name="GIAtranslatorRedistributeStanfordRelations.h" x="4" y="4" />
+		<file name="GIAwordnet.h" x="9" y="3" />
+		<file name="GIAxmlConversion.h" x="12" y="2" />
+
+		<file name="RTglobalDefs.h" x="14" y="8" />
+		<file name="RTmain.h" x="" y="" />
+		<file name="RToperations.h" x="" y="" />
+		<file name="RTparser.h" x="" y="" />
+		<file name="RTpixelMaps.h" x="14" y="5" />
+		<file name="RTppm.h" x="14" y="6" />
+		<file name="RTraytracer.h" x="" y="" />
+		<file name="RTreferenceManipulation.h" x="" y="" />
+		<file name="RTscene.h" x="" y="" />
+		<file name="RTviewinfo.h" x="14" y="7" />
+
+		<file name="SHAREDglobalDefs.h" x="11" y="10" />
+		<file name="SHAREDvars.h" x="11" y="9" />
+		<file name="SHAREDvector.h" x="11" y="8" />
+
+		<file name="LDjpeg.h" x="" y="" />
+		<file name="LDmysql.h" x="" y="" />
+		<file name="LDopengl.h" x="13" y="5" />
+		<file name="LDparser.h" x="12" y="5" />
+		<file name="LDreferenceClass.h" x="11" y="7" />
+		<file name="LDreferenceManipulation.h" x="11" y="6" />
+		<file name="LDsprite.h" x="11" y="5" />
+		<file name="LDsvg.h" x="10" y="5" />
+
+		<file name="XMLparserClass.h" x="14" y="3" />
+		<file name="XMLrulesClass.h" x="14" y="2" />
+
+		<file name="ORcomparison.h" x="" y="" />
+		<file name="ORdatabaseDecisionTree.h" x="" y="" />
+		<file name="ORdatabaseFileIO.h" x="" y="" />
+		<file name="ORdatabaseSQL.h" x="" y="" />
+		<file name="ORfeature.h" x="" y="" />
+		<file name="ORglobalDefs.h" x="" y="" />
+		<file name="ORimagecomparison.h" x="" y="" />
+		<file name="ORmain.h" x="" y="" />
+		<file name="ORmethod2DOD.h" x="" y="" />
+		<file name="ORmethod3DOD.h" x="" y="" />
+		<file name="ORmethod.h" x="" y="" />
+		<file name="ORoperations.h" x="" y="" />
+		<file name="ORpixelMaps.h" x="" y="" />
+		<file name="ORpolygonList.h" x="" y="" />
+		<file name="ORquadraticFit.h" x="" y="" />
+		<file name="ORrules.h" x="" y="" />
+		<file name="ORTHimageCategorisationNN.h" x="" y="" />
+		<file name="ORTHmain.h" x="" y="" />
+
+		<file name="ANNbiologicalConstructs.h" x="" y="" />
+		<file name="ANNdata.h" x="" y="" />
+		<file name="ANNdisplay.h" x="" y="" />
+		<file name="ANNexperienceClass.h" x="" y="" />
+		<file name="ANNformation.h" x="" y="" />
+		<file name="ANNglobalDefs.h" x="" y="" />
+		<file name="ANNmain.h" x="" y="" />
+		<file name="ANNneuronClass.h" x="" y="" />
+		<file name="ANNparser.h" x="" y="" />
+		<file name="ANNsprite.h" x="" y="" />
+		<file name="ANNtraining.h" x="" y="" />
+		<file name="ANNupdateAlgorithm.h" x="" y="" />
+		<file name="ANNxmlConversion.h" x="" y="" />
+
+		<file name="CSdataflow.h" x="" y="" />
+		<file name="CSdraw.h" x="" y="" />
+		<file name="CSexecflow.h" x="" y="" />
+		<file name="CSglobalDefs.h" x="" y="" />
+		<file name="CSmain.h" x="" y="" />
+		<file name="CSoperations.h" x="" y="" />
+		<file name="CSpreprocessorFilter.h" x="" y="" />
+		<file name="CSreferenceClass.h" x="" y="" />
+
+		<file name="OLC.h" x="" y="" />
+		<file name="OLCoperations.h" x="" y="" />
+	</grid>
 </rules>

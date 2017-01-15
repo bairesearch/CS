@@ -23,7 +23,7 @@
  * File Name: CSglobalsDefs.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c7b 12-October-2013
+ * Project Version: 3c8a 13-October-2013
  * Description: CS specific global definitions
  *
  *******************************************************************************/
@@ -33,13 +33,16 @@
 
 #include "SHAREDglobalDefs.h"
 
+#define CS_SUPPORT_PREDEFINED_GRID
+
 #define CS_WRITE_SVG_INKSCAPE_CONNECTORS
 #ifdef CS_WRITE_SVG_INKSCAPE_CONNECTORS
 	#define CS_WRITE_SVG_GROUPS
 #endif
 
 //#define CS_CONVERT_INDENTED_LIST_TO_HTML_LIST					//temporary compile condition for class HTML documentation generation
-//#define CS_GENERATE_CLASS_HTML_DOCUMENTATION_FROM_CUSTOM_CSCLASS_FORMAT	//temporary compile condition for class HTML documentation generation
+
+#define CS_GENERATE_CLASS_HTML_DOCUMENTATION_FROM_CUSTOM_CSCLASS_FORMAT	//temporary compile condition for class HTML documentation generation
 #ifdef CS_GENERATE_CLASS_HTML_DOCUMENTATION_FROM_CUSTOM_CSCLASS_FORMAT
 	#define CS_GENERATE_CLASS_HTML_DOCUMENTATION_FROM_CUSTOM_CSCLASS_FORMAT_COMBINED	//use project wide CSclass files
 #endif

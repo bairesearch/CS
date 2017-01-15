@@ -23,7 +23,7 @@
  * File Name: CSdraw.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c7b 12-October-2013
+ * Project Version: 3c8a 13-October-2013
  *
  *******************************************************************************/
 
@@ -404,7 +404,7 @@ void initiateMaxXatParticularY()
 
 
 
-Reference * createFileReferenceListBoxes(Reference * currentReferenceInPrintList, CSfileReference * firstReferenceInAboveLevelBelowList, CSfileReference * firstReferenceInTopLevelBelowList, XMLparserTag ** currentTag, bool outputFunctionsConnectivity, bool traceFunctionUpwards)
+Reference * createFileReferenceListBoxes(Reference * currentReferenceInPrintList, CSfileReference * firstReferenceInAboveLevelBelowList, CSfileReference * firstReferenceInTopLevelBelowList, XMLparserTag ** currentTag, bool outputFunctionsConnectivity, bool traceFunctionUpwards, XMLparserTag * firstTagInGridTag, bool usePredefinedGrid)
 {
 	Reference * newCurrentReferenceInPrintList = currentReferenceInPrintList;
 
@@ -412,8 +412,6 @@ Reference * createFileReferenceListBoxes(Reference * currentReferenceInPrintList
 
 	while(currentFileReference->next != NULL)
 	{
-
-
 		/*
 		if(currentFileReference->name != "")
 		{
@@ -428,11 +426,51 @@ Reference * createFileReferenceListBoxes(Reference * currentReferenceInPrintList
 
 		int maxYPos = 0;	//always print boxes with max Y pos...
 		bool aPreviousReferenceWithThisNameHasbeenPrinted = hasPreviousReferenceWithThisNameHasbeenPrinted(currentFileReference->name, firstReferenceInTopLevelBelowList, &maxYPos);
-		int xPos = maxXAtAParticularY[maxYPos];
-
+		int xPos = maxXAtAParticularY[maxYPos];	
+			
 		if(!aPreviousReferenceWithThisNameHasbeenPrinted)
-		{//add box and connections
+		{//add box and connections				
 
+			#ifdef CS_SUPPORT_PREDEFINED_GRID
+			if(usePredefinedGrid)
+			{
+				bool foundGridCoords = false;
+				XMLparserTag * currentFileTag = firstTagInGridTag;
+				while(currentFileTag->nextTag != NULL)
+				{	
+					//cout << "currentFileTag->firstAttribute->value = " << currentFileTag->firstAttribute->value << endl;
+					if(currentFileTag->firstAttribute->name == RULES_XML_ATTRIBUTE_name)
+					{
+						if(currentFileTag->firstAttribute->value == currentFileReference->name)
+						{	
+							//cout << "currentFileReference->name = " << currentFileReference->name << endl;
+							XMLParserAttribute * currentAttributeTag = currentFileTag->firstAttribute;
+							foundGridCoords = true;
+							while(currentAttributeTag->nextAttribute != NULL)
+							{	
+								if(currentAttributeTag->name == RULES_XML_ATTRIBUTE_x)
+								{		
+									xPos = atoi(currentAttributeTag->value.c_str());
+									//cout << "xPos = " << xPos << endl;
+								}
+								if(currentAttributeTag->name == RULES_XML_ATTRIBUTE_y)
+								{
+									maxYPos = atoi(currentAttributeTag->value.c_str());
+									//cout << "maxYPos = " << maxYPos << endl;
+								}
+								currentAttributeTag = currentAttributeTag->nextAttribute; 
+							}
+						}
+					}
+					currentFileTag = currentFileTag->nextTag; 
+				}
+				if(!foundGridCoords)
+				{
+					cout << "error: !foundGridCoords: currentFileReference->name = " << currentFileReference->name << endl;
+				}
+			}
+			#endif
+			
 			currentFileReference->printXIndex = xPos;
 			currentFileReference->printYIndex = maxYPos;
 
@@ -442,10 +480,17 @@ Reference * createFileReferenceListBoxes(Reference * currentReferenceInPrintList
 				vectorObjectsScaleFactor = CS_FILE_FUNCTIONS_ENABLED_VECTOROBJECTS_SCALE_FACTOR;			
 				double xOffset = 0.0;
 				#ifdef CS_DRAW_APPLY_EVEN_ODD_X_OFFSET
-				if((maxYPos % 2) == 0)
+				#ifdef CS_SUPPORT_PREDEFINED_GRID
+				if(!usePredefinedGrid)
 				{
-					xOffset = (vectorObjectsScaleFactor * CS_FILE_FUNCTIONS_ENABLED_TEXT_BOX_SCALE_FACTOR_X_SPACING_FRACTION * CS_FILE_FUNCTIONS_ENABLED_LARGE_BOX_SCALE_FACTOR_X) / 2.0;
+				#endif
+					if((maxYPos % 2) == 0)
+					{
+						xOffset = (vectorObjectsScaleFactor * CS_FILE_FUNCTIONS_ENABLED_TEXT_BOX_SCALE_FACTOR_X_SPACING_FRACTION * CS_FILE_FUNCTIONS_ENABLED_LARGE_BOX_SCALE_FACTOR_X) / 2.0;
+					}
+				#ifdef CS_SUPPORT_PREDEFINED_GRID
 				}
+				#endif
 				#endif
 				currentFileReference->printX = xPos * (vectorObjectsScaleFactor * CS_FILE_FUNCTIONS_ENABLED_TEXT_BOX_SCALE_FACTOR_X_SPACING_FRACTION * CS_FILE_FUNCTIONS_ENABLED_LARGE_BOX_SCALE_FACTOR_X) + xOffset;
 				currentFileReference->printY = (double)maxYPos * (vectorObjectsScaleFactor * CS_FILE_FUNCTIONS_ENABLED_TEXT_BOX_SCALE_FACTOR_Y_SPACING_FRACTION);
@@ -455,10 +500,17 @@ Reference * createFileReferenceListBoxes(Reference * currentReferenceInPrintList
 				vectorObjectsScaleFactor = CS_FILE_FUNCTIONS_DISABLED_VECTOROBJECTS_SCALE_FACTOR;			
 				double xOffset = 0.0;
 				#ifdef CS_DRAW_APPLY_EVEN_ODD_X_OFFSET
-				if((maxYPos % 2) == 0)
+				#ifdef CS_SUPPORT_PREDEFINED_GRID
+				if(!usePredefinedGrid)
 				{
-					xOffset = (vectorObjectsScaleFactor * CS_FILE_FUNCTIONS_DISABLED_TEXT_BOX_SCALE_FACTOR_X_SPACING_FRACTION) / 2.0;
+				#endif
+					if((maxYPos % 2) == 0)
+					{
+						xOffset = (vectorObjectsScaleFactor * CS_FILE_FUNCTIONS_DISABLED_TEXT_BOX_SCALE_FACTOR_X_SPACING_FRACTION) / 2.0;
+					}
+				#ifdef CS_SUPPORT_PREDEFINED_GRID
 				}
+				#endif
 				#endif				
 				currentFileReference->printX = xPos * (vectorObjectsScaleFactor * CS_FILE_FUNCTIONS_DISABLED_TEXT_BOX_SCALE_FACTOR_X_SPACING_FRACTION) + xOffset;
 				currentFileReference->printY = (vectorObjectsScaleFactor * CS_FILE_FUNCTIONS_DISABLED_TEXT_BOX_SCALE_FACTOR_Y_SPACING_FRACTION) * (double)maxYPos;
@@ -568,7 +620,7 @@ Reference * createFileReferenceListBoxes(Reference * currentReferenceInPrintList
 
 		if(currentFileReference->firstReferenceInBelowList != NULL)
 		{
-			newCurrentReferenceInPrintList = createFileReferenceListBoxes(newCurrentReferenceInPrintList, currentFileReference->firstReferenceInBelowList, firstReferenceInTopLevelBelowList, currentTag, outputFunctionsConnectivity, traceFunctionUpwards);
+			newCurrentReferenceInPrintList = createFileReferenceListBoxes(newCurrentReferenceInPrintList, currentFileReference->firstReferenceInBelowList, firstReferenceInTopLevelBelowList, currentTag, outputFunctionsConnectivity, traceFunctionUpwards, firstTagInGridTag, usePredefinedGrid);
 		}
 
 		currentFileReference = currentFileReference->next;
@@ -780,7 +832,7 @@ CSfileReference * findPrintedFileReferenceWithName(string name, CSfileReference 
 
 
 
-Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentReferenceInPrintList, CSfileReference * aboveLevelFileReference, CSfunctionReference * aboveLevelFunctionReference, CSfileReference * firstReferenceInTopLevelBelowList, int functionLevel, string functionReferenceNameToFind, XMLparserTag ** currentTag, bool traceFunctionUpwards, bool useSingleFileOnly, string * singleFileName)
+Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentReferenceInPrintList, CSfileReference * aboveLevelFileReference, CSfunctionReference * aboveLevelFunctionReference, CSfileReference * firstReferenceInTopLevelBelowList, int functionLevel, string functionReferenceNameToFind, XMLparserTag ** currentTag, bool traceFunctionUpwards, bool useSingleFileOnly, string * singleFileName, bool usePredefinedGrid)
 {
 	int newFunctionLevel = functionLevel;
 
@@ -906,10 +958,17 @@ Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentRe
 
 					double xOffset = 0.0;
 					#ifdef CS_DRAW_APPLY_EVEN_ODD_X_OFFSET
-					if((newFunctionLevel % 2) == 0)
+					#ifdef CS_SUPPORT_PREDEFINED_GRID
+					if(!usePredefinedGrid)
 					{
-						xOffset = CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR/0.5 / 2.0;
+					#endif					
+						if((newFunctionLevel % 2) == 0)
+						{
+							xOffset = CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR/0.5 / 2.0;
+						}
+					#ifdef CS_SUPPORT_PREDEFINED_GRID
 					}
+					#endif						
 					#endif	
 					functionReference->printX = fileReference->printX + (fileReference->maxFunctionPrintXAtAParticularY[newFunctionLevel])*CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR/0.5 + xOffset - (CS_FILE_FUNCTIONS_ENABLED_VECTOROBJECTS_SCALE_FACTOR*0.5 * CS_FILE_FUNCTIONS_ENABLED_LARGE_BOX_SCALE_FACTOR_X * 0.5);
 					functionReference->printY = fileReference->printY + (1+newFunctionLevel)*CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR*CS_FUNCTION_TEXT_BOX_SCALE_FACTOR_Y_SPACING_FRACTION;
@@ -1121,7 +1180,7 @@ Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentRe
 					*/
 
 					//recurse
-					newCurrentReferenceInPrintList = createFunctionReferenceListBoxesAndConnections(newCurrentReferenceInPrintList, fileReference, functionReference, firstReferenceInTopLevelBelowList, (newFunctionLevel+1), currentfunctionReferenceReference->name, currentTag, traceFunctionUpwards, useSingleFileOnly, singleFileName);
+					newCurrentReferenceInPrintList = createFunctionReferenceListBoxesAndConnections(newCurrentReferenceInPrintList, fileReference, functionReference, firstReferenceInTopLevelBelowList, (newFunctionLevel+1), currentfunctionReferenceReference->name, currentTag, traceFunctionUpwards, useSingleFileOnly, singleFileName, usePredefinedGrid);
 
 					currentfunctionReferenceReference = currentfunctionReferenceReference->next;
 				}			
