@@ -148,9 +148,9 @@
 	#endif
 	#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_FUNCTION_ARGUMENT_DELIMITER ','
 
-	//#define CS_GENERATE_CPP_CLASSES	//added 3e1a/27-August-2014
+	#define CS_GENERATE_CPP_CLASSES	//added 3e1a/27-August-2014
 	#ifdef CS_GENERATE_CPP_CLASSES
-		#define CS_GENERATE_CPP_CLASSES_DISABLE_OUTPUT	//safe for debug (no source/header file overwrites)
+		//#define CS_GENERATE_CPP_CLASSES_DISABLE_OUTPUT	//safe for debug (no source/header file overwrites)
 		#define CS_GENERATE_CODE_GENERIC_SOURCE_FILE_EXTENSION "cpp"
 		#define CS_GENERATE_CODE_GENERIC_HEADER_FILE_EXTENSION "hpp"
 		#define CS_GENERATE_CPP_CLASSES_TEXT_FUNCTION_PRIVATE "private: "
