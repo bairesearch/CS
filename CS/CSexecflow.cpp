@@ -23,7 +23,7 @@
  * File Name: CSexecflow.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c2a 19-October-2012
+ * Project Version: 3c3a 16-November-2012
  *
  *******************************************************************************/
 
@@ -177,8 +177,8 @@ void printCS(string topLevelFileName, string topLevelFunctionName, int width, in
 				
 				if(useOutputHTMLFile)
 				{//use single html file for project (rather than unique html file per file in project)
-					string HTMLdocumentationHeader = generateHTMLdocumentationHeader("Software Project");					
-					string HTMLdocumentationFooter = generateHTMLdocumentationFooter();
+					string HTMLdocumentationHeader = generateHTMLdocumentationHeader("Software Project", true);					
+					string HTMLdocumentationFooter = generateHTMLdocumentationFooter(true);
 					string HTMLdocumentation = HTMLdocumentationHeader + HTMLdocumentationBody + HTMLdocumentationFooter;
 					ofstream writeFileObjectHTML(outputHTMLFileName.c_str());
 					writeStringToFileObject(&HTMLdocumentation, &writeFileObjectHTML);					
@@ -251,16 +251,32 @@ void printCS(string topLevelFileName, string topLevelFunctionName, int width, in
 
 }
 
-string generateHTMLdocumentationHeader(string name)
+string generateHTMLdocumentationHeader(string name, bool htmlFileHeader)
 {
 	string HTMLdocumentationHeader = "";
-	HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h2>" + name + " Documentation</h2><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3c2a 19-October-2012<p>\n";
+	if(htmlFileHeader)
+	{
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h2>" + name + " Documentation</h2><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3c3a 16-November-2012<p>\n";
+	}
+	else
+	{
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<h2>" + name + " Documentation</h2>\n";	
+	}
 	return HTMLdocumentationHeader;
 }
 
-string generateHTMLdocumentationFooter()
+string generateHTMLdocumentationFooter(bool htmlFileFooter)
 {
-	return "</body></html>\n";
+	string HTMLdocumentationFooter = "";
+	if(htmlFileFooter)
+	{
+		HTMLdocumentationFooter = "</body></html>\n";
+	}
+	else
+	{
+		HTMLdocumentationFooter = "\n";	
+	}
+	return HTMLdocumentationFooter;
 }
 
 void writeStringToFileObject(string * s, ofstream * writeFileObject)
@@ -293,7 +309,9 @@ void generateHTMLdocumentationForAllFunctions(CSReference * firstReferenceInAbov
 				{//create multiple html files (ie, a single HTML file per parsed source file)
 					*HTMLdocumentationBody = "";
 				}
-
+				string HTMLdocumentationFileBody = "";
+				bool HTMLgeneratedSafe = false;
+				
 				CSReference * currentFunctionReference = currentFileReference->firstReferenceInFunctionList;
 				while(currentFunctionReference->next != NULL)
 				{	
@@ -302,6 +320,7 @@ void generateHTMLdocumentationForAllFunctions(CSReference * firstReferenceInAbov
 
 						if(!(currentFunctionReference->HTMLgenerated))
 						{//do not parse a function twice
+							HTMLgeneratedSafe = true;
 							currentFunctionReference->HTMLgenerated = true;
 
 							string outputSVGFileNameFunction = "";	//only used with traceAFunctionUpwards
@@ -314,7 +333,7 @@ void generateHTMLdocumentationForAllFunctions(CSReference * firstReferenceInAbov
 
 							string HTMLdocumentationFunction = "";
 							generateHTMLdocumentationForFunction(currentReferenceInPrintList, firstReferenceInTopLevelBelowList, currentFunctionReference, fileNameHoldingFunction, &currentTagInSVGFileFunction, topLevelFunctionName, generateHTMLdocumentationMode, &HTMLdocumentationFunction, &outputSVGFileNameFunction, false, "", traceAFunctionUpwards);		
-							*HTMLdocumentationBody = *HTMLdocumentationBody + HTMLdocumentationFunction; 
+							HTMLdocumentationFileBody = HTMLdocumentationFileBody + HTMLdocumentationFunction; 
 							#ifdef CS_DEBUG_HTML_DOCUMENTATION
 							//cout << "HTMLdocumentationFunction = " << HTMLdocumentationFunction << endl;
 							#endif
@@ -335,19 +354,27 @@ void generateHTMLdocumentationForAllFunctions(CSReference * firstReferenceInAbov
 
 					currentFunctionReference = currentFunctionReference->next;
 				}
-
+				
+				string HTMLdocumentationFileHeader = generateHTMLdocumentationHeader(currentFileReference->name, !useOutputHTMLFile);					
+				string HTMLdocumentationFileFooter = generateHTMLdocumentationFooter(!useOutputHTMLFile);
+				string HTMLdocumentationFile = "";
+				HTMLdocumentationFile = HTMLdocumentationFile + HTMLdocumentationFileHeader + HTMLdocumentationFileBody + HTMLdocumentationFileFooter;
+									
 				if(!useOutputHTMLFile)
 				{//create multiple html files (ie, a single HTML file per parsed source file)
-					string HTMLdocumentationHeader = generateHTMLdocumentationHeader(currentFileReference->name);					
-					string HTMLdocumentationFooter = generateHTMLdocumentationFooter();
-					string HTMLdocumentation = "";
-					HTMLdocumentation = HTMLdocumentation + HTMLdocumentationHeader + *HTMLdocumentationBody + HTMLdocumentationFooter;
 					#ifdef CS_DEBUG_HTML_DOCUMENTATION
-					//cout << "*HTMLdocumentationBody = " << *HTMLdocumentationBody << endl;
+					//cout << "HTMLdocumentationFile = " << HTMLdocumentationFile << endl;
 					#endif
 					string outputHTMLFileName = currentFileReference->name + HTML_EXTENSION;
 					ofstream writeFileObjectHTML(outputHTMLFileName.c_str());
-					writeStringToFileObject(&HTMLdocumentation, &writeFileObjectHTML);
+					writeStringToFileObject(&HTMLdocumentationFile, &writeFileObjectHTML);
+				}
+				else
+				{
+					if(HTMLgeneratedSafe)
+					{
+						*HTMLdocumentationBody = *HTMLdocumentationBody + HTMLdocumentationFile;
+					}
 				}
 
 				if(currentFileReference->firstReferenceInBelowList != NULL)
@@ -361,8 +388,8 @@ void generateHTMLdocumentationForAllFunctions(CSReference * firstReferenceInAbov
 	}
 }
 
-void generateHTMLdocumentationForFunction(Reference * currentReferenceInPrintList, CSReference * firstReferenceInTopLevelBelowList, CSReference * bottomLevelFunctionToTraceUpwards, string fileNameHoldingFunction, XMLParserTag ** currentTag, string topLevelFunctionName, int generateHTMLdocumentationMode, string * HTMLdocumentationFunction, string * outputSVGFileNameFunction, bool useOutputHTMLFile, string outputHTMLFileName, bool traceAFunctionUpwards)
-{		
+void generateHTMLdocumentationForFunction(Reference * currentReferenceInPrintList, CSReference * firstReferenceInTopLevelBelowList, CSReference * bottomLevelFunctionToTraceUpwards, string fileNameHoldingFunction, XMLParserTag ** currentTag, string topLevelFunctionName, int generateHTMLdocumentationMode, string * HTMLdocumentationFunctionBody, string * outputSVGFileNameFunction, bool useOutputHTMLFile, string outputHTMLFileName, bool traceAFunctionUpwards)
+{			
 	if(generateHTMLdocumentationMode == CS_GENERATE_HTML_DOCUMENTATION_MODE_OFF)
 	{
 		#ifdef CS_DISPLAY_INCLUDE_FILE_PARSING
@@ -397,7 +424,7 @@ void generateHTMLdocumentationForFunction(Reference * currentReferenceInPrintLis
 		string HTMLdocumentationFunctionInputArguments = "";
 		generateHTMLdocumentationFunctionInputArguments(&(bottomLevelFunctionToTraceUpwards->name), &(bottomLevelFunctionToTraceUpwards->nameFull), &HTMLdocumentationFunctionInputArguments);
 
-		*HTMLdocumentationFunction = *HTMLdocumentationFunction + HTMLdocumentationFunctionInputIntroduction + HTMLdocumentationFunctionInputArguments + "<br />";
+		*HTMLdocumentationFunctionBody = *HTMLdocumentationFunctionBody + HTMLdocumentationFunctionInputIntroduction + HTMLdocumentationFunctionInputArguments + "<br />";
 
 		if(traceAFunctionUpwards)
 		{
@@ -409,17 +436,17 @@ void generateHTMLdocumentationForFunction(Reference * currentReferenceInPrintLis
 		
 			string HTMLdocumentationFunctionTraceImagePlaceHolder = generateHTMLdocumentationFunctionTraceImagePlaceHolder(outputSVGFileNameFunction);	
 			
-			*HTMLdocumentationFunction = *HTMLdocumentationFunction +  HTMLdocumentationFunctionTraceTable + HTMLdocumentationFunctionTraceImagePlaceHolder;			
+			*HTMLdocumentationFunctionBody = *HTMLdocumentationFunctionBody +  HTMLdocumentationFunctionTraceTable + HTMLdocumentationFunctionTraceImagePlaceHolder;			
 		}
-		
+				
 		if(useOutputHTMLFile)
 		{//use single html file for function
-			string HTMLdocumentationHeader = generateHTMLdocumentationHeader(bottomLevelFunctionToTraceUpwards->name);					
-			string HTMLdocumentationFooter = generateHTMLdocumentationFooter();	
-			string HTMLdocumentation = HTMLdocumentationHeader + *HTMLdocumentationFunction + HTMLdocumentationFooter;
+			string HTMLdocumentationFunctionHeader = generateHTMLdocumentationHeader(bottomLevelFunctionToTraceUpwards->name, true);					
+			string HTMLdocumentationFunctionFooter = generateHTMLdocumentationFooter(true);	
+			string HTMLdocumentationFunction = HTMLdocumentationFunctionHeader + *HTMLdocumentationFunctionBody + HTMLdocumentationFunctionFooter;
 
 			ofstream writeFileObjectHTML(outputHTMLFileName.c_str());
-			writeStringToFileObject(&HTMLdocumentation, &writeFileObjectHTML);
+			writeStringToFileObject(&HTMLdocumentationFunction, &writeFileObjectHTML);
 		}	
 	}
 
