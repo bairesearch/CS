@@ -25,7 +25,7 @@
  * File Name: CSreferenceClass.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3d2e 14-April-2014
+ * Project Version: 3d3a 24-May-2014
  *
  *******************************************************************************/
 
@@ -86,6 +86,7 @@ public:
 	string name;		//file/function
 	int col;		//	file/function colour + connection colour to all children
 	bool printed;		//file/function printed
+	bool printedFunctionConnections; 	//file/function connections printed
 	#ifdef CS_HTML_DOCUMENTATION_GENERATE_FILE_CODE_STRUCTURE_DIAGRAMS
 	bool singleFileOnlyPrinted;	//file/function printed
 	#endif
@@ -151,6 +152,8 @@ public:
 	string name;		//file/function
 	int col;		//	file/function colour + connection colour to all children
 	bool printed;		//file/function printed
+	bool printedFileConnections;	//file/function connections printed
+	bool printedFileConnection;
 	int printX;		//file/function printX
 	int printY;		//file/function printY
 	int printXIndex;	//file/function printXIndex

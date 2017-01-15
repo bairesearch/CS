@@ -33,7 +33,7 @@
 		<miscellaneousItem name="CS_FILE_OR_FUNCTION_TEXT_BOX_BOX_SCALE_FACTOR_Y_SPACING_FRACTION_SVG" stringValue="" fractionalValue="0.1" />
 		
 		<miscellaneousItem name="CS_FILE_FUNCTIONS_DISABLED_VECTOROBJECTS_SCALE_FACTOR" stringValue="" fractionalValue="500" />
-		<miscellaneousItem name="CS_FILE_FUNCTIONS_ENABLED_VECTOROBJECTS_SCALE_FACTOR" stringValue="" fractionalValue="200" />
+		<miscellaneousItem name="CS_FILE_FUNCTIONS_ENABLED_VECTOROBJECTS_SCALE_FACTOR" stringValue="" fractionalValue="500" />
 		<miscellaneousItem name="CS_FILE_MAX_TEXT_LENGTH" stringValue="" fractionalValue="20" />
 		<miscellaneousItem name="CS_FILE_TEXT_BOX_PADDING_FRACTION_OF_TEXT_LENGTH" stringValue="" fractionalValue="1.25" />
 		<miscellaneousItem name="CS_FILE_FUNCTIONS_DISABLED_TEXT_BOX_SCALE_FACTOR_X_SPACING_FRACTION" stringValue="" fractionalValue="0.9" />
@@ -88,13 +88,13 @@
 		<file name="NLCprintDefs.h" x="6" y="5" />
 
 		<file name="GIAbot.h" x="5" y="10" />
-		<file name="GIAconditionNodeClass.h" x="3" y="15" />
+		<file name="GIAconditionNodeClass.h" x="3" y="16" />
 		<file name="GIAcxlConversion.h" x="13" y="8" />
 		<file name="GIAdatabase.h" x="6" y="13" />
 		<file name="GIAdraw.h" x="11" y="8" />
-		<file name="GIAentityConnectionClass.h" x="4" y="14" />
-		<file name="GIAentityNodeClass.h" x="3" y="14" />
-		<file name="GIAglobalDefs.h" x="3" y="16" />
+		<file name="GIAentityConnectionClass.h" x="4" y="15" />
+		<file name="GIAentityNodeClass.h" x="3" y="15" />
+		<file name="GIAglobalDefs.h" x="3" y="17" />
 		<file name="GIAlrp.h" x="1" y="8" />
 		<file name="GIAmain.h" x="4" y="7" />
 		<file name="GIAnlg.h" x="10" y="8" />
@@ -109,7 +109,7 @@
 		<file name="GIAtranslator.h" x="5" y="8" />
 		<file name="GIAtranslatorLinkEntities.h" x="7" y="9" />
 		<file name="GIAtranslatorOperations.h" x="3" y="12" />
-		<file name="GIAtranslatorDefs.h" x="4" y="14" />
+		<file name="GIAtranslatorDefs.h" x="4" y="13" />
 		<file name="GIAtranslatorRedistributeRelexRelations.h" x="4" y="9" />
 		<file name="GIAtranslatorRedistributeStanfordRelations.h" x="4" y="10" />
 		<file name="GIAwordnet.h" x="9" y="9" />
@@ -123,6 +123,9 @@
 		<file name="wn.h" x="4" y="17" />
 		<file name="math.h" x="5" y="17" />
 		<file name="CECodeextensionClass.h" x="6" y="17" />
+		<file name="jpeglib.h" x="" y="" />
+		<file name="jmemsys.h" x="" y="" />
+		<file name="float.h" x="" y="" />
 
 		<file name="RTglobalDefs.h" x="14" y="8" />
 		<file name="RTmain.h" x="" y="" />
@@ -178,6 +181,7 @@
 		<file name="ANNglobalDefs.h" x="" y="" />
 		<file name="ANNmain.h" x="" y="" />
 		<file name="ANNneuronClass.h" x="" y="" />
+		<file name="ANNneuronConnectionClass.h" x="" y="" />
 		<file name="ANNparser.h" x="" y="" />
 		<file name="ANNsprite.h" x="" y="" />
 		<file name="ANNtraining.h" x="" y="" />

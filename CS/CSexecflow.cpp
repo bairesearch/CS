@@ -25,7 +25,7 @@
  * File Name: CSexecflow.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3d2e 14-April-2014
+ * Project Version: 3d3a 24-May-2014
  *
  *******************************************************************************/
 
@@ -178,6 +178,7 @@ void printCS(string topLevelFileName, int width, int height, string outputLDRfil
 				currentReferenceInPrintList = createFunctionReferenceListBoxesAndConnections(currentReferenceInPrintList, firstReferenceInTopLevelBelowList, topLevelFunctionReference, firstReferenceInTopLevelBelowList, 0, currentReferenceInFunctionReferenceList->name, &currentTagInSVGFile, traceFunctionUpwards, false, NULL, usePredefinedGrid);
 				currentReferenceInFunctionReferenceList = currentReferenceInFunctionReferenceList->next;
 			}
+			resetPrintedFunctionConnections(firstReferenceInTopLevelBelowList, topLevelFunctionReference, false, NULL);
 
 			if(traceFunctionUpwards && (bottomLevelFunctionNameToTraceUpwards != ""))
 			{
@@ -310,7 +311,7 @@ string generateHTMLdocumentationHeader(string name, bool htmlHeader, bool isFile
 	string HTMLdocumentationHeader = "";
 	if(htmlHeader)
 	{
-		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3d2e 14-April-2014<p>\n";
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3d3a 24-May-2014<p>\n";
 	}
 	else
 	{
@@ -1027,6 +1028,7 @@ void generateFileDiagramFunctionsHeirachy(CSfileReference * currentFileReference
 				//cout << currentTopLevelFunctionReference->name << endl;
 				//cout << "currentTopLevelFunctionReference->name = " << currentTopLevelFunctionReference->name << endl;
 				CSfunctionReference * currentReferenceInFunctionReferenceList = currentTopLevelFunctionReference->firstReferenceInFunctionReferenceList;
+				currentTopLevelFunctionReference->printedFunctionConnections = false;
 				while(currentReferenceInFunctionReferenceList->next != NULL)
 				{
 					//cout << "currentReferenceInFunctionReferenceList->name = " << currentReferenceInFunctionReferenceList->name << endl;
@@ -1034,6 +1036,7 @@ void generateFileDiagramFunctionsHeirachy(CSfileReference * currentFileReference
 
 					currentReferenceInFunctionReferenceList = currentReferenceInFunctionReferenceList->next;
 				}
+				resetPrintedFunctionConnections(currentFileReference, currentTopLevelFunctionReference, true, &(currentFileReference->name));
 			}
 
 			currentTopLevelFunctionReference = currentTopLevelFunctionReference->next;

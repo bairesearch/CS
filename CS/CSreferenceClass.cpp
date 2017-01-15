@@ -25,79 +25,13 @@
  * File Name: CSreferenceClass.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3d2e 14-April-2014
+ * Project Version: 3d3a 24-May-2014
  *
  *******************************************************************************/
 
 #include "CSreferenceClass.h"
 
 
-
-
-CSfileReferenceContainer::CSfileReferenceContainer(void)
-{
-	next = NULL;
-	name = "";
-}
-
-CSfileReferenceContainer::~CSfileReferenceContainer(void)
-{
-	if(next != NULL)
-	{
-		delete next;
-	}
-}
-
-CSfileReference::CSfileReference(void)
-{
-	//file/function reference [shared]
-	id = 0;
-	level = 0;
-	name = "";
-	col = 0;
-	printed = false;
-	printX = 0;
-	printY = 0;
-	printXIndex = 0;
-	printYIndex = 0;
-	printTextX = 0;
-	printTextY = 0;
-	HTMLgenerated = false;
-
-	next = NULL;
-	previous = NULL;
-	firstReferenceContainerInAboveReferenceList = new CSfileReferenceContainer();
-	printedTrace = false;
-	printedTraceReset = false;
-
-	//file reference only
-	firstReferenceInAboveList = NULL;
-	firstReferenceInBelowList = NULL;
-	shortcutToPrintedVersionOfReference = NULL;
-	firstReferenceInFunctionList = NULL;
-
-	for(int i=0; i<MAX_INCLUDE_DEPTH_FUNCTION; i++)
-	{
-		maxFunctionPrintXAtAParticularY[i] = 0;
-	}
-
-}
-
-CSfileReference::~CSfileReference(void)
-{
-	if(firstReferenceInBelowList != NULL)
-	{
-		delete firstReferenceInBelowList;
-	}
-	if(next != NULL)
-	{
-		delete next;
-	}
-	if(firstReferenceContainerInAboveReferenceList != NULL)
-	{
-		delete firstReferenceContainerInAboveReferenceList;
-	}
-}
 
 
 
@@ -123,6 +57,7 @@ CSfunctionReference::CSfunctionReference(void)
 	name = "";
 	col = 0;
 	printed = false;
+	printedFunctionConnections = false;
 	#ifdef CS_HTML_DOCUMENTATION_GENERATE_FILE_CODE_STRUCTURE_DIAGRAMS
 	singleFileOnlyPrinted = false;
 	#endif
@@ -181,6 +116,73 @@ CSfunctionReference::~CSfunctionReference(void)
 	}
 }
 
+
+CSfileReferenceContainer::CSfileReferenceContainer(void)
+{
+	next = NULL;
+	name = "";
+}
+
+CSfileReferenceContainer::~CSfileReferenceContainer(void)
+{
+	if(next != NULL)
+	{
+		delete next;
+	}
+}
+
+CSfileReference::CSfileReference(void)
+{
+	//file/function reference [shared]
+	id = 0;
+	level = 0;
+	name = "";
+	col = 0;
+	printed = false;
+	printedFileConnections = false;
+	printedFileConnection = false;
+	printX = 0;
+	printY = 0;
+	printXIndex = 0;
+	printYIndex = 0;
+	printTextX = 0;
+	printTextY = 0;
+	HTMLgenerated = false;
+
+	next = NULL;
+	previous = NULL;
+	firstReferenceContainerInAboveReferenceList = new CSfileReferenceContainer();
+	printedTrace = false;
+	printedTraceReset = false;
+
+	//file reference only
+	firstReferenceInAboveList = NULL;
+	firstReferenceInBelowList = NULL;
+	shortcutToPrintedVersionOfReference = NULL;
+	firstReferenceInFunctionList = NULL;
+
+	for(int i=0; i<MAX_INCLUDE_DEPTH_FUNCTION; i++)
+	{
+		maxFunctionPrintXAtAParticularY[i] = 0;
+	}
+
+}
+
+CSfileReference::~CSfileReference(void)
+{
+	if(firstReferenceInBelowList != NULL)
+	{
+		delete firstReferenceInBelowList;
+	}
+	if(next != NULL)
+	{
+		delete next;
+	}
+	if(firstReferenceContainerInAboveReferenceList != NULL)
+	{
+		delete firstReferenceContainerInAboveReferenceList;
+	}
+}
 
 
 
