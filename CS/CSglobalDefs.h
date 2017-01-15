@@ -26,7 +26,7 @@
  * File Name: CSglobalsDefs.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h11a 10-December-2015
+ * Project Version: 3h11b 10-December-2015
  * Description: CS specific global definitions
  *
  *******************************************************************************/
@@ -45,7 +45,10 @@
 	
 	#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS	//added 3h1a/14-November-2014	//requires CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST
 	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
-		//#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DISABLE_OUTPUT	//safe for debug (no source/header file overwrites)
+		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DISABLE_OUTPUT	//safe for debug (no source/header file overwrites)
+		
+		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_TEMPLATE_USE_OPEN '<'
+		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_TEMPLATE_USE_CLOSE '>'
 		
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_NONCONST_BASED_ON_EXISTENCE_OF_ARBITRARY_SPECIAL_CASE_TEXT	//3h11a
 		#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_NONCONST_BASED_ON_EXISTENCE_OF_ARBITRARY_SPECIAL_CASE_TEXT
@@ -109,6 +112,7 @@
 			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_LIST_VARIABLE_PREFIX_CURRENT "current"  	//BAI standard prefix for object list iterator pointers
 			
 			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_VECTOR_OR_MAP_ITERATOR "::iterator "	
+			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_VECTOR_OR_MAP_ITERATOR_REVERSE "::reverse_iterator "	
 			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_VECTOR_OR_MAP_START "begin()"	
 			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_VECTOR_OR_MAP_FIND "find("	
 			

@@ -21,7 +21,7 @@
  * File Name: CSgenerateConstFunctionArgumentCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h11a 10-December-2015
+ * Project Version: 3h11b 10-December-2015
  *
  *******************************************************************************/
 
@@ -187,6 +187,7 @@ bool generateConstFunctionArgumentsFile(CSfile* currentFileObject)
 							exit(0); 
 						}
 					}
+
 				#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_PRECODED_CONST_ARGUMENTS
 				}
 				#endif
@@ -228,42 +229,56 @@ string replaceAllOccurancesOfFunctionObjectFunctionArgumentSecondaryAssignmentDe
 {
 	string functionTextUpdated = *functionTextOrig;
 	
-	string secondaryAssignmentDecarationHypotheticalExtract = string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_POINTER_TYPE) + functionArgumentSecondaryAssignmentName + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET;	//* secondaryAssignmentName = 
+	string secondaryAssignmentDecarationHypotheticalExtract[3];
+	secondaryAssignmentDecarationHypotheticalExtract[0] = string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_POINTER_TYPE) + functionArgumentSecondaryAssignmentName + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET;	//* secondaryAssignmentName = 
 	//cout << "secondaryAssignmentDecarationHypotheticalExtract = " << secondaryAssignmentDecarationHypotheticalExtract << endl;
+	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_PARSE_LISTS
+	secondaryAssignmentDecarationHypotheticalExtract[1] = string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_VECTOR_OR_MAP_ITERATOR) + functionArgumentSecondaryAssignmentName + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET;	//::iterator secondaryAssignmentName =
+	secondaryAssignmentDecarationHypotheticalExtract[2] = string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_VECTOR_OR_MAP_ITERATOR_REVERSE) + functionArgumentSecondaryAssignmentName + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET;	//::reverse_iterator secondaryAssignmentName =
+	int secondaryAssignmentDecarationHypotheticalExtractSize = 3;
+	#else
+	int secondaryAssignmentDecarationHypotheticalExtractSize = 1;
+	#endif
 	
 	bool stillSearching = true;
 	int pos = 0;
 	while(stillSearching)
 	{
-		pos = functionTextUpdated.find(secondaryAssignmentDecarationHypotheticalExtract, pos);
-		if(pos != CPP_STRING_FIND_RESULT_FAIL_VALUE)
-		{//only update function reference within functionText once
-			
-			//int indexOfStartOfLine = functionText->rfind(STRING_NEW_LINE, pos);
-			int indexOfFunctionArgumentSecondaryAssignmentType = CPP_STRING_FIND_RESULT_FAIL_VALUE;
-			string functionArgumentSecondaryAssignmentType = extractFullVariableNameReverse(&functionTextUpdated, pos-1, &indexOfFunctionArgumentSecondaryAssignmentType);
-			if(indexOfFunctionArgumentSecondaryAssignmentType != CPP_STRING_FIND_RESULT_FAIL_VALUE)
-			{
-				string secondaryAssignmentDecaration = functionArgumentSecondaryAssignmentType + secondaryAssignmentDecarationHypotheticalExtract;
-				string secondaryAssignmentDecarationWithConst = string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_CONST) + secondaryAssignmentDecaration;
-				//cout << "secondaryAssignmentDecaration = " << secondaryAssignmentDecaration << endl;
-				//cout << "secondaryAssignmentDecarationWithConst = " << secondaryAssignmentDecarationWithConst << endl;
-				
-				functionTextUpdated.replace(indexOfFunctionArgumentSecondaryAssignmentType, secondaryAssignmentDecaration.length(), secondaryAssignmentDecarationWithConst);
-				pos = pos + secondaryAssignmentDecarationWithConst.length();
-				*foundAtLeastOneInstance = true;
+		for(int i=0; i<secondaryAssignmentDecarationHypotheticalExtractSize; i++)
+		{
+			pos = functionTextUpdated.find(secondaryAssignmentDecarationHypotheticalExtract[i], pos);
+			if(pos != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+			{//only update function reference within functionText once
+
+				int indexOfFunctionArgumentSecondaryAssignmentType = CPP_STRING_FIND_RESULT_FAIL_VALUE;
+				string functionArgumentSecondaryAssignmentType = extractFullVariableTypeReverse(&functionTextUpdated, pos-1, &indexOfFunctionArgumentSecondaryAssignmentType);
+				if(indexOfFunctionArgumentSecondaryAssignmentType != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+				{
+					string secondaryAssignmentDecaration = functionArgumentSecondaryAssignmentType + secondaryAssignmentDecarationHypotheticalExtract[i];
+					string secondaryAssignmentDecarationWithConst = string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_CONST) + secondaryAssignmentDecaration;
+					if(i > 0)
+					{
+						cout << "secondaryAssignmentDecaration = " << secondaryAssignmentDecaration << endl;
+						cout << "secondaryAssignmentDecarationWithConst = " << secondaryAssignmentDecarationWithConst << endl;
+						exit(0);
+					}
+					
+					functionTextUpdated.replace(indexOfFunctionArgumentSecondaryAssignmentType, secondaryAssignmentDecaration.length(), secondaryAssignmentDecarationWithConst);
+					pos = pos + secondaryAssignmentDecarationWithConst.length();
+					*foundAtLeastOneInstance = true;
+				}
+				else
+				{
+					cout << "replaceAllOccurancesOfFunctionObjectFunctionArgumentSecondaryAssignmentDeclarationInFunction{} error: cannot find functionArgumentSecondaryAssignmentType" << endl;
+				}
 			}
 			else
 			{
-				cout << "replaceAllOccurancesOfFunctionObjectFunctionArgumentSecondaryAssignmentDeclarationInFunction{} error: cannot find functionArgumentSecondaryAssignmentType" << endl;
+				stillSearching = false;
 			}
 		}
-		else
-		{
-			stillSearching = false;
-		}
 	}
-	
+					
 	return functionTextUpdated;
 }
 
@@ -416,13 +431,30 @@ bool generateConstFunctionArgumentAndSearchForSecondaryReferences(CSfunction* cu
 
 							//trace for loop vector list iterators  (and secondary assignments)
 							int indexOfIteratorType = CPP_STRING_FIND_RESULT_FAIL_VALUE;
+							bool foundIterator = false;
+							string iterType;
 							if((indexOfIteratorType = functionText->rfind(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_VECTOR_OR_MAP_ITERATOR, indexOfFunctionArgument)) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+							{
+								foundIterator = true;
+								iterType = CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_VECTOR_OR_MAP_ITERATOR;
+							}
+							else
+							{
+								if((indexOfIteratorType = functionText->rfind(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_VECTOR_OR_MAP_ITERATOR_REVERSE, indexOfFunctionArgument)) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+								{
+									foundIterator = true;
+									iterType = CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_VECTOR_OR_MAP_ITERATOR_REVERSE;
+								}
+							}
+							if(foundIterator)
 							{
 								if(indexOfIteratorType > indexOfStartOfLine)
 								{
 									//added condition CS3h2a - detect list; eg "for(vector<GIAentityConnection*>::iterator connectionIter = entityNode->entityVectorConnectionsArray[i].begin(); ..."
 										//can't handle cases where iterator is defined on separate line to for loop (or where multiple iterators are used to refer to the same list), eg; NLCtranslatorCodeBlocksLogicalConditions.cpp: generateCodeBlocksFromMathText: map<int, vector<GIAentityNode*>*>::iterator sentenceIter = sentenceIterFirstInFullSentence;
 										//can't handle cases where vector/map functions are executed to modify the vector/map (or where multiple iterators are used to refer to the same list), eg; GIAtranslatorOperations.cpp: eraseSubstanceFromSubstanceList: entityNodesActiveListSubstances->erase(substanceEntityNodesListIteratorFound);
+									
+									/*
 									bool functionDeclarationArgumentHasBeginPointerBeingReferenced = false;
 									int indexOfBeginPointerBeingReferenced = CPP_STRING_FIND_RESULT_FAIL_VALUE;
 									if((indexOfBeginPointerBeingReferenced = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_VECTOR_OR_MAP_START, indexOfFunctionArgument)) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
@@ -449,10 +481,11 @@ bool generateConstFunctionArgumentAndSearchForSecondaryReferences(CSfunction* cu
 											#endif
 										}
 									}
+									*/
 
 									if(indexOfIteratorType < indexOfEqualsSetPrevious)
 									{
-										string iteratorName = extractFullVariableName(functionText, indexOfIteratorType+string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_VECTOR_OR_MAP_ITERATOR).length());
+										string iteratorName = extractFullVariableName(functionText, indexOfIteratorType+iterType.length());
 
 										#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
 										cout << "generateConstFunctionArgumentAndSearchForSecondaryReferences{}: found for loop vector/map iterator" << endl;
@@ -464,41 +497,29 @@ bool generateConstFunctionArgumentAndSearchForSecondaryReferences(CSfunction* cu
 
 										}
 
-										//trace secondary assignments of iterator (limitation: can only trace immediate secondary assignments of iterator variables)
+										//trace secondary assignments of iterator
 										//e.g. GIAentityNode* currentQueryEntityNode = connectionIterQuery->second;
-										int indexOfEqualsSetFollowingLine = CPP_STRING_FIND_RESULT_FAIL_VALUE;
-										if((indexOfEqualsSetFollowingLine = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET, indexOfEndOfLine)) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+										string followingLineHypothetical[4];
+										followingLineHypothetical[0] = string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET) + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_OPEN_PARAMETER_SPACE + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_POINTER + iteratorName + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_CLOSE_PARAMETER_SPACE + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_END_OF_COMMAND;	//[currentQueryEntityNode] = (*connectionIterQuery); 
+										followingLineHypothetical[1] = string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET) + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_POINTER + iteratorName + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_END_OF_COMMAND;	//[currentQueryEntityNode] = *connectionIterQuery; 
+										followingLineHypothetical[2] = string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET) + iteratorName + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_MAP_ITERATOR_FIRST + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_END_OF_COMMAND;	//[currentQueryEntityNode] = connectionIterQuery->first;
+										followingLineHypothetical[3] = string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET) + iteratorName + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_MAP_ITERATOR_SECOND + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_END_OF_COMMAND;	//[currentQueryEntityNode] = connectionIterQuery->second;
+										int followingLineHypotheticalSize = 4;
+												
+										for(int i=0; i<followingLineHypotheticalSize; i++)
 										{
-											int indexOfIteratorFollowingLine = CPP_STRING_FIND_RESULT_FAIL_VALUE;
-											if((indexOfIteratorFollowingLine = functionText->find(iteratorName, indexOfEndOfLine)) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+											int indexOfFollowingLineHypotheticalMatch = functionText->find(followingLineHypothetical[i], indexOfEndOfLine);
+											if(indexOfFollowingLineHypotheticalMatch != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 											{
-												int indexOfStartOfSecondaryAssignmentOfIterator;	//not used
-												string secondaryAssignmentOfIterator = extractFullVariableNameReverse(functionText, indexOfEqualsSetFollowingLine-1, &indexOfStartOfSecondaryAssignmentOfIterator);
-												string followingLineHypothetical[4];
-												followingLineHypothetical[0] = secondaryAssignmentOfIterator + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_OPEN_PARAMETER_SPACE + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_POINTER + iteratorName + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_CLOSE_PARAMETER_SPACE + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_END_OF_COMMAND;	//currentQueryEntityNode = (*connectionIterQuery); 
-												followingLineHypothetical[1] = secondaryAssignmentOfIterator + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_POINTER + iteratorName + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_END_OF_COMMAND;	//currentQueryEntityNode = *connectionIterQuery; 
-												followingLineHypothetical[2] = secondaryAssignmentOfIterator + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET + iteratorName + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_MAP_ITERATOR_FIRST + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_END_OF_COMMAND;	//currentQueryEntityNode = connectionIterQuery->first;
-												followingLineHypothetical[3] = secondaryAssignmentOfIterator + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET + iteratorName + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_MAP_ITERATOR_SECOND + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_END_OF_COMMAND;	//currentQueryEntityNode = connectionIterQuery->second;
-												bool foundSecondaryIteratorAssignmentExact = false;
-												int indexOfStartOfFollowingLine = indexOfEqualsSetFollowingLine - secondaryAssignmentOfIterator.length();
-												for(int i=0; i<3; i++)
+												int indexOfStartOfSecondaryAssignmentOfIterator;
+												string secondaryAssignmentOfIterator = extractFullVariableNameReverse(functionText, indexOfFollowingLineHypotheticalMatch-1, &indexOfStartOfSecondaryAssignmentOfIterator);
+												
+												#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+												cout << "found iterator secondary assignment" << endl;
+												#endif
+												if(generateConstFunctionArgumentAndSearchForSecondaryReferences(currentFunctionObject, currentFunctionArgumentInFunction, secondaryAssignmentOfIterator, false))
 												{
-													int indexOfFollowingLineHypotheticalMatch = functionText->find(followingLineHypothetical[i], indexOfStartOfFollowingLine);
-													if(indexOfFollowingLineHypotheticalMatch != CPP_STRING_FIND_RESULT_FAIL_VALUE)
-													{
-														foundSecondaryIteratorAssignmentExact = true;
-													}
-												}
 
-												if(foundSecondaryIteratorAssignmentExact)
-												{
-													#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
-													cout << "found iterator secondary assignment" << endl;
-													#endif
-													if(generateConstFunctionArgumentAndSearchForSecondaryReferences(currentFunctionObject, currentFunctionArgumentInFunction, iteratorName, false))
-													{
-
-													}
 												}
 											}
 										}
@@ -997,6 +1018,65 @@ string extractFullVariableNameReverse(string* functionText, int indexOfEndOfVari
 		i--;
 	}
 	return fullVariableName;
+}
+
+string extractFullVariableTypeReverse(string* functionText, int indexOfEndOfVariableType, int* indexOfStartOfVariableType)
+{
+	string fullVariableType = "";
+	int i = indexOfEndOfVariableType;
+	bool stillFindingVariableNameCharacters = true;
+	int currentNumberTemplateUseLevels = 0;
+	while(stillFindingVariableNameCharacters)
+	{
+		char c = (*functionText)[i];
+		bool foundValidChar = false;
+		if(currentNumberTemplateUseLevels > 0)
+		{
+			if(c == CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_TEMPLATE_USE_CLOSE)
+			{
+				currentNumberTemplateUseLevels++;
+			}
+			else if(c == CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_TEMPLATE_USE_OPEN)
+			{
+				currentNumberTemplateUseLevels--;
+			}
+			foundValidChar = true;
+		}
+		else
+		{
+			for(int j=0; j<CS_FUNCTION_OR_VARIABLE_NAME_CHARACTERS_NUMBER_OF_TYPES; j++)
+			{
+				if((*functionText)[i] == functionOrVariableNameCharacters[j])
+				{
+					foundValidChar = true;
+				}
+			}
+			if(c == CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_TEMPLATE_USE_CLOSE)
+			{
+				currentNumberTemplateUseLevels++;
+				foundValidChar = true;
+			}
+		}
+			
+		if(foundValidChar)
+		{
+			string blank = "";
+			fullVariableType = blank + c + fullVariableType;
+			*indexOfStartOfVariableType = i;
+		}
+		else
+		{
+			stillFindingVariableNameCharacters = false;
+		}
+		
+		if(i == 0)
+		{
+			stillFindingVariableNameCharacters = false;
+		}
+		
+		i--;
+	}
+	return fullVariableType;
 }
 
 bool charInString(string text, char* charArray, int arraySize)
