@@ -26,7 +26,7 @@
  * File Name: CSgenerateHTMLdocumentation.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e1e 27-August-2014
+ * Project Version: 3e1f 27-August-2014
  *
  *******************************************************************************/
 
@@ -51,7 +51,7 @@ void generateHTMLdocumentationFunctions(XMLparserTag * firstTagInSVGFile, CSfile
 			void generateHTMLdocumentationFunctionReferenceList(CSfunctionReference * function, string * HTMLdocumentationFunctionReferenceList);
 			string generateHTMLdocumentationImagePlaceHolder(string * traceImageFileName, string imageTitle);
 		void generateFileDiagramFunctionsHeirachy(CSfileReference * currentFileReference, string outputSVGFileNameFile, CSfileReference * firstReferenceInTopLevelBelowList, bool usePredefinedGrid);
-	void writeStringToFileObject(string * s, ofstream * writeFileObject);
+	void writeStringPointerToFileObject(string * s, ofstream * writeFileObject);
 	void addToHTMLdocumentationFileFunctionList(CSfunctionReference * currentFunctionReference, string * HTMLdocumentationFileFunctionList, int * previousIndentation, bool * previousIndentationFirst);
 
 #ifdef CS_GENERATE_CLASS_HTML_DOCUMENTATION_FROM_CUSTOM_CSCLASS_FORMAT

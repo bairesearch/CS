@@ -26,7 +26,7 @@
  * File Name: CSgenerateHTMLdocumentation.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e1e 27-August-2014
+ * Project Version: 3e1f 27-August-2014
  *
  *******************************************************************************/
 
@@ -72,7 +72,7 @@ void generateHTMLdocumentationFunctions(XMLparserTag * firstTagInSVGFile, CSfile
 		string HTMLdocumentationFooter = generateHTMLdocumentationFooter(true);
 		string HTMLdocumentation = HTMLdocumentationHeader + HTMLdocumentationBody + HTMLdocumentationFooter;
 		ofstream writeFileObjectHTML(outputHTMLfileName.c_str());
-		writeStringToFileObject(&HTMLdocumentation, &writeFileObjectHTML);
+		writeStringPointerToFileObject(&HTMLdocumentation, &writeFileObjectHTML);
 	}
 }
 				
@@ -81,7 +81,7 @@ string generateHTMLdocumentationHeader(string name, bool htmlHeader, bool isFile
 	string HTMLdocumentationHeader = "";
 	if(htmlHeader)
 	{
-		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3e1e 27-August-2014<p>\n";
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3e1f 27-August-2014<p>\n";
 	}
 	else
 	{
@@ -111,7 +111,7 @@ string generateHTMLdocumentationFooter(bool htmlFileFooter)
 	return HTMLdocumentationFooter;
 }
 
-void writeStringToFileObject(string * s, ofstream * writeFileObject)
+void writeStringPointerToFileObject(string * s, ofstream * writeFileObject)
 {
 	for(int i=0; i < s->size(); i++)
 	{
@@ -239,7 +239,7 @@ void generateHTMLdocumentationForAllFunctions(CSfileReference * firstReferenceIn
 					#endif
 					string outputHTMLfileName = currentFileReference->name + HTML_EXTENSION;
 					ofstream writeFileObjectHTML(outputHTMLfileName.c_str());
-					writeStringToFileObject(&HTMLdocumentationFile, &writeFileObjectHTML);
+					writeStringPointerToFileObject(&HTMLdocumentationFile, &writeFileObjectHTML);
 				}
 				else
 				{
@@ -322,7 +322,7 @@ void generateHTMLdocumentationForFunction(Reference * currentReferenceInPrintLis
 			string HTMLdocumentationFunction = HTMLdocumentationFunctionHeader + *HTMLdocumentationFunctionBody + HTMLdocumentationFunctionFooter;
 
 			ofstream writeFileObjectHTML(outputHTMLfileName.c_str());
-			writeStringToFileObject(&HTMLdocumentationFunction, &writeFileObjectHTML);
+			writeStringPointerToFileObject(&HTMLdocumentationFunction, &writeFileObjectHTML);
 		}
 	}
 
@@ -899,7 +899,7 @@ void generateClassHTMLdocumentationFromCustomCSclassFormat()
 
 			string outputHTMLfileName = CSclassFileName + HTML_EXTENSION;
 			ofstream writeFileObjectHTML(outputHTMLfileName.c_str());
-			writeStringToFileObject(&HTMLdocumentationFile, &writeFileObjectHTML);
+			writeStringPointerToFileObject(&HTMLdocumentationFile, &writeFileObjectHTML);
 
 
 		}
@@ -948,7 +948,7 @@ void convertIndentedListToHTMLlist()
 		generateHTMLdocumentationIndentedList(&indentedListVector, &HTMLdocumentationIndentedList);
 
 		ofstream writeFileObjectHTML(htmlListFileName.c_str());
-		writeStringToFileObject(&HTMLdocumentationIndentedList, &writeFileObjectHTML);
+		writeStringPointerToFileObject(&HTMLdocumentationIndentedList, &writeFileObjectHTML);
 	}
 }
 
