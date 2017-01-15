@@ -24,9 +24,9 @@
 /*******************************************************************************
  *
  * File Name: CSreferenceClass.cpp
- * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
+ * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e6a 07-September-2014
+ * Project Version: 3e7a 27-January-2015
  *
  *******************************************************************************/
 
@@ -212,7 +212,7 @@ CSfileReference::~CSfileReference(void)
 
 
 
-void printCSFileReference(CSfileReference * ref)
+void printCSFileReference(CSfileReference* ref)
 {
 	cout << "col = " << ref->col << endl;
 	cout << "id = " << ref->id << endl;
@@ -227,7 +227,7 @@ void printCSFileReference(CSfileReference * ref)
 	cout << "name = " << ref->name << endl;
 }
 
-void printCSFunctionReference(CSfunctionReference * ref)
+void printCSFunctionReference(CSfunctionReference* ref)
 {
 	cout << "col = " << ref->col << endl;
 	cout << "id = " << ref->id << endl;
@@ -248,9 +248,9 @@ void printCSFunctionReference(CSfunctionReference * ref)
 /*
 //these functions are not being used:
 
-void addReferenceToReferenceList(CSReference * reference, CSReference * firstReferenceInList)
+void addReferenceToReferenceList(CSReference* reference, CSReference* firstReferenceInList)
 {
-	CSReference * currentReferenceInIncludeFileList = firstReferenceInList;
+	CSReference* currentReferenceInIncludeFileList = firstReferenceInList;
 
 	bool foundMatch = false;
 	while(currentReferenceInIncludeFileList->next != NULL)
@@ -281,9 +281,9 @@ void addReferenceToReferenceList(CSReference * reference, CSReference * firstRef
 }
 
 
-void mergeIncludeFileReferences(CSReference * firstReferenceInIncludeFileList, CSReference * firstReferenceInTopLevelBelowList)
+void mergeIncludeFileReferences(CSReference* firstReferenceInIncludeFileList, CSReference* firstReferenceInTopLevelBelowList)
 {
-	CSReference * currentReferenceInIncludeFileList = firstReferenceInIncludeFileList;
+	CSReference* currentReferenceInIncludeFileList = firstReferenceInIncludeFileList;
 
 	while(currentReferenceInIncludeFileList->next != NULL)
 	{
@@ -298,9 +298,9 @@ void mergeIncludeFileReferences(CSReference * firstReferenceInIncludeFileList, C
 }
 
 
-void findAndMergeAllIndenticalFileReferences(CSReference * reference, CSReference * firstReferenceInAboveLevelBelowList)
+void findAndMergeAllIndenticalFileReferences(CSReference* reference, CSReference* firstReferenceInAboveLevelBelowList)
 {
-	CSReference * currentReference = firstReferenceInAboveLevelBelowList;
+	CSReference* currentReference = firstReferenceInAboveLevelBelowList;
 
 	while(currentReference->next != NULL)
 	{
@@ -364,16 +364,16 @@ void findAndMergeAllIndenticalFileReferences(CSReference * reference, CSReferenc
 }
 
 
-void mergeReferenceLists(CSReference * firstReferenceInList, CSReference * firstReferenceInListToMerge)
+void mergeReferenceLists(CSReference* firstReferenceInList, CSReference* firstReferenceInListToMerge)
 {
-	CSReference * currentReferenceInReferenceListToMerge = firstReferenceInListToMerge;
+	CSReference* currentReferenceInReferenceListToMerge = firstReferenceInListToMerge;
 
 	while(currentReferenceInReferenceListToMerge->next != NULL)
 	{
 		bool foundMatch = false;
 
 
-		CSReference * currentReference = firstReferenceInList;
+		CSReference* currentReference = firstReferenceInList;
 
 		while(currentReference->next != NULL)
 		{
@@ -386,7 +386,7 @@ void mergeReferenceLists(CSReference * firstReferenceInList, CSReference * first
 
 		if(!foundMatch)
 		{
-			CSReference * currentReference = firstReferenceInList;
+			CSReference* currentReference = firstReferenceInList;
 			while(currentReference->next != NULL)
 			{
 				if(currentReference->next->next == NULL)

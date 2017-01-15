@@ -24,9 +24,9 @@
 /*******************************************************************************
  *
  * File Name: CSgenerateHTMLdocumentation.h
- * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
+ * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e6a 07-September-2014
+ * Project Version: 3e7a 27-January-2015
  *
  *******************************************************************************/
 
@@ -38,21 +38,21 @@
 #include "LDreferenceManipulation.h"
 #include "XMLparserClass.h"
 
-void generateHTMLdocumentationFunctions(XMLparserTag * firstTagInSVGFile, CSfileReference * firstReferenceInTopLevelBelowList, int generateHTMLdocumentationMode, bool useOutputHTMLfile, bool traceFunctionUpwards, bool usePredefinedGrid, string outputHTMLfileName);
+void generateHTMLdocumentationFunctions(XMLparserTag* firstTagInSVGFile, CSfileReference* firstReferenceInTopLevelBelowList, int generateHTMLdocumentationMode, bool useOutputHTMLfile, bool traceFunctionUpwards, bool usePredefinedGrid, string outputHTMLfileName);
 	string generateHTMLdocumentationHeader(string name, bool htmlHeader, bool isFile);
 	string generateHTMLdocumentationFooter(bool htmlFileFooter);
-	void generateHTMLdocumentationForAllFunctions(CSfileReference * firstReferenceInAboveLevelBelowList, Reference * currentReferenceInPrintList, CSfileReference * firstReferenceInTopLevelBelowList, int generateHTMLdocumentationMode, bool useOutputHTMLfile, string * HTMLdocumentationBody, XMLparserTag * firstTagInSVGFile, XMLparserTag * lastTagInSVGFile, bool traceFunctionUpwards, bool usePredefinedGrid);
-		void generateHTMLdocumentationForFunction(Reference * currentReferenceInPrintList, CSfileReference * firstReferenceInTopLevelBelowList, CSfunctionReference * bottomLevelFunctionToTraceUpwards, string fileNameHoldingFunction, XMLparserTag ** currentTag, int generateHTMLdocumentationMode, string * HTMLdocumentationFunctionBody, string * outputSVGfileNameFunction, bool useOutputHTMLfile, string outputHTMLfileName, bool traceFunctionUpwards);
-			void generateHTMLdocumentationFunctionSummary(string * functionName, string * functionNameFull, string * HTMLdocumentationFunctionSummary);
-			void generateHTMLdocumentationFunctionInputArguments(string * functionName, string * functionNameFull, string * HTMLdocumentationFunctionInputArguments);
-				int findEndPositionOfArgument(string * functionArgumentsRaw, int startPositionOfArgument);
+	void generateHTMLdocumentationForAllFunctions(CSfileReference* firstReferenceInAboveLevelBelowList, Reference* currentReferenceInPrintList, CSfileReference* firstReferenceInTopLevelBelowList, int generateHTMLdocumentationMode, bool useOutputHTMLfile, string* HTMLdocumentationBody, XMLparserTag* firstTagInSVGFile, XMLparserTag* lastTagInSVGFile, bool traceFunctionUpwards, bool usePredefinedGrid);
+		void generateHTMLdocumentationForFunction(Reference* currentReferenceInPrintList, CSfileReference* firstReferenceInTopLevelBelowList, CSfunctionReference* bottomLevelFunctionToTraceUpwards, string fileNameHoldingFunction, XMLparserTag** currentTag, int generateHTMLdocumentationMode, string* HTMLdocumentationFunctionBody, string* outputSVGfileNameFunction, bool useOutputHTMLfile, string outputHTMLfileName, bool traceFunctionUpwards);
+			void generateHTMLdocumentationFunctionSummary(string* functionName, string* functionNameFull, string* HTMLdocumentationFunctionSummary);
+			void generateHTMLdocumentationFunctionInputArguments(string* functionName, string* functionNameFull, string* HTMLdocumentationFunctionInputArguments);
+				int findEndPositionOfArgument(string* functionArgumentsRaw, int startPositionOfArgument);
 				string ensureHTMLTagSafe(string str);
 				string createDescriptionFromCaseSensitiveMultiwordString(string str);
-			void generateHTMLdocumentationFunctionReferenceList(CSfunctionReference * function, string * HTMLdocumentationFunctionReferenceList);
-			string generateHTMLdocumentationImagePlaceHolder(string * traceImageFileName, string imageTitle);
-		void generateFileDiagramFunctionsHeirachy(CSfileReference * currentFileReference, string outputSVGFileNameFile, CSfileReference * firstReferenceInTopLevelBelowList, bool usePredefinedGrid);
-	void writeStringPointerToFileObject(string * s, ofstream * writeFileObject);
-	void addToHTMLdocumentationFileFunctionList(CSfunctionReference * currentFunctionReference, string * HTMLdocumentationFileFunctionList, int * previousIndentation, bool * previousIndentationFirst);
+			void generateHTMLdocumentationFunctionReferenceList(CSfunctionReference* function, string* HTMLdocumentationFunctionReferenceList);
+			string generateHTMLdocumentationImagePlaceHolder(string* traceImageFileName, string imageTitle);
+		void generateFileDiagramFunctionsHeirachy(CSfileReference* currentFileReference, string outputSVGFileNameFile, CSfileReference* firstReferenceInTopLevelBelowList, bool usePredefinedGrid);
+	void writeStringPointerToFileObject(string* s, ofstream* writeFileObject);
+	void addToHTMLdocumentationFileFunctionList(CSfunctionReference* currentFunctionReference, string* HTMLdocumentationFileFunctionList, int* previousIndentation, bool* previousIndentationFirst);
 
 #ifdef CS_GENERATE_CLASS_HTML_DOCUMENTATION_FROM_CUSTOM_CSCLASS_FORMAT
 #ifdef CS_GENERATE_CLASS_HTML_DOCUMENTATION_FROM_CUSTOM_CSCLASS_FORMAT_COMBINED
@@ -63,13 +63,13 @@ static string CSclassesArray[NUMBER_OF_CSCLASSES] = {"NLC.CSclass", "GIA.CSclass
 static string CSclassesArray[NUMBER_OF_CSCLASSES] = {"NLCcodeBlockClass.CSclass", "NLCclassDefinitionClass.CSclass", "NLCitemClass.CSclass", "NLCpreprocessorMathLogicalConditions.CSclass", "NLCpreprocessorSentenceClass.CSclass", "GIAconditionNodeClass.CSclass", "GIAentityConnectionClass.CSclass", "GIAentityNodeClass.CSclass", "GIAlrp.CSclass", "GIAnlg.CSclass", "GIAquery.CSclass", "GIAsentenceClass.CSclass", "GIAtranslatorGeneric.CSclass", "ORpolygonList.CSclass", "ORquadraticFit.CSclass", "ORTHimageCategorisationNN.CSclass", "CSreferenceClass.CSclass", "ANNexperienceClass.CSclass", "ANNneuronClass.CSclass", "RToperations.CSclass", "RTparser.CSclass", "RTppm.CSclass", "RTraytracer.CSclass", "RTscene.CSclass", "RTviewinfo.CSclass", "LDreferenceClass.CSclass", "SHAREDvars.CSclass", "XMLparser.CSclass", "XMLrules.CSclass"};
 #endif
 void generateClassHTMLdocumentationFromCustomCSclassFormat();
-string getFunctionNameFromFunctionNameFull(string * functionNameFull);
+string getFunctionNameFromFunctionNameFull(string* functionNameFull);
 #endif
 
 #ifdef CS_CONVERT_INDENTED_LIST_TO_HTML_LIST
 void convertIndentedListToHTMLlist();
-	bool readIndentedListFile(string indentedListFileName, vector<string> * indentedListVector);
-	void generateHTMLdocumentationIndentedList(vector<string> * indentedListVector, string * HTMLdocumentationIndentationList);
+	bool readIndentedListFile(string indentedListFileName, vector<string>* indentedListVector);
+	void generateHTMLdocumentationIndentedList(vector<string>* indentedListVector, string* HTMLdocumentationIndentationList);
 #endif
 
 

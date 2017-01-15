@@ -24,9 +24,9 @@
 /*******************************************************************************
  *
  * File Name: CSgenerateObjectOrientedCode.cpp
- * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
+ * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e6a 07-September-2014
+ * Project Version: 3e7a 27-January-2015
  *
  *******************************************************************************/
 
@@ -55,7 +55,7 @@ ReferencedClass::ReferencedClass(void)
 	next = NULL;
 }
 
-bool generateCPPclasses(CSfileReference * firstReferenceInTopLevelBelowList)
+bool generateCPPclasses(CSfileReference* firstReferenceInTopLevelBelowList)
 {
 	bool result = true;
 	
@@ -67,11 +67,11 @@ bool generateCPPclasses(CSfileReference * firstReferenceInTopLevelBelowList)
 	return result;	
 }
 
-bool generateCPPclassesRecurse(CSfileReference * firstReferenceInAboveLevelBelowList, CSfileReference * firstReferenceInTopLevelBelowList)	
+bool generateCPPclassesRecurse(CSfileReference* firstReferenceInAboveLevelBelowList, CSfileReference* firstReferenceInTopLevelBelowList)	
 {
 	bool result = true;
 	
-	CSfileReference * currentFileReference = firstReferenceInAboveLevelBelowList;
+	CSfileReference* currentFileReference = firstReferenceInAboveLevelBelowList;
 	while(currentFileReference->next != NULL)
 	{
 		if(currentFileReference->firstReferenceInBelowList != NULL)
@@ -105,7 +105,7 @@ bool generateCPPclassesRecurse(CSfileReference * firstReferenceInAboveLevelBelow
 	return result;
 }
 	
-bool generateCPPclassesFile(CSfileReference * currentFileReference, CSfileReference * firstReferenceInTopLevelBelowList)
+bool generateCPPclassesFile(CSfileReference* currentFileReference, CSfileReference* firstReferenceInTopLevelBelowList)
 {
 	bool result = true;
 	#ifdef CS_DEBUG_GENERATE_OBJECT_ORIENTED_CODE
@@ -113,11 +113,11 @@ bool generateCPPclassesFile(CSfileReference * currentFileReference, CSfileRefere
 	#endif
 	
 	string className = generateClassName(currentFileReference->name);
-	ReferencedClass * firstReferencedClassInList = new ReferencedClass();
-	ReferencedClass * currentReferencedClassInList = firstReferencedClassInList;
+	ReferencedClass* firstReferencedClassInList = new ReferencedClass();
+	ReferencedClass* currentReferencedClassInList = firstReferencedClassInList;
 	bool fileHasFunctions = false;
 		
-	CSfunctionReference * currentFunctionReference = currentFileReference->firstReferenceInFunctionList;
+	CSfunctionReference* currentFunctionReference = currentFileReference->firstReferenceInFunctionList;
 	while(currentFunctionReference->next != NULL)
 	{
 		//if(currentFunctionReference->printed)
@@ -153,15 +153,15 @@ bool generateCPPclassesFile(CSfileReference * currentFileReference, CSfileRefere
 			}		
 
 			//2. convert function references
-			CSfunctionReference * currentfunctionReferenceReference = currentFunctionReference->firstReferenceInFunctionReferenceList;
+			CSfunctionReference* currentfunctionReferenceReference = currentFunctionReference->firstReferenceInFunctionReferenceList;
 			while(currentfunctionReferenceReference->next != NULL)
 			{
 				string functionReferenceReferenceName = currentfunctionReferenceReference->name;
 				string functionReferenceReferenceNameUpdated = "";
 
 				string functionReferenceContext = "";
-				CSfileReference * fileReferenceHoldingFunction = NULL;
-				CSfunctionReference * referencedFunction = NULL;
+				CSfileReference* fileReferenceHoldingFunction = NULL;
+				CSfunctionReference* referencedFunction = NULL;
 				bool referencedFunctionFound = findFunctionReferenceWithName(functionReferenceReferenceName, firstReferenceInTopLevelBelowList, &fileReferenceHoldingFunction, &referencedFunction);
 				if(referencedFunctionFound)
 				{
@@ -275,7 +275,7 @@ bool generateCPPclassesFile(CSfileReference * currentFileReference, CSfileRefere
 		//5. add class wrapper footer to class function declarations in class header file
 		//find location of last function reference in header	
 		currentFunctionReference = currentFileReference->firstReferenceInFunctionList;
-		CSfunctionReference * lastFunctionReference = currentFunctionReference;
+		CSfunctionReference* lastFunctionReference = currentFunctionReference;
 		while(currentFunctionReference->next != NULL)
 		{
 			lastFunctionReference = currentFunctionReference;
@@ -348,19 +348,19 @@ string getFileContents(string inputFileName)
 	return fileContents;
 }
 
-void isFunctionBeingReferencedPublicallyRecurse(string functionName, string fileName, CSfileReference * firstReferenceInAboveLevelBelowList, bool * foundPublicReference)
+void isFunctionBeingReferencedPublicallyRecurse(string functionName, string fileName, CSfileReference* firstReferenceInAboveLevelBelowList, bool* foundPublicReference)
 {
-	CSfileReference * currentFileReference = firstReferenceInAboveLevelBelowList;
+	CSfileReference* currentFileReference = firstReferenceInAboveLevelBelowList;
 
 	while(currentFileReference->next != NULL)
 	{
 		if(currentFileReference->name != fileName)
 		{//search for external references to function only
 
-			CSfunctionReference * currentFunctionReference = currentFileReference->firstReferenceInFunctionList;
+			CSfunctionReference* currentFunctionReference = currentFileReference->firstReferenceInFunctionList;
 			while(currentFunctionReference->next != NULL)
 			{
-				CSfunctionReference * currentfunctionReferenceReference = currentFunctionReference->firstReferenceInFunctionReferenceList;
+				CSfunctionReference* currentfunctionReferenceReference = currentFunctionReference->firstReferenceInFunctionReferenceList;
 				while(currentfunctionReferenceReference->next != NULL)
 				{
 					if(currentfunctionReferenceReference->name == functionName)
@@ -438,7 +438,7 @@ string convertFunctionNameToClassFunctionNameHeader(string fullFunctionName, str
 	
 }
 
-string convertFunctionNameToClassFunctionNameSource(string fullFunctionName, string functionName, string className, bool foundPublicReference, bool * foundStaticReference)
+string convertFunctionNameToClassFunctionNameSource(string fullFunctionName, string functionName, string className, bool foundPublicReference, bool* foundStaticReference)
 {
 	string classFullFunctionName = "";
 	
@@ -477,11 +477,11 @@ string convertFunctionNameToClassFunctionNameSource(string fullFunctionName, str
 		
 }
 
-bool findReferencedClassInList(ReferencedClass * firstReferencedClassInList, string classNameToFind)
+bool findReferencedClassInList(ReferencedClass* firstReferencedClassInList, string classNameToFind)
 {
 	bool foundReferencedClass = false;
 	
-	ReferencedClass * currentReferencedClassInList = firstReferencedClassInList;
+	ReferencedClass* currentReferencedClassInList = firstReferencedClassInList;
 	while(currentReferencedClassInList->next != NULL)
 	{
 		if(currentReferencedClassInList->className == classNameToFind)
@@ -493,10 +493,10 @@ bool findReferencedClassInList(ReferencedClass * firstReferencedClassInList, str
 	return foundReferencedClass;
 }
 
-string generateReferencedClassesDeclarations(ReferencedClass * firstReferencedClassInList)
+string generateReferencedClassesDeclarations(ReferencedClass* firstReferencedClassInList)
 {
 	string referencedClassesDeclarations = "";
-	ReferencedClass * currentReferencedClassInList = firstReferencedClassInList;
+	ReferencedClass* currentReferencedClassInList = firstReferencedClassInList;
 	while(currentReferencedClassInList->next != NULL)
 	{
 		referencedClassesDeclarations = referencedClassesDeclarations + CHAR_TAB + CS_GENERATE_CPP_CLASSES_FUNCTION_PRIVATE + generateClassDeclarationName(currentReferencedClassInList->className) + CHAR_SPACE + generateClassObjectName(currentReferencedClassInList->className) + CHAR_SEMICOLON + CHAR_NEWLINE; 	//ie private: xClass x;
@@ -506,12 +506,12 @@ string generateReferencedClassesDeclarations(ReferencedClass * firstReferencedCl
 	return referencedClassesDeclarations;
 }
 
-bool moveIncludeFileStatementsToHeader(CSfileReference * firstReferenceInAboveLevelBelowList)	
+bool moveIncludeFileStatementsToHeader(CSfileReference* firstReferenceInAboveLevelBelowList)	
 {
 	bool result = true;
 	string includeStatementsHeaderNew = "";
 	
-	CSfileReference * currentFileReference = firstReferenceInAboveLevelBelowList->firstReferenceInBelowList;
+	CSfileReference* currentFileReference = firstReferenceInAboveLevelBelowList->firstReferenceInBelowList;
 	int positionOfLastIncludeStatementEndInHeader = CPP_STRING_FIND_RESULT_FAIL_VALUE;
 	int lineOfFirstIncludeStatementEndInSource = REALLY_LARGE_INT;
 	while(currentFileReference->next != NULL)
@@ -640,15 +640,15 @@ bool moveIncludeFileStatementsToHeader(CSfileReference * firstReferenceInAboveLe
 }
 
 
-bool findFunctionReferenceWithName(string name, CSfileReference * firstReferenceInAboveLevelBelowList, CSfileReference ** fileReferenceHoldingFunction, CSfunctionReference ** updatedFunctionReference)
+bool findFunctionReferenceWithName(string name, CSfileReference* firstReferenceInAboveLevelBelowList, CSfileReference** fileReferenceHoldingFunction, CSfunctionReference** updatedFunctionReference)
 {
 	bool foundPrintedReferenceWithName = false;
 	
-	CSfileReference * currentFileReference = firstReferenceInAboveLevelBelowList;
+	CSfileReference* currentFileReference = firstReferenceInAboveLevelBelowList;
 
 	while(currentFileReference->next != NULL)
 	{
-		CSfunctionReference * currentFunctionReference = currentFileReference->firstReferenceInFunctionList;
+		CSfunctionReference* currentFunctionReference = currentFileReference->firstReferenceInFunctionList;
 		while(currentFunctionReference->next != NULL)
 		{
 			if(currentFunctionReference->name == name)

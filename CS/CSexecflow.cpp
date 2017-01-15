@@ -24,9 +24,9 @@
 /*******************************************************************************
  *
  * File Name: CSexecflow.cpp
- * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
+ * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e6a 07-September-2014
+ * Project Version: 3e7a 27-January-2015
  *
  *******************************************************************************/
 
@@ -83,9 +83,9 @@ void generateCodeStructure(string topLevelFileName, int width, int height, strin
 		initiateOpenGL(width, height, 0, 0, false);
 	}
 
-	char * outputFileNameLDRcharstar = const_cast<char*>(outputLDRfileName.c_str());
-	char * displayFileNamePPMcharstar = const_cast<char*>(outputPPMfileName.c_str());
-	char * outputFileNameSVGcharstar = const_cast<char*>(outputSVGfileName.c_str());
+	char* outputFileNameLDRcharstar = const_cast<char*>(outputLDRfileName.c_str());
+	char* displayFileNamePPMcharstar = const_cast<char*>(outputPPMfileName.c_str());
+	char* outputFileNameSVGcharstar = const_cast<char*>(outputSVGfileName.c_str());
 
 	//1. for every f
 		//2. for every include f listed
@@ -93,9 +93,9 @@ void generateCodeStructure(string topLevelFileName, int width, int height, strin
 	//for every reference
 		//for every reference, and merge all
 
-	CSfileReference * topLevelReferenceInList = new CSfileReference();
+	CSfileReference* topLevelReferenceInList = new CSfileReference();
 	topLevelReferenceInList->name = topLevelFileName;
-	CSfileReference * firstReferenceInTopLevelBelowList = new CSfileReference();
+	CSfileReference* firstReferenceInTopLevelBelowList = new CSfileReference();
 	topLevelReferenceInList->firstReferenceInBelowList = firstReferenceInTopLevelBelowList;
 
 	//cout << "start getIncludeFileNamesFromCorHfile()" << endl;
@@ -107,22 +107,22 @@ void generateCodeStructure(string topLevelFileName, int width, int height, strin
 	}
 
 	initiateMaxXatParticularY();
-	Reference * firstReferenceInPrintList = new Reference();
+	Reference* firstReferenceInPrintList = new Reference();
 
 	setCurrentDirectory(tempFolderCharStar);
 
-	XMLparserTag * firstTagInSVGFile = new XMLparserTag();
-	XMLparserTag * currentTagInSVGFile = firstTagInSVGFile;
+	XMLparserTag* firstTagInSVGFile = new XMLparserTag();
+	XMLparserTag* currentTagInSVGFile = firstTagInSVGFile;
 
 
 	#ifdef CS_SUPPORT_PREDEFINED_GRID
 	bool usePredefinedGrid = false;
 	bool tempResult = true;
-	XMLparserTag * firstTagInRulesTag = parseTagDownALevel(CSfirstTagInXMLfile, RULES_XML_TAG_rules, &tempResult);
-	XMLparserTag * firstTagInGridTag = NULL;
+	XMLparserTag* firstTagInRulesTag = parseTagDownALevel(CSfirstTagInXMLfile, RULES_XML_TAG_rules, &tempResult);
+	XMLparserTag* firstTagInGridTag = NULL;
 	if(tempResult)
 	{
-		XMLparserTag * currentTag = firstTagInRulesTag;
+		XMLparserTag* currentTag = firstTagInRulesTag;
 		while(currentTag->nextTag != NULL)
 		{
 			if(currentTag->name == RULES_XML_TAG_grid)
@@ -142,16 +142,16 @@ void generateCodeStructure(string topLevelFileName, int width, int height, strin
 	}
 	#endif
 
-	Reference * currentReferenceInPrintList = createFileReferenceListBoxes(firstReferenceInPrintList, firstReferenceInTopLevelBelowList, firstReferenceInTopLevelBelowList, &currentTagInSVGFile, outputFunctionsConnectivity, traceFunctionUpwards, firstTagInGridTag, usePredefinedGrid);
+	Reference* currentReferenceInPrintList = createFileReferenceListBoxes(firstReferenceInPrintList, firstReferenceInTopLevelBelowList, firstReferenceInTopLevelBelowList, &currentTagInSVGFile, outputFunctionsConnectivity, traceFunctionUpwards, firstTagInGridTag, usePredefinedGrid);
 	if(outputFileConnections)
 	{
 		currentReferenceInPrintList = createFileReferenceListConnections(currentReferenceInPrintList, firstReferenceInTopLevelBelowList, firstReferenceInTopLevelBelowList, &currentTagInSVGFile, traceFunctionUpwards);
 	}
 	if(outputFunctionsConnectivity)
 	{
-		CSfunctionReference * currentReferenceInTopLevelBelowList = firstReferenceInTopLevelBelowList->firstReferenceInFunctionList;
+		CSfunctionReference* currentReferenceInTopLevelBelowList = firstReferenceInTopLevelBelowList->firstReferenceInFunctionList;
 		bool topLevelFunctionNameFound = false;
-		CSfunctionReference * topLevelFunctionReference = NULL;
+		CSfunctionReference* topLevelFunctionReference = NULL;
 		while(currentReferenceInTopLevelBelowList->next != NULL)
 		{
 			//cout << "currentReferenceInTopLevelBelowList->name = " << currentReferenceInTopLevelBelowList->name << endl;
@@ -164,7 +164,7 @@ void generateCodeStructure(string topLevelFileName, int width, int height, strin
 		}
 		if(topLevelFunctionNameFound)
 		{
-			//CSfunctionReference * topLevelFunctionReference = firstReferenceInTopLevelBelowList->firstReferenceInFunctionList;
+			//CSfunctionReference* topLevelFunctionReference = firstReferenceInTopLevelBelowList->firstReferenceInFunctionList;
 			topLevelFunctionReference->printX = firstReferenceInTopLevelBelowList->printX;
 			topLevelFunctionReference->printY = firstReferenceInTopLevelBelowList->printY;
 			topLevelFunctionReference->col = firstReferenceInTopLevelBelowList->col;
@@ -177,7 +177,7 @@ void generateCodeStructure(string topLevelFileName, int width, int height, strin
 				exit(0);
 			}
 
-			CSfunctionReference * currentReferenceInFunctionReferenceList = topLevelFunctionReference->firstReferenceInFunctionReferenceList;
+			CSfunctionReference* currentReferenceInFunctionReferenceList = topLevelFunctionReference->firstReferenceInFunctionReferenceList;
 			while(currentReferenceInFunctionReferenceList->next != NULL)
 			{
 				currentReferenceInPrintList = createFunctionReferenceListBoxesAndConnections(currentReferenceInPrintList, firstReferenceInTopLevelBelowList, topLevelFunctionReference, firstReferenceInTopLevelBelowList, 0, currentReferenceInFunctionReferenceList->name, &currentTagInSVGFile, traceFunctionUpwards, false, NULL, usePredefinedGrid);
@@ -187,8 +187,8 @@ void generateCodeStructure(string topLevelFileName, int width, int height, strin
 
 			if(traceFunctionUpwards && (bottomLevelFunctionNameToTraceUpwards != ""))
 			{
-				CSfileReference * fileReferenceHoldingFunction = NULL;
-				CSfunctionReference * bottomLevelFunctionToTraceUpwards = NULL;
+				CSfileReference* fileReferenceHoldingFunction = NULL;
+				CSfunctionReference* bottomLevelFunctionToTraceUpwards = NULL;
 				bool foundBottomLevelFunctionRef = findPrintedFunctionReferenceWithName(bottomLevelFunctionNameToTraceUpwards, firstReferenceInTopLevelBelowList, &fileReferenceHoldingFunction, &bottomLevelFunctionToTraceUpwards);
 				
 				if(foundBottomLevelFunctionRef)
@@ -256,10 +256,10 @@ void generateCodeStructure(string topLevelFileName, int width, int height, strin
 		{
 			//re-parse, then re-write to create a collapsed referencelist file...
 			//method1:
-			char * topLevelSceneFileName = outputFileNameLDRcharstar;
-			char * topLevelSceneFileNameCollapsed = "sceneCollapsedForRaytracing.ldr";
-			Reference * initialReferenceInSceneFile = new Reference();
-			Reference * topLevelReferenceInSceneFile = new Reference(topLevelSceneFileName, 1, true);	//The information in this object is not required or meaningful, but needs to be passed into the parseFile/parseReferenceList recursive function
+			char* topLevelSceneFileName = outputFileNameLDRcharstar;
+			char* topLevelSceneFileNameCollapsed = "sceneCollapsedForRaytracing.ldr";
+			Reference* initialReferenceInSceneFile = new Reference();
+			Reference* topLevelReferenceInSceneFile = new Reference(topLevelSceneFileName, 1, true);	//The information in this object is not required or meaningful, but needs to be passed into the parseFile/parseReferenceList recursive function
 			if(!parseFile(topLevelSceneFileName, initialReferenceInSceneFile, topLevelReferenceInSceneFile, true))
 			{//file does not exist
 				cout << "The file: " << topLevelSceneFileName << " does not exist in the directory" << endl;
@@ -268,14 +268,14 @@ void generateCodeStructure(string topLevelFileName, int width, int height, strin
 			write2DreferenceListCollapsedTo1DtoFile(topLevelSceneFileNameCollapsed, initialReferenceInSceneFile);
 
 
-			unsigned char * rgbMap = new unsigned char[width*height*RGB_NUM];
+			unsigned char* rgbMap = new unsigned char[width*height*RGB_NUM];
 
 			//setViewPort2Dortho(-100.0, 2000.0, -100.0, 2000.0);
 			setViewPort3Dortho(-100.0, 2000, 2000.0, -100.0, 1.0, -1.0);
 
 			//now reparse file
-			Reference * initialReferenceInCollapsedSceneFile = new Reference();
-			Reference * topLevelReferenceInCollapsedSceneFile = new Reference(topLevelSceneFileNameCollapsed, 1, true);	//The information in this object is not required or meaningful, but needs to be passed into the parseFile/parseReferenceList recursive function
+			Reference* initialReferenceInCollapsedSceneFile = new Reference();
+			Reference* topLevelReferenceInCollapsedSceneFile = new Reference(topLevelSceneFileNameCollapsed, 1, true);	//The information in this object is not required or meaningful, but needs to be passed into the parseFile/parseReferenceList recursive function
 			if(!parseFile(topLevelSceneFileNameCollapsed, initialReferenceInCollapsedSceneFile, topLevelReferenceInCollapsedSceneFile, true))
 			{//file does not exist
 				cout << "The file: " << topLevelSceneFileNameCollapsed << " does not exist in the directory" << endl;

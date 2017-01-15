@@ -24,9 +24,9 @@
 /*******************************************************************************
  *
  * File Name: CSmain.cpp
- * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
+ * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e6a 07-September-2014
+ * Project Version: 3e7a 27-January-2015
  *
  *******************************************************************************/
 
@@ -82,7 +82,7 @@ static char errmessage[] = "Usage:  OpenCS.exe [options]"
 
 
 
-int main(int argc,char **argv)
+int main(int argc,char* *argv)
 {
 #ifdef CS_CONVERT_INDENTED_LIST_TO_HTML_LIST
 	convertIndentedListToHTMLlist();
@@ -281,14 +281,14 @@ int main(int argc,char **argv)
 
 	if(argumentExists(argc,argv,"-version"))
 	{
-		cout << "OpenCS.exe - Project Version: 3e6a 07-September-2014" << endl;
+		cout << "OpenCS.exe - Project Version: 3e7a 27-January-2015" << endl;
 		exit(1);
 	}
 
 	if(!passInputReq)
 	{
 		printf(errmessage);
-		cout << "**** Known Limitations: *****" << endl;
+		cout << "**** Known Limitations:* ****" << endl;
 		cout << "all c/cpp and h/hpp files that wish to be parsed/added to tree must be contained in the same directory" << endl;
 		cout << "if the CS program does not stop, there might be loops in the include file structure (eg a.cpp includes b.cpp, b.cpp includes a.cpp)" << endl;
 		cout << "CS has been upgraded to support commenting (previously illegal functions and include files had to be be removed completely)" << endl;

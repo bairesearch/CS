@@ -24,9 +24,9 @@
 /*******************************************************************************
  *
  * File Name: CSmain.h
- * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
+ * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e6a 07-September-2014
+ * Project Version: 3e7a 27-January-2015
  *
  *******************************************************************************/
 
@@ -37,6 +37,6 @@
 #define CS_MODE_OUTPUT_DATA_FLOW (2)
 #define CS_MODE_FILTER_CODE_USING_PREPROCESSOR_DEFINITIONS (3)
 
-int main(int argc,char **argv);
+int main(int argc,char* *argv);
 
 #endif

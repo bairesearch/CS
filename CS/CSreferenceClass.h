@@ -24,9 +24,9 @@
 /*******************************************************************************
  *
  * File Name: CSreferenceClass.h
- * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
+ * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e6a 07-September-2014
+ * Project Version: 3e7a 27-January-2015
  *
  *******************************************************************************/
 
@@ -68,7 +68,7 @@ public:
 	CSfunctionReferenceContainer(void); // constructor declaration
 	~CSfunctionReferenceContainer();	//  and destructor.
 
-	CSfunctionReferenceContainer * next;
+	CSfunctionReferenceContainer* next;
 	string name;
 
 };
@@ -101,15 +101,15 @@ public:
 	int filePrintYrecordForSingleFileOnly;	//file/function printY
 	bool HTMLgenerated;	//file/function HTML generated
 
-	CSfunctionReference * next;
-	CSfunctionReference * previous;
-	CSfunctionReferenceContainer * firstReferenceContainerInAboveReferenceList;
+	CSfunctionReference* next;
+	CSfunctionReference* previous;
+	CSfunctionReferenceContainer* firstReferenceContainerInAboveReferenceList;
 	bool printedTrace;
 	bool printedTraceReset;		//used for html generation
 
 	//function reference only
 	string nameFull;	//function only
-	CSfunctionReference * firstReferenceInFunctionReferenceList;
+	CSfunctionReference* firstReferenceInFunctionReferenceList;
 	bool hasHadFunctionReferencesParsed;
 	bool isFunctionReference;
 	bool isFunctionReferenceReference;
@@ -119,7 +119,7 @@ public:
 	#endif
 	#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST
 	string functionText;
-	CSfunctionReference * firstReferenceInFunctionReferenceListRepeats;
+	CSfunctionReference* firstReferenceInFunctionReferenceListRepeats;
 	int functionReferenceCharacterIndex;	
 	#endif
 	#ifdef CS_GENERATE_CPP_CLASSES 
@@ -140,7 +140,7 @@ public:
 	CSfileReferenceContainer(void); // constructor declaration
 	~CSfileReferenceContainer();	//  and destructor.
 
-	CSfileReferenceContainer * next;
+	CSfileReferenceContainer* next;
 	string name;
 
 };
@@ -169,17 +169,17 @@ public:
 	int printTextY;		//file/function printYIndex
 	bool HTMLgenerated;	//file/function HTML generated
 
-	CSfileReference * next;
-	CSfileReference * previous;
-	CSfileReferenceContainer * firstReferenceContainerInAboveReferenceList;
+	CSfileReference* next;
+	CSfileReference* previous;
+	CSfileReferenceContainer* firstReferenceContainerInAboveReferenceList;
 	bool printedTrace;
 	bool printedTraceReset;		//used for html generation
 
 	//file reference only
-	CSfileReference * firstReferenceInAboveList;	//filefirstReferenceInAboveList
-	CSfileReference * firstReferenceInBelowList; 	//filefirstReferenceInBelowList
-	CSfileReference * shortcutToPrintedVersionOfReference;	//used if reference is not printed
-	CSfunctionReference * firstReferenceInFunctionList;
+	CSfileReference* firstReferenceInAboveList;	//filefirstReferenceInAboveList
+	CSfileReference* firstReferenceInBelowList; 	//filefirstReferenceInBelowList
+	CSfileReference* shortcutToPrintedVersionOfReference;	//used if reference is not printed
+	CSfunctionReference* firstReferenceInFunctionList;
 
 	#ifdef CS_GENERATE_CPP_CLASSES
 	string sourceFileNameOrig;	//eg "x.c"
@@ -198,17 +198,17 @@ public:
 
 
 
-void printCSFileReference(CSfileReference * ref);
-void printCSFunctionReference(CSfunctionReference * ref);
+void printCSFileReference(CSfileReference* ref);
+void printCSFunctionReference(CSfunctionReference* ref);
 
-typedef struct { CSfileReference * csref1; CSfunctionReference * csref2; } CSreferenceArray;
+typedef struct { CSfileReference* csref1; CSfunctionReference* csref2; } CSreferenceArray;
 
 /*
 //these functions are not being used:
-void addReferenceToReferenceList(CSReference * reference, CSReference * firstReferenceInList);
-void mergeIncludeFileReferences(CSReference * firstReferenceInIncludeFileList, CSReference * firstReferenceInTopLevelBelowList);
-	void findAndMergeAllIndenticalFileReferences(CSReference * reference, CSReference * firstReferenceInAboveLevelBelowList);
-		void mergeReferenceLists(CSReference * firstReferenceInList, CSReference * firstReferenceInListToMerge);
+void addReferenceToReferenceList(CSReference* reference, CSReference* firstReferenceInList);
+void mergeIncludeFileReferences(CSReference* firstReferenceInIncludeFileList, CSReference* firstReferenceInTopLevelBelowList);
+	void findAndMergeAllIndenticalFileReferences(CSReference* reference, CSReference* firstReferenceInAboveLevelBelowList);
+		void mergeReferenceLists(CSReference* firstReferenceInList, CSReference* firstReferenceInListToMerge);
 */
 
 #endif
