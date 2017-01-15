@@ -23,7 +23,7 @@
  * File Name: CSmain.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c5b 15-December-2012
+ * Project Version: 3c5c 21-December-2012
  *
  *******************************************************************************/
 
@@ -77,7 +77,9 @@ static char errmessage[] = "Usage:  OpenCS.exe [options]"
 		
 int main(int argc,char **argv)
 {
-#ifdef CS_GENERATE_CLASS_HTML_DOCUMENTATION_FROM_CUSTOM_CSCLASS_FORMAT
+#ifdef CS_CONVERT_INDENTED_LIST_TO_HTML_LIST
+	convertIndentedListToHTMLlist();
+#elif defined CS_GENERATE_CLASS_HTML_DOCUMENTATION_FROM_CUSTOM_CSCLASS_FORMAT
 	generateClassHTMLdocumentationFromCustomCSclassFormat();
 #else
 		
@@ -269,7 +271,7 @@ int main(int argc,char **argv)
 
 	if(argumentExists(argc,argv,"-version"))
 	{
-		cout << "OpenCS.exe - Project Version: 3c5b 15-December-2012" << endl;
+		cout << "OpenCS.exe - Project Version: 3c5c 21-December-2012" << endl;
 		exit(1);
 	}
 

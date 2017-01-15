@@ -23,7 +23,7 @@
  * File Name: CSexecflow.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c5b 15-December-2012
+ * Project Version: 3c5c 21-December-2012
  *
  *******************************************************************************/
 
@@ -43,6 +43,9 @@
 #include <fstream>
 #include <time.h>
 #include <math.h>
+#ifdef CS_CONVERT_INDENTED_LIST_TO_HTML_LIST
+#include <vector>
+#endif
 using namespace std;
 
 #define CS_CODE_STRUCTURE_FUNCTION_DIAGRAM_MINX -400
@@ -90,5 +93,12 @@ static string CSclassesArray[NUMBER_OF_CSCLASSES] = {"GIAconditionNodeClass.CScl
 void generateClassHTMLdocumentationFromCustomCSclassFormat();
 string getFunctionNameFromFunctionNameFull(string * functionNameFull);
 #endif			
+
+#ifdef CS_CONVERT_INDENTED_LIST_TO_HTML_LIST
+void convertIndentedListToHTMLlist();
+	bool readIndentedListFile(string indentedListFileName, vector<string> * indentedListVector);
+	void generateHTMLdocumentationIndentedList(vector<string> * indentedListVector, string * HTMLdocumentationIndentationList);
+#endif
+
 
 #endif

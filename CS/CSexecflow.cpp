@@ -23,7 +23,7 @@
  * File Name: CSexecflow.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c5b 15-December-2012
+ * Project Version: 3c5c 21-December-2012
  *
  *******************************************************************************/
 
@@ -55,6 +55,8 @@ using namespace std;
 #ifndef LINUX
 	#include <windows.h>
 #endif
+
+
 
 
 void printCS(string topLevelFileName, int width, int height, string outputLDRfileName, string outputSVGfileName, string outputPPMfileName, string outputHTMLfileName, bool useOutputLDRfile, bool useOutputPPMfile, bool useOutputHTMLfile, int generateHTMLdocumentationMode, bool display, bool outputFunctionsConnectivity, bool traceFunctionUpwards, string bottomLevelFunctionNameToTraceUpwards, bool outputFileConnections)
@@ -260,7 +262,7 @@ string generateHTMLdocumentationHeader(string name, bool htmlHeader, bool isFile
 	string HTMLdocumentationHeader = "";
 	if(htmlHeader)
 	{
-		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3c5b 15-December-2012<p>\n";
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3c5c 21-December-2012<p>\n";
 	}
 	else
 	{
@@ -897,13 +899,13 @@ string generateHTMLdocumentationImagePlaceHolder(string * traceImageFileName, st
 
 
 
-void addToHTMLdocumentationFileFunctionList(CSfunctionReference * currentFunctionReference, string * HTMLdocumentationFileFunctionList, int * previousIndentation, bool * previousIndentationFirst)
+void addToHTMLdocumentationIndentedList(string currentFunctionReferenceName, int currentFunctionReferenceIndentation, string * HTMLdocumentationFileFunctionList, int * previousIndentation, bool * previousIndentationFirst)
 {
-	string functionNameCompact = currentFunctionReference->name;	// + "()";
+	string functionNameCompact = currentFunctionReferenceName;	// + "()";
 	
-	int differenceBetweenPreviousIndentation = currentFunctionReference->functionReferenceIndentation - *previousIndentation;
+	int differenceBetweenPreviousIndentation = currentFunctionReferenceIndentation - *previousIndentation;
 	string rawIndentationText = "\n";
-	for(int i=0; i<currentFunctionReference->functionReferenceIndentation; i++)
+	for(int i=0; i<currentFunctionReferenceIndentation; i++)
 	{
 		rawIndentationText = rawIndentationText + "\t";	
 	}
@@ -936,8 +938,16 @@ void addToHTMLdocumentationFileFunctionList(CSfunctionReference * currentFunctio
 		}
 	}
 	*previousIndentationFirst = false;
-	*previousIndentation = currentFunctionReference->functionReferenceIndentation;
+	*previousIndentation = currentFunctionReferenceIndentation;
 }
+
+void addToHTMLdocumentationFileFunctionList(CSfunctionReference * currentFunctionReference, string * HTMLdocumentationFileFunctionList, int * previousIndentation, bool * previousIndentationFirst)
+{
+	addToHTMLdocumentationIndentedList(currentFunctionReference->name, currentFunctionReference->functionReferenceIndentation, HTMLdocumentationFileFunctionList, previousIndentation, previousIndentationFirst);
+}
+
+
+
 		
 void generateFileDiagramFunctionsHeirachy(CSfileReference * currentFileReference, string outputSVGFileNameFile, CSfileReference * firstReferenceInTopLevelBelowList)
 {
@@ -1085,3 +1095,118 @@ string getFunctionNameFromFunctionNameFull(string * functionNameFull)
 }
 
 #endif			
+
+
+
+
+
+
+#ifdef CS_CONVERT_INDENTED_LIST_TO_HTML_LIST
+void convertIndentedListToHTMLlist()
+{
+	string indentedListFileName = "requirementsLayout.txt";
+	string htmlListFileName = string("requirementsLayout") + HTML_EXTENSION;
+	
+	vector<string> indentedListVector;
+	if(readIndentedListFile(indentedListFileName, &indentedListVector))
+	{
+		string HTMLdocumentationIndentedList = "";
+		generateHTMLdocumentationIndentedList(&indentedListVector, &HTMLdocumentationIndentedList);
+
+		ofstream writeFileObjectHTML(htmlListFileName.c_str());
+		writeStringToFileObject(&HTMLdocumentationIndentedList, &writeFileObjectHTML);	
+	}
+}
+
+bool readIndentedListFile(string indentedListFileName, vector<string> * indentedListVector)
+{
+	bool result = true;
+	
+	ifstream parseFileObject(indentedListFileName.c_str());
+	if(!parseFileObject.rdbuf( )->is_open( ))
+	{
+		//txt file does not exist in current directory.
+		cout << "Error: indented list File does not exist in current directory: " << indentedListFileName << endl;
+		result = false;
+	}
+	else
+	{
+		int charCount = 0;
+		char currentToken;
+		string currentEntry = "";
+		int entryIndex = 0;
+		while(parseFileObject.get(currentToken))
+		{
+			if(currentToken == CHAR_NEWLINE)
+			{
+				indentedListVector->push_back(currentEntry);
+				//cout << "1. currentEntry = " << currentEntry << endl;
+				currentEntry = "";
+				entryIndex++;
+			}
+			else
+			{
+				currentEntry = currentEntry + currentToken;
+			}
+
+			charCount++;
+		}
+		parseFileObject.close();
+	}
+	
+	return result;
+}
+
+//generic software to convert an indented list into an HTML list 
+void generateHTMLdocumentationIndentedList(vector<string> * indentedListVector, string * HTMLdocumentationIndentationList)
+{
+	//generate list
+	*HTMLdocumentationIndentationList = "";
+	*HTMLdocumentationIndentationList = *HTMLdocumentationIndentationList + "\t<p><b>Generic Indented List</b><br />\n";
+	string HTMLdocumentationIndentationListBody = "\t<ul>\n";
+	HTMLdocumentationIndentationListBody = HTMLdocumentationIndentationListBody + "<li>";
+	int previousIndentation = 0;
+	bool previousIndentationFirst = true;
+	int referenceIndex=0;
+	bool foundReferences = false;
+
+	for(vector<string>::iterator indentedListVectorIter = indentedListVector->begin(); indentedListVectorIter != indentedListVector->end(); indentedListVectorIter++)
+	{	
+		foundReferences = true;
+			
+		string currentEntry = *indentedListVectorIter;
+		int currentEntryLengthOld = currentEntry.length(); 
+		int indentationLevel=0;
+		while(currentEntry[indentationLevel] == CHAR_TAB)
+		{
+			indentationLevel++;
+		}
+		currentEntry = currentEntry.substr(indentationLevel, currentEntryLengthOld-indentationLevel);
+		//cout << "2. currentEntry = " << currentEntry << endl;
+		//cout << "indentationLevel = " << indentationLevel << endl;
+		
+		addToHTMLdocumentationIndentedList(currentEntry, indentationLevel, &HTMLdocumentationIndentationListBody, &previousIndentation, &previousIndentationFirst);
+		//cout << "HTMLdocumentationIndentationListBody = " << HTMLdocumentationIndentationListBody << endl;		
+
+	}
+	
+	for(int i=0; i<previousIndentation; i++)
+	{
+		HTMLdocumentationIndentationListBody = HTMLdocumentationIndentationListBody + "</li></ul>";		
+	}	
+	HTMLdocumentationIndentationListBody = HTMLdocumentationIndentationListBody + "</li>\n";
+	HTMLdocumentationIndentationListBody = HTMLdocumentationIndentationListBody + "\t</ul>";					
+					
+	if(foundReferences)
+	{	
+		*HTMLdocumentationIndentationList = *HTMLdocumentationIndentationList + HTMLdocumentationIndentationListBody;
+	}
+	else
+	{
+		*HTMLdocumentationIndentationList = *HTMLdocumentationIndentationList + "N/A";	
+	}
+	*HTMLdocumentationIndentationList = *HTMLdocumentationIndentationList + "</p>\n";
+		
+	//cout << "HTMLdocumentationIndentationList: " << *HTMLdocumentationIndentationList << endl;
+}
+#endif
