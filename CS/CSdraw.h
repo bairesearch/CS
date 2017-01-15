@@ -23,7 +23,7 @@
  * File Name: CSdraw.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c4b 01-December-2012
+ * Project Version: 3c4c 03-December-2012
  *
  *******************************************************************************/
 
@@ -70,6 +70,9 @@
 #define CS_FUNCTION_TEXT_BOX_PADDING_FRACTION_OF_TEXT_LENGTH (1.00)
 #define CS_FUNCTION_TEXT_BOX_SCALE_FACTOR_Y_SPACING_FRACTION (0.7)
 #define CS_FUNCTION_TEXT_BOX_OUTLINE_WIDTH_SVG (0.1)
+
+#define CS_FILE_CONNECTOR_STROKE_WIDTH_SVG (1.0)
+#define CS_FUNCTION_CONNECTOR_STROKE_WIDTH_SVG (0.2)
 
 #define CS_LAYER_0_COLOUR (6)
 #define CS_LAYER_1_COLOUR (1)
@@ -124,6 +127,9 @@
 #define CS_FUNCTION_TEXT_BOX_SCALE_FACTOR_Y_SPACING_FRACTION_NAME "CS_FUNCTION_TEXT_BOX_SCALE_FACTOR_Y_SPACING_FRACTION"
 #define CS_FUNCTION_TEXT_BOX_OUTLINE_WIDTH_SVG_NAME "CS_FUNCTION_TEXT_BOX_OUTLINE_WIDTH_SVG"
 
+#define CS_FILE_CONNECTOR_STROKE_WIDTH_SVG_NAME "CS_FILE_CONNECTOR_STROKE_WIDTH_SVG"
+#define CS_FUNCTION_CONNECTOR_STROKE_WIDTH_SVG_NAME "CS_FUNCTION_CONNECTOR_STROKE_WIDTH_SVG"
+
 #define CS_LAYER_0_COLOUR_NAME "CS_LAYER_0_COLOUR"
 #define CS_LAYER_1_COLOUR_NAME "CS_LAYER_1_COLOUR"
 #define CS_LAYER_2_COLOUR_NAME "CS_LAYER_2_COLOUR"
@@ -137,6 +143,7 @@
 #define CS_LAYER_10_COLOUR_NAME "CS_LAYER_10_COLOUR"
 #define CS_LAYER_11_COLOUR_NAME "CS_LAYER_11_COLOUR"
 #define CS_LAYER_12_COLOUR_NAME "CS_LAYER_12_COLOUR"
+#define CS_LAYER_NUMBER_OF_LAYERS (13)
 
 #define CS_FUNCTION_CONNECTION_HIGHLIGHT_COLOUR_NAME "CS_FUNCTION_CONNECTION_HIGHLIGHT_COLOUR"
 #define CS_FUNCTION_BOX_HIGHLIGHT_COLOUR_NAME "CS_FUNCTION_BOX_HIGHLIGHT_COLOUR"
@@ -158,13 +165,14 @@ Reference * createFileReferenceListConnections(Reference * currentReferenceInPri
 Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentReferenceInPrintList, CSfileReference * aboveLevelFileReference, CSfunctionReference * aboveLevelFunctionReference, CSfileReference * firstReferenceInTopLevelBelowList, int functionLevel, string functionReferenceNameToFind, XMLparserTag ** currentTag, bool traceFunctionUpwards, bool useSingleFileOnly, string * singleFileName);
 	CSreferenceArray findFunctionReferenceInAPrintedFileReferenceRecursive(CSfileReference * fileReferenceToSearchIn, string functionReferenceNameToFind, CSreferenceArray * foundFileAndFunctionReference, bool * referenceFound, bool useSingleFileOnly, string * singleFileName);
 		CSreferenceArray findFunctionReferenceInPrintedFileReference(CSfileReference * fileReferenceToSearchIn, string functionReferenceNameToFind, CSreferenceArray * foundFileAndFunctionReference, bool * referenceFound, bool useSingleFileOnly, string * singleFileName);
-	Reference * createFunctionReferenceConnection(Reference * currentReferenceInPrintList, CSfunctionReference * reference,  CSfunctionReference * currentReferenceInAboveList, int colour, bool traceAFunctionUpwardsAndNotCurrentlyTracing, bool prepareForTrace, XMLparserTag ** currentTag);
+	Reference * createFunctionReferenceConnection(Reference * currentReferenceInPrintList, CSfunctionReference * reference,  CSfunctionReference * currentReferenceInAboveList, int colour, bool traceAFunctionUpwardsAndNotCurrentlyTracing, bool prepareForTrace, XMLparserTag ** currentTag, CSfileReference * fileReference,  CSfileReference * currentFileReferenceInAboveList);
 
 	Reference * configureFileOrFunctionReferenceConnection(Reference * currentReferenceInPrintList, vec * referencePrintPos,  vec * currentReferenceInAboveListPrintPos, int colour, bool fileOrFunction, bool traceAFunctionUpwardsAndNotCurrentlyTracing, XMLparserTag ** currentTag, string * startGroupID, string * endGroupID);
 	Reference * createFileOrFunctionReferenceBox(Reference * currentReferenceInPrintList,  vec * referencePrintPos, string * referenceName, double scaleFactor, int colour, double maxTextLength, double zPosition);
 	Reference * createBox(Reference * currentReferenceInPrintList, vec * vect, double width, double height, int colour);
 
 int calculateCSBoxAndConnectionColourBasedUponLevel(int yIndex);
+int calculateCSBoxAndConnectionColourBasedUponFileName(CSfileReference * currentFileReference);
 
 CSfunctionReference * findPrintedFunctionReferenceWithName(string name, CSfunctionReference * reference, CSfileReference * firstReferenceInAboveLevelBelowList, bool * foundPrintedReferenceWithName, string * fileNameHoldingFunction);
 Reference * traceFunctionsUpwardsAndDrawOrHighLightThese(Reference * currentReferenceInPrintList, CSfileReference * firstReferenceInTopLevelBelowList, CSfunctionReference * currentFunctionBeingTraced, XMLparserTag ** currentTag, int generateHTMLdocumentationMode, string * HTMLdocumentationFunctionTraceTableRows);

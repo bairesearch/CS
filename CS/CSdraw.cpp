@@ -23,7 +23,7 @@
  * File Name: CSdraw.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c4b 01-December-2012
+ * Project Version: 3c4c 03-December-2012
  *
  *******************************************************************************/
 
@@ -85,6 +85,8 @@ static double CS_FUNCTION_MAX_TEXT_LENGTH;
 static double CS_FUNCTION_TEXT_BOX_PADDING_FRACTION_OF_TEXT_LENGTH;
 static double CS_FUNCTION_TEXT_BOX_SCALE_FACTOR_Y_SPACING_FRACTION;
 static double CS_FUNCTION_TEXT_BOX_OUTLINE_WIDTH_SVG;
+static double CS_FILE_CONNECTOR_STROKE_WIDTH_SVG;
+static double CS_FUNCTION_CONNECTOR_STROKE_WIDTH_SVG;
 
 static int CS_LAYER_0_COLOUR;
 static int CS_LAYER_1_COLOUR;
@@ -99,6 +101,23 @@ static int CS_LAYER_9_COLOUR;
 static int CS_LAYER_10_COLOUR;
 static int CS_LAYER_11_COLOUR;
 static int CS_LAYER_12_COLOUR;
+
+static string CS_LAYER_0_COLOUR_PROJECT_NAME;
+static string CS_LAYER_1_COLOUR_PROJECT_NAME;
+static string CS_LAYER_2_COLOUR_PROJECT_NAME;
+static string CS_LAYER_3_COLOUR_PROJECT_NAME;
+static string CS_LAYER_4_COLOUR_PROJECT_NAME;
+static string CS_LAYER_5_COLOUR_PROJECT_NAME;
+static string CS_LAYER_6_COLOUR_PROJECT_NAME;
+static string CS_LAYER_7_COLOUR_PROJECT_NAME;
+static string CS_LAYER_8_COLOUR_PROJECT_NAME;
+static string CS_LAYER_9_COLOUR_PROJECT_NAME;
+static string CS_LAYER_10_COLOUR_PROJECT_NAME;
+static string CS_LAYER_11_COLOUR_PROJECT_NAME;
+static string CS_LAYER_12_COLOUR_PROJECT_NAME;
+
+static int CSlayerColourArray[CS_LAYER_NUMBER_OF_LAYERS];
+static string CSlayerColourProjectNameArray[CS_LAYER_NUMBER_OF_LAYERS];
 
 static int CS_FUNCTION_CONNECTION_HIGHLIGHT_COLOUR;
 static int CS_FUNCTION_BOX_HIGHLIGHT_COLOUR;
@@ -246,58 +265,105 @@ void fillInCSrulesExternVariables()
 			CS_FUNCTION_TEXT_BOX_OUTLINE_WIDTH_SVG = currentReferenceRulesClass->fractionalValue;
 		}
 
+		else if(currentReferenceRulesClass->name == CS_FILE_CONNECTOR_STROKE_WIDTH_SVG_NAME)
+		{
+			CS_FILE_CONNECTOR_STROKE_WIDTH_SVG = currentReferenceRulesClass->fractionalValue;
+		}
+		else if(currentReferenceRulesClass->name == CS_FUNCTION_CONNECTOR_STROKE_WIDTH_SVG_NAME)
+		{
+			CS_FUNCTION_CONNECTOR_STROKE_WIDTH_SVG = currentReferenceRulesClass->fractionalValue;
+		}
 
 		else if(currentReferenceRulesClass->name == CS_LAYER_0_COLOUR_NAME)
 		{
 			CS_LAYER_0_COLOUR = currentReferenceRulesClass->fractionalValue;
+			CS_LAYER_0_COLOUR_PROJECT_NAME = currentReferenceRulesClass->stringValue;
+			CSlayerColourArray[0] = CS_LAYER_0_COLOUR;
+			CSlayerColourProjectNameArray[0] = CS_LAYER_0_COLOUR_PROJECT_NAME;			
 		}
 		else if(currentReferenceRulesClass->name == CS_LAYER_1_COLOUR_NAME)
 		{
 			CS_LAYER_1_COLOUR = currentReferenceRulesClass->fractionalValue;
+			CS_LAYER_1_COLOUR_PROJECT_NAME = currentReferenceRulesClass->stringValue;
+			CSlayerColourArray[1] = CS_LAYER_1_COLOUR;
+			CSlayerColourProjectNameArray[1] = CS_LAYER_1_COLOUR_PROJECT_NAME;			
 		}
 		else if(currentReferenceRulesClass->name == CS_LAYER_2_COLOUR_NAME)
 		{
 			CS_LAYER_2_COLOUR = currentReferenceRulesClass->fractionalValue;
+			CS_LAYER_2_COLOUR_PROJECT_NAME = currentReferenceRulesClass->stringValue;
+			CSlayerColourArray[2] = CS_LAYER_2_COLOUR;
+			CSlayerColourProjectNameArray[2] = CS_LAYER_2_COLOUR_PROJECT_NAME;			
 		}
 		else if(currentReferenceRulesClass->name == CS_LAYER_3_COLOUR_NAME)
 		{
 			CS_LAYER_3_COLOUR = currentReferenceRulesClass->fractionalValue;
+			CS_LAYER_3_COLOUR_PROJECT_NAME = currentReferenceRulesClass->stringValue;
+			CSlayerColourArray[3] = CS_LAYER_3_COLOUR;
+			CSlayerColourProjectNameArray[3] = CS_LAYER_3_COLOUR_PROJECT_NAME;			
 		}
 		else if(currentReferenceRulesClass->name == CS_LAYER_4_COLOUR_NAME)
 		{
 			CS_LAYER_4_COLOUR = currentReferenceRulesClass->fractionalValue;
+			CS_LAYER_4_COLOUR_PROJECT_NAME = currentReferenceRulesClass->stringValue;
+			CSlayerColourArray[4] = CS_LAYER_4_COLOUR;
+			CSlayerColourProjectNameArray[4] = CS_LAYER_4_COLOUR_PROJECT_NAME;			
 		}
 		else if(currentReferenceRulesClass->name == CS_LAYER_5_COLOUR_NAME)
 		{
 			CS_LAYER_5_COLOUR = currentReferenceRulesClass->fractionalValue;
+			CS_LAYER_5_COLOUR_PROJECT_NAME = currentReferenceRulesClass->stringValue;
+			CSlayerColourArray[5] = CS_LAYER_5_COLOUR;
+			CSlayerColourProjectNameArray[5] = CS_LAYER_5_COLOUR_PROJECT_NAME;			
 		}
 		else if(currentReferenceRulesClass->name == CS_LAYER_6_COLOUR_NAME)
 		{
 			CS_LAYER_6_COLOUR = currentReferenceRulesClass->fractionalValue;
+			CS_LAYER_6_COLOUR_PROJECT_NAME = currentReferenceRulesClass->stringValue;
+			CSlayerColourArray[6] = CS_LAYER_6_COLOUR;
+			CSlayerColourProjectNameArray[6] = CS_LAYER_6_COLOUR_PROJECT_NAME;			
 		}
 		else if(currentReferenceRulesClass->name == CS_LAYER_7_COLOUR_NAME)
 		{
 			CS_LAYER_7_COLOUR = currentReferenceRulesClass->fractionalValue;
+			CS_LAYER_7_COLOUR_PROJECT_NAME = currentReferenceRulesClass->stringValue;
+			CSlayerColourArray[7] = CS_LAYER_7_COLOUR;
+			CSlayerColourProjectNameArray[7] = CS_LAYER_7_COLOUR_PROJECT_NAME;			
 		}
 		else if(currentReferenceRulesClass->name == CS_LAYER_8_COLOUR_NAME)
 		{
 			CS_LAYER_8_COLOUR = currentReferenceRulesClass->fractionalValue;
+			CS_LAYER_8_COLOUR_PROJECT_NAME = currentReferenceRulesClass->stringValue;
+			CSlayerColourArray[8] = CS_LAYER_8_COLOUR;
+			CSlayerColourProjectNameArray[8] = CS_LAYER_8_COLOUR_PROJECT_NAME;			
 		}
 		else if(currentReferenceRulesClass->name == CS_LAYER_9_COLOUR_NAME)
 		{
 			CS_LAYER_9_COLOUR = currentReferenceRulesClass->fractionalValue;
+			CS_LAYER_9_COLOUR_PROJECT_NAME = currentReferenceRulesClass->stringValue;
+			CSlayerColourArray[9] = CS_LAYER_9_COLOUR;
+			CSlayerColourProjectNameArray[9] = CS_LAYER_9_COLOUR_PROJECT_NAME;			
 		}
 		else if(currentReferenceRulesClass->name == CS_LAYER_10_COLOUR_NAME)
 		{
 			CS_LAYER_10_COLOUR = currentReferenceRulesClass->fractionalValue;
+			CS_LAYER_10_COLOUR_PROJECT_NAME = currentReferenceRulesClass->stringValue;
+			CSlayerColourArray[10] = CS_LAYER_10_COLOUR;
+			CSlayerColourProjectNameArray[10] = CS_LAYER_10_COLOUR_PROJECT_NAME;			
 		}
 		else if(currentReferenceRulesClass->name == CS_LAYER_11_COLOUR_NAME)
 		{
 			CS_LAYER_11_COLOUR = currentReferenceRulesClass->fractionalValue;
+			CS_LAYER_11_COLOUR_PROJECT_NAME = currentReferenceRulesClass->stringValue;
+			CSlayerColourArray[11] = CS_LAYER_11_COLOUR;
+			CSlayerColourProjectNameArray[11] = CS_LAYER_11_COLOUR_PROJECT_NAME;			
 		}
 		else if(currentReferenceRulesClass->name == CS_LAYER_12_COLOUR_NAME)
 		{
 			CS_LAYER_12_COLOUR = currentReferenceRulesClass->fractionalValue;
+			CS_LAYER_12_COLOUR_PROJECT_NAME = currentReferenceRulesClass->stringValue;
+			CSlayerColourArray[12] = CS_LAYER_12_COLOUR;
+			CSlayerColourProjectNameArray[12] = CS_LAYER_12_COLOUR_PROJECT_NAME;			
 		}
 
 
@@ -414,7 +480,7 @@ Reference * createFileReferenceListBoxes(Reference * currentReferenceInPrintList
 			#ifdef CS_USE_RAINBOW_COLOURS_FOR_FILE_BOXES
 			int colour = calculateCSBoxAndConnectionColourBasedUponLevel(maxYPos);
 			#else
-			int colour = DAT_FILE_COLOUR_CYAN;
+			int colour = calculateCSBoxAndConnectionColourBasedUponFileName(currentFileReference);
 			#endif
 			currentFileReference->col = colour;
 
@@ -638,8 +704,12 @@ Reference * findAndLinkAllFileReferencesWithSameName(Reference * currentReferenc
 				{
 					//cout << "h" << endl;
 					//cout << "currentReferenceFirstReferenceInAboveListPrinted->name = " << currentReferenceFirstReferenceInAboveListPrinted->name << endl;
+					#ifdef CS_USE_RAINBOW_COLOURS_FOR_FILE_BOXES
 					int colour = calculateCSBoxAndConnectionColourBasedUponLevel(currentReferenceFirstReferenceInAboveListPrinted->printYIndex);
-
+					#else
+					int colour = calculateCSBoxAndConnectionColourBasedUponFileName(currentReferenceFirstReferenceInAboveListPrinted);					
+					#endif
+					
 					newCurrentReferenceInPrintList = createFileReferenceConnection(newCurrentReferenceInPrintList, reference, currentReferenceFirstReferenceInAboveListPrinted, colour, traceFunctionUpwards, currentTag);	//add line
 				}
 			}
@@ -864,14 +934,9 @@ Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentRe
 					aboveConnectionColour = aboveLevelFunctionReference->col;	//or =calculateCSBoxAndConnectionColourBasedUponLevel(aboveLevelFunctionReference->printYIndex);	[same thing]
 					colour = calculateCSBoxAndConnectionColourBasedUponLevel(functionReference->printYIndex);
 					#else
-						#ifdef CS_USE_RAINBOW_COLOURS_FOR_FILE_BOXES
 						//new: use same colour as file box
-							aboveConnectionColour = aboveLevelFunctionReference->col;		//OLDWRONG; int aboveConnectionColour = aboveLevelFunctionReference->col;	//OLDWRONG2; same as aboveLevelFileReference->colour;
-							colour = fileReference->col;					//OLDWRONG; int colour = aboveLevelFileReference->col;
-						#else
-							aboveConnectionColour = DAT_FILE_COLOUR_MAGENTA;
-							colour = DAT_FILE_COLOUR_CYAN;
-						#endif
+						aboveConnectionColour = aboveLevelFunctionReference->col;		//OLDWRONG; int aboveConnectionColour = aboveLevelFunctionReference->col;	//OLDWRONG2; same as aboveLevelFileReference->colour;
+						colour = fileReference->col;					//OLDWRONG; int colour = aboveLevelFileReference->col;
 					#endif
 					functionReference->col = colour;
 				}
@@ -910,7 +975,7 @@ Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentRe
 				*/
 
 				//print function connections;
-				newCurrentReferenceInPrintList = createFunctionReferenceConnection(newCurrentReferenceInPrintList, functionReference, aboveLevelFunctionReference, aboveConnectionColour, traceFunctionUpwards, prepareForTrace, currentTag);
+				newCurrentReferenceInPrintList = createFunctionReferenceConnection(newCurrentReferenceInPrintList, functionReference, aboveLevelFunctionReference, aboveConnectionColour, traceFunctionUpwards, prepareForTrace, currentTag, fileReference, aboveLevelFileReference);
 						
 			
 				//apply hack
@@ -929,7 +994,7 @@ Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentRe
 				if(!traceFunctionUpwards)
 				{//only print connections when not tracing a bottom level function upwards - saves space
 				#endif
-					string groupID = createGroupID(functionReference->name, functionReference->printX, functionReference->printY);
+					string groupID = createGroupID(fileReference->name, functionReference->printX, functionReference->printY);	//OLD: functionReference->name
 					nextTagOnOriginalLayer = writeSVGgroup(currentTag, &groupID);
 				#ifdef CS_DO_NOT_DRAW_ALL_FUNCTION_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
 				}
@@ -1064,7 +1129,7 @@ Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentRe
 			else
 			{	
 				//print function connections;
-				newCurrentReferenceInPrintList = createFunctionReferenceConnection(newCurrentReferenceInPrintList, functionReference, aboveLevelFunctionReference, aboveLevelFunctionReference->col, traceFunctionUpwards, prepareForTrace, currentTag);
+				newCurrentReferenceInPrintList = createFunctionReferenceConnection(newCurrentReferenceInPrintList, functionReference, aboveLevelFunctionReference, aboveLevelFunctionReference->col, traceFunctionUpwards, prepareForTrace, currentTag, fileReference, aboveLevelFileReference);
 			
 				if(useSingleFileOnly)
 				{			
@@ -1316,7 +1381,7 @@ Reference * createFileReferenceConnection(Reference * currentReferenceInPrintLis
 	return configureFileOrFunctionReferenceConnection(currentReferenceInPrintList, &referencePrintPos, &currentReferenceInAboveListPrintPos, colour, true, traceAFunctionUpwardsAndNotCurrentlyTracing, currentTag, &startGroupID, &endGroupID);		
 }
 
-Reference * createFunctionReferenceConnection(Reference * currentReferenceInPrintList, CSfunctionReference * reference,  CSfunctionReference * currentReferenceInAboveList, int colour, bool traceAFunctionUpwardsAndNotCurrentlyTracing, bool prepareForTrace, XMLparserTag ** currentTag)
+Reference * createFunctionReferenceConnection(Reference * currentReferenceInPrintList, CSfunctionReference * reference,  CSfunctionReference * currentReferenceInAboveList, int colour, bool traceAFunctionUpwardsAndNotCurrentlyTracing, bool prepareForTrace, XMLparserTag ** currentTag, CSfileReference * fileReference,  CSfileReference * currentFileReferenceInAboveList)
 {
 	if(prepareForTrace)
 	{
@@ -1339,8 +1404,8 @@ Reference * createFunctionReferenceConnection(Reference * currentReferenceInPrin
 	vec currentReferenceInAboveListPrintPos;
 	currentReferenceInAboveListPrintPos.x = currentReferenceInAboveList->printX;
 	currentReferenceInAboveListPrintPos.y = currentReferenceInAboveList->printY;
- 	string startGroupID = createGroupID(reference->name, reference->printX, reference->printY);
- 	string endGroupID = createGroupID(currentReferenceInAboveList->name, currentReferenceInAboveList->printX, currentReferenceInAboveList->printY);
+ 	string startGroupID = createGroupID(fileReference->name, reference->printX, reference->printY);	//OLD: reference->name
+ 	string endGroupID = createGroupID(currentFileReferenceInAboveList->name, currentReferenceInAboveList->printX, currentReferenceInAboveList->printY);	//OLD: currentReferenceInAboveList->name
 
 	return configureFileOrFunctionReferenceConnection(currentReferenceInPrintList, &referencePrintPos, &currentReferenceInAboveListPrintPos, colour, false, traceAFunctionUpwardsAndNotCurrentlyTracing, currentTag, &startGroupID, &endGroupID);		
 }
@@ -1429,7 +1494,17 @@ Reference * configureFileOrFunctionReferenceConnection(Reference * currentRefere
 		pos2.y = currentReferenceInAboveListPrintPos->y;
 		
 		#ifdef CS_WRITE_SVG_INKSCAPE_CONNECTORS
-		writeSVGconnector(currentTag, &pos1, &pos2, colour, startGroupID, endGroupID);		
+		double strokeWidth;
+		if(fileOrFunction)
+		{	
+			strokeWidth = CS_FILE_CONNECTOR_STROKE_WIDTH_SVG;
+		}
+		else
+		{
+			strokeWidth = CS_FUNCTION_CONNECTOR_STROKE_WIDTH_SVG;
+		}
+		
+		writeSVGconnector(currentTag, &pos1, &pos2, colour, startGroupID, endGroupID, strokeWidth);		
 		#else
 		writeSVGline(currentTag, &pos1, &pos2, colour);
 		#endif
@@ -1574,6 +1649,34 @@ int calculateCSBoxAndConnectionColourBasedUponLevel(int yIndex)
 
 }
 
+int calculateCSBoxAndConnectionColourBasedUponFileName(CSfileReference * currentFileReference)
+{
+	string fileName = currentFileReference->name;
+	int colour;
+	bool foundProjectAbbreviation = false;
+	
+	for(int i=0; i<CS_LAYER_NUMBER_OF_LAYERS ; i++)
+	{
+		if(CSlayerColourProjectNameArray[i] != "")
+		{
+			int positionOfProjectAbbreviation = fileName.find(CSlayerColourProjectNameArray[i]);
+			if(positionOfProjectAbbreviation == 0)
+			{
+				foundProjectAbbreviation = true;
+				colour = CSlayerColourArray[i];
+			}
+		}
+	}
+	if(!foundProjectAbbreviation)
+	{
+		colour = DAT_FILE_COLOUR_DARKRED;
+	}
+
+	return colour;
+
+}
+
+
 
 
 
@@ -1691,7 +1794,11 @@ Reference * traceFunctionsUpwardsAndDrawOrHighLightThese(Reference * currentRefe
 					//just highlight the connection (already drawn)
 				#endif
 				
-				newCurrentReferenceInPrintList = createFunctionReferenceConnection(newCurrentReferenceInPrintList, currentFunctionBeingTraced, higherLevelFunction, functionConnectionColour, false, false, currentTag);
+				CSfileReference fileReferenceUnkown;
+				fileReferenceUnkown.name = "";
+				CSfileReference fileReferenceInAboveLevelListUnkown;
+				fileReferenceInAboveLevelListUnkown.name = "";
+				newCurrentReferenceInPrintList = createFunctionReferenceConnection(newCurrentReferenceInPrintList, currentFunctionBeingTraced, higherLevelFunction, functionConnectionColour, false, false, currentTag, &fileReferenceUnkown, &fileReferenceInAboveLevelListUnkown);
 
 				//cout << "higherLevelFunctionFound, " << higherLevelFunction->name << endl;
 				if(generateHTMLdocumentationMode == CS_GENERATE_HTML_DOCUMENTATION_MODE_OFF)
@@ -1786,8 +1893,8 @@ void writeFileOrFunctionSVGboxTransparent(XMLparserTag ** currentTag, vec * pos,
 string createGroupID(string objectName, int printX, int printY)
 {
 	string groupID = "";
-	//groupID = groupID + objectName + intToString(printX) + intToString(printY);
-	groupID = groupID + intToString(printX) + intToString(printY);
+	groupID = groupID + objectName + intToString(printX) + intToString(printY);
+	//groupID = groupID + intToString(printX) + intToString(printY);
 	return groupID;
 }
 

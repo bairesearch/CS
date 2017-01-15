@@ -23,7 +23,7 @@
  * File Name: CSmain.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c4b 01-December-2012
+ * Project Version: 3c4c 03-December-2012
  *
  *******************************************************************************/
 
@@ -56,6 +56,7 @@ static char errmessage[] = "Usage:  OpenCS.exe [options]"
 "\n\t-width [int]            : raster graphics width in pixels (def: 640)"
 "\n\t-height [int]           : raster graphics height in pixels (def: 480)"
 "\n\t-enablefunctions        : output function connectivity on top of file connectivity"
+"\n\t-disablefileconnections : disable output of file connections"
 "\n\t-mode [int]             : mode (1: execution flow, 2: data flow, 3: filter code based upon preprocessor definitions) (def: 1)"
 "\n\t-trace                  : trace a function's usage upwards"
 "\n\t-tracefunction [string] : bottom level function name to trace upwards / document (eg, y for int y())"
@@ -118,6 +119,8 @@ int main(int argc,char **argv)
 	int rasterImageWidth = 1600;
 	int rasterImageHeight = 1000;
 
+	bool outputFileConnections = true;
+	
 	if (argumentExists(argc,argv,"-mode"))
 	{
 		mode = getFloatArgument(argc,argv,"-mode");
@@ -196,6 +199,10 @@ int main(int argc,char **argv)
 	{
 		outputFunctionsConnectivity = true;
 	}
+	if(argumentExists(argc,argv,"-disablefileconnections"))
+	{
+		outputFileConnections = false;
+	}
 
 	if(argumentExists(argc,argv,"-trace"))
 	{
@@ -262,7 +269,7 @@ int main(int argc,char **argv)
 
 	if(argumentExists(argc,argv,"-version"))
 	{
-		cout << "OpenCS.exe - Project Version: 3c4b 01-December-2012" << endl;
+		cout << "OpenCS.exe - Project Version: 3c4c 03-December-2012" << endl;
 		exit(1);
 	}
 
@@ -339,7 +346,7 @@ int main(int argc,char **argv)
 
 	if(mode == CS_MODE_OUTPUT_EXECUTION_FLOW)
 	{
-		printCS(topLevelFileName, rasterImageWidth, rasterImageHeight, outputLDRfileName, outputSVGfileName, outputPPMfileName, outputHTMLfileName, useOutputLDRfile, useOutputPPMfile, useOutputHTMLfile, generateHTMLdocumentationMode, displayInOpenGLAndOutputScreenshot, outputFunctionsConnectivity, traceFunctionUpwards, bottomLevelFunctionNameToTraceUpwards);
+		printCS(topLevelFileName, rasterImageWidth, rasterImageHeight, outputLDRfileName, outputSVGfileName, outputPPMfileName, outputHTMLfileName, useOutputLDRfile, useOutputPPMfile, useOutputHTMLfile, generateHTMLdocumentationMode, displayInOpenGLAndOutputScreenshot, outputFunctionsConnectivity, traceFunctionUpwards, bottomLevelFunctionNameToTraceUpwards, outputFileConnections);
 	}
 	else if(mode == CS_MODE_OUTPUT_DATA_FLOW)
 	{

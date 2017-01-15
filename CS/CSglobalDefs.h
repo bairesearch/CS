@@ -23,7 +23,7 @@
  * File Name: CSglobalsDefs.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c4b 01-December-2012
+ * Project Version: 3c4c 03-December-2012
  * Description: CS specific global definitions
  *
  *******************************************************************************/
@@ -70,7 +70,7 @@
 //#define CS_DEBUG_HTML_DOCUMENTATION
 #define CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_SUMMARY
 
-#define CS_USE_RAINBOW_COLOURS_FOR_FILE_BOXES		//optional
+//#define CS_USE_RAINBOW_COLOURS_FOR_FILE_BOXES		//optional
 //#define CS_USE_RAINBOW_COLOURS_FOR_FUNCTION_BOXES	//optional
 #define CS_DISPLAY_INCLUDE_FILE_PARSING
 #define CS_CENTRE_BOXES

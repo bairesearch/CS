@@ -33,7 +33,7 @@
 		<miscellaneousItem name="CS_FILE_OR_FUNCTION_TEXT_BOX_BOX_SCALE_FACTOR_Y_SPACING_FRACTION_SVG" stringValue="" fractionalValue="0.1" />
 		
 		<miscellaneousItem name="CS_FILE_FUNCTIONS_DISABLED_VECTOROBJECTS_SCALE_FACTOR" stringValue="" fractionalValue="500" />
-		<miscellaneousItem name="CS_FILE_FUNCTIONS_ENABLED_VECTOROBJECTS_SCALE_FACTOR" stringValue="" fractionalValue="200" />
+		<miscellaneousItem name="CS_FILE_FUNCTIONS_ENABLED_VECTOROBJECTS_SCALE_FACTOR" stringValue="" fractionalValue="500" />
 		<miscellaneousItem name="CS_FILE_MAX_TEXT_LENGTH" stringValue="" fractionalValue="20" />
 		<miscellaneousItem name="CS_FILE_TEXT_BOX_PADDING_FRACTION_OF_TEXT_LENGTH" stringValue="" fractionalValue="1.25" />
 		<miscellaneousItem name="CS_FILE_FUNCTIONS_DISABLED_TEXT_BOX_SCALE_FACTOR_X_SPACING_FRACTION" stringValue="" fractionalValue="0.9" />
@@ -51,18 +51,21 @@
 		<miscellaneousItem name="CS_FUNCTION_TEXT_BOX_PADDING_FRACTION_OF_TEXT_LENGTH" stringValue="" fractionalValue="1.00" />
 		<miscellaneousItem name="CS_FUNCTION_TEXT_BOX_SCALE_FACTOR_Y_SPACING_FRACTION" stringValue="" fractionalValue="0.7" />
 		<miscellaneousItem name="CS_FUNCTION_TEXT_BOX_OUTLINE_WIDTH_SVG" stringValue="" fractionalValue="0.3" />
+
+		<miscellaneousItem name="CS_FILE_CONNECTOR_STROKE_WIDTH_SVG" stringValue="" fractionalValue="1.0" />
+		<miscellaneousItem name="CS_FUNCTION_CONNECTOR_STROKE_WIDTH_SVG" stringValue="" fractionalValue="0.2" />
 		
-		<miscellaneousItem name="CS_LAYER_0_COLOUR" stringValue="" fractionalValue="6" />
-		<miscellaneousItem name="CS_LAYER_1_COLOUR" stringValue="" fractionalValue="1" />
-		<miscellaneousItem name="CS_LAYER_2_COLOUR" stringValue="" fractionalValue="2" />
-		<miscellaneousItem name="CS_LAYER_3_COLOUR" stringValue="" fractionalValue="3" />
-		<miscellaneousItem name="CS_LAYER_4_COLOUR" stringValue="" fractionalValue="4" />
-		<miscellaneousItem name="CS_LAYER_5_COLOUR" stringValue="" fractionalValue="22" />
-		<miscellaneousItem name="CS_LAYER_6_COLOUR" stringValue="" fractionalValue="25" />
-		<miscellaneousItem name="CS_LAYER_7_COLOUR" stringValue="" fractionalValue="14" />
-		<miscellaneousItem name="CS_LAYER_8_COLOUR" stringValue="" fractionalValue="5" />
-		<miscellaneousItem name="CS_LAYER_9_COLOUR" stringValue="" fractionalValue="7" />
-		<miscellaneousItem name="CS_LAYER_10_COLOUR" stringValue="" fractionalValue="8" />
+		<miscellaneousItem name="CS_LAYER_0_COLOUR" stringValue="SHARED" fractionalValue="6" />
+		<miscellaneousItem name="CS_LAYER_1_COLOUR" stringValue="OR" fractionalValue="1" />
+		<miscellaneousItem name="CS_LAYER_2_COLOUR" stringValue="ANN" fractionalValue="2" />
+		<miscellaneousItem name="CS_LAYER_3_COLOUR" stringValue="GIA" fractionalValue="3" />
+		<miscellaneousItem name="CS_LAYER_4_COLOUR" stringValue="RT" fractionalValue="4" />
+		<miscellaneousItem name="CS_LAYER_5_COLOUR" stringValue="CS" fractionalValue="22" />
+		<miscellaneousItem name="CS_LAYER_6_COLOUR" stringValue="XML" fractionalValue="25" />
+		<miscellaneousItem name="CS_LAYER_7_COLOUR" stringValue="LD" fractionalValue="14" />
+		<miscellaneousItem name="CS_LAYER_8_COLOUR" stringValue="LRRC" fractionalValue="5" />
+		<miscellaneousItem name="CS_LAYER_9_COLOUR" stringValue="OLC" fractionalValue="7" />
+		<miscellaneousItem name="CS_LAYER_10_COLOUR" stringValue="PRD" fractionalValue="8" />
 		<miscellaneousItem name="CS_LAYER_11_COLOUR" stringValue="" fractionalValue="0" />
 		<miscellaneousItem name="CS_LAYER_12_COLOUR" stringValue="" fractionalValue="15" />
 		
