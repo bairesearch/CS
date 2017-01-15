@@ -26,7 +26,7 @@
  * File Name: CSgenerateObjectOrientedCode.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e7d 27-January-2015
+ * Project Version: 3e7e 27-January-2015
  *
  *******************************************************************************/
 
@@ -50,7 +50,6 @@ public:
 
 bool generateCPPclasses(CSfileReference* firstReferenceInTopLevelBelowList);
 	bool generateCPPclassesRecurse(CSfileReference* firstReferenceInAboveLevelBelowList, CSfileReference* firstReferenceInTopLevelBelowList);
-		string getFileContents(string inputFileName);
 		bool generateCPPclassesFile(CSfileReference* currentFileReference, CSfileReference* firstReferenceInTopLevelBelowList);
 			void isFunctionBeingReferencedPublicallyRecurse(string functionName, string fileName, CSfileReference* firstReferenceInAboveLevelBelowList, bool* foundPublicReference);
 			string generateClassName(string headerFileName);
