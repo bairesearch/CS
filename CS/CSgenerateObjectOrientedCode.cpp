@@ -26,7 +26,7 @@
  * File Name: CSgenerateObjectOrientedCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e1g 27-August-2014
+ * Project Version: 3e2a 29-August-2014
  *
  *******************************************************************************/
 
@@ -345,39 +345,34 @@ void isFunctionBeingReferencedPublicallyRecurse(string functionName, string file
 
 	while(currentFileReference->next != NULL)
 	{
-		if(currentFileReference->printed)
-		{
-			if(currentFileReference->name != fileName)
-			{//search for external references to function only
-			
-				CSfunctionReference * currentFunctionReference = currentFileReference->firstReferenceInFunctionList;
-				while(currentFunctionReference->next != NULL)
-				{
-					if(currentFunctionReference->printed)
-					{
-						CSfunctionReference * currentfunctionReferenceReference = currentFunctionReference->firstReferenceInFunctionReferenceList;
-						while(currentfunctionReferenceReference->next != NULL)
-						{
-							if(currentfunctionReferenceReference->name == functionName)
-							{
-								*foundPublicReference = true;
-								#ifdef CS_DEBUG_GENERATE_OBJECT_ORIENTED_CODE
-								//cout << "foundPublicReference" << endl;
-								#endif
-							}
-							currentfunctionReferenceReference = currentfunctionReferenceReference->next;
-						}
-					}
-					currentFunctionReference = currentFunctionReference->next;
-				}
+		if(currentFileReference->name != fileName)
+		{//search for external references to function only
 
-				if(currentFileReference->firstReferenceInBelowList != NULL)
+			CSfunctionReference * currentFunctionReference = currentFileReference->firstReferenceInFunctionList;
+			while(currentFunctionReference->next != NULL)
+			{
+				CSfunctionReference * currentfunctionReferenceReference = currentFunctionReference->firstReferenceInFunctionReferenceList;
+				while(currentfunctionReferenceReference->next != NULL)
 				{
-					isFunctionBeingReferencedPublicallyRecurse(functionName, fileName, currentFileReference->firstReferenceInBelowList, foundPublicReference);
+					if(currentfunctionReferenceReference->name == functionName)
+					{
+						*foundPublicReference = true;
+						#ifdef CS_DEBUG_GENERATE_OBJECT_ORIENTED_CODE
+						//cout << "foundPublicReference" << endl;
+						#endif
+					}
+					currentfunctionReferenceReference = currentfunctionReferenceReference->next;
 				}
+				
+				currentFunctionReference = currentFunctionReference->next;
 			}
-			
+
+			if(currentFileReference->firstReferenceInBelowList != NULL)
+			{
+				isFunctionBeingReferencedPublicallyRecurse(functionName, fileName, currentFileReference->firstReferenceInBelowList, foundPublicReference);
+			}
 		}
+			
 		currentFileReference = currentFileReference->next;
 	}
 
