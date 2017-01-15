@@ -26,7 +26,7 @@
  * File Name: CSgenerateObjectOrientedCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e2b 29-August-2014
+ * Project Version: 3e2c 29-August-2014
  *
  *******************************************************************************/
 
@@ -122,129 +122,129 @@ bool generateCPPclassesFile(CSfileReference * currentFileReference, CSfileRefere
 	{
 		//if(currentFunctionReference->printed)
 		//{//only create connections to printed boxes (is this required?)
-			if(currentFileReference->name != CS_GENERATE_CPP_CLASSES_FUNCTION_MAIN_NAME)
-			{//do not modifier main function
 				
-				fileHasFunctions = true;
-				
-				bool foundStaticReference = false;
-				bool foundPublicReference = false;
-				isFunctionBeingReferencedPublicallyRecurse(currentFunctionReference->name, currentFileReference->name, firstReferenceInTopLevelBelowList, &foundPublicReference);
+			fileHasFunctions = true;
 
-				//1. convert function names
-				int positionOfFunctionReferenceHeaderOrig = currentFileReference->headerFileTextOrig.find(currentFunctionReference->nameFull);
-				int positionOfFunctionReferenceSourceOrig = currentFileReference->sourceFileTextOrig.find(currentFunctionReference->nameFull);
-				string classFullFunctionNameSource = convertFunctionNameToClassFunctionNameSource(currentFunctionReference->nameFull, currentFunctionReference->name, className, foundPublicReference, &foundStaticReference);
-				string classFullFunctionNameHeader = convertFunctionNameToClassFunctionNameHeader(currentFunctionReference->nameFull, currentFunctionReference->name, className, foundPublicReference, foundStaticReference);	
-				currentFunctionReference->headerFunctionNameFullUpdated = classFullFunctionNameHeader;
-				currentFunctionReference->sourceFunctionNameFullUpdated = classFullFunctionNameSource;
+			bool foundStaticReference = false;
+			bool foundPublicReference = false;
+			isFunctionBeingReferencedPublicallyRecurse(currentFunctionReference->name, currentFileReference->name, firstReferenceInTopLevelBelowList, &foundPublicReference);
 
-				bool foundAtLeastOneInstance = false;
-				currentFileReference->headerFileText = replaceAllOccurancesOfString(&(currentFileReference->headerFileText), currentFunctionReference->nameFull, classFullFunctionNameHeader, &foundAtLeastOneInstance);
-				if(!foundAtLeastOneInstance)
+			//1. convert function names
+			int positionOfFunctionReferenceHeaderOrig = currentFileReference->headerFileTextOrig.find(currentFunctionReference->nameFull);
+			int positionOfFunctionReferenceSourceOrig = currentFileReference->sourceFileTextOrig.find(currentFunctionReference->nameFull);
+			string classFullFunctionNameSource = convertFunctionNameToClassFunctionNameSource(currentFunctionReference->nameFull, currentFunctionReference->name, className, foundPublicReference, &foundStaticReference);
+			string classFullFunctionNameHeader = convertFunctionNameToClassFunctionNameHeader(currentFunctionReference->nameFull, currentFunctionReference->name, className, foundPublicReference, foundStaticReference);	
+			currentFunctionReference->headerFunctionNameFullUpdated = classFullFunctionNameHeader;
+			currentFunctionReference->sourceFunctionNameFullUpdated = classFullFunctionNameSource;
+
+			bool foundAtLeastOneInstance = false;
+			currentFileReference->headerFileText = replaceAllOccurancesOfString(&(currentFileReference->headerFileText), currentFunctionReference->nameFull, classFullFunctionNameHeader, &foundAtLeastOneInstance);
+			if(!foundAtLeastOneInstance)
+			{
+				cout << "generateCPPclassesFile() error: !foundAtLeastOneInstance of " << currentFunctionReference->nameFull << " in currentFileReference->headerFileText" << endl;
+				exit(0);
+			}
+			foundAtLeastOneInstance = false;
+			currentFileReference->sourceFileText = replaceAllOccurancesOfString(&(currentFileReference->sourceFileText), currentFunctionReference->nameFull, classFullFunctionNameSource, &foundAtLeastOneInstance);
+			if(!foundAtLeastOneInstance)
+			{
+				cout << "generateCPPclassesFile() error: !foundAtLeastOneInstance of " << currentFunctionReference->nameFull << " in currentFileReference->sourceFileText" << endl;
+				exit(0);
+			}		
+
+			//2. convert function references
+			CSfunctionReference * currentfunctionReferenceReference = currentFunctionReference->firstReferenceInFunctionReferenceList;
+			while(currentfunctionReferenceReference->next != NULL)
+			{
+				string functionReferenceReferenceName = currentfunctionReferenceReference->name;
+				string functionReferenceReferenceNameUpdated = "";
+
+				string functionReferenceContext = "";
+				CSfileReference * fileReferenceHoldingFunction = NULL;
+				CSfunctionReference * referencedFunction = NULL;
+				bool referencedFunctionFound = findFunctionReferenceWithName(functionReferenceReferenceName, firstReferenceInTopLevelBelowList, &fileReferenceHoldingFunction, &referencedFunction);
+				if(referencedFunctionFound)
 				{
-					cout << "generateCPPclassesFile() error: !foundAtLeastOneInstance of " << currentFunctionReference->nameFull << " in currentFileReference->headerFileText" << endl;
-					exit(0);
-				}
-				foundAtLeastOneInstance = false;
-				currentFileReference->sourceFileText = replaceAllOccurancesOfString(&(currentFileReference->sourceFileText), currentFunctionReference->nameFull, classFullFunctionNameSource, &foundAtLeastOneInstance);
-				if(!foundAtLeastOneInstance)
-				{
-					cout << "generateCPPclassesFile() error: !foundAtLeastOneInstance of " << currentFunctionReference->nameFull << " in currentFileReference->sourceFileText" << endl;
-					exit(0);
-				}		
+					string fileNameHoldingFunction = fileReferenceHoldingFunction->name;
+					string classHoldingFunction = generateClassName(fileNameHoldingFunction);
 
-				//2. convert function references
-				CSfunctionReference * currentfunctionReferenceReference = currentFunctionReference->firstReferenceInFunctionReferenceList;
-				while(currentfunctionReferenceReference->next != NULL)
-				{
-					string functionReferenceReferenceName = currentfunctionReferenceReference->name;
-					string functionReferenceReferenceNameUpdated = "";
-
-					string functionReferenceContext = "";
-					CSfileReference * fileReferenceHoldingFunction = NULL;
-					CSfunctionReference * referencedFunction = NULL;
-					bool referencedFunctionFound = findFunctionReferenceWithName(functionReferenceReferenceName, firstReferenceInTopLevelBelowList, &fileReferenceHoldingFunction, &referencedFunction);
-					if(referencedFunctionFound)
+					//add context
+					if(foundStaticReference)
 					{
-						string fileNameHoldingFunction = fileReferenceHoldingFunction->name;
-						string classHoldingFunction = generateClassName(fileNameHoldingFunction);
-
-						//add context
-						if(foundStaticReference)
-						{
-							//create a new temporary object pertaining to the functionReferenceReference's class
-							functionReferenceReferenceNameUpdated = functionReferenceReferenceNameUpdated + CHAR_OPEN_BRACKET + CS_GENERATE_CPP_CLASSES_NEW + CHAR_SPACE + generateClassDeclarationName(classHoldingFunction) + CHAR_CLOSE_BRACKET + CS_GENERATE_CPP_CLASSES_FUNCTION_REFERENCE_CONTEXT_DELIMITER_POINTER + functionReferenceReferenceName;	//eg (new chickenClass)->function
-						}
-						else
-						{
-							if(fileNameHoldingFunction == currentFileReference->name)
-							{
-								functionReferenceReferenceNameUpdated = string(CS_GENERATE_CPP_CLASSES_FUNCTION_REFERENCE_CONTEXT_LOCAL) + string(CS_GENERATE_CPP_CLASSES_FUNCTION_REFERENCE_CONTEXT_DELIMITER_POINTER) + functionReferenceReferenceName;
-							}
-							else
-							{
-								functionReferenceReferenceNameUpdated = generateClassObjectName(classHoldingFunction) + CS_GENERATE_CPP_CLASSES_FUNCTION_REFERENCE_CONTEXT_DELIMITER + functionReferenceReferenceName;
-
-								//cout << "classHoldingFunction = " << classHoldingFunction << endl;
-								bool foundReferencedClass = findReferencedClassInList(firstReferencedClassInList, classHoldingFunction);
-								if(!foundReferencedClass)
-								{
-									currentReferencedClassInList->className = classHoldingFunction;
-									currentReferencedClassInList->next = new ReferencedClass();
-									currentReferencedClassInList = currentReferencedClassInList->next;
-								}
-							}
-						}
-						#ifdef CS_DEBUG_GENERATE_OBJECT_ORIENTED_CODE
-						//cout << "functionReferenceReferenceName = " << functionReferenceReferenceName << endl;
-						//cout << "functionReferenceReferenceNameUpdated = " << functionReferenceReferenceNameUpdated << endl;
-						#endif
-						
-					
-						int posOfFunctionRefUpdated = currentFunctionReference->functionTextRaw.find(functionReferenceReferenceNameUpdated);
-						if(posOfFunctionRefUpdated == CPP_STRING_FIND_RESULT_FAIL_VALUE)
-						{//only update function reference within functionText once
-							
-							int posOfFunctionText = currentFileReference->sourceFileText.find(currentFunctionReference->functionTextRaw);
-							int functionTextOrigLength = currentFunctionReference->functionTextRaw.length();
-							if(posOfFunctionText != CPP_STRING_FIND_RESULT_FAIL_VALUE)
-							{
-								foundAtLeastOneInstance = false;
-								currentFunctionReference->functionTextRaw = replaceAllOccurancesOfString(&(currentFunctionReference->functionTextRaw), functionReferenceReferenceName, functionReferenceReferenceNameUpdated, &foundAtLeastOneInstance);
-								if(!foundAtLeastOneInstance)
-								{
-									cout << "generateCPPclassesFile() error: !foundAtLeastOneInstance of " << functionReferenceReferenceName << " in currentFunctionReference->functionTextRaw" << endl;
-									exit(0);
-								}
-								currentFileReference->sourceFileText = currentFileReference->sourceFileText.substr(0, posOfFunctionText) + currentFunctionReference->functionTextRaw + currentFileReference->sourceFileText.substr(posOfFunctionText+functionTextOrigLength, currentFileReference->sourceFileText.length()-posOfFunctionText+functionTextOrigLength);
-
-								//cout << "currentFunctionReference->functionTextRaw = " << currentFunctionReference->functionTextRaw << endl;							
-								//exit(0);
-							}
-							else
-							{
-								cout << "generateCPPclassesFile() error: currentFunctionReference->functionTextRaw not found in currentFileReference->sourceFileText" << endl;
-								cout << "currentFunctionReference->functionTextRaw = " <<  currentFunctionReference->functionTextRaw << endl;
-								exit(0); 
-							}
-						}
+						//create a new temporary object pertaining to the functionReferenceReference's class
+						functionReferenceReferenceNameUpdated = functionReferenceReferenceNameUpdated + CHAR_OPEN_BRACKET + CS_GENERATE_CPP_CLASSES_NEW + CHAR_SPACE + generateClassDeclarationName(classHoldingFunction) + CHAR_CLOSE_BRACKET + CS_GENERATE_CPP_CLASSES_FUNCTION_REFERENCE_CONTEXT_DELIMITER_POINTER + functionReferenceReferenceName;	//eg (new chickenClass)->function
 					}
 					else
 					{
-						cout << "generateCPPclassesFile() error: !referencedFunctionFound, functionReferenceReferenceName = " << functionReferenceReferenceName << endl;
-						cout << "currentFileReference->name = " << currentFileReference->name << endl;
-						cout << "currentFunctionReference->nameFull = " << currentFunctionReference->nameFull << endl;
-						cout << "currentFunctionReference->name = " << currentFunctionReference->name << endl;
-						exit(0);
-					}
+						if(fileNameHoldingFunction == currentFileReference->name)
+						{
+							functionReferenceReferenceNameUpdated = string(CS_GENERATE_CPP_CLASSES_FUNCTION_REFERENCE_CONTEXT_LOCAL) + string(CS_GENERATE_CPP_CLASSES_FUNCTION_REFERENCE_CONTEXT_DELIMITER_POINTER) + functionReferenceReferenceName;
+						}
+						else
+						{
+							functionReferenceReferenceNameUpdated = generateClassObjectName(classHoldingFunction) + CS_GENERATE_CPP_CLASSES_FUNCTION_REFERENCE_CONTEXT_DELIMITER + functionReferenceReferenceName;
 
+							//cout << "classHoldingFunction = " << classHoldingFunction << endl;
+							bool foundReferencedClass = findReferencedClassInList(firstReferencedClassInList, classHoldingFunction);
+							if(!foundReferencedClass)
+							{
+								currentReferencedClassInList->className = classHoldingFunction;
+								currentReferencedClassInList->next = new ReferencedClass();
+								currentReferencedClassInList = currentReferencedClassInList->next;
+							}
+						}
+					}
 					#ifdef CS_DEBUG_GENERATE_OBJECT_ORIENTED_CODE
-					//cout << "generateCPPclassesFile(): currentFunctionReference->name = " << currentFunctionReference->name << endl;	
-					//cout << "generateCPPclassesFile(): currentFunctionReference->nameFull = " << currentFunctionReference->nameFull << endl;
+					//cout << "functionReferenceReferenceName = " << functionReferenceReferenceName << endl;
+					//cout << "functionReferenceReferenceNameUpdated = " << functionReferenceReferenceNameUpdated << endl;
 					#endif
-					currentfunctionReferenceReference = currentfunctionReferenceReference->next;
+
+					//must search and replace a more specific "functionName(" instead of "functionName" incase there exists a variable called functionNameSomeArbitraryVariable
+					functionReferenceReferenceName = functionReferenceReferenceName + CHAR_OPEN_BRACKET;
+					functionReferenceReferenceNameUpdated = functionReferenceReferenceNameUpdated + CHAR_OPEN_BRACKET;					 
+
+					int posOfFunctionRefUpdated = currentFunctionReference->functionTextRaw.find(functionReferenceReferenceNameUpdated);
+					if(posOfFunctionRefUpdated == CPP_STRING_FIND_RESULT_FAIL_VALUE)
+					{//only update function reference within functionText once
+
+						int posOfFunctionText = currentFileReference->sourceFileText.find(currentFunctionReference->functionTextRaw);
+						int functionTextOrigLength = currentFunctionReference->functionTextRaw.length();
+						if(posOfFunctionText != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+						{
+							foundAtLeastOneInstance = false;
+							currentFunctionReference->functionTextRaw = replaceAllOccurancesOfString(&(currentFunctionReference->functionTextRaw), functionReferenceReferenceName, functionReferenceReferenceNameUpdated, &foundAtLeastOneInstance);
+							if(!foundAtLeastOneInstance)
+							{
+								cout << "generateCPPclassesFile() error: !foundAtLeastOneInstance of " << functionReferenceReferenceName << " in currentFunctionReference->functionTextRaw" << endl;
+								exit(0);
+							}
+							currentFileReference->sourceFileText = currentFileReference->sourceFileText.substr(0, posOfFunctionText) + currentFunctionReference->functionTextRaw + currentFileReference->sourceFileText.substr(posOfFunctionText+functionTextOrigLength, currentFileReference->sourceFileText.length()-posOfFunctionText+functionTextOrigLength);
+
+							//cout << "currentFunctionReference->functionTextRaw = " << currentFunctionReference->functionTextRaw << endl;							
+							//exit(0);
+						}
+						else
+						{
+							cout << "generateCPPclassesFile() error: currentFunctionReference->functionTextRaw not found in currentFileReference->sourceFileText" << endl;
+							cout << "currentFunctionReference->functionTextRaw = " <<  currentFunctionReference->functionTextRaw << endl;
+							exit(0); 
+						}
+					}
 				}
+				else
+				{
+					cout << "generateCPPclassesFile() error: !referencedFunctionFound, functionReferenceReferenceName = " << functionReferenceReferenceName << endl;
+					cout << "currentFileReference->name = " << currentFileReference->name << endl;
+					cout << "currentFunctionReference->nameFull = " << currentFunctionReference->nameFull << endl;
+					cout << "currentFunctionReference->name = " << currentFunctionReference->name << endl;
+					exit(0);
+				}
+
+				#ifdef CS_DEBUG_GENERATE_OBJECT_ORIENTED_CODE
+				//cout << "generateCPPclassesFile(): currentFunctionReference->name = " << currentFunctionReference->name << endl;	
+				//cout << "generateCPPclassesFile(): currentFunctionReference->nameFull = " << currentFunctionReference->nameFull << endl;
+				#endif
+				currentfunctionReferenceReference = currentfunctionReferenceReference->next;
 			//}
 		}
 		currentFunctionReference = currentFunctionReference->next;	
@@ -413,20 +413,22 @@ string generateClassObjectName(string className)
 string convertFunctionNameToClassFunctionNameHeader(string fullFunctionName, string functionName, string className, bool foundPublicReference, bool foundStaticReference)
 {
 	string classFullFunctionName = "";
-	
+
+	string permissionsString = "";
 	if(foundStaticReference)
 	{
-		foundPublicReference = true;	//static functions must be made public even for internal referencing	
-	}
-	
-	string permissionsString = "";
-	if(foundPublicReference)
-	{
-		permissionsString = string(CS_GENERATE_CPP_CLASSES_FUNCTION_PUBLIC);
+		permissionsString = "";	//static functions cannot be part of class - they must be manually moved out of header class definition once oo code is generated 
 	}
 	else
 	{
-		permissionsString = string(CS_GENERATE_CPP_CLASSES_FUNCTION_PRIVATE);
+		if(foundPublicReference)
+		{
+			permissionsString = string(CS_GENERATE_CPP_CLASSES_FUNCTION_PUBLIC);
+		}
+		else
+		{
+			permissionsString = string(CS_GENERATE_CPP_CLASSES_FUNCTION_PRIVATE);
+		}
 	}
 	
 	classFullFunctionName = STRING_TAB + permissionsString + fullFunctionName;
@@ -451,9 +453,9 @@ string convertFunctionNameToClassFunctionNameSource(string fullFunctionName, str
 
 		//detect static functions and do not add context to these - added 3e2b
 		int positionOfStaticIdentifier = fullFunctionNamePart1.find(CS_GENERATE_CPP_CLASSES_STATIC);
-		if(positionOfStaticIdentifier != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+		if((positionOfStaticIdentifier != CPP_STRING_FIND_RESULT_FAIL_VALUE) || (functionName == CS_GENERATE_CPP_CLASSES_FUNCTION_MAIN_NAME))
 		{
-			classFullFunctionName = fullFunctionName;	//do not add class context to static functions
+			classFullFunctionName = fullFunctionName;	//do not add class context to static functions	//do not add class context to main functions
 			*foundStaticReference = true;
 		}
 		else
