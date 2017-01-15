@@ -23,7 +23,7 @@
  * File Name: CSexecflow.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c5a 15-December-2012
+ * Project Version: 3c5b 15-December-2012
  *
  *******************************************************************************/
 
@@ -260,11 +260,11 @@ string generateHTMLdocumentationHeader(string name, bool htmlHeader, bool isFile
 	string HTMLdocumentationHeader = "";
 	if(htmlHeader)
 	{
-		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h2>" + name + " Documentation</h2><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3c5a 15-December-2012<p>\n";
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3c5b 15-December-2012<p>\n";
 	}
 	else
 	{
-		HTMLdocumentationHeader = HTMLdocumentationHeader + "<h2>" + name + " Documentation</h2>\n";	
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<h3>" + name + " Documentation</h3>\n";	
 	}
 	if(isFile)
 	{
@@ -465,7 +465,7 @@ void generateHTMLdocumentationForFunction(Reference * currentReferenceInPrintLis
 		#endif
 		
 		string HTMLdocumentationFunctionTitle = "";
-		HTMLdocumentationFunctionTitle = HTMLdocumentationFunctionTitle + "<h3>" + (bottomLevelFunctionToTraceUpwards->name) + "()</h3>";
+		HTMLdocumentationFunctionTitle = HTMLdocumentationFunctionTitle + "<h4>" + (bottomLevelFunctionToTraceUpwards->name) + "()</h4>";
 		string HTMLdocumentationFunctionSummary = "";		
 		#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_SUMMARY
 		generateHTMLdocumentationFunctionSummary(&(bottomLevelFunctionToTraceUpwards->name), &(bottomLevelFunctionToTraceUpwards->nameFull), &HTMLdocumentationFunctionSummary);
@@ -1032,7 +1032,7 @@ void generateClassHTMLdocumentationFromCustomCSclassFormat()
 					currentClassBeingParsed = "";	
 					
 					string HTMLdocumentationClassTitle = "";
-					HTMLdocumentationClassTitle = HTMLdocumentationClassTitle + "<h3>Class " + className + "</h3>\n";
+					HTMLdocumentationClassTitle = HTMLdocumentationClassTitle + "<h4>Class " + className + "</h4>\n";
 					string HTMLdocumentationClassHeader = "";
 					HTMLdocumentationClassHeader = HTMLdocumentationClassHeader + "<p><b>Class description:</b> " + HTMLdocumentationClassDescription + "</p>\n";
 					
