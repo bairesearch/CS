@@ -26,9 +26,10 @@
  * File Name: CSexecflow.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e7b 27-January-2015
+ * Project Version: 3e7c 27-January-2015
  *
  *******************************************************************************/
+
 
 #ifndef HEADER_CS_EXECFLOW
 #define HEADER_CS_EXECFLOW
@@ -38,17 +39,6 @@
 #include "LDreferenceManipulation.h"
 #include "XMLparserClass.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string>
-#include <string.h>
-#include <iostream>
-#include <fstream>
-#include <time.h>
-#include <math.h>
-#ifdef CS_CONVERT_INDENTED_LIST_TO_HTML_LIST
-#include <vector>
-#endif
 using namespace std;
 
 #ifdef LINUX

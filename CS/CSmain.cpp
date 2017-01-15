@@ -26,11 +26,13 @@
  * File Name: CSmain.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e7b 27-January-2015
+ * Project Version: 3e7c 27-January-2015
  *
  *******************************************************************************/
 
 //issues, need to flip vertically
+
+
 #include "CSmain.h"
 #include "CSexecflow.h"
 #include "CSdataflow.h"
@@ -281,7 +283,7 @@ int main(int argc,char* *argv)
 
 	if(argumentExists(argc,argv,"-version"))
 	{
-		cout << "OpenCS.exe - Project Version: 3e7b 27-January-2015" << endl;
+		cout << "OpenCS.exe - Project Version: 3e7c 27-January-2015" << endl;
 		exit(1);
 	}
 

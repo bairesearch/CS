@@ -26,7 +26,7 @@
  * File Name: CSgenerateObjectOrientedCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e7b 27-January-2015
+ * Project Version: 3e7c 27-January-2015
  *
  *******************************************************************************/
 
@@ -34,17 +34,6 @@
 #include "CSgenerateObjectOrientedCode.h"
 #include "CSdraw.h"
 #include "SHAREDvars.h"
-
-#include <iostream>
-#include <fstream>
-#include <ctime>
-#include <cstring>
-#include <cstdlib>
-#include <cmath>
-#include <string>
-#include <vector>
-using namespace std;
-
 
 
 #ifdef CS_GENERATE_CPP_CLASSES
