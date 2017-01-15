@@ -21,7 +21,7 @@
  * File Name: CSgenerateConstFunctionArgumentCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h13c 11-December-2015
+ * Project Version: 3h13d 11-December-2015
  *
  *******************************************************************************/
 
@@ -583,14 +583,14 @@ bool generateConstFunctionArgument(CSfunction* currentFunctionObject, CSfunction
 		{
 			currentFunctionArgumentInFunction->isNotConst = true;
 			
-			if(currentFunctionObject->name == "findFunctionReferenceTargetRecurse")
+			if(currentFunctionObject->name == "getIncludeFileNamesFromCorHfile")
 			{
-				if(currentFunctionArgumentInFunction->argumentName == "fileObjectHoldingFunction")
+				if(currentFunctionArgumentInFunction->argumentName == "aboveLevelObject")
 				{
 					//cout << "currentLine = " << currentLine << endl;
 					cout << "zt3" << endl;
 					cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
-					exit(0);	
+					//exit(0);	
 				}
 			}
 		}
@@ -710,9 +710,9 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 			{
 				//e.g. "return functionDeclarationArgument;"
 				*isNotConst = true;
-			if(currentFunctionObject->name == "findFunctionReferenceTargetRecurse")
+			if(currentFunctionObject->name == "getIncludeFileNamesFromCorHfile")
 			{
-				if(currentFunctionArgumentInFunction->argumentName == "fileObjectHoldingFunction")
+				if(currentFunctionArgumentInFunction->argumentName == "aboveLevelObject")
 				{
 					//cout << "currentLine = " << currentLine << endl;
 					cout << "2" << endl;
@@ -787,9 +787,9 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 										{
 											//detect execution of object functions: e.g. "functionArgument->WHOLEWORDFUNCTIONNAME(" / "functionArgument->someIntermediaryObject[].WHOLEWORDFUNCTIONNAME("
 											*isNotConst = true;	
-			if(currentFunctionObject->name == "findFunctionReferenceTargetRecurse")
+			if(currentFunctionObject->name == "getIncludeFileNamesFromCorHfile")
 			{
-				if(currentFunctionArgumentInFunction->argumentName == "fileObjectHoldingFunction")
+				if(currentFunctionArgumentInFunction->argumentName == "aboveLevelObject")
 				{
 					cout << "currentLine = " << currentLine << endl;
 					cout << "3" << endl;
@@ -812,9 +812,9 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 														{
 															//e.g. "entityNodesActiveListCompleteFastIndex->insert(pair<string, GIAentityNode*>(entityNodesTempActiveListCompleteIndex, entityNode));"
 															currentFunctionArgumentInFunctionTemp->isNotConst = true;
-			if(currentFunctionObject->name == "findFunctionReferenceTargetRecurse")
+			if(currentFunctionObject->name == "getIncludeFileNamesFromCorHfile")
 			{
-				if(currentFunctionArgumentInFunction->argumentName == "fileObjectHoldingFunction")
+				if(currentFunctionArgumentInFunction->argumentName == "aboveLevelObject")
 				{
 					cout << "currentLine = " << currentLine << endl;
 					cout << "4" << endl;
@@ -840,9 +840,9 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 															if(functionArgumentReferenceWholeWordCheck(functionText, functionArgumentSecondaryAssignmentName, indexOfFunctionArgumentSecondaryAssignment))
 															{
 																currentFunctionArgumentInFunctionTemp->isNotConst = true;
-			if(currentFunctionObject->name == "findFunctionReferenceTargetRecurse")
+			if(currentFunctionObject->name == "getIncludeFileNamesFromCorHfile")
 			{
-				if(currentFunctionArgumentInFunction->argumentName == "fileObjectHoldingFunction")
+				if(currentFunctionArgumentInFunction->argumentName == "aboveLevelObject")
 				{
 					cout << "currentLine = " << currentLine << endl;
 					cout << "5" << endl;
@@ -874,9 +874,9 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 						if(currentLine.find(stdLibNonObjectFunctionExecutionHypothetical) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 						{
 							*isNotConst = true;
-			if(currentFunctionObject->name == "findFunctionReferenceTargetRecurse")
+			if(currentFunctionObject->name == "getIncludeFileNamesFromCorHfile")
 			{
-				if(currentFunctionArgumentInFunction->argumentName == "fileObjectHoldingFunction")
+				if(currentFunctionArgumentInFunction->argumentName == "aboveLevelObject")
 				{
 					cout << "currentLine = " << currentLine << endl;
 					cout << "6" << endl;
@@ -906,9 +906,9 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 					|| (twoCharactersAfterFunctionArgument == CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_INCREMENT) || (twoCharactersAfterFunctionArgument == CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_DECREMENT))
 					{
 						*isNotConst = true;
-			if(currentFunctionObject->name == "findFunctionReferenceTargetRecurse")
+			if(currentFunctionObject->name == "getIncludeFileNamesFromCorHfile")
 			{
-				if(currentFunctionArgumentInFunction->argumentName == "fileObjectHoldingFunction")
+				if(currentFunctionArgumentInFunction->argumentName == "aboveLevelObject")
 				{
 					cout << "currentLine = " << currentLine << endl;
 					cout << "6" << endl;
@@ -970,23 +970,23 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 								if(doublePointerAssignmentDetected)
 								{
 									*isConstEffective = true;
-			if(currentFunctionObject->name == "findFunctionReferenceTargetRecurse")
+			if(currentFunctionObject->name == "getIncludeFileNamesFromCorHfile")
 			{
-				if(currentFunctionArgumentInFunction->argumentName == "fileObjectHoldingFunction")
+				if(currentFunctionArgumentInFunction->argumentName == "aboveLevelObject")
 				{
 					cout << "currentLine = " << currentLine << endl;
 					cout << "7a" << endl;
 					cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
-					//exit(0);	
+					exit(0);	
 				}
 			}
 								}
 								else
 								{
 									*isNotConst = true;
-			if(currentFunctionObject->name == "findFunctionReferenceTargetRecurse")
+			if(currentFunctionObject->name == "getIncludeFileNamesFromCorHfile")
 			{
-				if(currentFunctionArgumentInFunction->argumentName == "fileObjectHoldingFunction")
+				if(currentFunctionArgumentInFunction->argumentName == "aboveLevelObject")
 				{
 					cout << "currentLine = " << currentLine << endl;
 					cout << "7b" << endl;
@@ -1012,6 +1012,7 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 						{
 							bool inverseNonConstAssignmentDetectedDoublePointer = false;
 							bool inverseNonConstAssignmentDetectedAlias = false;
+							//int indexOfTextBeforeFunctionArgument = indexOfStartOfLine;
 							string textBeforeFunctionArgument = functionText->substr(indexOfStartOfLine, indexOfFunctionArgument-indexOfStartOfLine);
 							CSfunctionArgument* currentFunctionArgumentInFunctionTemp = currentFunctionObject->firstFunctionArgumentInFunction;
 							while(currentFunctionArgumentInFunctionTemp->next != NULL)
@@ -1060,8 +1061,10 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 											{
 												if(functionArgumentReferenceWholeWordCheck(&textBeforeFunctionArgument, functionArgumentSecondaryAssignmentName, aliasIndex))
 												{
+													string textBeforeSecondaryReference = textBeforeFunctionArgument.substr(0, aliasIndex);
+													
 													#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_ASSIGNMENT_OF_ALIASES_STRICT
-													if(verifyThatVariableIsNotDeclarationOrNextIteratorAssignmentOrArrayIndex(currentFunctionObject, functionText, textBeforeFunctionArgument, functionArgumentSecondaryAssignmentName, aliasIndex, indexOfSquareBracketOpen, indexOfSquareBracketClose, indexOfEndOfCommand, indexOfStartOfLine, indexOfEqualsSetPrevious))
+													if(verifyThatVariableIsNotDeclarationOrNextIteratorAssignmentOrArrayIndex(currentFunctionObject, functionText, textBeforeSecondaryReference, functionArgumentSecondaryAssignmentName, indexOfStartOfLine+aliasIndex, indexOfSquareBracketOpen, indexOfSquareBracketClose, indexOfEndOfCommand, indexOfStartOfLine, indexOfEqualsSetPrevious))
 													{//prevent detection of typeX* nonconstargumentORsecondaryReferenceToNonConstArgument = functionArgument
 													#endif
 														//e.g. "nonconstargumentORsecondaryReferenceToNonConstArgument[->optionalSubObject] = functionArgument"
@@ -1088,9 +1091,9 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 								#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
 								cout << "checkIfVariableIsBeingModifiedInFunction{}: inverseNonConstAssignmentDetected: isNotConst = true" << endl;
 								#endif
-			if(currentFunctionObject->name == "findFunctionReferenceTargetRecurse")
+			if(currentFunctionObject->name == "getIncludeFileNamesFromCorHfile")
 			{
-				if(currentFunctionArgumentInFunction->argumentName == "fileObjectHoldingFunction")
+				if(currentFunctionArgumentInFunction->argumentName == "aboveLevelObject")
 				{
 					cout << "currentLine = " << currentLine << endl;
 					cout << "8" << endl;
@@ -1105,14 +1108,14 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 								#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
 								cout << "checkIfVariableIsBeingModifiedInFunction{}: inverseNonConstAssignmentDetected: isNotConst = true" << endl;
 								#endif
-			if(currentFunctionObject->name == "findFunctionReferenceTargetRecurse")
+			if(currentFunctionObject->name == "getIncludeFileNamesFromCorHfile")
 			{
-				if(currentFunctionArgumentInFunction->argumentName == "fileObjectHoldingFunction")
+				if(currentFunctionArgumentInFunction->argumentName == "aboveLevelObject")
 				{
 					cout << "currentLine = " << currentLine << endl;
 					cout << "9" << endl;
 					cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
-					exit(0);	
+					//exit(0);	
 				}
 			}
 							}
@@ -1127,9 +1130,9 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 					if(indexOfSpecialCaseTextForAssignmentOfNonConst != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 					{
 						*isNotConst = true;
-			if(currentFunctionObject->name == "findFunctionReferenceTargetRecurse")
+			if(currentFunctionObject->name == "getIncludeFileNamesFromCorHfile")
 			{
-				if(currentFunctionArgumentInFunction->argumentName == "fileObjectHoldingFunction")
+				if(currentFunctionArgumentInFunction->argumentName == "aboveLevelObject")
 				{
 					cout << "currentLine = " << currentLine << endl;
 					cout << "10" << endl;
@@ -1154,9 +1157,9 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 						if(functionArgumentReferenceWholeWordCheck(functionText, returnVar, indexOfReturnVar))
 						{
 							*isNotConst = true;
-			if(currentFunctionObject->name == "findFunctionReferenceTargetRecurse")
+			if(currentFunctionObject->name == "getIncludeFileNamesFromCorHfile")
 			{
-				if(currentFunctionArgumentInFunction->argumentName == "fileObjectHoldingFunction")
+				if(currentFunctionArgumentInFunction->argumentName == "aboveLevelObject")
 				{
 					cout << "currentLine = " << currentLine << endl;
 					cout << "11" << endl;
@@ -1177,9 +1180,9 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 					if(functionText->find(nonConstGlobalAssignmentHypothetical) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 					{
 						*isNotConst = true;
-			if(currentFunctionObject->name == "findFunctionReferenceTargetRecurse")
+			if(currentFunctionObject->name == "getIncludeFileNamesFromCorHfile")
 			{
-				if(currentFunctionArgumentInFunction->argumentName == "fileObjectHoldingFunction")
+				if(currentFunctionArgumentInFunction->argumentName == "aboveLevelObject")
 				{
 					cout << "currentLine = " << currentLine << endl;
 					cout << "12" << endl;
@@ -1203,9 +1206,9 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 		#else
 		*isNotConst = true;
 		#endif
-			if(currentFunctionObject->name == "findFunctionReferenceTargetRecurse")
+			if(currentFunctionObject->name == "getIncludeFileNamesFromCorHfile")
 			{
-				if(currentFunctionArgumentInFunction->argumentName == "fileObjectHoldingFunction")
+				if(currentFunctionArgumentInFunction->argumentName == "aboveLevelObject")
 				{
 					//cout << "currentLine = " << currentLine << endl;
 					cout << "13" << endl;
@@ -1223,9 +1226,9 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 		#else
 		*isNotConst = true;
 		#endif
-			if(currentFunctionObject->name == "findFunctionReferenceTargetRecurse")
+			if(currentFunctionObject->name == "getIncludeFileNamesFromCorHfile")
 			{
-				if(currentFunctionArgumentInFunction->argumentName == "fileObjectHoldingFunction")
+				if(currentFunctionArgumentInFunction->argumentName == "aboveLevelObject")
 				{
 					//cout << "currentLine = " << currentLine << endl;
 					cout << "14" << endl;
