@@ -21,7 +21,7 @@
  * File Name: CSgenerateConstFunctionArgumentCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h13e 11-December-2015
+ * Project Version: 3h13f 11-December-2015
  *
  *******************************************************************************/
 
@@ -583,9 +583,9 @@ bool generateConstFunctionArgument(CSfunction* currentFunctionObject, CSfunction
 		{
 			currentFunctionArgumentInFunction->isNotConst = true;
 			
-			if(currentFunctionObject->name == "getIncludeFileNamesFromCorHfile")
+			if(currentFunctionObject->name == "generateHTMLdocumentationFunctionReferenceList")
 			{
-				if(currentFunctionArgumentInFunction->argumentName == "aboveLevelObject")
+				if(currentFunctionArgumentInFunction->argumentName == "function")
 				{
 					//cout << "currentLine = " << currentLine << endl;
 					cout << "zt3" << endl;
@@ -714,9 +714,9 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 			{
 				//e.g. "return functionDeclarationArgument;"
 				*isNotConst = true;
-			if(currentFunctionObject->name == "getIncludeFileNamesFromCorHfile")
+			if(currentFunctionObject->name == "generateHTMLdocumentationFunctionReferenceList")
 			{
-				if(currentFunctionArgumentInFunction->argumentName == "aboveLevelObject")
+				if(currentFunctionArgumentInFunction->argumentName == "function")
 				{
 					//cout << "currentLine = " << currentLine << endl;
 					cout << "2" << endl;
@@ -791,23 +791,23 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 										{
 											//detect execution of object functions: e.g. "functionArgument->WHOLEWORDFUNCTIONNAME(" / "functionArgument->someIntermediaryObject[].WHOLEWORDFUNCTIONNAME("
 											*isNotConst = true;	
-			if(currentFunctionObject->name == "getIncludeFileNamesFromCorHfile")
+			if(currentFunctionObject->name == "generateHTMLdocumentationFunctionReferenceList")
 			{
-				if(currentFunctionArgumentInFunction->argumentName == "aboveLevelObject")
+				if(currentFunctionArgumentInFunction->argumentName == "function")
 				{
 					cout << "currentLine = " << currentLine << endl;
 					cout << "3" << endl;
 					cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
 					exit(0);	
 				}
-			}											
+			}						
 											
 											#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_OBJECT_FUNCTION_EXECUTIONS_DETECT_PARAMETERS_FUNCTION_ARGUMENTS_OR_SECONDARY_ASSIGNMENTS
 											CSfunctionArgument* currentFunctionArgumentInFunctionTemp = currentFunctionObject->firstFunctionArgumentInFunction;
 											while(currentFunctionArgumentInFunctionTemp->next != NULL)
 											{
 												//NB this code is redundant if CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_ASSIGNMENT_OF_ALIASES is enabled, since argumentNameAliasList includes the original (primary) functionArgument;
-												int indexOfFunctionArgumentTemp = indexOfObjectFunctionName+objectFunctionName.length()-1;
+												int indexOfFunctionArgumentTemp = indexOfObjectFunctionName+objectFunctionName.length();	//-1 not required because of '('
 												while((indexOfFunctionArgumentTemp = functionText->find(currentFunctionArgumentInFunctionTemp->argumentName, indexOfFunctionArgumentTemp+1)) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 												{
 													if((indexOfFunctionArgumentTemp != CPP_STRING_FIND_RESULT_FAIL_VALUE) && (indexOfFunctionArgumentTemp < indexOfEndOfLine))
@@ -816,9 +816,9 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 														{
 															//e.g. "entityNodesActiveListCompleteFastIndex->insert(pair<string, GIAentityNode*>(entityNodesTempActiveListCompleteIndex, entityNode));"
 															currentFunctionArgumentInFunctionTemp->isNotConst = true;
-			if(currentFunctionObject->name == "getIncludeFileNamesFromCorHfile")
+			if(currentFunctionObject->name == "generateHTMLdocumentationFunctionReferenceList")
 			{
-				if(currentFunctionArgumentInFunction->argumentName == "aboveLevelObject")
+				if(currentFunctionArgumentInFunction->argumentName == "function")
 				{
 					cout << "currentLine = " << currentLine << endl;
 					cout << "4" << endl;
@@ -836,17 +836,17 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 												{
 													//cout << "argumentNameAliasListIter = " << *argumentNameAliasListIter << endl;
 													string functionArgumentSecondaryAssignmentName = *argumentNameAliasListIter;
-													int indexOfFunctionArgumentSecondaryAssignment = indexOfObjectFunctionName+objectFunctionName.length()-1;
-													while((indexOfFunctionArgumentSecondaryAssignment = functionText->find(currentFunctionArgumentInFunctionTemp->argumentName, indexOfFunctionArgumentSecondaryAssignment+1)) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+													int indexOfFunctionArgumentSecondaryAssignment = indexOfObjectFunctionName+objectFunctionName.length();	//-1 not required because of '('
+													while((indexOfFunctionArgumentSecondaryAssignment = functionText->find(functionArgumentSecondaryAssignmentName, indexOfFunctionArgumentSecondaryAssignment+1)) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 													{
 														if((indexOfFunctionArgumentSecondaryAssignment != CPP_STRING_FIND_RESULT_FAIL_VALUE) && (indexOfFunctionArgumentSecondaryAssignment < indexOfEndOfLine))
 														{
 															if(functionArgumentReferenceWholeWordCheck(functionText, functionArgumentSecondaryAssignmentName, indexOfFunctionArgumentSecondaryAssignment))
 															{
 																currentFunctionArgumentInFunctionTemp->isNotConst = true;
-			if(currentFunctionObject->name == "getIncludeFileNamesFromCorHfile")
+			if(currentFunctionObject->name == "generateHTMLdocumentationFunctionReferenceList")
 			{
-				if(currentFunctionArgumentInFunction->argumentName == "aboveLevelObject")
+				if(currentFunctionArgumentInFunction->argumentName == "function")
 				{
 					cout << "currentLine = " << currentLine << endl;
 					cout << "5" << endl;
@@ -878,9 +878,9 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 						if(currentLine.find(stdLibNonObjectFunctionExecutionHypothetical) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 						{
 							*isNotConst = true;
-			if(currentFunctionObject->name == "getIncludeFileNamesFromCorHfile")
+			if(currentFunctionObject->name == "generateHTMLdocumentationFunctionReferenceList")
 			{
-				if(currentFunctionArgumentInFunction->argumentName == "aboveLevelObject")
+				if(currentFunctionArgumentInFunction->argumentName == "function")
 				{
 					cout << "currentLine = " << currentLine << endl;
 					cout << "6" << endl;
@@ -910,9 +910,9 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 					|| (twoCharactersAfterFunctionArgument == CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_INCREMENT) || (twoCharactersAfterFunctionArgument == CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_DECREMENT))
 					{
 						*isNotConst = true;
-			if(currentFunctionObject->name == "getIncludeFileNamesFromCorHfile")
+			if(currentFunctionObject->name == "generateHTMLdocumentationFunctionReferenceList")
 			{
-				if(currentFunctionArgumentInFunction->argumentName == "aboveLevelObject")
+				if(currentFunctionArgumentInFunction->argumentName == "function")
 				{
 					cout << "currentLine = " << currentLine << endl;
 					cout << "6" << endl;
@@ -974,9 +974,9 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 								if(doublePointerAssignmentDetected)
 								{
 									*isConstEffective = true;
-			if(currentFunctionObject->name == "getIncludeFileNamesFromCorHfile")
+			if(currentFunctionObject->name == "generateHTMLdocumentationFunctionReferenceList")
 			{
-				if(currentFunctionArgumentInFunction->argumentName == "aboveLevelObject")
+				if(currentFunctionArgumentInFunction->argumentName == "function")
 				{
 					cout << "currentLine = " << currentLine << endl;
 					cout << "7a" << endl;
@@ -988,9 +988,9 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 								else
 								{
 									*isNotConst = true;
-			if(currentFunctionObject->name == "getIncludeFileNamesFromCorHfile")
+			if(currentFunctionObject->name == "generateHTMLdocumentationFunctionReferenceList")
 			{
-				if(currentFunctionArgumentInFunction->argumentName == "aboveLevelObject")
+				if(currentFunctionArgumentInFunction->argumentName == "function")
 				{
 					cout << "currentLine = " << currentLine << endl;
 					cout << "7b" << endl;
@@ -1095,9 +1095,9 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 								#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
 								cout << "checkIfVariableIsBeingModifiedInFunction{}: inverseNonConstAssignmentDetected: isNotConst = true" << endl;
 								#endif
-			if(currentFunctionObject->name == "getIncludeFileNamesFromCorHfile")
+			if(currentFunctionObject->name == "generateHTMLdocumentationFunctionReferenceList")
 			{
-				if(currentFunctionArgumentInFunction->argumentName == "aboveLevelObject")
+				if(currentFunctionArgumentInFunction->argumentName == "function")
 				{
 					cout << "currentLine = " << currentLine << endl;
 					cout << "8" << endl;
@@ -1112,9 +1112,9 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 								#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
 								cout << "checkIfVariableIsBeingModifiedInFunction{}: inverseNonConstAssignmentDetected: isNotConst = true" << endl;
 								#endif
-			if(currentFunctionObject->name == "getIncludeFileNamesFromCorHfile")
+			if(currentFunctionObject->name == "generateHTMLdocumentationFunctionReferenceList")
 			{
-				if(currentFunctionArgumentInFunction->argumentName == "aboveLevelObject")
+				if(currentFunctionArgumentInFunction->argumentName == "function")
 				{
 					cout << "currentLine = " << currentLine << endl;
 					cout << "9" << endl;
@@ -1134,9 +1134,9 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 					if(indexOfSpecialCaseTextForAssignmentOfNonConst != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 					{
 						*isNotConst = true;
-			if(currentFunctionObject->name == "getIncludeFileNamesFromCorHfile")
+			if(currentFunctionObject->name == "generateHTMLdocumentationFunctionReferenceList")
 			{
-				if(currentFunctionArgumentInFunction->argumentName == "aboveLevelObject")
+				if(currentFunctionArgumentInFunction->argumentName == "function")
 				{
 					cout << "currentLine = " << currentLine << endl;
 					cout << "10" << endl;
@@ -1161,9 +1161,9 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 						if(functionArgumentReferenceWholeWordCheck(functionText, returnVar, indexOfReturnVar))
 						{
 							*isNotConst = true;
-			if(currentFunctionObject->name == "getIncludeFileNamesFromCorHfile")
+			if(currentFunctionObject->name == "generateHTMLdocumentationFunctionReferenceList")
 			{
-				if(currentFunctionArgumentInFunction->argumentName == "aboveLevelObject")
+				if(currentFunctionArgumentInFunction->argumentName == "function")
 				{
 					cout << "currentLine = " << currentLine << endl;
 					cout << "11" << endl;
@@ -1184,9 +1184,9 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 					if(functionText->find(nonConstGlobalAssignmentHypothetical) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 					{
 						*isNotConst = true;
-			if(currentFunctionObject->name == "getIncludeFileNamesFromCorHfile")
+			if(currentFunctionObject->name == "generateHTMLdocumentationFunctionReferenceList")
 			{
-				if(currentFunctionArgumentInFunction->argumentName == "aboveLevelObject")
+				if(currentFunctionArgumentInFunction->argumentName == "function")
 				{
 					cout << "currentLine = " << currentLine << endl;
 					cout << "12" << endl;
@@ -1210,9 +1210,9 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 		#else
 		*isNotConst = true;
 		#endif
-			if(currentFunctionObject->name == "getIncludeFileNamesFromCorHfile")
+			if(currentFunctionObject->name == "generateHTMLdocumentationFunctionReferenceList")
 			{
-				if(currentFunctionArgumentInFunction->argumentName == "aboveLevelObject")
+				if(currentFunctionArgumentInFunction->argumentName == "function")
 				{
 					//cout << "currentLine = " << currentLine << endl;
 					cout << "13" << endl;
@@ -1230,9 +1230,9 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 		#else
 		*isNotConst = true;
 		#endif
-			if(currentFunctionObject->name == "getIncludeFileNamesFromCorHfile")
+			if(currentFunctionObject->name == "generateHTMLdocumentationFunctionReferenceList")
 			{
-				if(currentFunctionArgumentInFunction->argumentName == "aboveLevelObject")
+				if(currentFunctionArgumentInFunction->argumentName == "function")
 				{
 					//cout << "currentLine = " << currentLine << endl;
 					cout << "14" << endl;
@@ -1242,7 +1242,118 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 			}
 	}
 	#endif
-					
+
+	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_OBJECT_FUNCTION_EXECUTIONS_DETECT_PARAMETERS_FUNCTION_ARGUMENTS_OR_SECONDARY_ASSIGNMENTS_ALTERNATE
+	//limitation; doesnt support cases with enclosing brackets, e.g. "if(!(newParseFileObject->get(functionArgumentName))"; but such cases should never be used anyway
+	int indexOfNewLine = -1;
+	int indexOfEndOfLine = -1;
+	while((indexOfNewLine = functionText->find(STRING_NEW_LINE, indexOfNewLine+1)) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+	{
+		int indexOfStartOfLine = indexOfEndOfLine+1;
+		indexOfEndOfLine = indexOfNewLine;
+				
+		int i = indexOfStartOfLine;
+		bool stillFindingWhiteSpace = true;
+		while((i < indexOfEndOfLine) && stillFindingWhiteSpace)
+		{
+			char c = (*functionText)[i];
+			if((c == CHAR_TAB) || (c == CHAR_SPACE))
+			{
+				i++;
+			}
+			else
+			{
+				stillFindingWhiteSpace = false;
+			}
+
+		}
+			
+		int indexOfVariableName = i;
+		string variableName = extractFullVariableName(functionText, indexOfVariableName);
+		if(variableName != "")
+		{			
+			int indexOfReferenceToken = indexOfVariableName + variableName.length();
+			for(int i=0; i<CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_REFERENCE_NUMBER_OF_TYPES; i++)
+			{
+				if(functionText->substr(indexOfReferenceToken, codeReference[i].length()) == codeReference[i])
+				{
+					int indexOfObjectFunctionName = indexOfReferenceToken + codeReference[i].length();
+					string objectFunctionName = extractFullVariableName(functionText, indexOfObjectFunctionName);
+					if(objectFunctionName != "")
+					{	
+						int indexOfBracketOpen = indexOfObjectFunctionName + objectFunctionName.length();
+						if(indexOfBracketOpen < indexOfEndOfLine)
+						{
+							if((*functionText)[indexOfBracketOpen] == CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_OPEN_PARAMETER_SPACE)
+							{
+								CSfunctionArgument* currentFunctionArgumentInFunctionTemp = currentFunctionObject->firstFunctionArgumentInFunction;
+								while(currentFunctionArgumentInFunctionTemp->next != NULL)
+								{
+									//NB this code is redundant if CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_ASSIGNMENT_OF_ALIASES is enabled, since argumentNameAliasList includes the original (primary) functionArgument;
+									int indexOfFunctionArgumentTemp = indexOfObjectFunctionName+objectFunctionName.length();	//-1 not required because of '('
+									while((indexOfFunctionArgumentTemp = functionText->find(currentFunctionArgumentInFunctionTemp->argumentName, indexOfFunctionArgumentTemp+1)) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+									{
+										if((indexOfFunctionArgumentTemp != CPP_STRING_FIND_RESULT_FAIL_VALUE) && (indexOfFunctionArgumentTemp < indexOfEndOfLine))
+										{
+											if(functionArgumentReferenceWholeWordCheck(functionText, currentFunctionArgumentInFunctionTemp->argumentName, indexOfFunctionArgumentTemp))
+											{
+												//e.g. "entityNodesActiveListCompleteFastIndex->insert(pair<string, GIAentityNode*>(entityNodesTempActiveListCompleteIndex, entityNode));"
+												currentFunctionArgumentInFunctionTemp->isNotConst = true;
+								if(currentFunctionObject->name == "generateHTMLdocumentationFunctionReferenceList")
+								{
+									if(currentFunctionArgumentInFunction->argumentName == "function")
+									{
+										cout << "variableName = " << variableName << endl;
+										cout << "444" << endl;
+										cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
+										//exit(0);	
+									}
+								}	
+											}
+										}
+									}
+
+									#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_ASSIGNMENT_OF_ALIASES
+									//preconditions: argumentNameAliasList has already been filled for all function arguments
+									for(vector<string>::iterator argumentNameAliasListIter = currentFunctionArgumentInFunctionTemp->argumentNameAliasList.begin(); argumentNameAliasListIter < currentFunctionArgumentInFunctionTemp->argumentNameAliasList.end(); argumentNameAliasListIter++)
+									{
+										//cout << "argumentNameAliasListIter = " << *argumentNameAliasListIter << endl;
+										string functionArgumentSecondaryAssignmentName = *argumentNameAliasListIter;
+										int indexOfFunctionArgumentSecondaryAssignment = indexOfObjectFunctionName+objectFunctionName.length();	//-1 not required because of '('
+										while((indexOfFunctionArgumentSecondaryAssignment = functionText->find(functionArgumentSecondaryAssignmentName, indexOfFunctionArgumentSecondaryAssignment+1)) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+										{
+											if((indexOfFunctionArgumentSecondaryAssignment != CPP_STRING_FIND_RESULT_FAIL_VALUE) && (indexOfFunctionArgumentSecondaryAssignment < indexOfEndOfLine))
+											{
+												if(functionArgumentReferenceWholeWordCheck(functionText, functionArgumentSecondaryAssignmentName, indexOfFunctionArgumentSecondaryAssignment))
+												{
+													currentFunctionArgumentInFunctionTemp->isNotConst = true;
+								if(currentFunctionObject->name == "generateHTMLdocumentationFunctionReferenceList")
+								{
+									if(currentFunctionArgumentInFunction->argumentName == "function")
+									{
+										cout << "variableName = " << variableName << endl;
+										cout << "555" << endl;
+										cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
+										//exit(0);
+									}
+								}		
+												}
+											}
+										}
+									}
+									#endif
+
+									currentFunctionArgumentInFunctionTemp = currentFunctionArgumentInFunctionTemp->next;
+								}
+							}	
+						}
+					}
+				}
+			}
+		}
+	}
+	#endif
+						
 	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
 	cout << "end checkIfVariableIsBeingModifiedInFunction{}: functionDeclarationArgument = " << functionDeclarationArgument << endl;
 	#endif
@@ -1302,6 +1413,15 @@ bool functionArgumentReferenceWholeWordCheck(string* functionText, string functi
 		{
 			functionArgumentReferenceWholeWord = true;	
 		}
+		else
+		{
+			cout << "q1 (*functionText)[indexOfFunctionArgument-1] = " << (*functionText)[indexOfFunctionArgument-1] << endl;
+		}
+	}
+	else
+	{
+		cout << "q2 (*functionText)[indexOfFunctionArgument+functionDeclarationArgument.length()] = " << (*functionText)[indexOfFunctionArgument+functionDeclarationArgument.length()] << endl;
+
 	}
 	return functionArgumentReferenceWholeWord;
 }
