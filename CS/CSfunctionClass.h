@@ -26,7 +26,7 @@
  * File Name: CSfunctionClass.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h7a 06-December-2015
+ * Project Version: 3h8a 08-December-2015
  *
  *******************************************************************************/
 
@@ -43,13 +43,13 @@ class CSfunctionArgument
 {
 public:
 	CSfunctionArgument(void);
-	string argument;	//name and type for function declaration (header) arguments, or function reference argument contents 
-	string argumentName;
-	string argumentType;
-	bool isNotConst;
-	bool constIdentified;
-	CSfunctionArgument* next;
-	vector<string> argumentNameAliasList;
+	string argument;	//for function declaration (header) arguments (includes type and name), and for function reference argument contents 
+	string argumentName;	//for function declaration (header) arguments, not for function references arguments
+	string argumentType;	//for function declaration (header) arguments, not for function references arguments
+	bool isNotConst;	//for function declaration (header) arguments, not for function references arguments
+	bool constIdentified;	//for function declaration (header) arguments, not for function references arguments
+	CSfunctionArgument* next;	//for function declaration (header) arguments (includes type and name), and for function reference argument contents 
+	vector<string> argumentNameAliasList;	//for function declaration (header) arguments, not for function references arguments
 };
 #endif
 
