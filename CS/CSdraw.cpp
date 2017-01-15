@@ -26,7 +26,7 @@
  * File Name: CSdraw.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e7c 27-January-2015
+ * Project Version: 3e7d 27-January-2015
  *
  *******************************************************************************/
 
@@ -924,7 +924,7 @@ LDreference* createFunctionReferenceListBoxesAndConnections(LDreference* current
 			{
 				//cout << "*singleFileName = " <<* singleFileName << endl;
 
-				if(fileReference->name ==* singleFileName)
+				if(fileReference->name == *singleFileName)
 				{
 					if(functionReference->printed)
 					{
@@ -1352,7 +1352,7 @@ CSreferenceArray findFunctionReferenceInPrintedFileReference(CSfileReference* fi
 	bool filePassedSingleFileOnly = false;
 	if(useSingleFileOnly)
 	{
-		if(fileReferenceToSearchIn->name ==* singleFileName)
+		if(fileReferenceToSearchIn->name == *singleFileName)
 		{
 			filePassedSingleFileOnly = true;
 		}
@@ -1974,7 +1974,7 @@ LDreference* traceFunctionsUpwardsAndDrawOrHighLightThese(LDreference* currentRe
 				else if(generateHTMLdocumentationMode == CS_GENERATE_HTML_DOCUMENTATION_MODE_ON)
 				{
 					string HTMLdocumentationFunctionTraceTableRow = "\t\t<tr><td>" + fileNameHoldingFunction + "</td><td>" + currentFunctionBeingTraced->name + "</td></tr>\n";
-					*HTMLdocumentationFunctionTraceTableRows =* HTMLdocumentationFunctionTraceTableRows + HTMLdocumentationFunctionTraceTableRow;
+					*HTMLdocumentationFunctionTraceTableRows = *HTMLdocumentationFunctionTraceTableRows + HTMLdocumentationFunctionTraceTableRow;
 				}
 
 				newCurrentReferenceInPrintList = traceFunctionsUpwardsAndDrawOrHighLightThese(newCurrentReferenceInPrintList, firstReferenceInTopLevelBelowList, higherLevelFunction, currentTag, generateHTMLdocumentationMode, HTMLdocumentationFunctionTraceTableRows);
