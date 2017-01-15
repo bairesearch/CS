@@ -26,7 +26,7 @@
  * File Name: CSglobalsDefs.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h2d 23-November-2015
+ * Project Version: 3h3a 30-November-2015
  * Description: CS specific global definitions
  *
  *******************************************************************************/
@@ -64,8 +64,11 @@
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_ARRAY_INDEX_OPEN "["
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_ARRAY_INDEX_CLOSE "]"
 		
-		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_REFERENCE_LAST_CHARACTERS (2)
-		static char referenceLastCharacters[CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_REFERENCE_LAST_CHARACTERS] = {'.', '>'};	//. , ->
+		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_REFERENCE (2)
+		static char codeReferenceLastCharacters[CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_REFERENCE] = {'.', '>'};
+		static string codeReference[CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_REFERENCE] = {".", "->"};
+				
+		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_POINTER_TYPE "* "		//e.g. classType* objectName 
 		
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_PARSE_LISTS	//3h2a
 		#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_PARSE_LISTS
