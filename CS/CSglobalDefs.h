@@ -26,7 +26,7 @@
  * File Name: CSglobalsDefs.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e5a 03-September-2014
+ * Project Version: 3e5b 03-September-2014
  * Description: CS specific global definitions
  *
  *******************************************************************************/
@@ -36,7 +36,7 @@
 
 #include "SHAREDglobalDefs.h"
 
-#define CS_GENERATE_CPP_CLASSES	//added 3e1a/27-August-2014
+//#define CS_GENERATE_CPP_CLASSES	//added 3e1a/27-August-2014
 #ifdef CS_GENERATE_CPP_CLASSES
 	#define CS_GENERATE_CPP_CLASSES_DISABLE_OUTPUT	//safe for debug (no source/header file overwrites)
 	#define CS_GENERATE_CPP_CLASSES_SOURCE_FILE_EXTENSION "cpp"
