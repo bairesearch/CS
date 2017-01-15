@@ -21,7 +21,7 @@
  * File Name: CSgenerateConstFunctionArgumentCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h1e 14-November-2015
+ * Project Version: 3h1f 14-November-2015
  *
  *******************************************************************************/
 
@@ -108,7 +108,7 @@ bool generateConstFunctionArgumentsFile(CSfile* currentFileObject)
 		CSfunctionArgument* currentFunctionArgumentInFunction = currentFunctionObject->firstFunctionArgumentInFunction;
 		while(currentFunctionArgumentInFunction->next != NULL)
 		{
-			if(currentFunctionArgumentInFunction->isConst)
+			if(!(currentFunctionArgumentInFunction->isNotConst))
 			{
 				string argument = currentFunctionArgumentInFunction->argument + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_FUNCTION_ARGUMENT_DELIMITER;
 				string argumentWithConsts = string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_CONST) + argument;
@@ -243,17 +243,9 @@ bool generateConstFunctionArgumentsFunction(CSfunction* currentFunctionObject)
 							}
 							//cout << "\t\t\t\t\t functionReferenceArgumentIndex = " << functionReferenceArgumentIndex << endl;
 
-							if(currentFunctionArgumentInFunctionReferenceTarget->isConst)
+							if(currentFunctionArgumentInFunctionReferenceTarget->isNotConst)
 							{
-								//currentFunctionArgumentInFunctionReference->isConst = true;	//redundant
-								currentFunctionArgumentInFunction->isConst = true;
-								//cout << "\t\t\t\t\t\t detect currentFunctionArgumentInFunctionReferenceTarget->isConst" << endl;
-								//cout << "\t\t\t\t\t\t set currentFunctionArgumentInFunction->isConst" << endl;
-							}
-							else
-							{
-								currentFunctionArgumentInFunction->isConst = false;	//redundant
-								currentFunctionArgumentInFunction->constIdentified = true;
+								currentFunctionArgumentInFunction->isNotConst = true;
 							}
 							
 							/*
@@ -274,13 +266,13 @@ bool generateConstFunctionArgumentsFunction(CSfunction* currentFunctionObject)
 				currentFunctionReference = currentFunctionReference->next;
 			}
 			
-			if((currentFunctionArgumentInFunction->constIdentified) && !(currentFunctionArgumentInFunction->isConst))
+			if(currentFunctionArgumentInFunction->isNotConst)
 			{
 			
 			}
 			else
 			{
-				bool isConst = true;
+				bool isNotConst = false;
 				//step 1: check function text to see if it contains a modification of the function argument
 				//condition 1: text after varnameX, and before ';' on same line must not contain an equals signs [meaning; the variable is not being set by anothing]
 				int indexOfFunctionArgument = -1;
@@ -317,12 +309,12 @@ bool generateConstFunctionArgumentsFunction(CSfunction* currentFunctionObject)
 										//added condition CS3h1d - ensure not a cout start, e.g. 'cout << "indexOfFunctionArgument' in; 'cout << "indexOfFunctionArgument = " << indexOfFunctionArgument << endl;'
 										if((indexOfFunctionArgument < string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_COUT_START).length()) || ((currentFunctionObject->functionText).substr(indexOfFunctionArgument-string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_COUT_START).length(), string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_COUT_START).length()) != CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_COUT_START))
 										{
-											isConst = false;
+											isNotConst = true;
 											
 											/*
 											if(currentFunctionArgumentInFunction->argumentName == "currentTag" && currentFunctionObject->name == "writeSVGconnector")
 											{
-												cout << "isConst = false" << endl;
+												cout << "isNotConst = true" << endl;
 												exit(0);
 											}
 											*/
@@ -351,14 +343,9 @@ bool generateConstFunctionArgumentsFunction(CSfunction* currentFunctionObject)
 					}
 
 				}
-				if(isConst)
+				if(isNotConst)
 				{
-					currentFunctionArgumentInFunction->isConst = true;
-				}
-				else
-				{
-					currentFunctionArgumentInFunction->isConst = false;	//redundant
-					currentFunctionArgumentInFunction->constIdentified = true;
+					currentFunctionArgumentInFunction->isNotConst = true;
 				}
 			}
 			currentFunctionArgumentInFunction->constIdentified = true;
