@@ -11,7 +11,7 @@ SOURCES= CSmain.cpp CSexecflow.cpp CSdataflow.cpp CSpreprocessorfilter.cpp CSref
 
 
 OBJECTS=$(SOURCES:.cpp=.o)
-EXECUTABLE=CS.exe
+EXECUTABLE=OpenCS.exe
 
 all: $(SOURCES) $(EXECUTABLE)
 	

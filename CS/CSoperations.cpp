@@ -1,9 +1,29 @@
 /*******************************************************************************
+ * 
+ * This file is part of BAIPROJECT.
+ * 
+ * BAIPROJECT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License version 3
+ * only, as published by the Free Software Foundation.
+ * 
+ * BAIPROJECT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * version 3 along with BAIPROJECT.  If not, see <http://www.gnu.org/licenses/>
+ * for a copy of the AGPLv3 License.
+ * 
+ *******************************************************************************/
+
+/*******************************************************************************
  *
  * File Name: CSoperations.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3a8b 14-June-2012
+ * Project Version: 3a11b 09-July-2012
  *
  *******************************************************************************/
 
@@ -35,7 +55,7 @@ using namespace std;
 bool getIncludeFileNamesFromCorHFile(CSReference * firstReferenceInIncludeFileList, CSReference * topLevelReference, string topLevelReferenceName, int level)
 {
 	bool fileFound = false;
-	
+
 	string parseFileName = topLevelReferenceName;
 	CSReference * previousReference = NULL;
 
@@ -51,7 +71,7 @@ bool getIncludeFileNamesFromCorHFile(CSReference * firstReferenceInIncludeFileLi
 	else
 	{
 		fileFound = true;
-		
+
 		char c;
 		int id = 0;
 		int charCount = 0;
@@ -266,7 +286,7 @@ bool getIncludeFileNamesFromCorHFile(CSReference * firstReferenceInIncludeFileLi
 						//parse into .h file;
 						string referenceName = hashIncludeFileName;
 						bool hFileFound = getIncludeFileNamesFromCorHFile(currentReferenceInIncludeFileList->firstReferenceInBelowList, currentReferenceInIncludeFileList, referenceName, level+1);
-						
+
 						if(hFileFound)
 						{
 							//parse into .cpp file;
@@ -283,10 +303,10 @@ bool getIncludeFileNamesFromCorHFile(CSReference * firstReferenceInIncludeFileLi
 								//fill function and function reference list using .h file;
 								CSReference * newfirstReferenceInFunctionList = new CSReference();
 								currentReferenceInIncludeFileList->firstReferenceInFunctionList = newfirstReferenceInFunctionList;
-								
+
 								bool hFileFound2 = getFunctionNamesFromFunctionDeclarationsInHFile(currentReferenceInIncludeFileList->firstReferenceInFunctionList, referenceName, level);
 								if(hFileFound2)
-								{								
+								{
 									//cout << "currentReferenceInIncludeFileList->firstReferenceInFunctionList->name = " << currentReferenceInIncludeFileList->firstReferenceInFunctionList->name << endl;
 
 									//cout << "topLevelReferenceName = " << topLevelReferenceName << endl;
@@ -303,18 +323,18 @@ bool getIncludeFileNamesFromCorHFile(CSReference * firstReferenceInIncludeFileLi
 							{
 								//cout << "!cFileFound" << endl;
 								CSReference * newfirstReferenceInFunctionList = new CSReference();
-								currentReferenceInIncludeFileList->firstReferenceInFunctionList = newfirstReferenceInFunctionList;							
+								currentReferenceInIncludeFileList->firstReferenceInFunctionList = newfirstReferenceInFunctionList;
 							}
 						}
 						else
 						{
 							//cout << "!hFileFound" << endl;
 							CSReference * newfirstReferenceInFunctionList = new CSReference();
-							currentReferenceInIncludeFileList->firstReferenceInFunctionList = newfirstReferenceInFunctionList;						
+							currentReferenceInIncludeFileList->firstReferenceInFunctionList = newfirstReferenceInFunctionList;
 						}
 
 						//cout << "h3" << endl;
-						
+
 						currentReferenceInIncludeFileList = currentReferenceInIncludeFileList->next;
 
 
@@ -351,16 +371,16 @@ bool getIncludeFileNamesFromCorHFile(CSReference * firstReferenceInIncludeFileLi
 		}
 		parseFileObject->close();
 	}
-	
+
 	delete parseFileObject;
 	return fileFound;
 }
 
 
 bool getFunctionNamesFromFunctionDeclarationsInHFile(CSReference * firstReferenceInFunctionList, string topLevelFileName, int level)
-{	
+{
 	bool fileFound = false;
-	
+
 	string parseFileName = topLevelFileName;
 
 	char * parseFileNamecharstar = const_cast<char*>(parseFileName.c_str());
@@ -665,7 +685,7 @@ bool getFunctionNamesFromFunctionDeclarationsInHFile(CSReference * firstReferenc
 		}
 		parseFileObject->close();
 	}
-	
+
 	delete parseFileObject;
 	return fileFound;
 }
@@ -825,13 +845,13 @@ void getFunctionReferenceNamesFromFunctionsInCFile(CSReference * firstReferenceI
 				//OLD method - comments are not ignored;
 				bool stillFindingEndOfFunction = true;
 				bool newLineFound = false;
-				
+
 				#define CS_MAX_NUM_CHARACTERS_PER_FUNCTION (1000000)
 				int currentIndexInFunction = positionOfFunctionReference;
 				while(stillFindingEndOfFunction)
 				{
 					char c = fileContentsString[currentIndexInFunction];
-					
+
 					if(newLineFound)
 					{
 						if(c == '}')
@@ -847,12 +867,12 @@ void getFunctionReferenceNamesFromFunctionsInCFile(CSReference * firstReferenceI
 					{
 						newLineFound = false;
 					}
-					
+
 					if(c == '\n')
 					{
 						newLineFound = true;
 					}
-					
+
 					if(currentIndexInFunction > CS_MAX_NUM_CHARACTERS_PER_FUNCTION)
 					{
 						cout << "getFunctionReferenceNamesFromFunctionsInCFile() error: function definitions in .cpp files must end with a } without any leading white space" << endl;

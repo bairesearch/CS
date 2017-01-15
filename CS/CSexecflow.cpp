@@ -1,9 +1,29 @@
 /*******************************************************************************
+ * 
+ * This file is part of BAIPROJECT.
+ * 
+ * BAIPROJECT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License version 3
+ * only, as published by the Free Software Foundation.
+ * 
+ * BAIPROJECT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * version 3 along with BAIPROJECT.  If not, see <http://www.gnu.org/licenses/>
+ * for a copy of the AGPLv3 License.
+ * 
+ *******************************************************************************/
+
+/*******************************************************************************
  *
  * File Name: CSexecflow.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3a8b 14-June-2012
+ * Project Version: 3a11b 09-July-2012
  *
  *******************************************************************************/
 
@@ -32,6 +52,10 @@
 #include <math.h>
 using namespace std;
 
+#ifndef LINUX
+	#include <windows.h>
+#endif
+
 
 void printCS(string topLevelFileName, string topLevelFunctionName, int width, int height, string outputLDRFileName, string outputSVGFileName, string outputPPMFileName, bool useOutputLDRFile, bool useOutputPPMFile, bool display, bool outputFunctionsConnectivity, bool traceAFunctionUpwards, string bottomLevelFunctionNameToTraceUpwards)
 {
@@ -39,7 +63,7 @@ void printCS(string topLevelFileName, string topLevelFunctionName, int width, in
 	{
 		initiateOpenGL(width, height, 0, 0, false);
 	}
-	
+
 	char * outputFileNameLDRcharstar = const_cast<char*>(outputLDRFileName.c_str());
 	char * displayFileNamePPMcharstar = const_cast<char*>(outputPPMFileName.c_str());
 	char * outputFileNameSVGcharstar = const_cast<char*>(outputSVGFileName.c_str());
@@ -72,11 +96,11 @@ void printCS(string topLevelFileName, string topLevelFunctionName, int width, in
 
 
 	#ifdef LINUX
-	chdir(tempFolderCharStar);						
+	chdir(tempFolderCharStar);
 	#else
 	::SetCurrentDirectory(tempFolderCharStar);
 	#endif
-	
+
 	ofstream writeFileObject(outputFileNameSVGcharstar);
 	writeSVGHeader(&writeFileObject);
 		//writeFileObject->put(CHAR_SPACE);
@@ -109,21 +133,21 @@ void printCS(string topLevelFileName, string topLevelFunctionName, int width, in
 		}
 		/*
 		cout << "h1b" << endl;
-		
+
 		cout << "firstReferenceInTopLevelBelowList->col = " << firstReferenceInTopLevelBelowList->col << endl;
 		cout << "currentReferenceInPrintList->name = " << currentReferenceInPrintList->name << endl;
 		cout << "firstReferenceInTopLevelBelowList->name = " << firstReferenceInTopLevelBelowList->name << endl;
 		cout << "topLevelFunctionReference->name = " << topLevelFunctionReference->name << endl;
-				
+
 		cout << "aboveLevelFileReference->name = " << firstReferenceInTopLevelBelowList->name << endl;
 		cout << "aboveLevelFunctionReference->name = " << topLevelFunctionReference->name << endl;
 		cout << "firstReferenceInTopLevelBelowList->name = " << firstReferenceInTopLevelBelowList->name << endl;
 		cout << "functionLevel = " << 0 << endl;
 		cout << "functionReferenceNameToFind = " << topLevelFunctionReference->firstReferenceInFunctionReferenceList->name << endl;
-		
+
 		cout << "topLevelFunctionReference->firstReferenceInFunctionReferenceList->name = " << topLevelFunctionReference->firstReferenceInFunctionReferenceList->name << endl;
 		*/
-		
+
 		//cout << "g1" << endl;
 		CSReference * currentReferenceInFunctionReferenceList = topLevelFunctionReference->firstReferenceInFunctionReferenceList;
 		while(currentReferenceInFunctionReferenceList->next != NULL)
@@ -132,7 +156,7 @@ void printCS(string topLevelFileName, string topLevelFunctionName, int width, in
 			currentReferenceInPrintList = createFunctionReferenceListBoxesAndConnections(currentReferenceInPrintList, firstReferenceInTopLevelBelowList, topLevelFunctionReference, firstReferenceInTopLevelBelowList, 0, currentReferenceInFunctionReferenceList->name, &writeFileObject, traceAFunctionUpwards);
 			currentReferenceInFunctionReferenceList = currentReferenceInFunctionReferenceList->next;
 		}
-		//cout << "g2" << endl;	
+		//cout << "g2" << endl;
 
 		if(traceAFunctionUpwards)
 		{
@@ -220,7 +244,7 @@ void printCS(string topLevelFileName, string topLevelFunctionName, int width, in
 		{
 			generatePixmapFromRGBMap(displayFileNamePPMcharstar, width, height, rgbMap);
 		}
-		
+
 		delete rgbMap;
 
 	}

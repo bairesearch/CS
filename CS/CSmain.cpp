@@ -1,9 +1,29 @@
 /*******************************************************************************
+ * 
+ * This file is part of BAIPROJECT.
+ * 
+ * BAIPROJECT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License version 3
+ * only, as published by the Free Software Foundation.
+ * 
+ * BAIPROJECT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * version 3 along with BAIPROJECT.  If not, see <http://www.gnu.org/licenses/>
+ * for a copy of the AGPLv3 License.
+ * 
+ *******************************************************************************/
+
+/*******************************************************************************
  *
  * File Name: CSmain.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3a8b 14-June-2012
+ * Project Version: 3a11b 09-July-2012
  *
  *******************************************************************************/
 
@@ -16,7 +36,12 @@
 #include "XMLrulesClass.h"
 #include "LDsprite.h"
 
-static char errmessage[] = "Usage:  CS.exe [options]"
+#ifndef LINUX
+	#include <windows.h>
+#endif
+
+
+static char errmessage[] = "Usage:  OpenCS.exe [options]"
 "\n"
 "\n\twhere options are any of the following"
 "\n"
@@ -35,7 +60,7 @@ static char errmessage[] = "Usage:  CS.exe [options]"
 "\n\t-tracefunction [string] : bottom level function name to trace upwards (eg, y for int y())"
 "\n"
 "\n\t-workingfolder [string] : working directory name for input files (def: same as exe)"
-"\n\t-exefolder [string]     : exe directory name for executables CS.exe and (def: same as exe)"
+"\n\t-exefolder [string]     : exe directory name for executables OpenCS.exe and (def: same as exe)"
 "\n\t-tempfolder [string]    : temp directory name for temporary and output files (def: same as exe)"
 "\n"
 "\n\t-version                : print version"
@@ -52,25 +77,25 @@ int main(int argc,char **argv)
 {
 	bool useOutputLDRFile = false;
 	string outputLDRFileName = "codeStructureNet.ldr";
-	
+
 	bool useOutputPPMFile = false;
 	string outputPPMFileName = "codeStructureNet.ppm";
-	
+
 	bool useOutputSVGFile = false;
 	string outputSVGFileName = "codeStructureNet.svg";
 
 	bool useOutputAllFile = false;
 	string outputAllFileName = "codeStructureNet";
-		
+
 	bool useTopLevelFile = false;
 	string topLevelFileName = "main.cpp";
-	
+
 	bool useTopLevelFunction = false;
 	string topLevelFunctionName = "main";
-	
+
 	bool useBottomLevelFunctionNameToTraceUpwards = false;
 	string bottomLevelFunctionNameToTraceUpwards = "";
-	
+
 	bool printOutput = false;
 	bool displayInOpenGLAndOutputScreenshot = true;
 
@@ -81,7 +106,7 @@ int main(int argc,char **argv)
 	bool traceAFunctionUpwards = false;
 
 	int rasterImageWidth = 1600;
-	int rasterImageHeight = 1000; 
+	int rasterImageHeight = 1000;
 
 	if (exists_argument(argc,argv,"-mode"))
 	mode=get_float_argument(argc,argv,"-mode");
@@ -144,7 +169,7 @@ int main(int argc,char **argv)
 
 	if (exists_argument(argc,argv,"-height"))
 	rasterImageHeight=get_float_argument(argc,argv,"-height");
-		
+
 	if (exists_argument(argc,argv,"-enablefunctions"))
 	{
 		outputFunctionsConnectivity = true;
@@ -173,20 +198,20 @@ int main(int argc,char **argv)
 		}
 	}
 
-	char currentFolder[EXE_FOLDER_PATH_MAX_LENGTH];	
+	char currentFolder[EXE_FOLDER_PATH_MAX_LENGTH];
 	#ifdef LINUX
-	getcwd(currentFolder, EXE_FOLDER_PATH_MAX_LENGTH);					
+	getcwd(currentFolder, EXE_FOLDER_PATH_MAX_LENGTH);
 	#else
 	::GetCurrentDirectory(EXE_FOLDER_PATH_MAX_LENGTH, currentFolder);
 	#endif
-		
+
 	if (exists_argument(argc,argv,"-workingfolder"))
 	{
 		workingFolderCharStar=get_char_argument(argc,argv,"-workingfolder");
 	}
 	else
 	{
-		workingFolderCharStar = currentFolder;		
+		workingFolderCharStar = currentFolder;
 	}
 	if (exists_argument(argc,argv,"-exefolder"))
 	{
@@ -206,14 +231,14 @@ int main(int argc,char **argv)
 	}
 
 	#ifdef LINUX
-	chdir(workingFolderCharStar);						
+	chdir(workingFolderCharStar);
 	#else
 	::SetCurrentDirectory(workingFolderCharStar);
-	#endif		
+	#endif
 
 	if (exists_argument(argc,argv,"-version"))
 	{
-		cout << "cs.exe version: 2a4a" << endl;
+		cout << "OpenCS.exe version: 2a4a" << endl;
 		exit(1);
 	}
 
@@ -239,17 +264,17 @@ int main(int argc,char **argv)
 
 
 	if(printOutput)
-	{		
+	{
 		if(!useOutputLDRFile)
-		{		
+		{
 			if(useOutputAllFile || displayInOpenGLAndOutputScreenshot)		//LDR output is always required when displaying semantic network in OpenGL and outputing screenshot
 			{
-				useOutputLDRFile = true;			
+				useOutputLDRFile = true;
 				outputLDRFileName = outputAllFileName + ".ldr";
 			}
 		}
 		if(!useOutputSVGFile)
-		{	
+		{
 			useOutputSVGFile = true;	//SVG output is always required when printing/drawing semantic network
 			outputSVGFileName = outputAllFileName + ".svg";
 		}
@@ -257,10 +282,10 @@ int main(int argc,char **argv)
 		{
 			if(useOutputAllFile)
 			{
-				useOutputPPMFile = true;		
+				useOutputPPMFile = true;
 				outputPPMFileName = outputAllFileName + ".ppm";
 			}
-		}		
+		}
 	}
 
 
@@ -271,8 +296,8 @@ int main(int argc,char **argv)
 	}
 	fillInLDSpriteExternVariables();
 	fillInCSRulesExternVariables();
-		
-	
+
+
 	if(mode == CS_MODE_OUTPUT_EXECUTION_FLOW)
 	{
 		printCS(topLevelFileName, topLevelFunctionName, rasterImageWidth, rasterImageHeight, outputLDRFileName, outputSVGFileName, outputPPMFileName, useOutputLDRFile, useOutputPPMFile, displayInOpenGLAndOutputScreenshot, outputFunctionsConnectivity, traceAFunctionUpwards, bottomLevelFunctionNameToTraceUpwards);
