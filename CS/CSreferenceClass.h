@@ -23,7 +23,7 @@
  * File Name: CSreferenceClass.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c3c 16-November-2012
+ * Project Version: 3c3d 17-November-2012
  *
  *******************************************************************************/
 
@@ -55,30 +55,32 @@ using namespace std;
 #define CS_GENERATE_HTML_DOCUMENTATION_MODE_ALL_FUNCTIONS
 */
 
-class CSReferenceContainer{
+
+
+class CSFunctionReferenceContainer{
 private:
 	/*There are currently no private attributes of this class*/
 public:
 
-	CSReferenceContainer(void); // constructor declaration
-	~CSReferenceContainer();	//  and destructor.
+	CSFunctionReferenceContainer(void); // constructor declaration
+	~CSFunctionReferenceContainer();	//  and destructor.
 
-	CSReferenceContainer * next;
+	CSFunctionReferenceContainer * next;
 	string name;
 
 };
 
-class CSReference{
+class CSFunctionReference{
 private:
 	/*There are currently no private attributes of this class*/
 public:
 
-	CSReference(void); // constructor declaration
-	~CSReference();	//  and destructor.
+	CSFunctionReference(void); // constructor declaration
+	~CSFunctionReference();	//  and destructor.
 
 	//file/function reference [shared]
 	int id;			//file/function id
-	int level;		//file/funciton Level
+	int level;		//file/function Level
 	string name;		//file/function
 	int col;		//	file/function colour + connection colour to all children
 	bool printed;		//file/function printed
@@ -90,22 +92,15 @@ public:
 	int printTextY;		//file/function printYIndex
 	bool HTMLgenerated;	//file/function HTML generated
 	
-	CSReference * next;
-	CSReference * previous;
-	CSReferenceContainer * firstReferenceContainerInAboveFileOrFunctionReferenceList;
+	CSFunctionReference * next;
+	CSFunctionReference * previous;
+	CSFunctionReferenceContainer * firstReferenceContainerInAboveReferenceList;
 	bool printedTrace;
 	bool printedTraceReset;		//used for html generation
 	
-	//file reference only
-	CSReference * firstReferenceInAboveList;	//filefirstReferenceInAboveList
-	CSReference * firstReferenceInBelowList; 	//filefirstReferenceInBelowList
-	CSReference * shortcutToPrintedVersionOfReference;	//used if reference is not printed
-	bool isFileReference;
-	CSReference * firstReferenceInFunctionList;
-
 	//function reference only
 	string nameFull;	//function only
-	CSReference * firstReferenceInFunctionReferenceList;
+	CSFunctionReference * firstReferenceInFunctionReferenceList;
 	bool isFunctionReference;
 	bool isFunctionReferenceReference;
 	int numTopLevelFunctionsInFileAlreadyPrinted;
@@ -118,11 +113,65 @@ public:
 };
 
 
+class CSFileReferenceContainer{
+private:
+	/*There are currently no private attributes of this class*/
+public:
+
+	CSFileReferenceContainer(void); // constructor declaration
+	~CSFileReferenceContainer();	//  and destructor.
+
+	CSFileReferenceContainer * next;
+	string name;
+
+};
+
+class CSFileReference{
+private:
+	/*There are currently no private attributes of this class*/
+public:
+
+	CSFileReference(void); // constructor declaration
+	~CSFileReference();	//  and destructor.
+
+	//file/function reference [shared]
+	int id;			//file/function id
+	int level;		//file/function Level
+	string name;		//file/function
+	int col;		//	file/function colour + connection colour to all children
+	bool printed;		//file/function printed
+	int printX;		//file/function printX
+	int printY;		//file/function printY
+	int printXIndex;	//file/function printXIndex
+	int printYIndex;	//file/function printYIndex
+	int printTextX;		//file/function printXIndex
+	int printTextY;		//file/function printYIndex
+	bool HTMLgenerated;	//file/function HTML generated
+	
+	CSFileReference * next;
+	CSFileReference * previous;
+	CSFileReferenceContainer * firstReferenceContainerInAboveReferenceList;
+	bool printedTrace;
+	bool printedTraceReset;		//used for html generation
+	
+	//file reference only
+	CSFileReference * firstReferenceInAboveList;	//filefirstReferenceInAboveList
+	CSFileReference * firstReferenceInBelowList; 	//filefirstReferenceInBelowList
+	CSFileReference * shortcutToPrintedVersionOfReference;	//used if reference is not printed
+	CSFunctionReference * firstReferenceInFunctionList;
+
+	int maxFunctionPrintXAtAParticularY[MAX_INCLUDE_DEPTH_FUNCTION];
+
+};
 
 
-void printCSReference(CSReference * ref);
 
-typedef struct { CSReference * csref1, * csref2; } CSReferenceArray;
+
+
+void printCSFileReference(CSFileReference * ref);
+void printCSFunctionReference(CSFunctionReference * ref);
+
+typedef struct { CSFileReference * csref1; CSFunctionReference * csref2; } CSReferenceArray;
 
 /*
 //these functions are not being used:

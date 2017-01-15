@@ -23,7 +23,7 @@
  * File Name: CSexecflow.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c3c 16-November-2012
+ * Project Version: 3c3d 17-November-2012
  *
  *******************************************************************************/
 
@@ -83,9 +83,9 @@ void printCS(string topLevelFileName, string topLevelFunctionName, int width, in
 	//for every reference
 		//for every reference, and merge all
 
-	CSReference * topLevelReferenceInList = new CSReference();
+	CSFileReference * topLevelReferenceInList = new CSFileReference();
 	topLevelReferenceInList->name = topLevelFileName;
-	CSReference * firstReferenceInTopLevelBelowList = new CSReference();
+	CSFileReference * firstReferenceInTopLevelBelowList = new CSFileReference();
 	topLevelReferenceInList->firstReferenceInBelowList = firstReferenceInTopLevelBelowList;
 
 	bool hFileFound = getIncludeFileNamesFromCorHFile(firstReferenceInTopLevelBelowList, topLevelReferenceInList, topLevelFileName, 0);
@@ -111,7 +111,7 @@ void printCS(string topLevelFileName, string topLevelFunctionName, int width, in
 
 	if(outputFunctionsConnectivity)
 	{
-		CSReference * topLevelFunctionReference = firstReferenceInTopLevelBelowList->firstReferenceInFunctionList;
+		CSFunctionReference * topLevelFunctionReference = firstReferenceInTopLevelBelowList->firstReferenceInFunctionList;
 		topLevelFunctionReference->printX = firstReferenceInTopLevelBelowList->printX;
 		topLevelFunctionReference->printY = firstReferenceInTopLevelBelowList->printY;
 		topLevelFunctionReference->col = firstReferenceInTopLevelBelowList->col;
@@ -124,7 +124,7 @@ void printCS(string topLevelFileName, string topLevelFunctionName, int width, in
 			exit(0);
 		}
 
-		CSReference * currentReferenceInFunctionReferenceList = topLevelFunctionReference->firstReferenceInFunctionReferenceList;
+		CSFunctionReference * currentReferenceInFunctionReferenceList = topLevelFunctionReference->firstReferenceInFunctionReferenceList;
 		while(currentReferenceInFunctionReferenceList->next != NULL)
 		{
 			currentReferenceInPrintList = createFunctionReferenceListBoxesAndConnections(currentReferenceInPrintList, firstReferenceInTopLevelBelowList, topLevelFunctionReference, firstReferenceInTopLevelBelowList, 0, currentReferenceInFunctionReferenceList->name, &currentTagInSVGFile, traceAFunctionUpwards);
@@ -135,7 +135,7 @@ void printCS(string topLevelFileName, string topLevelFunctionName, int width, in
 		{
 			bool foundBottomLevelFunctionRef = false;
 			string fileNameHoldingFunction = "";
-			CSReference * bottomLevelFunctionToTraceUpwards = findPrintedFunctionReferenceWithName(bottomLevelFunctionNameToTraceUpwards, NULL, firstReferenceInTopLevelBelowList, &foundBottomLevelFunctionRef, &fileNameHoldingFunction);
+			CSFunctionReference * bottomLevelFunctionToTraceUpwards = findPrintedFunctionReferenceWithName(bottomLevelFunctionNameToTraceUpwards, NULL, firstReferenceInTopLevelBelowList, &foundBottomLevelFunctionRef, &fileNameHoldingFunction);
 			if(foundBottomLevelFunctionRef)
 			{	
 				if(generateHTMLdocumentationMode == CS_GENERATE_HTML_DOCUMENTATION_MODE_ON)
@@ -256,7 +256,7 @@ string generateHTMLdocumentationHeader(string name, bool htmlFileHeader)
 	string HTMLdocumentationHeader = "";
 	if(htmlFileHeader)
 	{
-		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h2>" + name + " Documentation</h2><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3c3c 16-November-2012<p>\n";
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h2>" + name + " Documentation</h2><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3c3d 17-November-2012<p>\n";
 	}
 	else
 	{
@@ -287,11 +287,11 @@ void writeStringToFileObject(string * s, ofstream * writeFileObject)
 	}
 }
 
-void generateHTMLdocumentationForAllFunctions(CSReference * firstReferenceInAboveLevelBelowList, Reference * currentReferenceInPrintList, CSReference * firstReferenceInTopLevelBelowList, string topLevelFunctionName, int generateHTMLdocumentationMode, bool useOutputHTMLFile, string * HTMLdocumentationBody, XMLParserTag * firstTagInSVGFile, XMLParserTag * lastTagInSVGFile, bool traceAFunctionUpwards)
+void generateHTMLdocumentationForAllFunctions(CSFileReference * firstReferenceInAboveLevelBelowList, Reference * currentReferenceInPrintList, CSFileReference * firstReferenceInTopLevelBelowList, string topLevelFunctionName, int generateHTMLdocumentationMode, bool useOutputHTMLFile, string * HTMLdocumentationBody, XMLParserTag * firstTagInSVGFile, XMLParserTag * lastTagInSVGFile, bool traceAFunctionUpwards)
 {
 	bool result = true;
 	
-	CSReference * currentFileReference = firstReferenceInAboveLevelBelowList;
+	CSFileReference * currentFileReference = firstReferenceInAboveLevelBelowList;
 
 	while(currentFileReference->next != NULL)
 	{
@@ -317,7 +317,7 @@ void generateHTMLdocumentationForAllFunctions(CSReference * firstReferenceInAbov
 				#endif
 				bool HTMLgeneratedSafe = false;
 				
-				CSReference * currentFunctionReference = currentFileReference->firstReferenceInFunctionList;
+				CSFunctionReference * currentFunctionReference = currentFileReference->firstReferenceInFunctionList;
 				while(currentFunctionReference->next != NULL)
 				{	
 					if(currentFunctionReference->printed)
@@ -405,7 +405,7 @@ void generateHTMLdocumentationForAllFunctions(CSReference * firstReferenceInAbov
 	}
 }
 
-void generateHTMLdocumentationForFunction(Reference * currentReferenceInPrintList, CSReference * firstReferenceInTopLevelBelowList, CSReference * bottomLevelFunctionToTraceUpwards, string fileNameHoldingFunction, XMLParserTag ** currentTag, string topLevelFunctionName, int generateHTMLdocumentationMode, string * HTMLdocumentationFunctionBody, string * outputSVGFileNameFunction, bool useOutputHTMLFile, string outputHTMLFileName, bool traceAFunctionUpwards)
+void generateHTMLdocumentationForFunction(Reference * currentReferenceInPrintList, CSFileReference * firstReferenceInTopLevelBelowList, CSFunctionReference * bottomLevelFunctionToTraceUpwards, string fileNameHoldingFunction, XMLParserTag ** currentTag, string topLevelFunctionName, int generateHTMLdocumentationMode, string * HTMLdocumentationFunctionBody, string * outputSVGFileNameFunction, bool useOutputHTMLFile, string outputHTMLFileName, bool traceAFunctionUpwards)
 {			
 	if(generateHTMLdocumentationMode == CS_GENERATE_HTML_DOCUMENTATION_MODE_OFF)
 	{
@@ -736,7 +736,7 @@ string generateHTMLdocumentationFunctionTraceImagePlaceHolder(string * traceImag
 }
 
 
-void addToHTMLdocumentationFileFunctionList(CSReference * currentFunctionReference, string * HTMLdocumentationFileFunctionList, int * previousIndentation, bool * previousIndentationFirst)
+void addToHTMLdocumentationFileFunctionList(CSFunctionReference * currentFunctionReference, string * HTMLdocumentationFileFunctionList, int * previousIndentation, bool * previousIndentationFirst)
 {
 	string functionNameCompact = currentFunctionReference->name;	// + "()";
 	

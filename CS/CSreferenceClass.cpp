@@ -23,7 +23,7 @@
  * File Name: CSreferenceClass.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c3c 16-November-2012
+ * Project Version: 3c3d 17-November-2012
  *
  *******************************************************************************/
 
@@ -32,7 +32,21 @@
 
 
 
-CSReference::CSReference(void)
+CSFileReferenceContainer::CSFileReferenceContainer(void)
+{
+	next = NULL;
+	name = "";
+}
+
+CSFileReferenceContainer::~CSFileReferenceContainer(void)
+{
+	if(next != NULL)
+	{
+		delete next;
+	}
+}
+
+CSFileReference::CSFileReference(void)
 {
 	//file/function reference [shared]
 	id = 0;
@@ -50,7 +64,7 @@ CSReference::CSReference(void)
 	
 	next = NULL;
 	previous = NULL;
-	firstReferenceContainerInAboveFileOrFunctionReferenceList = new CSReferenceContainer();
+	firstReferenceContainerInAboveReferenceList = new CSFileReferenceContainer();
 	printedTrace = false;
 	printedTraceReset = false;
 	
@@ -58,8 +72,68 @@ CSReference::CSReference(void)
 	firstReferenceInAboveList = NULL;
 	firstReferenceInBelowList = NULL;
 	shortcutToPrintedVersionOfReference = NULL;
-	isFileReference = false;
 	firstReferenceInFunctionList = NULL;
+
+	for(int i=0; i<MAX_INCLUDE_DEPTH_FUNCTION; i++)
+	{
+		maxFunctionPrintXAtAParticularY[i] = 0;
+	}
+
+}
+
+CSFileReference::~CSFileReference(void)
+{
+	if(firstReferenceInBelowList != NULL)
+	{
+		delete firstReferenceInBelowList;
+	}
+	if(next != NULL)
+	{
+		delete next;
+	}
+	if(firstReferenceContainerInAboveReferenceList != NULL)
+	{
+		delete firstReferenceContainerInAboveReferenceList;
+	}
+}
+
+
+
+CSFunctionReferenceContainer::CSFunctionReferenceContainer(void)
+{
+	next = NULL;
+	name = "";
+}
+
+CSFunctionReferenceContainer::~CSFunctionReferenceContainer(void)
+{
+	if(next != NULL)
+	{
+		delete next;
+	}
+}
+
+CSFunctionReference::CSFunctionReference(void)
+{
+	//file/function reference [shared]
+	id = 0;
+	level = 0;
+	name = "";
+	col = 0;
+	printed = false;
+	printX = 0;
+	printY = 0;
+	printXIndex = 0;
+	printYIndex = 0;
+	printTextX = 0;
+	printTextY = 0;
+	HTMLgenerated = false;
+	
+	next = NULL;
+	previous = NULL;
+	firstReferenceContainerInAboveReferenceList = new CSFunctionReferenceContainer();
+	printedTrace = false;
+	printedTraceReset = false;
 
 	//function reference only
 	nameFull = "";
@@ -78,41 +152,43 @@ CSReference::CSReference(void)
 
 }
 
-
-CSReference::~CSReference(void)
+CSFunctionReference::~CSFunctionReference(void)
 {
+	/*
 	if(firstReferenceInBelowList != NULL)
 	{
 		delete firstReferenceInBelowList;
 	}
+	*/
 	if(next != NULL)
 	{
 		delete next;
 	}
-	if(firstReferenceContainerInAboveFileOrFunctionReferenceList != NULL)
+	if(firstReferenceContainerInAboveReferenceList != NULL)
 	{
-		delete firstReferenceContainerInAboveFileOrFunctionReferenceList;
-	}
-}
-
-
-CSReferenceContainer::CSReferenceContainer(void)
-{
-	next = NULL;
-	name = "";
-}
-
-CSReferenceContainer::~CSReferenceContainer(void)
-{
-	if(next != NULL)
-	{
-		delete next;
+		delete firstReferenceContainerInAboveReferenceList;
 	}
 }
 
 
 
-void printCSReference(CSReference * ref)
+
+void printCSFileReference(CSFileReference * ref)
+{
+	cout << "col = " << ref->col << endl;
+	cout << "id = " << ref->id << endl;
+	cout << "printed = " << ref->printed << endl;
+	cout << "printX = " << ref->printX << endl;
+	cout << "printY = " << ref->printY << endl;
+	cout << "printXIndex = " << ref->printXIndex << endl;
+	cout << "printYIndex = " << ref->printYIndex << endl;
+	cout << "printTextX = " << ref->printTextX << endl;
+	cout << "printTextY = " << ref->printTextY << endl;
+	cout << "level = " << ref->level << endl;
+	cout << "name = " << ref->name << endl;
+}
+
+void printCSFunctionReference(CSFunctionReference * ref)
 {
 	cout << "col = " << ref->col << endl;
 	cout << "id = " << ref->id << endl;

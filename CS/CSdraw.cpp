@@ -23,7 +23,7 @@
  * File Name: CSdraw.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c3c 16-November-2012
+ * Project Version: 3c3d 17-November-2012
  *
  *******************************************************************************/
 
@@ -338,11 +338,11 @@ void initiateMaxXAtAParticularY()
 
 
 
-Reference * createFileReferenceListBoxes(Reference * currentReferenceInPrintList, CSReference * firstReferenceInAboveLevelBelowList, CSReference * firstReferenceInTopLevelBelowList, XMLParserTag ** currentTag, bool outputFunctionsConnectivity, bool traceAFunctionUpwards)
+Reference * createFileReferenceListBoxes(Reference * currentReferenceInPrintList, CSFileReference * firstReferenceInAboveLevelBelowList, CSFileReference * firstReferenceInTopLevelBelowList, XMLParserTag ** currentTag, bool outputFunctionsConnectivity, bool traceAFunctionUpwards)
 {
 	Reference * newCurrentReferenceInPrintList = currentReferenceInPrintList;
 
-	CSReference * currentFileReference = firstReferenceInAboveLevelBelowList;
+	CSFileReference * currentFileReference = firstReferenceInAboveLevelBelowList;
 
 	while(currentFileReference->next != NULL)
 	{
@@ -424,10 +424,12 @@ Reference * createFileReferenceListBoxes(Reference * currentReferenceInPrintList
 			if(!traceAFunctionUpwards)
 			{//only print connections when not tracing a bottom level function upwards - saves space
 			#endif
-				newCurrentReferenceInPrintList = createFileOrFunctionReferenceBox(newCurrentReferenceInPrintList, currentFileReference, vectorObjectsScaleFactor, colour, CS_FILE_MAX_TEXT_LENGTH, CS_OUTPUT_Z_POSITION_FILE_BOX);	//add box
 				vec pos;
 				pos.x = currentFileReference->printX;
-				pos.y = currentFileReference->printY;
+				pos.y = currentFileReference->printY;			
+				pos.z = currentFileReference->printY;	
+				newCurrentReferenceInPrintList = createFileOrFunctionReferenceBox(newCurrentReferenceInPrintList, &pos, &(currentFileReference->name), vectorObjectsScaleFactor, colour, CS_FILE_MAX_TEXT_LENGTH, CS_OUTPUT_Z_POSITION_FILE_BOX);	//add box
+
 				writeFileOrFunctionSVGBox(currentTag, &pos, currentFileReference->name.length(), vectorObjectsScaleFactor, CS_FILE_MAX_TEXT_LENGTH, colour, CS_FILE_TEXT_BOX_OUTLINE_WIDTH_SVG);
 			#ifdef CS_DO_NOT_DRAW_ALL_FILE_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
 			}
@@ -485,11 +487,11 @@ Reference * createFileReferenceListBoxes(Reference * currentReferenceInPrintList
 	return newCurrentReferenceInPrintList;
 }
 
-bool hasAPreviousReferenceWithThisNameHasbeenPrinted(string name, CSReference * firstReferenceInAboveLevelBelowList, int *maxYPos)
+bool hasAPreviousReferenceWithThisNameHasbeenPrinted(string name, CSFileReference * firstReferenceInAboveLevelBelowList, int *maxYPos)
 {
 	bool aPreviousReferenceWithThisNameHasbeenPrinted = false;
 
-	CSReference * currentReference = firstReferenceInAboveLevelBelowList;
+	CSFileReference * currentReference = firstReferenceInAboveLevelBelowList;
 
 	while(currentReference->next != NULL)
 	{
@@ -521,9 +523,9 @@ bool hasAPreviousReferenceWithThisNameHasbeenPrinted(string name, CSReference * 
 	return aPreviousReferenceWithThisNameHasbeenPrinted;
 }
 
-void addShortcutsToPrintedVersionOfReference(CSReference * reference, string name, CSReference * firstReferenceInAboveLevelBelowList)
+void addShortcutsToPrintedVersionOfReference(CSFileReference * reference, string name, CSFileReference * firstReferenceInAboveLevelBelowList)
 {
-	CSReference * currentReference = firstReferenceInAboveLevelBelowList;
+	CSFileReference * currentReference = firstReferenceInAboveLevelBelowList;
 
 	while(currentReference->next != NULL)
 	{
@@ -558,10 +560,10 @@ void addShortcutsToPrintedVersionOfReference(CSReference * reference, string nam
 
 
 
-Reference * createFileReferenceListConnections(Reference * currentReferenceInPrintList, CSReference * firstReferenceInAboveLevelBelowList, CSReference * firstReferenceInTopLevelBelowList, XMLParserTag ** currentTag, bool traceAFunctionUpwards)
+Reference * createFileReferenceListConnections(Reference * currentReferenceInPrintList, CSFileReference * firstReferenceInAboveLevelBelowList, CSFileReference * firstReferenceInTopLevelBelowList, XMLParserTag ** currentTag, bool traceAFunctionUpwards)
 {
 	Reference * newCurrentReferenceInPrintList = currentReferenceInPrintList;
-	CSReference * currentReference = firstReferenceInAboveLevelBelowList;
+	CSFileReference * currentReference = firstReferenceInAboveLevelBelowList;
 
 	while(currentReference->next != NULL)
 	{
@@ -587,10 +589,10 @@ Reference * createFileReferenceListConnections(Reference * currentReferenceInPri
 
 
 
-Reference * findAndLinkAllFileReferencesWithSameName(Reference * currentReferenceInPrintList, CSReference * reference, CSReference * firstReferenceInAboveLevelBelowList, CSReference * firstReferenceInTopLevelBelowList, XMLParserTag ** currentTag, bool traceAFunctionUpwards)
+Reference * findAndLinkAllFileReferencesWithSameName(Reference * currentReferenceInPrintList, CSFileReference * reference, CSFileReference * firstReferenceInAboveLevelBelowList, CSFileReference * firstReferenceInTopLevelBelowList, XMLParserTag ** currentTag, bool traceAFunctionUpwards)
 {
 	Reference * newCurrentReferenceInPrintList = currentReferenceInPrintList;
-	CSReference * currentReference = firstReferenceInAboveLevelBelowList;
+	CSFileReference * currentReference = firstReferenceInAboveLevelBelowList;
 
 	while(currentReference->next != NULL)
 	{
@@ -602,7 +604,7 @@ Reference * findAndLinkAllFileReferencesWithSameName(Reference * currentReferenc
 			if(currentReference->firstReferenceInAboveList != NULL)
 			{
 				//cout << "currentReference->firstReferenceInAboveList->name = " << currentReference->firstReferenceInAboveList->name << endl;
-				CSReference * currentReferenceFirstReferenceInAboveListPrinted = NULL;
+				CSFileReference * currentReferenceFirstReferenceInAboveListPrinted = NULL;
 				string currentReferenceFirstReferenceInAboveListName = currentReference->firstReferenceInAboveList->name;
 				bool foundPrintedReferenceWithName = false;
 				currentReferenceFirstReferenceInAboveListPrinted = findPrintedFileReferenceWithName(currentReferenceFirstReferenceInAboveListName, currentReferenceFirstReferenceInAboveListPrinted, firstReferenceInTopLevelBelowList, &foundPrintedReferenceWithName);
@@ -614,7 +616,7 @@ Reference * findAndLinkAllFileReferencesWithSameName(Reference * currentReferenc
 					int colour = calculateCSBoxAndConnectionColourBasedUponLevel(currentReferenceFirstReferenceInAboveListPrinted->printYIndex);
 
 
-					newCurrentReferenceInPrintList = createFileOrFunctionReferenceConnection(newCurrentReferenceInPrintList, reference, currentReferenceFirstReferenceInAboveListPrinted, colour, true, traceAFunctionUpwards, currentTag);	//add line
+					newCurrentReferenceInPrintList = createFileReferenceConnection(newCurrentReferenceInPrintList, reference, currentReferenceFirstReferenceInAboveListPrinted, colour, traceAFunctionUpwards, currentTag);	//add line
 
 				}
 			}
@@ -633,10 +635,10 @@ Reference * findAndLinkAllFileReferencesWithSameName(Reference * currentReferenc
 	return newCurrentReferenceInPrintList;
 }
 
-CSReference * findPrintedFileReferenceWithName(string name, CSReference * reference, CSReference * firstReferenceInAboveLevelBelowList, bool * foundPrintedReferenceWithName)
+CSFileReference * findPrintedFileReferenceWithName(string name, CSFileReference * reference, CSFileReference * firstReferenceInAboveLevelBelowList, bool * foundPrintedReferenceWithName)
 {
-	CSReference * updatedReference = reference;
-	CSReference * currentReference = firstReferenceInAboveLevelBelowList;
+	CSFileReference * updatedReference = reference;
+	CSFileReference * currentReference = firstReferenceInAboveLevelBelowList;
 
 	while(currentReference->next != NULL)
 	{
@@ -685,7 +687,7 @@ CSReference * findPrintedFileReferenceWithName(string name, CSReference * refere
 
 
 
-Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentReferenceInPrintList, CSReference * aboveLevelFileReference, CSReference * aboveLevelFunctionReference, CSReference * firstReferenceInTopLevelBelowList, int functionLevel, string functionReferenceNameToFind, XMLParserTag ** currentTag, bool traceAFunctionUpwards)
+Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentReferenceInPrintList, CSFileReference * aboveLevelFileReference, CSFunctionReference * aboveLevelFunctionReference, CSFileReference * firstReferenceInTopLevelBelowList, int functionLevel, string functionReferenceNameToFind, XMLParserTag ** currentTag, bool traceAFunctionUpwards)
 {
 	int newFunctionLevel = functionLevel;
 
@@ -694,8 +696,8 @@ Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentRe
 
 	bool referenceFound = false;
 
-	CSReference * functionReference = NULL;
-	CSReference * fileReference = NULL;
+	CSFunctionReference * functionReference = NULL;
+	CSFileReference * fileReference = NULL;
 
 	newFoundFileAndFunctionReference = findFunctionReferenceInAPrintedFileReferenceRecursive(aboveLevelFileReference, functionReferenceNameToFind, &newFoundFileAndFunctionReference, &referenceFound);
 	if(referenceFound)
@@ -786,7 +788,7 @@ Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentRe
 
 
 		//print function connections;
-		newCurrentReferenceInPrintList = createFileOrFunctionReferenceConnection(newCurrentReferenceInPrintList, functionReference, aboveLevelFunctionReference, aboveConnectionColour, false, traceAFunctionUpwards, currentTag);
+		newCurrentReferenceInPrintList = createFunctionReferenceConnection(newCurrentReferenceInPrintList, functionReference, aboveLevelFunctionReference, aboveConnectionColour, traceAFunctionUpwards, currentTag);
 
 
 		#ifdef CS_DO_NOT_DRAW_ALL_FUNCTION_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
@@ -794,11 +796,12 @@ Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentRe
 		{//only print connections when not tracing a bottom level function upwards - saves space
 		#endif
 			//print function box
-			newCurrentReferenceInPrintList = createFileOrFunctionReferenceBox(newCurrentReferenceInPrintList, functionReference, CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR, colour, CS_FUNCTION_MAX_TEXT_LENGTH, CS_OUTPUT_Z_POSITION_FUNCTION_BOX);	//add box
-				vec pos;
-				pos.x = functionReference->printX;
-				pos.y = functionReference->printY;
-				writeFileOrFunctionSVGBox(currentTag, &pos, functionReference->name.length(), CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR, CS_FUNCTION_MAX_TEXT_LENGTH, colour, CS_FUNCTION_TEXT_BOX_OUTLINE_WIDTH_SVG);
+			vec pos;
+			pos.x = functionReference->printX;
+			pos.y = functionReference->printY;			
+			newCurrentReferenceInPrintList = createFileOrFunctionReferenceBox(newCurrentReferenceInPrintList, &pos, &(functionReference->name), CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR, colour, CS_FUNCTION_MAX_TEXT_LENGTH, CS_OUTPUT_Z_POSITION_FUNCTION_BOX);	//add box
+
+			writeFileOrFunctionSVGBox(currentTag, &pos, functionReference->name.length(), CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR, CS_FUNCTION_MAX_TEXT_LENGTH, colour, CS_FUNCTION_TEXT_BOX_OUTLINE_WIDTH_SVG);
 		#ifdef CS_DO_NOT_DRAW_ALL_FUNCTION_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
 		}
 		#endif
@@ -859,7 +862,7 @@ Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentRe
 
 
 		//now for each function Reference Reference within function reference;
-		CSReference * currentfunctionReferenceReference = functionReference->firstReferenceInFunctionReferenceList;
+		CSFunctionReference * currentfunctionReferenceReference = functionReference->firstReferenceInFunctionReferenceList;
 		while(currentfunctionReferenceReference->next != NULL)
 		{
 			/*
@@ -885,7 +888,7 @@ Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentRe
 	{
 
 		//print function connections;
-		newCurrentReferenceInPrintList = createFileOrFunctionReferenceConnection(newCurrentReferenceInPrintList, functionReference, aboveLevelFunctionReference, aboveLevelFunctionReference->col, false, traceAFunctionUpwards, currentTag);
+		newCurrentReferenceInPrintList = createFunctionReferenceConnection(newCurrentReferenceInPrintList, functionReference, aboveLevelFunctionReference, aboveLevelFunctionReference->col, traceAFunctionUpwards, currentTag);
 
 	}
 
@@ -893,7 +896,7 @@ Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentRe
 
 }
 
-CSReferenceArray findFunctionReferenceInAPrintedFileReferenceRecursive(CSReference * fileReferenceToSearchIn, string functionReferenceNameToFind, CSReferenceArray * foundFileAndFunctionReference, bool * referenceFound)
+CSReferenceArray findFunctionReferenceInAPrintedFileReferenceRecursive(CSFileReference * fileReferenceToSearchIn, string functionReferenceNameToFind, CSReferenceArray * foundFileAndFunctionReference, bool * referenceFound)
 {
 	CSReferenceArray newFoundFileAndFunctionReference;
 	newFoundFileAndFunctionReference.csref1 = foundFileAndFunctionReference->csref1;
@@ -905,7 +908,7 @@ CSReferenceArray findFunctionReferenceInAPrintedFileReferenceRecursive(CSReferen
 	//search include files;
 	if(fileReferenceToSearchIn->firstReferenceInBelowList != NULL)
 	{
-		CSReference * currentReference = fileReferenceToSearchIn->firstReferenceInBelowList;
+		CSFileReference * currentReference = fileReferenceToSearchIn->firstReferenceInBelowList;
 		while(currentReference->next != NULL)
 		{
 			newFoundFileAndFunctionReference = findFunctionReferenceInAPrintedFileReferenceRecursive(currentReference, functionReferenceNameToFind, &newFoundFileAndFunctionReference, referenceFound);
@@ -917,13 +920,13 @@ CSReferenceArray findFunctionReferenceInAPrintedFileReferenceRecursive(CSReferen
 	return newFoundFileAndFunctionReference;
 }
 
-CSReferenceArray findFunctionReferenceInPrintedFileReference(CSReference * fileReferenceToSearchIn, string functionReferenceNameToFind, CSReferenceArray * foundFileAndFunctionReference, bool * referenceFound)
+CSReferenceArray findFunctionReferenceInPrintedFileReference(CSFileReference * fileReferenceToSearchIn, string functionReferenceNameToFind, CSReferenceArray * foundFileAndFunctionReference, bool * referenceFound)
 {
 	CSReferenceArray newFoundFileAndFunctionReference;
 	newFoundFileAndFunctionReference.csref1 = foundFileAndFunctionReference->csref1;
 	newFoundFileAndFunctionReference.csref2 = foundFileAndFunctionReference->csref2;
 
-	CSReference * currentReferenceEnsuredPrinted = NULL;
+	CSFileReference * currentReferenceEnsuredPrinted = NULL;
 	if(!(fileReferenceToSearchIn->printed))
 	{
 		currentReferenceEnsuredPrinted = fileReferenceToSearchIn->shortcutToPrintedVersionOfReference;
@@ -941,7 +944,7 @@ CSReferenceArray findFunctionReferenceInPrintedFileReference(CSReference * fileR
 		currentReferenceEnsuredPrinted = fileReferenceToSearchIn;
 	}
 
-	CSReference * currentFunctionReference = currentReferenceEnsuredPrinted->firstReferenceInFunctionList;
+	CSFunctionReference * currentFunctionReference = currentReferenceEnsuredPrinted->firstReferenceInFunctionList;
 	while(currentFunctionReference->next != NULL)
 	{
 		if(currentFunctionReference->name == functionReferenceNameToFind)
@@ -982,7 +985,7 @@ CSReferenceArray findFunctionReferenceInPrintedFileReference(CSReference * fileR
 
 
 
-Reference * createFileOrFunctionReferenceBox(Reference * currentReferenceInPrintList, CSReference * reference, double scaleFactor, int colour, double maxTextLength, double zPosition)
+Reference * createFileOrFunctionReferenceBox(Reference * currentReferenceInPrintList,  vec * referencePrintPos, string * referenceName, double scaleFactor, int colour, double maxTextLength, double zPosition)
 {
 	//cout << "zPosition = " << zPosition << endl;
 
@@ -992,40 +995,40 @@ Reference * createFileOrFunctionReferenceBox(Reference * currentReferenceInPrint
 	newCurrentReferenceInPrintList->colour = colour;
 
 #ifdef CS_CENTRE_BOXES
-	newCurrentReferenceInPrintList->vertex1relativePosition.x = reference->printX - CS_FILE_OR_FUNCTION_TEXT_BOX_SCALE_FACTOR_X*scaleFactor*reference->name.length()/maxTextLength;
+	newCurrentReferenceInPrintList->vertex1relativePosition.x = referencePrintPos->x - CS_FILE_OR_FUNCTION_TEXT_BOX_SCALE_FACTOR_X*scaleFactor*referenceName->length()/maxTextLength;
 #else
-	newCurrentReferenceInPrintList->vertex1relativePosition.x = reference->printX - CS_FILE_OR_FUNCTION_TEXT_BOX_SCALE_FACTOR_X*scaleFactor;
+	newCurrentReferenceInPrintList->vertex1relativePosition.x = referencePrintPos->x - CS_FILE_OR_FUNCTION_TEXT_BOX_SCALE_FACTOR_X*scaleFactor;
 #endif
-	newCurrentReferenceInPrintList->vertex1relativePosition.y = reference->printY + CS_FILE_OR_FUNCTION_TEXT_BOX_BOX_SCALE_FACTOR_Y_LDR*scaleFactor;
+	newCurrentReferenceInPrintList->vertex1relativePosition.y = referencePrintPos->y + CS_FILE_OR_FUNCTION_TEXT_BOX_BOX_SCALE_FACTOR_Y_LDR*scaleFactor;
 	newCurrentReferenceInPrintList->vertex1relativePosition.z = zPosition;
 
 #ifdef CS_CENTRE_BOXES
-	newCurrentReferenceInPrintList->vertex2relativePosition.x = reference->printX + CS_FILE_OR_FUNCTION_TEXT_BOX_SCALE_FACTOR_X*scaleFactor*reference->name.length()/maxTextLength;
+	newCurrentReferenceInPrintList->vertex2relativePosition.x = referencePrintPos->x + CS_FILE_OR_FUNCTION_TEXT_BOX_SCALE_FACTOR_X*scaleFactor*referenceName->length()/maxTextLength;
 #else
-	newCurrentReferenceInPrintList->vertex2relativePosition.x = reference->printX + CS_FILE_OR_FUNCTION_TEXT_BOX_SCALE_FACTOR_X*scaleFactor;
+	newCurrentReferenceInPrintList->vertex2relativePosition.x = referencePrintPos->x + CS_FILE_OR_FUNCTION_TEXT_BOX_SCALE_FACTOR_X*scaleFactor;
 #endif
-	newCurrentReferenceInPrintList->vertex2relativePosition.y = reference->printY + CS_FILE_OR_FUNCTION_TEXT_BOX_BOX_SCALE_FACTOR_Y_LDR*scaleFactor;
+	newCurrentReferenceInPrintList->vertex2relativePosition.y = referencePrintPos->y + CS_FILE_OR_FUNCTION_TEXT_BOX_BOX_SCALE_FACTOR_Y_LDR*scaleFactor;
 	newCurrentReferenceInPrintList->vertex2relativePosition.z = zPosition;
 
 #ifdef CS_CENTRE_BOXES
-	newCurrentReferenceInPrintList->vertex3relativePosition.x = reference->printX + CS_FILE_OR_FUNCTION_TEXT_BOX_SCALE_FACTOR_X*scaleFactor*reference->name.length()/maxTextLength;
+	newCurrentReferenceInPrintList->vertex3relativePosition.x = referencePrintPos->x + CS_FILE_OR_FUNCTION_TEXT_BOX_SCALE_FACTOR_X*scaleFactor*referenceName->length()/maxTextLength;
 #else
-	newCurrentReferenceInPrintList->vertex3relativePosition.x = reference->printX + CS_FILE_OR_FUNCTION_TEXT_BOX_SCALE_FACTOR_X*scaleFactor;
+	newCurrentReferenceInPrintList->vertex3relativePosition.x = referencePrintPos->x + CS_FILE_OR_FUNCTION_TEXT_BOX_SCALE_FACTOR_X*scaleFactor;
 #endif
-	newCurrentReferenceInPrintList->vertex3relativePosition.y = reference->printY - CS_FILE_OR_FUNCTION_TEXT_BOX_BOX_SCALE_FACTOR_Y_LDR*scaleFactor;
+	newCurrentReferenceInPrintList->vertex3relativePosition.y = referencePrintPos->y - CS_FILE_OR_FUNCTION_TEXT_BOX_BOX_SCALE_FACTOR_Y_LDR*scaleFactor;
 	newCurrentReferenceInPrintList->vertex3relativePosition.z = zPosition;
 
 #ifdef CS_CENTRE_BOXES
-	newCurrentReferenceInPrintList->vertex4relativePosition.x = reference->printX - CS_FILE_OR_FUNCTION_TEXT_BOX_SCALE_FACTOR_X*scaleFactor*reference->name.length()/maxTextLength;
+	newCurrentReferenceInPrintList->vertex4relativePosition.x = referencePrintPos->x - CS_FILE_OR_FUNCTION_TEXT_BOX_SCALE_FACTOR_X*scaleFactor*referenceName->length()/maxTextLength;
 #else
-	newCurrentReferenceInPrintList->vertex4relativePosition.x = reference->printX - CS_FILE_OR_FUNCTION_TEXT_BOX_SCALE_FACTOR_X*scaleFactor;
+	newCurrentReferenceInPrintList->vertex4relativePosition.x = referencePrintPos->x - CS_FILE_OR_FUNCTION_TEXT_BOX_SCALE_FACTOR_X*scaleFactor;
 #endif
-	newCurrentReferenceInPrintList->vertex4relativePosition.y = reference->printY - CS_FILE_OR_FUNCTION_TEXT_BOX_BOX_SCALE_FACTOR_Y_LDR*scaleFactor;
+	newCurrentReferenceInPrintList->vertex4relativePosition.y = referencePrintPos->y - CS_FILE_OR_FUNCTION_TEXT_BOX_BOX_SCALE_FACTOR_Y_LDR*scaleFactor;
 	newCurrentReferenceInPrintList->vertex4relativePosition.z = zPosition;
 
 	/*
 	cout << "createFileOrFunctionReferenceBox():" << endl;
-	cout << "reference->name = " << reference->name << endl;
+	cout << "referenceName = " << *referenceName << endl;
 	cout << "newCurrentReferenceInPrintList->type = " << newCurrentReferenceInPrintList->type << endl;
 	cout << "newCurrentReferenceInPrintList->colour = " << newCurrentReferenceInPrintList->colour << endl;
 	cout << "newCurrentReferenceInPrintList->vertex1relativePosition.x = " << newCurrentReferenceInPrintList->vertex1relativePosition.x << endl;
@@ -1050,23 +1053,60 @@ Reference * createFileOrFunctionReferenceBox(Reference * currentReferenceInPrint
 }
 
 
-Reference * createFileOrFunctionReferenceConnection(Reference * currentReferenceInPrintList, CSReference * reference,  CSReference * currentReferenceInAboveList, int colour, bool fileOrFunction, bool traceAFunctionUpwardsAndNotCurrentlyTracing, XMLParserTag ** currentTag)
+Reference * createFileReferenceConnection(Reference * currentReferenceInPrintList, CSFileReference * reference,  CSFileReference * currentReferenceInAboveList, int colour, bool traceAFunctionUpwardsAndNotCurrentlyTracing, XMLParserTag ** currentTag)
 {
-	Reference * newCurrentReferenceInPrintList = currentReferenceInPrintList;
-
-
 	//cout << "h1" << endl;
 	//add currentReferenceInAboveList to reference's above list for reverse lookup / function upwards trace
-	CSReferenceContainer * currentReferenceContainerInAboveFileOrFunctionReferenceList = reference->firstReferenceContainerInAboveFileOrFunctionReferenceList;
+	CSFileReferenceContainer * currentReferenceContainerInAboveFileOrFunctionReferenceList = reference->firstReferenceContainerInAboveReferenceList;
 	while(currentReferenceContainerInAboveFileOrFunctionReferenceList->next != NULL)
 	{
 		currentReferenceContainerInAboveFileOrFunctionReferenceList = currentReferenceContainerInAboveFileOrFunctionReferenceList->next;
 	}
 	currentReferenceContainerInAboveFileOrFunctionReferenceList->name = currentReferenceInAboveList->name;
-	CSReferenceContainer * newCSRefContainer = new CSReferenceContainer();
+	CSFileReferenceContainer * newCSRefContainer = new CSFileReferenceContainer();
 	currentReferenceContainerInAboveFileOrFunctionReferenceList->next = newCSRefContainer;
 	//cout << "h2" << endl;
 
+	vec referencePrintPos;
+	referencePrintPos.x = reference->printX;
+	referencePrintPos.y = reference->printY;
+	vec currentReferenceInAboveListPrintPos;
+	currentReferenceInAboveListPrintPos.x = currentReferenceInAboveList->printX;
+	currentReferenceInAboveListPrintPos.y = currentReferenceInAboveList->printY;
+		
+	return configureFileOrFunctionReferenceConnection(currentReferenceInPrintList, &referencePrintPos, &currentReferenceInAboveListPrintPos, colour, true, traceAFunctionUpwardsAndNotCurrentlyTracing, currentTag);		
+}
+
+Reference * createFunctionReferenceConnection(Reference * currentReferenceInPrintList, CSFunctionReference * reference,  CSFunctionReference * currentReferenceInAboveList, int colour, bool traceAFunctionUpwardsAndNotCurrentlyTracing, XMLParserTag ** currentTag)
+{
+	//cout << "h1" << endl;
+	//add currentReferenceInAboveList to reference's above list for reverse lookup / function upwards trace
+	CSFunctionReferenceContainer * currentReferenceContainerInAboveFileOrFunctionReferenceList = reference->firstReferenceContainerInAboveReferenceList;
+	while(currentReferenceContainerInAboveFileOrFunctionReferenceList->next != NULL)
+	{
+		currentReferenceContainerInAboveFileOrFunctionReferenceList = currentReferenceContainerInAboveFileOrFunctionReferenceList->next;
+	}
+	currentReferenceContainerInAboveFileOrFunctionReferenceList->name = currentReferenceInAboveList->name;
+	CSFunctionReferenceContainer * newCSRefContainer = new CSFunctionReferenceContainer();
+	currentReferenceContainerInAboveFileOrFunctionReferenceList->next = newCSRefContainer;
+	//cout << "h2" << endl;
+	
+	vec referencePrintPos;
+	referencePrintPos.x = reference->printX;
+	referencePrintPos.y = reference->printY;
+	vec currentReferenceInAboveListPrintPos;
+	currentReferenceInAboveListPrintPos.x = currentReferenceInAboveList->printX;
+	currentReferenceInAboveListPrintPos.y = currentReferenceInAboveList->printY;
+	
+	return configureFileOrFunctionReferenceConnection(currentReferenceInPrintList, &referencePrintPos, &currentReferenceInAboveListPrintPos, colour, false, traceAFunctionUpwardsAndNotCurrentlyTracing, currentTag);		
+}
+
+
+
+
+Reference * configureFileOrFunctionReferenceConnection(Reference * currentReferenceInPrintList, vec * referencePrintPos,  vec * currentReferenceInAboveListPrintPos, int colour, bool fileOrFunction, bool traceAFunctionUpwardsAndNotCurrentlyTracing, XMLParserTag ** currentTag)
+{
+	Reference * newCurrentReferenceInPrintList = currentReferenceInPrintList;
 
 	bool draw = false;
 	if(fileOrFunction)
@@ -1099,8 +1139,8 @@ Reference * createFileOrFunctionReferenceConnection(Reference * currentReference
 		newCurrentReferenceInPrintList->type = REFERENCE_TYPE_LINE;
 		newCurrentReferenceInPrintList->colour = colour;
 
-		newCurrentReferenceInPrintList->vertex1relativePosition.x = currentReferenceInAboveList->printX;
-		newCurrentReferenceInPrintList->vertex1relativePosition.y = currentReferenceInAboveList->printY;
+		newCurrentReferenceInPrintList->vertex1relativePosition.x = currentReferenceInAboveListPrintPos->x;
+		newCurrentReferenceInPrintList->vertex1relativePosition.y = currentReferenceInAboveListPrintPos->y;
 		if(fileOrFunction)
 		{
 			newCurrentReferenceInPrintList->vertex1relativePosition.z = CS_OUTPUT_Z_POSITION_FILE_CONNECTIONS;	//why doesnt this work
@@ -1110,8 +1150,8 @@ Reference * createFileOrFunctionReferenceConnection(Reference * currentReference
 			newCurrentReferenceInPrintList->vertex1relativePosition.z = CS_OUTPUT_Z_POSITION_FUNCTION_CONNECTIONS;	//why doesnt this work
 		}
 
-		newCurrentReferenceInPrintList->vertex2relativePosition.x = reference->printX;
-		newCurrentReferenceInPrintList->vertex2relativePosition.y = reference->printY;
+		newCurrentReferenceInPrintList->vertex2relativePosition.x = referencePrintPos->x;
+		newCurrentReferenceInPrintList->vertex2relativePosition.y = referencePrintPos->y;
 		if(fileOrFunction)
 		{
 			newCurrentReferenceInPrintList->vertex2relativePosition.z = CS_OUTPUT_Z_POSITION_FILE_CONNECTIONS;	//why doesnt this work
@@ -1121,9 +1161,8 @@ Reference * createFileOrFunctionReferenceConnection(Reference * currentReference
 			newCurrentReferenceInPrintList->vertex2relativePosition.z = CS_OUTPUT_Z_POSITION_FUNCTION_CONNECTIONS;	//why doesnt this work
 		}
 		/*
-		cout << "createFileOrFunctionReferenceConnection():" << endl;
+		cout << "configureFileOrFunctionReferenceConnection():" << endl;
 		cout << "currentReferenceInAboveList->name = " << currentReferenceInAboveList->name << endl;
-		cout << "reference->name = " << reference->name << endl;
 		cout << "newCurrentReferenceInPrintList->type = " << newCurrentReferenceInPrintList->type << endl;
 		cout << "newCurrentReferenceInPrintList->colour = " << newCurrentReferenceInPrintList->colour << endl;
 		cout << "newCurrentReferenceInPrintList->vertex1relativePosition.x = " << newCurrentReferenceInPrintList->vertex1relativePosition.x << endl;
@@ -1139,11 +1178,11 @@ Reference * createFileOrFunctionReferenceConnection(Reference * currentReference
 		newCurrentReferenceInPrintList = newCurrentReferenceInPrintList->next;
 
 		vec pos1;
-		pos1.x = reference->printX;
-		pos1.y = reference->printY;
+		pos1.x = referencePrintPos->x;
+		pos1.y = referencePrintPos->y;
 		vec pos2;
-		pos2.x = currentReferenceInAboveList->printX;
-		pos2.y = currentReferenceInAboveList->printY;
+		pos2.x = currentReferenceInAboveListPrintPos->x;
+		pos2.y = currentReferenceInAboveListPrintPos->y;
 		writeSVGLine(currentTag, &pos1, &pos2, colour);
 
 	}
@@ -1302,14 +1341,14 @@ int calculateCSBoxAndConnectionColourBasedUponLevel(int yIndex)
 
 
 
-CSReference * findPrintedFunctionReferenceWithName(string name, CSReference * reference, CSReference * firstReferenceInAboveLevelBelowList, bool * foundPrintedReferenceWithName, string * fileNameHoldingFunction)
+CSFunctionReference * findPrintedFunctionReferenceWithName(string name, CSFunctionReference * reference, CSFileReference * firstReferenceInAboveLevelBelowList, bool * foundPrintedReferenceWithName, string * fileNameHoldingFunction)
 {
-	CSReference * updatedFunctionReference = reference;
-	CSReference * currentFileReference = firstReferenceInAboveLevelBelowList;
+	CSFunctionReference * updatedFunctionReference = reference;
+	CSFileReference * currentFileReference = firstReferenceInAboveLevelBelowList;
 
 	while(currentFileReference->next != NULL)
 	{
-		CSReference * currentFunctionReference = currentFileReference->firstReferenceInFunctionList;
+		CSFunctionReference * currentFunctionReference = currentFileReference->firstReferenceInFunctionList;
 		while(currentFunctionReference->next != NULL)
 		{
 			if(currentFunctionReference->name == name)
@@ -1336,23 +1375,24 @@ CSReference * findPrintedFunctionReferenceWithName(string name, CSReference * re
 	return updatedFunctionReference;
 }
 
-Reference * traceFunctionsUpwardsAndDrawOrHighLightThese(Reference * currentReferenceInPrintList, CSReference * firstReferenceInTopLevelBelowList, CSReference * currentFunctionBeingTraced, XMLParserTag ** currentTag, string topLevelFunctionName, int generateHTMLdocumentationMode, string * HTMLdocumentationFunctionTraceTableRows)
+Reference * traceFunctionsUpwardsAndDrawOrHighLightThese(Reference * currentReferenceInPrintList, CSFileReference * firstReferenceInTopLevelBelowList, CSFunctionReference * currentFunctionBeingTraced, XMLParserTag ** currentTag, string topLevelFunctionName, int generateHTMLdocumentationMode, string * HTMLdocumentationFunctionTraceTableRows)
 {
 	Reference * newCurrentReferenceInPrintList = currentReferenceInPrintList;
 
 	//print function box;
 	int functionBoxColour;
 	#ifdef CS_DO_NOT_DRAW_ALL_FUNCTION_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
-		functionBoxColour = currentFunctionBeingTraced->col;
+	functionBoxColour = currentFunctionBeingTraced->col;
 	#else
-		functionBoxColour = CS_FUNCTION_BOX_HIGHLIGHT_COLOUR;
-		//just highlight the box (already drawn)
+	functionBoxColour = CS_FUNCTION_BOX_HIGHLIGHT_COLOUR;
+	//just highlight the box (already drawn)
 	#endif
-	newCurrentReferenceInPrintList = createFileOrFunctionReferenceBox(newCurrentReferenceInPrintList, currentFunctionBeingTraced, CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR, functionBoxColour, CS_FUNCTION_MAX_TEXT_LENGTH, CS_OUTPUT_Z_POSITION_FUNCTION_TRACE_BOX);	//add box
-		vec pos;
-		pos.x = currentFunctionBeingTraced->printX;
-		pos.y = currentFunctionBeingTraced->printY;
-		writeFileOrFunctionSVGBoxTransparent(currentTag, &pos, currentFunctionBeingTraced->name.length(), CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR, CS_FUNCTION_MAX_TEXT_LENGTH, functionBoxColour, CS_FUNCTION_TEXT_BOX_OUTLINE_WIDTH_SVG, 0.5);
+	vec pos;
+	pos.x = currentFunctionBeingTraced->printX;
+	pos.y = currentFunctionBeingTraced->printY;
+	newCurrentReferenceInPrintList = createFileOrFunctionReferenceBox(newCurrentReferenceInPrintList, &pos, &(currentFunctionBeingTraced->name), CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR, functionBoxColour, CS_FUNCTION_MAX_TEXT_LENGTH, CS_OUTPUT_Z_POSITION_FUNCTION_TRACE_BOX);	//add box
+
+	writeFileOrFunctionSVGBoxTransparent(currentTag, &pos, currentFunctionBeingTraced->name.length(), CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR, CS_FUNCTION_MAX_TEXT_LENGTH, functionBoxColour, CS_FUNCTION_TEXT_BOX_OUTLINE_WIDTH_SVG, 0.5);
 
 	//print function text;
 	#ifdef CS_DO_NOT_DRAW_ALL_FUNCTION_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
@@ -1374,14 +1414,14 @@ Reference * traceFunctionsUpwardsAndDrawOrHighLightThese(Reference * currentRefe
 
 	//add currentReferenceInAboveList to reference's above list for reverse lookup / function upwards trace
 
-	CSReferenceContainer * currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList = currentFunctionBeingTraced->firstReferenceContainerInAboveFileOrFunctionReferenceList;
+	CSFunctionReferenceContainer * currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList = currentFunctionBeingTraced->firstReferenceContainerInAboveReferenceList;
 	while(currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList->next != NULL)	// && (currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList->name != "main")
 	{
 		//cout << "currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList->name = " << currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList->name << endl;
 
 		bool higherLevelFunctionFound = false;
 		string fileNameHoldingFunction = "";
-		CSReference * higherLevelFunction = findPrintedFunctionReferenceWithName(currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList->name, NULL, firstReferenceInTopLevelBelowList, &higherLevelFunctionFound, &fileNameHoldingFunction);
+		CSFunctionReference * higherLevelFunction = findPrintedFunctionReferenceWithName(currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList->name, NULL, firstReferenceInTopLevelBelowList, &higherLevelFunctionFound, &fileNameHoldingFunction);
 
 		if(higherLevelFunctionFound)
 		{
@@ -1412,7 +1452,7 @@ Reference * traceFunctionsUpwardsAndDrawOrHighLightThese(Reference * currentRefe
 					functionConnectionColour = CS_FUNCTION_CONNECTION_HIGHLIGHT_COLOUR;
 					//just highlight the connection (already drawn)
 				#endif
-				newCurrentReferenceInPrintList = createFileOrFunctionReferenceConnection(newCurrentReferenceInPrintList, currentFunctionBeingTraced, higherLevelFunction, functionConnectionColour, false, false, currentTag);
+				newCurrentReferenceInPrintList = createFunctionReferenceConnection(newCurrentReferenceInPrintList, currentFunctionBeingTraced, higherLevelFunction, functionConnectionColour, false, currentTag);
 
 				newCurrentReferenceInPrintList = traceFunctionsUpwardsAndDrawOrHighLightThese(newCurrentReferenceInPrintList, firstReferenceInTopLevelBelowList, higherLevelFunction, currentTag, topLevelFunctionName, generateHTMLdocumentationMode, HTMLdocumentationFunctionTraceTableRows);
 			}
@@ -1431,21 +1471,21 @@ Reference * traceFunctionsUpwardsAndDrawOrHighLightThese(Reference * currentRefe
 
 
 
-void traceFunctionsUpwardsAndDrawOrHighLightTheseReset(CSReference * firstReferenceInTopLevelBelowList, CSReference * currentFunctionBeingTraced, string topLevelFunctionName)
+void traceFunctionsUpwardsAndDrawOrHighLightTheseReset(CSFileReference * firstReferenceInTopLevelBelowList, CSFunctionReference * currentFunctionBeingTraced, string topLevelFunctionName)
 {
 	currentFunctionBeingTraced->printedTrace = false;
 	currentFunctionBeingTraced->printedTraceReset = true;
 
 	//add currentReferenceInAboveList to reference's above list for reverse lookup / function upwards trace
 
-	CSReferenceContainer * currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList = currentFunctionBeingTraced->firstReferenceContainerInAboveFileOrFunctionReferenceList;
+	CSFunctionReferenceContainer * currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList = currentFunctionBeingTraced->firstReferenceContainerInAboveReferenceList;
 	while(currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList->next != NULL)	// && (currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList->name != "main")
 	{
 		//cout << "currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList->name = " << currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList->name << endl;
 
 		bool higherLevelFunctionFound = false;
 		string fileNameHoldingFunction = "";
-		CSReference * higherLevelFunction = findPrintedFunctionReferenceWithName(currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList->name, NULL, firstReferenceInTopLevelBelowList, &higherLevelFunctionFound, &fileNameHoldingFunction);
+		CSFunctionReference * higherLevelFunction = findPrintedFunctionReferenceWithName(currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList->name, NULL, firstReferenceInTopLevelBelowList, &higherLevelFunctionFound, &fileNameHoldingFunction);
 
 		if(higherLevelFunctionFound)
 		{
