@@ -21,7 +21,7 @@
  * File Name: CSgenerateConstFunctionArgumentCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h8a 08-December-2015
+ * Project Version: 3h8b 08-December-2015
  *
  *******************************************************************************/
 
@@ -601,9 +601,23 @@ bool checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 					if((indexOfEqualsSetPrevious == CPP_STRING_FIND_RESULT_FAIL_VALUE) || (indexOfEqualsSetPrevious < indexOfStartOfLine))
 					{//ignore all lines with assignments [this indicates that the functionArgument objectFunction is not modifying the functionArgument] e.g. "int indexOfFunctionReferenceStartOfLine = functionContentsString->rfind(stringToFind, indexToFunctionReference)"
 						
-						int indexOfBracketOpenPrevious = functionText->rfind(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_OPEN_PARAMETER_SPACE, indexOfFunctionArgument);
-						if((indexOfBracketOpenPrevious == CPP_STRING_FIND_RESULT_FAIL_VALUE) || (indexOfBracketOpenPrevious < indexOfStartOfLine))
-						{//e.g. ignore all lines with preceeding brackets, e.g. "format.c_str()" in "sprintf(stringCharStar, format.c_str(), number);"
+						string currentLine = functionText->substr(indexOfStartOfLine, indexOfEndOfLine-indexOfStartOfLine);
+						CSfunction* currentFunctionReference = currentFunctionObject->firstReferenceInFunctionReferenceListRepeats;
+						bool lineIncludesBAIfunctionReference = false;	//NB non-BAI function references eg put/push_back are intentionally not detected
+						while(currentFunctionReference->next != NULL)
+						{
+							string currentReferenceToFind = currentFunctionReference->name + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_OPEN_PARAMETER_SPACE;
+							//cout << "currentReferenceToFind = " << currentReferenceToFind << endl;
+							//cout << "currentLine = " << currentLine << endl;
+							if(currentLine.find(currentReferenceToFind) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+							{
+								lineIncludesBAIfunctionReference = true;
+							}
+							currentFunctionReference = currentFunctionReference->next;
+						}
+						if(!lineIncludesBAIfunctionReference)
+						{
+							//ignore all lines with function reference on same line, e.g. "sprintf(stringCharStar, format.c_str(), number);"
 							
 							for(int i=0; i<CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_REFERENCE; i++)
 							{
