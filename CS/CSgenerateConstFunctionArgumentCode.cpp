@@ -21,7 +21,7 @@
  * File Name: CSgenerateConstFunctionArgumentCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h2b 23-November-2015
+ * Project Version: 3h2c 23-November-2015
  *
  *******************************************************************************/
 
@@ -389,7 +389,7 @@ bool generateConstFunctionArgumentFunction(CSfunction* currentFunctionObject, CS
 	{
 		//cout << "\t\t currentFunctionReference->name = " << currentFunctionReference->name << endl;
 		//cout << "\t\t currentFunctionReferenceIndex = " << currentFunctionReferenceIndex << endl;
-
+		
 		CSfile* fileObjectHoldingFunction = currentFunctionReference->functionReferenceTargetFileOwner;
 		CSfunction* functionReferenceTarget = currentFunctionReference->functionReferenceTarget;
 		if(functionReferenceTarget != NULL)
@@ -449,6 +449,15 @@ bool generateConstFunctionArgumentFunction(CSfunction* currentFunctionObject, CS
 					if(currentFunctionArgumentInFunctionReferenceTarget->isNotConst)
 					{
 						currentFunctionArgumentInFunction->isNotConst = true;
+						
+						/*OK:
+						if(currentFunctionReference->name == "setLumOrContrastOrDepthMapValue")
+						{
+							cout << "\t\t currentFunctionReference->name = " << currentFunctionReference->name << endl;
+							cout << "\t\t currentFunctionReferenceIndex = " << currentFunctionReferenceIndex << endl;
+							cout << "\t\t currentFunctionArgumentInFunction->argumentName = " << currentFunctionArgumentInFunction->argumentName << endl;
+						}
+						*/
 					}
 
 					/*
@@ -515,6 +524,9 @@ bool checkIfVariableIsBeingModifiedInFunction(string* functionText, string funct
 					if((indexOfEndOfEqualsSet != indexOfEndOfEqualsTest) && (indexOfEndOfEqualsSet != indexOfEndOfNotEqualsTest))	//not required for multiline logical conditions because checking for (indexOfEndOfEqualsSet < indexOfEndOfCommand), e.g. if(chicken == 5). Only required for single line logical conditions, eg. if(chicken == 5) bat = 2;
 					{
 					*/
+					if(indexOfFunctionArgument < indexOfEndOfEqualsSet)
+					{//restored 3h2c
+					
 						//added condition CS3h1d - ensure not a cout start, e.g. 'cout << "indexOfFunctionArgument' in; 'cout << "indexOfFunctionArgument = " << indexOfFunctionArgument << endl;'
 						if((indexOfFunctionArgument < string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_COUT_START).length()) || (functionText->substr(indexOfFunctionArgument-string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_COUT_START).length(), string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_COUT_START).length()) != CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_COUT_START))
 						{
@@ -550,6 +562,15 @@ bool checkIfVariableIsBeingModifiedInFunction(string* functionText, string funct
 							if(passMiscellaneousConditions)
 							{
 								isNotConst = true;
+								if(functionDeclarationArgument == "contrastVal")
+								{								
+									//cout << "nn functionDeclarationArgument = " << functionDeclarationArgument << endl;
+									string lineText = functionText->substr(indexOfStartOfLine, indexOfEndOfCommand-indexOfStartOfLine);
+									//cout << "lineText = " << lineText << endl;
+									//cout << "indexOfStartOfLine = " << indexOfStartOfLine << endl;
+									//cout << "indexOfEndOfEqualsSet = " << indexOfEndOfEqualsSet << endl;
+									//cout << "indexOfEndOfCommand = " << indexOfEndOfCommand << endl;
+								}
 							}
 							
 							/*
@@ -559,9 +580,7 @@ bool checkIfVariableIsBeingModifiedInFunction(string* functionText, string funct
 							functionArgument->parameter = 5;
 							*/
 						}
-					/*
 					}
-					*/
 				}
 			}
 			else
