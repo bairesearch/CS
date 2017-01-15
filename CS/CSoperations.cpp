@@ -779,7 +779,7 @@ void getFunctionReferenceNamesFromFunctionsInCfile(CSfileReference * firstRefere
 				#endif
 				int positionOfFunctionReference = fileContentsString.find(fullFunctionName);
 
-				if(positionOfFunctionReference != -1)
+				if(positionOfFunctionReference != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 				{
 					#define CS_MAX_NUM_CHARACTERS_PER_FUNCTION (1000000)
 
@@ -1078,7 +1078,7 @@ CSfunctionReference * searchFunctionStringForFunctionReferences(CSfileReference 
 
 		//now search the function string for this function reference;
 		int indexToFunctionReference  = functionContentsString.find((currentFunction->name + '('));
-		if(indexToFunctionReference != -1)
+		if(indexToFunctionReference != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 		{
 			#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST
 			int indexOfFunctionReferenceStartOfLine = functionContentsString.rfind("\n", indexToFunctionReference);
