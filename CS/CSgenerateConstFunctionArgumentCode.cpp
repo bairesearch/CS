@@ -21,7 +21,7 @@
  * File Name: CSgenerateConstFunctionArgumentCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h4a 01-December-2015
+ * Project Version: 3h5a 03-December-2015
  *
  *******************************************************************************/
 
@@ -125,6 +125,41 @@ bool generateConstFunctionArgumentsFile(CSfile* currentFileObject)
 				cout << "argumentWithConsts = " << argumentWithConsts << endl;
 				#endif
 				nameFullWithConsts = replaceAllOccurancesOfString(&(nameFullWithConsts), argument, argumentWithConsts);
+				
+				//add const to function argument secondary assignements - CS3h5a
+				for(vector<string>::iterator argumentNameAliasListIter = currentFunctionArgumentInFunction->argumentNameAliasList.begin(); argumentNameAliasListIter < currentFunctionArgumentInFunction->argumentNameAliasList.end(); argumentNameAliasListIter++)
+				{
+					//cout << "argumentNameAliasListIter = " << *argumentNameAliasListIter << endl;
+					string functionArgumentSecondaryAssignmentName = *argumentNameAliasListIter;
+					int posOfFunctionText = currentFileObject->sourceFileText.find(currentFunctionObject->functionTextRaw);
+					int functionTextOrigLength = currentFunctionObject->functionTextRaw.length();
+					if(posOfFunctionText != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+					{
+						bool foundAtLeastOneInstance = false;
+						currentFunctionObject->functionTextRaw = replaceAllOccurancesOfFunctionObjectFunctionArgumentSecondaryAssignmentDeclarationInFunction(&(currentFunctionObject->functionTextRaw), functionArgumentSecondaryAssignmentName, &foundAtLeastOneInstance);
+						if(foundAtLeastOneInstance)
+						{
+							//cout << "foundAtLeastOneInstance" << endl;
+							currentFileObject->sourceFileText = currentFileObject->sourceFileText.substr(0, posOfFunctionText) + currentFunctionObject->functionTextRaw + currentFileObject->sourceFileText.substr((posOfFunctionText+functionTextOrigLength), currentFileObject->sourceFileText.length()-(posOfFunctionText+functionTextOrigLength));
+						}
+						/*
+						else
+						{
+							cout << "generateConstFunctionArgumentsFile{} error: !foundAtLeastOneInstance of " << functionArgumentSecondaryAssignmentName << " in currentFunctionObject->functionTextRaw" << endl;
+							cout << "currentFileObject->name = " << currentFileObject->name << endl;
+							cout << "currentFunctionObject->nameFull = " << currentFunctionObject->nameFull << endl;
+							cout << "currentFunctionObject->name = " << currentFunctionObject->name << endl;
+							exit(0);						
+						}
+						*/
+					}
+					else
+					{
+						cout << "generateConstFunctionArgumentsFile{} error: currentFunctionObject->functionTextRaw not found in currentFileObject->sourceFileText" << endl;
+						cout << "currentFunctionObject->functionTextRaw = " <<  currentFunctionObject->functionTextRaw << endl;
+						exit(0); 
+					}
+				}
 			}
 			currentFunctionArgumentInFunction = currentFunctionArgumentInFunction->next;
 		}
@@ -147,6 +182,49 @@ bool generateConstFunctionArgumentsFile(CSfile* currentFileObject)
 	#endif
 	
 	return result;
+}
+
+string replaceAllOccurancesOfFunctionObjectFunctionArgumentSecondaryAssignmentDeclarationInFunction(string* functionTextOrig, string functionArgumentSecondaryAssignmentName, bool* foundAtLeastOneInstance)
+{
+	string functionTextUpdated = *functionTextOrig;
+	
+	string secondaryAssignmentDecarationHypotheticalExtract = string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_POINTER_TYPE) + functionArgumentSecondaryAssignmentName + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET;	//* secondaryAssignmentName = 
+	//cout << "secondaryAssignmentDecarationHypotheticalExtract = " << secondaryAssignmentDecarationHypotheticalExtract << endl;
+	
+	bool stillSearching = true;
+	int pos = 0;
+	while(stillSearching)
+	{
+		pos = functionTextUpdated.find(secondaryAssignmentDecarationHypotheticalExtract, pos);
+		if(pos != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+		{//only update function reference within functionText once
+			
+			//int indexOfStartOfLine = functionText->rfind(STRING_NEW_LINE, pos);
+			int indexOfFunctionArgumentSecondaryAssignmentType = CPP_STRING_FIND_RESULT_FAIL_VALUE;
+			string functionArgumentSecondaryAssignmentType = extractFullVariableNameReverse(&functionTextUpdated, pos-1, &indexOfFunctionArgumentSecondaryAssignmentType);
+			if(indexOfFunctionArgumentSecondaryAssignmentType != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+			{
+				string secondaryAssignmentDecaration = functionArgumentSecondaryAssignmentType + secondaryAssignmentDecarationHypotheticalExtract;
+				string secondaryAssignmentDecarationWithConst = string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_CONST) + secondaryAssignmentDecaration;
+				//cout << "secondaryAssignmentDecaration = " << secondaryAssignmentDecaration << endl;
+				//cout << "secondaryAssignmentDecarationWithConst = " << secondaryAssignmentDecarationWithConst << endl;
+				
+				functionTextUpdated.replace(indexOfFunctionArgumentSecondaryAssignmentType, secondaryAssignmentDecaration.length(), secondaryAssignmentDecarationWithConst);
+				pos = pos + secondaryAssignmentDecarationWithConst.length();
+				*foundAtLeastOneInstance = true;
+			}
+			else
+			{
+				cout << "replaceAllOccurancesOfFunctionObjectFunctionArgumentSecondaryAssignmentDeclarationInFunction{} error: cannot find functionArgumentSecondaryAssignmentType" << endl;
+			}
+		}
+		else
+		{
+			stillSearching = false;
+		}
+	}
+	
+	return functionTextUpdated;
 }
 
 //generateConstFunctionArgumentsFunction limitation: currently doesn't support embedded function reference arguments, eg; doThis(arg1, doThis2(arg2, arg3));
