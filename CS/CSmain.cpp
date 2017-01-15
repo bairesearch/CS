@@ -23,7 +23,7 @@
  * File Name: CSmain.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c6c 22-July-2013
+ * Project Version: 3c7b 12-October-2013
  *
  *******************************************************************************/
 
@@ -271,7 +271,7 @@ int main(int argc,char **argv)
 
 	if(argumentExists(argc,argv,"-version"))
 	{
-		cout << "OpenCS.exe - Project Version: 3c6c 22-July-2013" << endl;
+		cout << "OpenCS.exe - Project Version: 3c7b 12-October-2013" << endl;
 		exit(1);
 	}
 
@@ -348,7 +348,7 @@ int main(int argc,char **argv)
 
 	if(mode == CS_MODE_OUTPUT_EXECUTION_FLOW)
 	{
-		printCS(topLevelFileName, rasterImageWidth, rasterImageHeight, outputLDRfileName, outputSVGfileName, outputPPMfileName, outputHTMLfileName, useOutputLDRfile, useOutputPPMfile, useOutputHTMLfile, generateHTMLdocumentationMode, displayInOpenGLAndOutputScreenshot, outputFunctionsConnectivity, traceFunctionUpwards, bottomLevelFunctionNameToTraceUpwards, outputFileConnections);
+		printCS(topLevelFileName, rasterImageWidth, rasterImageHeight, outputLDRfileName, outputSVGfileName, outputPPMfileName, outputHTMLfileName, useOutputLDRfile, useOutputPPMfile, useOutputHTMLfile, generateHTMLdocumentationMode, displayInOpenGLAndOutputScreenshot, outputFunctionsConnectivity, traceFunctionUpwards, bottomLevelFunctionNameToTraceUpwards, outputFileConnections, topLevelFunctionName);
 	}
 	else if(mode == CS_MODE_OUTPUT_DATA_FLOW)
 	{

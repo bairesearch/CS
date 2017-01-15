@@ -23,7 +23,7 @@
  * File Name: CSexecflow.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c6c 22-July-2013
+ * Project Version: 3c7b 12-October-2013
  *
  *******************************************************************************/
 
@@ -59,7 +59,7 @@ using namespace std;
 
 
 
-void printCS(string topLevelFileName, int width, int height, string outputLDRfileName, string outputSVGfileName, string outputPPMfileName, string outputHTMLfileName, bool useOutputLDRfile, bool useOutputPPMfile, bool useOutputHTMLfile, int generateHTMLdocumentationMode, bool display, bool outputFunctionsConnectivity, bool traceFunctionUpwards, string bottomLevelFunctionNameToTraceUpwards, bool outputFileConnections)
+void printCS(string topLevelFileName, int width, int height, string outputLDRfileName, string outputSVGfileName, string outputPPMfileName, string outputHTMLfileName, bool useOutputLDRfile, bool useOutputPPMfile, bool useOutputHTMLfile, int generateHTMLdocumentationMode, bool display, bool outputFunctionsConnectivity, bool traceFunctionUpwards, string bottomLevelFunctionNameToTraceUpwards, bool outputFileConnections, string topLevelFunctionName)
 {
 	bool result = true;
 	
@@ -117,79 +117,100 @@ void printCS(string topLevelFileName, int width, int height, string outputLDRfil
 	}
 	if(outputFunctionsConnectivity)
 	{
-		CSfunctionReference * topLevelFunctionReference = firstReferenceInTopLevelBelowList->firstReferenceInFunctionList;
-		topLevelFunctionReference->printX = firstReferenceInTopLevelBelowList->printX;
-		topLevelFunctionReference->printY = firstReferenceInTopLevelBelowList->printY;
-		topLevelFunctionReference->col = firstReferenceInTopLevelBelowList->col;
-
-		firstReferenceInTopLevelBelowList->maxFunctionPrintXAtAParticularY[0] = firstReferenceInTopLevelBelowList->maxFunctionPrintXAtAParticularY[0] + 1;
-		topLevelFunctionReference->printed = true;
-		if(!(firstReferenceInTopLevelBelowList->printed))
+		CSfunctionReference * currentReferenceInTopLevelBelowList = firstReferenceInTopLevelBelowList->firstReferenceInFunctionList;
+		bool topLevelFunctionNameFound = false;
+		CSfunctionReference * topLevelFunctionReference = NULL;
+		while(currentReferenceInTopLevelBelowList->next != NULL)
 		{
-			cout << "error" << endl;
-			exit(0);
+			//cout << "currentReferenceInTopLevelBelowList->name = " << currentReferenceInTopLevelBelowList->name << endl;
+			if(currentReferenceInTopLevelBelowList->name == topLevelFunctionName)
+			{
+				topLevelFunctionReference = currentReferenceInTopLevelBelowList;
+				topLevelFunctionNameFound = true;
+			}
+			currentReferenceInTopLevelBelowList = currentReferenceInTopLevelBelowList->next;
 		}
+		if(topLevelFunctionNameFound)
+		{		
+			//CSfunctionReference * topLevelFunctionReference = firstReferenceInTopLevelBelowList->firstReferenceInFunctionList;
+			topLevelFunctionReference->printX = firstReferenceInTopLevelBelowList->printX;
+			topLevelFunctionReference->printY = firstReferenceInTopLevelBelowList->printY;
+			topLevelFunctionReference->col = firstReferenceInTopLevelBelowList->col;
 
-		CSfunctionReference * currentReferenceInFunctionReferenceList = topLevelFunctionReference->firstReferenceInFunctionReferenceList;
-		while(currentReferenceInFunctionReferenceList->next != NULL)
-		{
-			currentReferenceInPrintList = createFunctionReferenceListBoxesAndConnections(currentReferenceInPrintList, firstReferenceInTopLevelBelowList, topLevelFunctionReference, firstReferenceInTopLevelBelowList, 0, currentReferenceInFunctionReferenceList->name, &currentTagInSVGFile, traceFunctionUpwards, false, NULL);
-			currentReferenceInFunctionReferenceList = currentReferenceInFunctionReferenceList->next;
-		}
+			firstReferenceInTopLevelBelowList->maxFunctionPrintXAtAParticularY[0] = firstReferenceInTopLevelBelowList->maxFunctionPrintXAtAParticularY[0] + 1;
+			topLevelFunctionReference->printed = true;
+			if(!(firstReferenceInTopLevelBelowList->printed))
+			{
+				cout << "error" << endl;
+				exit(0);
+			}
 
-		if(traceFunctionUpwards && (bottomLevelFunctionNameToTraceUpwards != ""))
-		{
-			bool foundBottomLevelFunctionRef = false;
-			string fileNameHoldingFunction = "";
-			CSfunctionReference * bottomLevelFunctionToTraceUpwards = findPrintedFunctionReferenceWithName(bottomLevelFunctionNameToTraceUpwards, NULL, firstReferenceInTopLevelBelowList, &foundBottomLevelFunctionRef, &fileNameHoldingFunction);
-			if(foundBottomLevelFunctionRef)
-			{	
-				if(generateHTMLdocumentationMode == CS_GENERATE_HTML_DOCUMENTATION_MODE_ON)
-				{
-					if(!useOutputHTMLfile)
-					{//still use single html file for function, but automatically generate html file name (based on function name)
-						useOutputHTMLfile = true;
-						outputHTMLfileName = bottomLevelFunctionNameToTraceUpwards + HTML_EXTENSION;	//automatically generate html file name (based on function name)
+			CSfunctionReference * currentReferenceInFunctionReferenceList = topLevelFunctionReference->firstReferenceInFunctionReferenceList;
+			while(currentReferenceInFunctionReferenceList->next != NULL)
+			{
+				currentReferenceInPrintList = createFunctionReferenceListBoxesAndConnections(currentReferenceInPrintList, firstReferenceInTopLevelBelowList, topLevelFunctionReference, firstReferenceInTopLevelBelowList, 0, currentReferenceInFunctionReferenceList->name, &currentTagInSVGFile, traceFunctionUpwards, false, NULL);
+				currentReferenceInFunctionReferenceList = currentReferenceInFunctionReferenceList->next;
+			}
+
+			if(traceFunctionUpwards && (bottomLevelFunctionNameToTraceUpwards != ""))
+			{
+				bool foundBottomLevelFunctionRef = false;
+				string fileNameHoldingFunction = "";
+				CSfunctionReference * bottomLevelFunctionToTraceUpwards = findPrintedFunctionReferenceWithName(bottomLevelFunctionNameToTraceUpwards, NULL, firstReferenceInTopLevelBelowList, &foundBottomLevelFunctionRef, &fileNameHoldingFunction);
+				if(foundBottomLevelFunctionRef)
+				{	
+					if(generateHTMLdocumentationMode == CS_GENERATE_HTML_DOCUMENTATION_MODE_ON)
+					{
+						if(!useOutputHTMLfile)
+						{//still use single html file for function, but automatically generate html file name (based on function name)
+							useOutputHTMLfile = true;
+							outputHTMLfileName = bottomLevelFunctionNameToTraceUpwards + HTML_EXTENSION;	//automatically generate html file name (based on function name)
+						}
 					}
+					string HTMLdocumentationFunctionNOTUSED = "";
+					generateHTMLdocumentationForFunction(currentReferenceInPrintList, firstReferenceInTopLevelBelowList, bottomLevelFunctionToTraceUpwards, fileNameHoldingFunction, &currentTagInSVGFile, generateHTMLdocumentationMode, &HTMLdocumentationFunctionNOTUSED, &outputSVGfileName, useOutputHTMLfile, outputHTMLfileName, traceFunctionUpwards);							
 				}
-				string HTMLdocumentationFunctionNOTUSED = "";
-				generateHTMLdocumentationForFunction(currentReferenceInPrintList, firstReferenceInTopLevelBelowList, bottomLevelFunctionToTraceUpwards, fileNameHoldingFunction, &currentTagInSVGFile, generateHTMLdocumentationMode, &HTMLdocumentationFunctionNOTUSED, &outputSVGfileName, useOutputHTMLfile, outputHTMLfileName, traceFunctionUpwards);							
+				else
+				{
+					cout << "error: foundBottomLevelFunctionRef " << bottomLevelFunctionNameToTraceUpwards << " cannot be found" << endl;
+					exit(0);
+				}
 			}
 			else
 			{
-				cout << "error: foundBottomLevelFunctionRef " << bottomLevelFunctionNameToTraceUpwards << " cannot be found" << endl;
-				exit(0);
+				if(generateHTMLdocumentationMode == CS_GENERATE_HTML_DOCUMENTATION_MODE_ON)
+				{//generate documentation for all functions...
+
+					//find last tag in svg file;
+					XMLparserTag * lastTagInSVGFile = firstTagInSVGFile;
+					XMLparserTag * tempTagInSVGFile = firstTagInSVGFile;
+					while(tempTagInSVGFile->nextTag != NULL)
+					{
+						lastTagInSVGFile = tempTagInSVGFile;
+						tempTagInSVGFile = tempTagInSVGFile->nextTag;
+					}
+
+					string HTMLdocumentationBody = "";
+					Reference * firstReferenceInPrintListFunction = new Reference();								
+					generateHTMLdocumentationForAllFunctions(firstReferenceInTopLevelBelowList, firstReferenceInPrintListFunction, firstReferenceInTopLevelBelowList, generateHTMLdocumentationMode, useOutputHTMLfile, &HTMLdocumentationBody, firstTagInSVGFile, lastTagInSVGFile, traceFunctionUpwards);
+					delete firstReferenceInPrintListFunction;	//should delete this, as it will contain far too many LD vector graphics references (ie a set of traced references for each function)
+					htmlDocumentationGenerationPreventsDisplay = true;	//cannot display in OpenGL/save to file, as LD vector graphics references have been deleted
+
+					if(useOutputHTMLfile)
+					{//use single html file for project (rather than unique html file per file in project)
+						string HTMLdocumentationHeader = generateHTMLdocumentationHeader("Software Project", true, false);					
+						string HTMLdocumentationFooter = generateHTMLdocumentationFooter(true);
+						string HTMLdocumentation = HTMLdocumentationHeader + HTMLdocumentationBody + HTMLdocumentationFooter;
+						ofstream writeFileObjectHTML(outputHTMLfileName.c_str());
+						writeStringToFileObject(&HTMLdocumentation, &writeFileObjectHTML);					
+					}				
+				}		
 			}
 		}
 		else
 		{
-			if(generateHTMLdocumentationMode == CS_GENERATE_HTML_DOCUMENTATION_MODE_ON)
-			{//generate documentation for all functions...
-				
-				//find last tag in svg file;
-				XMLparserTag * lastTagInSVGFile = firstTagInSVGFile;
-				XMLparserTag * tempTagInSVGFile = firstTagInSVGFile;
-				while(tempTagInSVGFile->nextTag != NULL)
-				{
-					lastTagInSVGFile = tempTagInSVGFile;
-					tempTagInSVGFile = tempTagInSVGFile->nextTag;
-				}
-										
-				string HTMLdocumentationBody = "";
-				Reference * firstReferenceInPrintListFunction = new Reference();								
-				generateHTMLdocumentationForAllFunctions(firstReferenceInTopLevelBelowList, firstReferenceInPrintListFunction, firstReferenceInTopLevelBelowList, generateHTMLdocumentationMode, useOutputHTMLfile, &HTMLdocumentationBody, firstTagInSVGFile, lastTagInSVGFile, traceFunctionUpwards);
-				delete firstReferenceInPrintListFunction;	//should delete this, as it will contain far too many LD vector graphics references (ie a set of traced references for each function)
-				htmlDocumentationGenerationPreventsDisplay = true;	//cannot display in OpenGL/save to file, as LD vector graphics references have been deleted
-				
-				if(useOutputHTMLfile)
-				{//use single html file for project (rather than unique html file per file in project)
-					string HTMLdocumentationHeader = generateHTMLdocumentationHeader("Software Project", true, false);					
-					string HTMLdocumentationFooter = generateHTMLdocumentationFooter(true);
-					string HTMLdocumentation = HTMLdocumentationHeader + HTMLdocumentationBody + HTMLdocumentationFooter;
-					ofstream writeFileObjectHTML(outputHTMLfileName.c_str());
-					writeStringToFileObject(&HTMLdocumentation, &writeFileObjectHTML);					
-				}				
-			}		
+			cout << "error: !topLevelFunctionNameFound" << endl;
+			exit(0);
 		}
 	}
 	
@@ -262,7 +283,7 @@ string generateHTMLdocumentationHeader(string name, bool htmlHeader, bool isFile
 	string HTMLdocumentationHeader = "";
 	if(htmlHeader)
 	{
-		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3c6c 22-July-2013<p>\n";
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3c7b 12-October-2013<p>\n";
 	}
 	else
 	{
