@@ -23,7 +23,7 @@
  * File Name: CSexecflow.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c8a 13-October-2013
+ * Project Version: 3c9a 06-February-2014
  *
  *******************************************************************************/
 
@@ -100,11 +100,7 @@ void printCS(string topLevelFileName, int width, int height, string outputLDRfil
 	initiateMaxXatParticularY();
 	Reference * firstReferenceInPrintList = new Reference();
 
-	#ifdef LINUX
-	chdir(tempFolderCharStar);
-	#else
-	::SetCurrentDirectory(tempFolderCharStar);
-	#endif
+	setCurrentDirectory(tempFolderCharStar);
 	
 	XMLparserTag * firstTagInSVGFile = new XMLparserTag();
 	XMLparserTag * currentTagInSVGFile = firstTagInSVGFile;
@@ -310,7 +306,7 @@ string generateHTMLdocumentationHeader(string name, bool htmlHeader, bool isFile
 	string HTMLdocumentationHeader = "";
 	if(htmlHeader)
 	{
-		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3c8a 13-October-2013<p>\n";
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3c9a 06-February-2014<p>\n";
 	}
 	else
 	{
@@ -1009,11 +1005,7 @@ void generateFileDiagramFunctionsHeirachy(CSfileReference * currentFileReference
 		Reference * firstReferenceInPrintList = new Reference();
 		Reference * currentReferenceInPrintList = firstReferenceInPrintList;
 
-		#ifdef LINUX
-		chdir(tempFolderCharStar);
-		#else
-		::SetCurrentDirectory(tempFolderCharStar);
-		#endif
+		setCurrentDirectory(tempFolderCharStar);
 
 		XMLparserTag * firstTagInSVGFile = new XMLparserTag();
 		XMLparserTag * currentTagInSVGFile = firstTagInSVGFile;
