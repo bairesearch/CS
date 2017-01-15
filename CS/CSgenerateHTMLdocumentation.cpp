@@ -24,9 +24,9 @@
 /*******************************************************************************
  *
  * File Name: CSgenerateHTMLdocumentation.cpp
- * Author: Richard Bruce Baxter - Copyright (c) 2005-2016 Baxter AI (baxterai.com)
+ * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3i19e 15-December-2016
+ * Project Version: 3j1a 14-January-2017
  *
  *******************************************************************************/
 
@@ -38,7 +38,7 @@
 
 
 //generate documentation for all functions...
-void generateHTMLdocumentationFunctions(XMLparserTag* firstTagInSVGFile, CSfileContainer* firstObjectInTopLevelBelowListContainer, int generateHTMLdocumentationMode, bool useOutputHTMLfile, bool traceFunctionUpwards, bool usePredefinedGrid, string outputHTMLfileName)
+void generateHTMLdocumentationFunctions(XMLparserTag* firstTagInSVGFile, CSfileContainer* firstObjectInTopLevelBelowListContainer, int generateHTMLdocumentationMode, const bool useOutputHTMLfile, const bool traceFunctionUpwards, bool usePredefinedGrid, const string outputHTMLfileName)
 {
 	//find last tag in svg file;
 	XMLparserTag* lastTagInSVGFile = firstTagInSVGFile;
@@ -64,12 +64,12 @@ void generateHTMLdocumentationFunctions(XMLparserTag* firstTagInSVGFile, CSfileC
 	}
 }
 
-string generateHTMLdocumentationHeader(string name, bool htmlHeader, bool isFile)
+string generateHTMLdocumentationHeader(const string name, const bool htmlHeader, const bool isFile)
 {
 	string HTMLdocumentationHeader = "";
 	if(htmlHeader)
 	{
-		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3i19e 15-December-2016<p>\n";
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3j1a 14-January-2017<p>\n";
 	}
 	else
 	{
@@ -85,7 +85,7 @@ string generateHTMLdocumentationHeader(string name, bool htmlHeader, bool isFile
 	return HTMLdocumentationHeader;
 }
 
-string generateHTMLdocumentationFooter(bool htmlFileFooter)
+string generateHTMLdocumentationFooter(const bool htmlFileFooter)
 {
 	string HTMLdocumentationFooter = "";
 	if(htmlFileFooter)
@@ -107,7 +107,7 @@ void writeStringPointerToFileObject(string* s, ofstream* writeFileObject)
 	}
 }
 
-void generateHTMLdocumentationForAllFunctions(CSfileContainer* firstObjectInAboveLevelBelowListContainer, LDreference* currentReferenceInPrintList, CSfileContainer* firstObjectInTopLevelBelowListContainer, int generateHTMLdocumentationMode, bool useOutputHTMLfile, string* HTMLdocumentationBody, XMLparserTag* firstTagInSVGFile, XMLparserTag* lastTagInSVGFile, bool traceFunctionUpwards, bool usePredefinedGrid)
+void generateHTMLdocumentationForAllFunctions(CSfileContainer* firstObjectInAboveLevelBelowListContainer, LDreference* currentReferenceInPrintList, CSfileContainer* firstObjectInTopLevelBelowListContainer, int generateHTMLdocumentationMode, const bool useOutputHTMLfile, string* HTMLdocumentationBody, const XMLparserTag* firstTagInSVGFile, XMLparserTag* lastTagInSVGFile, const bool traceFunctionUpwards, bool usePredefinedGrid)
 {
 	bool result = true;
 
@@ -250,7 +250,7 @@ void generateHTMLdocumentationForAllFunctions(CSfileContainer* firstObjectInAbov
 	}
 }
 
-void generateHTMLdocumentationForFunction(LDreference* currentReferenceInPrintList, CSfileContainer* firstObjectInTopLevelBelowListContainer, CSfunction* bottomLevelFunctionToTraceUpwards, string fileNameHoldingFunction, XMLparserTag** currentTag, int generateHTMLdocumentationMode, string* HTMLdocumentationFunctionBody, string* outputSVGfileNameFunction, bool useOutputHTMLfile, string outputHTMLfileName, bool traceFunctionUpwards)
+void generateHTMLdocumentationForFunction(LDreference* currentReferenceInPrintList, CSfileContainer* firstObjectInTopLevelBelowListContainer, CSfunction* bottomLevelFunctionToTraceUpwards, const string fileNameHoldingFunction, XMLparserTag** currentTag, int generateHTMLdocumentationMode, string* HTMLdocumentationFunctionBody, const string* outputSVGfileNameFunction, const bool useOutputHTMLfile, const string outputHTMLfileName, const bool traceFunctionUpwards)
 {
 	if(generateHTMLdocumentationMode == CS_GENERATE_HTML_DOCUMENTATION_MODE_OFF)
 	{
@@ -319,7 +319,7 @@ void generateHTMLdocumentationForFunction(LDreference* currentReferenceInPrintLi
 
 }
 
-void generateHTMLdocumentationFunctionSummary(string* functionName, string* functionNameFull, string* HTMLdocumentationFunctionSummary)
+void generateHTMLdocumentationFunctionSummary(string* functionName, const string* functionNameFull, string* HTMLdocumentationFunctionSummary)
 {
 	*HTMLdocumentationFunctionSummary = "";
 	*HTMLdocumentationFunctionSummary = *HTMLdocumentationFunctionSummary + "\t<p><b>Function Summary</b><br /><table border=\"1\">\n\t\t<tr><th>" + "name" + "</th><th>" + "return type" + "</th><th>" + "description" + "</th></tr>\n";
@@ -335,7 +335,7 @@ void generateHTMLdocumentationFunctionSummary(string* functionName, string* func
 	#endif
 }
 
-void generateHTMLdocumentationFunctionInputArguments(string* functionName, string* functionNameFull, string* HTMLdocumentationFunctionInputArguments)
+void generateHTMLdocumentationFunctionInputArguments(const string* functionName, const string* functionNameFull, string* HTMLdocumentationFunctionInputArguments)
 {
 	*HTMLdocumentationFunctionInputArguments = "";
 	#ifdef CS_GENERATE_CLASS_HTML_DOCUMENTATION_FROM_CUSTOM_CSCLASS_FORMAT
@@ -438,7 +438,7 @@ void generateHTMLdocumentationFunctionInputArguments(string* functionName, strin
 }
 
 
-string ensureHTMLTagSafe(string str)
+string ensureHTMLTagSafe(const string str)
 {
 	string htmlSafeString = "";
 	for(int i=0; i<str.length(); i++)
@@ -610,7 +610,7 @@ void generateHTMLdocumentationFunctionReferenceList(CSfunction* function, string
 	#endif
 }
 
-string generateHTMLdocumentationImagePlaceHolder(string* traceImageFileName, string imageTitle)
+string generateHTMLdocumentationImagePlaceHolder(const string* traceImageFileName, const string imageTitle)
 {
 	string HTMLdocumentationFunctionTraceImagePlaceHolder = "\t<br /><b>" + imageTitle + "</b><br /><img width=\"1300px\" src=\"" +* traceImageFileName  + "\">\n";
 	return HTMLdocumentationFunctionTraceImagePlaceHolder;
@@ -618,7 +618,7 @@ string generateHTMLdocumentationImagePlaceHolder(string* traceImageFileName, str
 
 
 
-void addToHTMLdocumentationIndentedList(string currentFunctionObjectName, int currentFunctionObjectIndentation, string* HTMLdocumentationFileFunctionList, int* previousIndentation, bool* previousIndentationFirst)
+void addToHTMLdocumentationIndentedList(const string currentFunctionObjectName, int currentFunctionObjectIndentation, string* HTMLdocumentationFileFunctionList, int* previousIndentation, bool* previousIndentationFirst)
 {
 	string functionNameCompact = currentFunctionObjectName;	// + "{}";
 
@@ -668,7 +668,7 @@ void addToHTMLdocumentationFileFunctionList(CSfunction* currentFunctionObject, s
 
 
 
-void generateFileDiagramFunctionsHeirachy(CSfile* currentFileObject, string outputSVGFileNameFile, CSfileContainer* firstObjectInTopLevelBelowListContainer, bool usePredefinedGrid)
+void generateFileDiagramFunctionsHeirachy(CSfile* currentFileObject, const string outputSVGFileNameFile, CSfileContainer* firstObjectInTopLevelBelowListContainer, bool usePredefinedGrid)
 {
 	bool result = true;
 
@@ -813,7 +813,7 @@ void generateClassHTMLdocumentationFromCustomCSclassFormat()
 	}
 }
 
-string getFunctionNameFromFunctionNameFull(string* functionNameFull)
+string getFunctionNameFromFunctionNameFull(const string* functionNameFull)
 {
 	#ifdef CS_DEBUG
 	//cout << "functionNameFull = " <<* functionNameFull << endl;
@@ -864,7 +864,7 @@ void convertIndentedListToHTMLlist()
 	}
 }
 
-bool readIndentedListFile(string indentedListFileName, vector<string>* indentedListVector)
+bool readIndentedListFile(const string indentedListFileName, vector<string>* indentedListVector)
 {
 	bool result = true;
 

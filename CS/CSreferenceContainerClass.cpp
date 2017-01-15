@@ -24,9 +24,9 @@
 /*******************************************************************************
  *
  * File Name: CSreferenceContainerClass.cpp
- * Author: Richard Bruce Baxter - Copyright (c) 2005-2016 Baxter AI (baxterai.com)
+ * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3i19e 15-December-2016
+ * Project Version: 3j1a 14-January-2017
  *
  *******************************************************************************/
 
@@ -78,7 +78,7 @@ CSfileContainer::~CSfileContainer(void)
 
 
 //CHECKTHIS;
-int findEndPositionOfArgument(string* functionArgumentsRaw, int startPositionOfArgument, bool* lastArgument)
+int findEndPositionOfArgument(const string* functionArgumentsRaw, const int startPositionOfArgument, bool* lastArgument)
 {
 	#ifdef CS_DEBUG
 	//cout << "functionArgumentsRaw = " << *functionArgumentsRaw << endl;
@@ -189,7 +189,7 @@ int findEndPositionOfArgument(string* functionArgumentsRaw, int startPositionOfA
 */
 
 //limitation; can't match argument types (only number of arguments)
-bool findFunctionReferenceTarget(CSfunction* functionReference, CSfile* currentFileObject, CSfile** fileObjectHoldingFunction, CSfunction** functionReferenceTarget, bool countArguments)
+bool findFunctionReferenceTarget(const CSfunction* functionReference, constEffective CSfile* currentFileObject, constEffective CSfile** fileObjectHoldingFunction, constEffective CSfunction** functionReferenceTarget, const bool countArguments)
 {
 	string name = functionReference->name;
 	int numArguments = countArgumentList(functionReference->firstFunctionArgumentInFunction);
@@ -199,7 +199,7 @@ bool findFunctionReferenceTarget(CSfunction* functionReference, CSfile* currentF
 
 	bool foundPrintedReferenceWithName = false;
 
-	CSfunction* currentFunctionObject = currentFileObject->firstFunctionInFunctionList;
+	constEffective CSfunction* currentFunctionObject = currentFileObject->firstFunctionInFunctionList;
 	while(currentFunctionObject->next != NULL)
 	{
 		bool conditions = false;
@@ -239,20 +239,20 @@ bool findFunctionReferenceTarget(CSfunction* functionReference, CSfile* currentF
 	return foundPrintedReferenceWithName;
 }
 
-bool findFunctionReferenceTargetRecurse(CSfunction* functionReference, CSfileContainer* firstObjectInAboveLevelBelowListContainer, CSfile** fileObjectHoldingFunction, CSfunction** functionReferenceTarget, bool countArguments)
+bool findFunctionReferenceTargetRecurse(const CSfunction* functionReference, constEffective CSfileContainer* firstObjectInAboveLevelBelowListContainer, constEffective CSfile** fileObjectHoldingFunction, constEffective CSfunction** functionReferenceTarget, const bool countArguments)
 {
 	bool foundPrintedReferenceWithName = false;
 
 	string name = functionReference->name;
 	int numArguments = countArgumentList(functionReference->firstFunctionArgumentInFunction);
 
-	CSfileContainer* currentFileObjectContainer = firstObjectInAboveLevelBelowListContainer;
+	constEffective CSfileContainer* currentFileObjectContainer = firstObjectInAboveLevelBelowListContainer;
 
 	while(currentFileObjectContainer->next != NULL)
 	{
-		CSfile* currentFileObject = currentFileObjectContainer->fileObject;
+		constEffective CSfile* currentFileObject = currentFileObjectContainer->fileObject;
 
-		CSfunction* currentFunctionObject = currentFileObject->firstFunctionInFunctionList;
+		constEffective CSfunction* currentFunctionObject = currentFileObject->firstFunctionInFunctionList;
 		while(currentFunctionObject->next != NULL)
 		{
 			bool conditions = false;
@@ -293,10 +293,10 @@ bool findFunctionReferenceTargetRecurse(CSfunction* functionReference, CSfileCon
 	return foundPrintedReferenceWithName;
 }
 
-int countArgumentList(CSfunctionArgument* firstFunctionArgumentInFunction)
+int countArgumentList(const CSfunctionArgument* firstFunctionArgumentInFunction)
 {
 	int count = 0;
-	CSfunctionArgument* currentFunctionArgumentInFunction = firstFunctionArgumentInFunction;
+	const CSfunctionArgument* currentFunctionArgumentInFunction = firstFunctionArgumentInFunction;
 	while(currentFunctionArgumentInFunction->next != NULL)
 	{
 		count++;

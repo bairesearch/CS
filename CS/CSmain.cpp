@@ -24,9 +24,9 @@
 /*******************************************************************************
  *
  * File Name: CSmain.cpp
- * Author: Richard Bruce Baxter - Copyright (c) 2005-2016 Baxter AI (baxterai.com)
+ * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3i19e 15-December-2016
+ * Project Version: 3j1a 14-January-2017
  *
  *******************************************************************************/
 
@@ -87,7 +87,7 @@ static char errmessage[] = "Usage:  OpenCS.exe [options]"
 
 
 
-int main(int argc, char** argv)
+int main(const int argc, const char** argv)
 {
 #ifdef CS_CONVERT_INDENTED_LIST_TO_HTML_LIST
 	convertIndentedListToHTMLlist();
@@ -294,7 +294,7 @@ int main(int argc, char** argv)
 
 	if(argumentExists(argc, argv, "-version"))
 	{
-		cout << "OpenCS.exe - Project Version: 3i19e 15-December-2016" << endl;
+		cout << "OpenCS.exe - Project Version: 3j1a 14-January-2017" << endl;
 		exit(1);
 	}
 

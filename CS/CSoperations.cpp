@@ -24,9 +24,9 @@
 /*******************************************************************************
  *
  * File Name: CSoperations.cpp
- * Author: Richard Bruce Baxter - Copyright (c) 2005-2016 Baxter AI (baxterai.com)
+ * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3i19e 15-December-2016
+ * Project Version: 3j1a 14-January-2017
  *
  *******************************************************************************/
 
@@ -38,7 +38,7 @@
 
 
 
-bool getIncludeFileNamesFromCorHfile(CSfileContainer* firstReferenceInIncludeFileListContainer, CSfileContainer* topLevelReferenceContainer, CSfile* aboveLevelObject, string topLevelReferenceName, int level)
+bool getIncludeFileNamesFromCorHfile(CSfileContainer* firstReferenceInIncludeFileListContainer, constEffective CSfileContainer* topLevelReferenceContainer, CSfile* aboveLevelObject, const string topLevelReferenceName, const int level)
 {
 	bool fileFound = false;
 
@@ -403,10 +403,10 @@ bool fileIsHeader(string parseFileName)
 }
 #endif
 		
-bool findFileObjectInFileObjectContainerList(CSfileContainer* firstReferenceContainerInLevel, string fileReferenceName, CSfile** fileReferenceFound)
+bool findFileObjectInFileObjectContainerList(constEffective CSfileContainer* firstReferenceContainerInLevel, const string fileReferenceName, constEffective CSfile** fileReferenceFound)
 {
 	bool foundFileObject = false;
-	CSfileContainer* currentReferenceContainerInLevel = firstReferenceContainerInLevel;
+	constEffective CSfileContainer* currentReferenceContainerInLevel = firstReferenceContainerInLevel;
 	while(currentReferenceContainerInLevel->next != NULL)
 	{
 		if(currentReferenceContainerInLevel->fileObject->name == fileReferenceName)
@@ -430,7 +430,7 @@ bool findFileObjectInFileObjectContainerList(CSfileContainer* firstReferenceCont
 }
 
 
-bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunction* firstFunctionInFunctionList, string topLevelFileName, int level)
+bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunction* firstFunctionInFunctionList, const string topLevelFileName, const int level)
 {
 	bool fileFound = false;
 
@@ -764,7 +764,7 @@ bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunction* firstFunctionIn
 
 #define MAX_CODE_FILE_SIZE (1000000)
 
-void getFunctionObjectNamesFromFunctionsInCfile(CSfile* firstFileInIncludeFileList, CSfunction* firstFunctionInFunctionList, CSfile* aboveLevelObject, string topLevelFileName, int level)
+void getFunctionObjectNamesFromFunctionsInCfile(const CSfile* firstFileInIncludeFileList, CSfunction* firstFunctionInFunctionList, const CSfile* aboveLevelObject, const string topLevelFileName, const int level)
 {
 	string codeFileName = topLevelFileName;
 	char* codeFileNamecharstar = const_cast<char*>(codeFileName.c_str());
@@ -1094,11 +1094,11 @@ void getFunctionObjectNamesFromFunctionsInCfile(CSfile* firstFileInIncludeFileLi
 	*/
 }
 
-bool searchFunctionStringForFunctionReferencesRecursive(CSfile* firstFileInIncludeFileList, CSfileContainer* firstFileNameInLayerContainingFunctionReferencesToSearchFor, CSfunction** currentReferenceInFunctionReferenceList, CSfunction** currentReferenceInFunctionReferenceListRepeats, string* functionContentsString)
+bool searchFunctionStringForFunctionReferencesRecursive(const CSfile* firstFileInIncludeFileList, const CSfileContainer* firstFileNameInLayerContainingFunctionReferencesToSearchFor, CSfunction** currentReferenceInFunctionReferenceList, CSfunction** currentReferenceInFunctionReferenceListRepeats, string* functionContentsString)
 {
 	bool result = true;
 
-	CSfileContainer* currentReferenceContainer = firstFileNameInLayerContainingFunctionReferencesToSearchFor;
+	const CSfileContainer* currentReferenceContainer = firstFileNameInLayerContainingFunctionReferencesToSearchFor;
 	#ifdef CS_DEBUG
 	cout << "searchFunctionStringForFunctionReferencesRecursive{}:" << endl;
 	//cout << "functionContentsString = " << *functionContentsString << endl;
@@ -1107,7 +1107,7 @@ bool searchFunctionStringForFunctionReferencesRecursive(CSfile* firstFileInInclu
 
 	while(currentReferenceContainer->next != NULL)
 	{
-		CSfile* currentReference = currentReferenceContainer->fileObject;
+		const CSfile* currentReference = currentReferenceContainer->fileObject;
 		#ifdef CS_DEBUG
 		cout << "currentReference->name = " << currentReference->name << endl;
 		#endif
@@ -1137,7 +1137,7 @@ bool searchFunctionStringForFunctionReferencesRecursive(CSfile* firstFileInInclu
 
 }
 
-bool searchFunctionStringForFunctionReferences(CSfile* firstFileInIncludeFileList, CSfile* fileNameContainingFunctionReferencesToSearchFor, CSfunction** currentReferenceInFunctionReferenceList, CSfunction** currentReferenceInFunctionReferenceListRepeats, string* functionContentsString)
+bool searchFunctionStringForFunctionReferences(const CSfile* firstFileInIncludeFileList, const CSfile* fileNameContainingFunctionReferencesToSearchFor, CSfunction** currentReferenceInFunctionReferenceList, CSfunction** currentReferenceInFunctionReferenceListRepeats, string* functionContentsString)
 {
 	bool result = true;
 
@@ -1150,7 +1150,7 @@ bool searchFunctionStringForFunctionReferences(CSfile* firstFileInIncludeFileLis
 	#endif
 
 	//now search function string for all functions within referenceFound;
-	//CSfunction* currentFunction = foundReference->firstFunctionInFunctionList;
+	//const CSfunction* currentFunction = foundReference->firstFunctionInFunctionList;
 	//if(fileNameContainingFunctionReferencesToSearchFor->firstFunctionInFunctionList != NULL)	//added 3i16b
 	//{
 		CSfunction* currentFunction = fileNameContainingFunctionReferencesToSearchFor->firstFunctionInFunctionList;
@@ -1335,7 +1335,7 @@ void identifyFunctionReferenceArguments(CSfunction* currentReferenceInFunctionRe
 }
 
 //NB this function is not necessary for the current implementation, but is used for neatness
-string removePrependedWhiteSpace(string argument)
+string removePrependedWhiteSpace(const string argument)
 {
 	string argumentWithoutPrependedWhitespace = "";
 	bool findingWhitespace = true;
@@ -1362,7 +1362,7 @@ string removePrependedWhiteSpace(string argument)
 }
 
 #ifdef CS_IDENTIFY_FUNCTION_DECLARATION_ARGUMENTS
-void identifyFunctionDeclarationArguments(CSfunction* currentReferenceInFunctionReferenceList, string* functionNameFull)
+void identifyFunctionDeclarationArguments(CSfunction* currentReferenceInFunctionReferenceList, const string* functionNameFull)
 {
 	CSfunctionArgument* currentFunctionArgumentInFunctionReference = currentReferenceInFunctionReferenceList->firstFunctionArgumentInFunction;
 
@@ -1529,7 +1529,7 @@ CSfile* findReferenceInIncludeFileList(CSfile* firstReferenceInAboveLevelBelowLi
 */
 
 
-string generateSourceFileNameFromHeaderFileName(string headerFileName, string sourceFileNameExtension)
+string generateSourceFileNameFromHeaderFileName(const string headerFileName, const string sourceFileNameExtension)
 {
 	string sourceFileName = "";
 	int positionOfExtension = headerFileName.rfind(CHAR_FULLSTOP);
@@ -1604,7 +1604,7 @@ void attachFunctionReferenceTargets(CSfileContainer* firstObjectInAboveLevelBelo
 }
 
 
-string extractFunctionArgumentName(string* argumentText, int indexOfStartOfVariableName)
+string extractFunctionArgumentName(string* argumentText, const int indexOfStartOfVariableName)
 {
 	string fullVariableName = "";
 	int i = indexOfStartOfVariableName;

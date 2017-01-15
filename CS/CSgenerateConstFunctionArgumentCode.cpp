@@ -19,9 +19,9 @@
 /*******************************************************************************
  *
  * File Name: CSgenerateConstFunctionArgumentCode.cpp
- * Author: Richard Bruce Baxter - Copyright (c) 2005-2016 Baxter AI (baxterai.com)
+ * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3i19e 15-December-2016
+ * Project Version: 3j1a 14-January-2017
  *
  *******************************************************************************/
 
@@ -46,7 +46,7 @@ bool generateConstFunctionArguments(CSfileContainer* firstObjectInTopLevelBelowL
 	return result;
 }
 
-bool generateConstFunctionArgumentsRecurse(CSfileContainer* firstObjectInAboveLevelBelowListContainer, CSfileContainer* firstObjectInTopLevelBelowListContainer)
+bool generateConstFunctionArgumentsRecurse(CSfileContainer* firstObjectInAboveLevelBelowListContainer, const CSfileContainer* firstObjectInTopLevelBelowListContainer)
 {
 	bool result = true;
 
@@ -241,7 +241,7 @@ bool generateConstFunctionArgumentsFile(CSfile* currentFileObject)
 	return result;
 }
 
-string addConstToAllOccurancesOfFunctionObjectFunctionArgumentSecondaryAssignmentDeclarationInFunction(string* functionTextOrig, string functionArgumentSecondaryAssignmentName, bool* foundAtLeastOneInstance, string constString)
+string addConstToAllOccurancesOfFunctionObjectFunctionArgumentSecondaryAssignmentDeclarationInFunction(const string* functionTextOrig, const string functionArgumentSecondaryAssignmentName, bool* foundAtLeastOneInstance, const string constString)
 {
 	string functionTextUpdated = *functionTextOrig;
 
@@ -1204,7 +1204,7 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 	#endif
 }
 
-bool verifyThatVariableIsNotDeclarationOrNextIteratorAssignmentOrArrayIndex(CSfunction* currentFunctionObject, string* functionText, string textBeforeFunctionArgument, string functionDeclarationArgument, int indexOfFunctionArgument, int indexOfSquareBracketOpen, int indexOfSquareBracketClose, int indexOfEndOfCommand, int indexOfStartOfLine, int indexOfEqualsSet)
+bool verifyThatVariableIsNotDeclarationOrNextIteratorAssignmentOrArrayIndex(const CSfunction* currentFunctionObject, const string* functionText, const string textBeforeFunctionArgument, const string functionDeclarationArgument, const int indexOfFunctionArgument, const int indexOfSquareBracketOpen, const int indexOfSquareBracketClose, const int indexOfEndOfCommand, const int indexOfStartOfLine, const int indexOfEqualsSet)
 {
 	bool  passMiscellaneousConditions = true;
 
@@ -1262,7 +1262,7 @@ bool functionArgumentReferenceWholeWordCheck(string* functionText, string functi
 	return functionArgumentReferenceWholeWord;
 }
 
-string extractFullVariableName(string* functionText, int indexOfStartOfVariableName)
+string extractFullVariableName(string* functionText, const int indexOfStartOfVariableName)
 {
 	string fullVariableName = "";
 	int i = indexOfStartOfVariableName;
@@ -1294,7 +1294,7 @@ string extractFullVariableName(string* functionText, int indexOfStartOfVariableN
 	return fullVariableName;
 }
 
-string extractFullVariableNameReverse(string* functionText, int indexOfEndOfVariableName, int* indexOfStartOfVariableName)
+string extractFullVariableNameReverse(const string* functionText, const int indexOfEndOfVariableName, int* indexOfStartOfVariableName)
 {
 	string fullVariableName = "";
 	int i = indexOfEndOfVariableName;
@@ -1328,7 +1328,7 @@ string extractFullVariableNameReverse(string* functionText, int indexOfEndOfVari
 	return fullVariableName;
 }
 
-string extractFullVariableTypeReverse(string* functionText, int indexOfEndOfVariableType, int* indexOfStartOfVariableType)
+string extractFullVariableTypeReverse(const string* functionText, const int indexOfEndOfVariableType, int* indexOfStartOfVariableType)
 {
 	string fullVariableType = "";
 	int i = indexOfEndOfVariableType;
@@ -1387,7 +1387,7 @@ string extractFullVariableTypeReverse(string* functionText, int indexOfEndOfVari
 	return fullVariableType;
 }
 
-bool charInString(string text, char* charArray, int arraySize)
+bool charInString(const string text, const char* charArray, const int arraySize)
 {
 	bool result = false;
 	for(int i=0; i<text.length(); i++)

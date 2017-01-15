@@ -19,9 +19,9 @@
 /*******************************************************************************
  *
  * File Name: CSgenerateObjectOrientedCode.h
- * Author: Richard Bruce Baxter - Copyright (c) 2005-2016 Baxter AI (baxterai.com)
+ * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3i19e 15-December-2016
+ * Project Version: 3j1a 14-January-2017
  *
  *******************************************************************************/
 
@@ -44,17 +44,17 @@ public:
 
 
 bool generateCPPclasses(CSfileContainer* firstObjectInTopLevelBelowListContainer);
-	bool generateCPPclassesRecurse(CSfileContainer* firstObjectInAboveLevelBelowListContainer, CSfileContainer* firstObjectInTopLevelBelowListContainer);
-		bool generateCPPclassesFile(CSfile* currentFileObject, CSfileContainer* firstObjectInTopLevelBelowListContainer);
-			string replaceAllOccurancesOfFunctionObjectReferenceNameInFunction(string* functionTextOrig, string functionReferenceName, string functionReferenceNameUpdated, bool* foundAtLeastOneInstance);
-			void isFunctionBeingReferencedPublicallyRecurse(string functionName, string fileName, CSfileContainer* firstObjectInAboveLevelBelowListContainer, bool* foundPublicReference);
-			string generateClassName(string headerFileName);
-				string generateClassDeclarationName(string className);
-				string generateClassObjectName(string className);
-			string convertFunctionNameToClassFunctionNameSource(string fullFunctionName, string functionName, string className, bool foundPublicReference, bool* foundStaticReference);
-			string convertFunctionNameToClassFunctionNameHeader(string fullFunctionName, string functionName, string className, bool foundPublicReference, bool foundStaticReference);
-			string generateReferencedClassesDeclarations(ReferencedClass* firstReferencedClassInList);
-			bool findReferencedClassInList(ReferencedClass* firstReferencedClassInList, string classNameToFind);
+	bool generateCPPclassesRecurse(CSfileContainer* firstObjectInAboveLevelBelowListContainer, const CSfileContainer* firstObjectInTopLevelBelowListContainer);
+		bool generateCPPclassesFile(CSfile* currentFileObject, const CSfileContainer* firstObjectInTopLevelBelowListContainer);
+			string replaceAllOccurancesOfFunctionObjectReferenceNameInFunction(const string* functionTextOrig, string functionReferenceName, string functionReferenceNameUpdated, bool* foundAtLeastOneInstance);
+			void isFunctionBeingReferencedPublicallyRecurse(const string functionName, const string fileName, const CSfileContainer* firstObjectInAboveLevelBelowListContainer, bool* foundPublicReference);
+			string generateClassName(const string headerFileName);
+				string generateClassDeclarationName(const string className);
+				string generateClassObjectName(const string className);
+			string convertFunctionNameToClassFunctionNameSource(string fullFunctionName, const string functionName, const string className, const bool foundPublicReference, bool* foundStaticReference);
+			string convertFunctionNameToClassFunctionNameHeader(const string fullFunctionName, const string functionName, const string className, const bool foundPublicReference, const bool foundStaticReference);
+			string generateReferencedClassesDeclarations(const ReferencedClass* firstReferencedClassInList);
+			bool findReferencedClassInList(const ReferencedClass* firstReferencedClassInList, const string classNameToFind);
 			bool moveIncludeFileStatementsToHeader(CSfile* firstReferenceInAboveLevelBelowList);
 
 
