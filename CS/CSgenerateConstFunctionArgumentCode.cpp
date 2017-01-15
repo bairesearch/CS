@@ -21,7 +21,7 @@
  * File Name: CSgenerateConstFunctionArgumentCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h10a 09-December-2015
+ * Project Version: 3h11a 10-December-2015
  *
  *******************************************************************************/
 
@@ -626,7 +626,7 @@ bool checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 		if(functionArgumentReferenceWholeWordCheck(functionText, functionDeclarationArgument, indexOfFunctionArgument))
 		{
 			//ensure variable is not preceeded by a -> or . (ie is not actually the function argument but a subset of another object), e.g. pm->wide = wide;
-			if((indexOfFunctionArgument == 0) || !charInCharArray((*functionText)[indexOfFunctionArgument-1], codeReferenceLastCharacters, CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_REFERENCE))
+			if((indexOfFunctionArgument == 0) || !charInCharArray((*functionText)[indexOfFunctionArgument-1], codeReferenceLastCharacters, CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_REFERENCE_NUMBER_OF_TYPES))
 			{//added 3h2d
 
 				//find next occurance of ';' on same line
@@ -665,7 +665,7 @@ bool checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 						{
 							//ignore all lines with function reference on same line, e.g. "sprintf(stringCharStar, format.c_str(), number);"
 							
-							for(int i=0; i<CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_REFERENCE; i++)
+							for(int i=0; i<CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_REFERENCE_NUMBER_OF_TYPES; i++)
 							{
 								int indexOfObjectFunctionName = indexOfFunctionArgument+functionDeclarationArgument.length()+codeReference[i].length();
 								if(indexOfObjectFunctionName+1 < functionText->length())	//+1 to compensate for function name
@@ -699,7 +699,7 @@ bool checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 					#endif
 					#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_CSTDLIB_NON_OBJECT_FUNCTION_EXECUTIONS
 					bool lineIncludesStdLibNonObjectFunctionReference = false;
-					for(int i=0; i<CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_CSTDLIB_NON_OBJECT_FUNCTIONS; i++)
+					for(int i=0; i<CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_CSTDLIB_NON_OBJECT_FUNCTIONS_NUMBER_OF_TYPES; i++)
 					{
 						string stdLibNonObjectFunctionExecutionHypothetical = cstdlibNonObjectFunctions[i] + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_OPEN_PARAMETER_SPACE + functionDeclarationArgument + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_CLOSE_PARAMETER_SPACE + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_END_OF_COMMAND;
 						if(currentLine.find(stdLibNonObjectFunctionExecutionHypothetical) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
@@ -853,6 +853,17 @@ bool checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 						}
 					}
 				}
+								
+				#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_NONCONST_BASED_ON_EXISTENCE_OF_ARBITRARY_SPECIAL_CASE_TEXT
+				for(int i=0; i<CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_SPECIAL_CASES_NUMBER_OF_TYPES; i++)
+				{
+					int indexOfSpecialCaseTextForAssignmentOfNonConst = currentLine.find(specialCaseTextForAssignmentOfNonConst[i]);
+					if(indexOfSpecialCaseTextForAssignmentOfNonConst != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+					{
+						isNotConst = true;
+					}
+				}
+				#endif
 			}
 		}
 	}
@@ -899,7 +910,7 @@ bool checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 		isNotConst = true;
 	}
 	#endif
-
+		
 	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
 	cout << "end checkIfVariableIsBeingModifiedInFunction{}: functionDeclarationArgument = " << functionDeclarationArgument << endl;
 	#endif
