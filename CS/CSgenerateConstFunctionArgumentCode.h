@@ -21,7 +21,7 @@
  * File Name: CSgenerateConstFunctionArgumentCode.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h12b 11-December-2015
+ * Project Version: 3h13a 11-December-2015
  *
  *******************************************************************************/
 
@@ -37,9 +37,10 @@ bool generateConstFunctionArguments(CSfileContainer* firstObjectInTopLevelBelowL
 	bool generateConstFunctionArgumentsRecurse(CSfileContainer* firstObjectInAboveLevelBelowListContainer, CSfileContainer* firstObjectInTopLevelBelowListContainer);
 		bool generateConstFunctionArgumentsFile(CSfile* currentFileObject);
 			bool generateConstFunctionArgumentsFunction(CSfunction* currentFunctionObject);
-				bool generateConstFunctionArgumentAndSearchForSecondaryReferences(CSfunction* currentFunctionObject, CSfunctionArgument* currentFunctionArgumentInFunction, string functionDeclarationArgument, bool ignoreListIterationNextAssignments);
-					bool generateConstFunctionArgument(CSfunction* currentFunctionObject, CSfunctionArgument* currentFunctionArgumentInFunction, string functionDeclarationArgument, bool ignoreListIterationNextAssignments);
-						bool checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject, CSfunctionArgument* currentFunctionArgumentInFunction, string functionDeclarationArgument, bool ignoreListIterationNextAssignments);
+				bool generateConstFunctionArgumentAndSearchForSecondaryReferences(CSfunction* currentFunctionObject, CSfunctionArgument* currentFunctionArgumentInFunction, string functionDeclarationArgument);
+					bool generateConstFunctionArgument(CSfunction* currentFunctionObject, CSfunctionArgument* currentFunctionArgumentInFunction, string functionDeclarationArgument);
+						void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject, CSfunctionArgument* currentFunctionArgumentInFunction, string functionDeclarationArgument, bool* isNotConst, bool* isConstEffective);
+							bool verifyThatVariableIsNotDeclarationOrNextIteratorAssignmentOrArrayIndex(string* functionText, string textBeforeFunctionArgument, string functionDeclarationArgument, int indexOfFunctionArgument, int indexOfSquareBracketOpen, int indexOfSquareBracketClose, int indexOfEndOfCommand, int indexOfStartOfLine, int indexOfEqualsSet);
 							bool functionArgumentReferenceWholeWordCheck(string* functionText, string functionDeclarationArgument, int indexOfFunctionArgument);
 							bool charInString(string text, char* charArray, int arraySize);
 							#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_ASSIGNMENT_OF_DOUBLE_POINTERS
@@ -51,7 +52,7 @@ bool generateConstFunctionArguments(CSfileContainer* firstObjectInTopLevelBelowL
 						string extractFullVariableName(string* functionText, int indexOfStartOfVariableName);
 						string extractFullVariableNameReverse(string* functionText, int indexOfEndOfVariableName, int* indexOfStartOfVariableName);
 						string extractFullVariableTypeReverse(string* functionText, int indexOfEndOfVariableType, int* indexOfStartOfVariableType);
-			string replaceAllOccurancesOfFunctionObjectFunctionArgumentSecondaryAssignmentDeclarationInFunction(string* functionTextOrig, string functionArgumentSecondaryAssignmentName, bool* foundAtLeastOneInstance);		
+			string addConstToAllOccurancesOfFunctionObjectFunctionArgumentSecondaryAssignmentDeclarationInFunction(string* functionTextOrig, string functionArgumentSecondaryAssignmentName, bool* foundAtLeastOneInstance, string constString);
 
 #endif
 
