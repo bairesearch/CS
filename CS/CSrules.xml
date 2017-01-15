@@ -108,12 +108,21 @@
 		<file name="GIAtranslatorDefineSubstances.h" x="6" y="9" />
 		<file name="GIAtranslator.h" x="5" y="8" />
 		<file name="GIAtranslatorLinkEntities.h" x="7" y="9" />
-		<file name="GIAtranslatorOperations.h" x="3" y="13" />
+		<file name="GIAtranslatorOperations.h" x="3" y="12" />
 		<file name="GIAtranslatorDefs.h" x="4" y="14" />
 		<file name="GIAtranslatorRedistributeRelexRelations.h" x="4" y="9" />
 		<file name="GIAtranslatorRedistributeStanfordRelations.h" x="4" y="10" />
 		<file name="GIAwordnet.h" x="9" y="9" />
 		<file name="GIAxmlConversion.h" x="12" y="8" />
+
+		<file name="GIAcorpus.h" x="8" y="11" />
+		<file name="GIAcorpusTranslator.h" x="8" y="12" />
+		<file name="GIAcorpusOperations.h" x="8" y="13" />
+		<file name="GIAcorpusDatabase.h" x="8" y="14" />
+
+		<file name="wn.h" x="4" y="17" />
+		<file name="math.h" x="5" y="17" />
+		<file name="CECodeextensionClass.h" x="6" y="17" />
 
 		<file name="RTglobalDefs.h" x="14" y="8" />
 		<file name="RTmain.h" x="" y="" />
