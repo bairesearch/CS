@@ -23,7 +23,7 @@
  * File Name: CSmain.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c3g 18-November-2012
+ * Project Version: 3c3h 19-November-2012
  *
  *******************************************************************************/
 
@@ -256,7 +256,7 @@ int main(int argc,char **argv)
 
 	if(argumentExists(argc,argv,"-version"))
 	{
-		cout << "OpenCS.exe - Project Version: 3c3g 18-November-2012" << endl;
+		cout << "OpenCS.exe - Project Version: 3c3h 19-November-2012" << endl;
 		exit(1);
 	}
 
@@ -276,6 +276,7 @@ int main(int argc,char **argv)
 		cout << "CS may produce large SVG files (Eg when functions are enabled via enablefunctions) which must be viewed with a viewer capable of dynamic zoom, eg, inkscape" << endl;
 		cout << "CS is not designed to operate with function pointers (and object orientated code) - it is argued that code is easier to read without function pointers and should only be used where heavy optimisation is required" << endl;
 		cout << "the first include file in the top level source file (eg PROJECTmain.cpp) must declare the top level function name (eg main)" << endl;
+		cout << "make sure the temp folder is clear of all output files (ie svg/html files of the same name as expected output files)" << endl;
 		cout << "****************************" << endl;
 		exit(0);
 	}
@@ -332,7 +333,7 @@ int main(int argc,char **argv)
 
 	if(mode == CS_MODE_OUTPUT_EXECUTION_FLOW)
 	{
-		printCS(topLevelFileName, topLevelFunctionName, rasterImageWidth, rasterImageHeight, outputLDRfileName, outputSVGfileName, outputPPMfileName, outputHTMLfileName, useOutputLDRfile, useOutputPPMfile, useOutputHTMLfile, generateHTMLdocumentationMode, displayInOpenGLAndOutputScreenshot, outputFunctionsConnectivity, traceFunctionUpwards, bottomLevelFunctionNameToTraceUpwards);
+		printCS(topLevelFileName, rasterImageWidth, rasterImageHeight, outputLDRfileName, outputSVGfileName, outputPPMfileName, outputHTMLfileName, useOutputLDRfile, useOutputPPMfile, useOutputHTMLfile, generateHTMLdocumentationMode, displayInOpenGLAndOutputScreenshot, outputFunctionsConnectivity, traceFunctionUpwards, bottomLevelFunctionNameToTraceUpwards);
 	}
 	else if(mode == CS_MODE_OUTPUT_DATA_FLOW)
 	{

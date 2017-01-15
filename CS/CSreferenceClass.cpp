@@ -23,7 +23,7 @@
  * File Name: CSreferenceClass.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c3g 18-November-2012
+ * Project Version: 3c3h 19-November-2012
  *
  *******************************************************************************/
 
@@ -59,7 +59,7 @@ CSfileReference::CSfileReference(void)
 	printXIndex = 0;
 	printYIndex = 0;
 	printTextX = 0;
-	printTextY = 0;
+	printTextY = 0;	
 	HTMLgenerated = false;
 	
 	next = NULL;
@@ -121,17 +121,23 @@ CSfunctionReference::CSfunctionReference(void)
 	name = "";
 	col = 0;
 	printed = false;
+	#ifdef CS_HTML_DOCUMENTATION_GENERATE_FILE_CODE_STRUCTURE_DIAGRAMS
+	singleFileOnlyPrinted = false;
+	#endif	
 	printX = 0;
 	printY = 0;
 	printXIndex = 0;
 	printYIndex = 0;
 	printTextX = 0;
 	printTextY = 0;
+	filePrintXrecordForSingleFileOnly = 0;
+	filePrintYrecordForSingleFileOnly = 0;	
 	HTMLgenerated = false;
 	
 	next = NULL;
 	previous = NULL;
 	firstReferenceContainerInAboveReferenceList = new CSfunctionReferenceContainer();
+	hasHadFunctionReferencesParsed = false;
 	printedTrace = false;
 	printedTraceReset = false;
 

@@ -23,7 +23,7 @@
  * File Name: CSoperations.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c3g 18-November-2012
+ * Project Version: 3c3h 19-November-2012
  *
  *******************************************************************************/
 
@@ -762,240 +762,243 @@ void getFunctionReferenceNamesFromFunctionsInCfile(CSfileReference * firstRefere
 
 		while(currentReference->next != NULL)
 		{
-
-			string fullFunctionName = currentReference->nameFull;
-
-			//1. in cpp file, find fullfilename [identified in header];
-			#ifdef CS_DEBUG
-			//cout << "fileContentsString = " << fileContentsString << endl;
-			//cout << "fullFunctionName = " << fullFunctionName << endl;
-			#endif
-			int positionOfFunctionReference = fileContentsString.find(fullFunctionName);
-
-			if(positionOfFunctionReference != -1)
+			if(!(currentReference->hasHadFunctionReferencesParsed))
 			{
-				/*
-				//NEW method - comments are ignored - there is a problem with this and so it has been disabled at present...
-								
-				string functionContentsString = "";
+				string fullFunctionName = currentReference->nameFull;
 
-				//2. create a string containing all text from this position to the closing bracket "\n}"
-				bool stillFindingEndOfFunction = true;
-				bool waitingForNewLine = false;
-				bool readingLargeComment = false;
-				int lineCount = 0;
+				//1. in cpp file, find fullfilename [identified in header];
+				#ifdef CS_DEBUG
+				//cout << "fileContentsString = " << fileContentsString << endl;
+				//cout << "fullFunctionName = " << fullFunctionName << endl;
+				#endif
+				int positionOfFunctionReference = fileContentsString.find(fullFunctionName);
 
-				int currentIndexInFunction = positionOfFunctionReference;
-				while(stillFindingEndOfFunction)
+				if(positionOfFunctionReference != -1)
 				{
-					char c = fileContentsString[currentIndexInFunction];
-					currentIndexInFunction++;
-					if(readingLargeComment)
-					{
-						if(c == '\n')
-						{
-							lineCount++;
-						}
-						else
-						{
-							while(c == '*')
-							{
+					/*
+					//NEW method - comments are ignored - there is a problem with this and so it has been disabled at present...
 
-								c = fileContentsString[currentIndexInFunction];
-								currentIndexInFunction++;
-								if(c == '/')
+					string functionContentsString = "";
+
+					//2. create a string containing all text from this position to the closing bracket "\n}"
+					bool stillFindingEndOfFunction = true;
+					bool waitingForNewLine = false;
+					bool readingLargeComment = false;
+					int lineCount = 0;
+
+					int currentIndexInFunction = positionOfFunctionReference;
+					while(stillFindingEndOfFunction)
+					{
+						char c = fileContentsString[currentIndexInFunction];
+						currentIndexInFunction++;
+						if(readingLargeComment)
+						{
+							if(c == '\n')
+							{
+								lineCount++;
+							}
+							else
+							{
+								while(c == '*')
 								{
-									readingLargeComment = false;
-								}
-								else if(c == '\n')
-								{
-									lineCount++;
+
+									c = fileContentsString[currentIndexInFunction];
+									currentIndexInFunction++;
+									if(c == '/')
+									{
+										readingLargeComment = false;
+									}
+									else if(c == '\n')
+									{
+										lineCount++;
+									}
 								}
 							}
-						}
 
-					}
-					else if(c == '/')
-					{
-						c = fileContentsString[currentIndexInFunction];
-						currentIndexInFunction++;
-						if(c == '*')
-						{
-							readingLargeComment = true;
 						}
 						else if(c == '/')
 						{
-							//single line comment found
-							waitingForNewLine = true;
-
-						}
-						else if(c == '\n')
-						{
-							lineCount++;
-							if(waitingForNewLine)
+							c = fileContentsString[currentIndexInFunction];
+							currentIndexInFunction++;
+							if(c == '*')
 							{
-								waitingForNewLine = false;
+								readingLargeComment = true;
+							}
+							else if(c == '/')
+							{
+								//single line comment found
+								waitingForNewLine = true;
+
+							}
+							else if(c == '\n')
+							{
+								lineCount++;
+								if(waitingForNewLine)
+								{
+									waitingForNewLine = false;
+								}
+								else
+								{
+									functionContentsString = functionContentsString + c;
+								}
 							}
 							else
 							{
 								functionContentsString = functionContentsString + c;
 							}
 						}
+						else if(waitingForNewLine)
+						{
+							if(c == '\n')
+							{
+								lineCount++;
+								waitingForNewLine = false;
+							}
+							else
+							{
+								//do nothing, still waiting for new line
+							}
+						}
+						else if(c == '\n')
+						{
+							functionContentsString = functionContentsString + c;
+
+							c = fileContentsString[currentIndexInFunction];
+							currentIndexInFunction++;
+							if(c == '}')
+							{
+								stillFindingEndOfFunction = false;
+							}
+							functionContentsString = functionContentsString + c;
+						}
 						else
 						{
 							functionContentsString = functionContentsString + c;
 						}
 					}
-					else if(waitingForNewLine)
-					{
-						if(c == '\n')
-						{
-							lineCount++;
-							waitingForNewLine = false;
-						}
-						else
-						{
-							//do nothing, still waiting for new line
-						}
-					}
-					else if(c == '\n')
-					{
-						functionContentsString = functionContentsString + c;
+					*/
 
-						c = fileContentsString[currentIndexInFunction];
-						currentIndexInFunction++;
-						if(c == '}')
-						{
-							stillFindingEndOfFunction = false;
-						}
-						functionContentsString = functionContentsString + c;
-					}
-					else
+					//OLD method - comments are not ignored;
+					bool stillFindingEndOfFunction = true;
+					bool newLineFound = false;
+
+					#define CS_MAX_NUM_CHARACTERS_PER_FUNCTION (1000000)
+					int currentIndexInFunction = positionOfFunctionReference;
+					while(stillFindingEndOfFunction)
 					{
-						functionContentsString = functionContentsString + c;
-					}
-				}
-				*/
+						char c = fileContentsString[currentIndexInFunction];
 
-				//OLD method - comments are not ignored;
-				bool stillFindingEndOfFunction = true;
-				bool newLineFound = false;
-
-				#define CS_MAX_NUM_CHARACTERS_PER_FUNCTION (1000000)
-				int currentIndexInFunction = positionOfFunctionReference;
-				while(stillFindingEndOfFunction)
-				{
-					char c = fileContentsString[currentIndexInFunction];
-
-					if(newLineFound)
-					{
-						if(c == '}')
+						if(newLineFound)
 						{
-							stillFindingEndOfFunction = false;
+							if(c == '}')
+							{
+								stillFindingEndOfFunction = false;
+							}
+							else
+							{
+								newLineFound = false;
+							}
 						}
 						else
 						{
 							newLineFound = false;
 						}
+
+						if(c == '\n')
+						{
+							newLineFound = true;
+						}
+
+						if(currentIndexInFunction > CS_MAX_NUM_CHARACTERS_PER_FUNCTION)
+						{
+							cout << "getFunctionReferenceNamesFromFunctionsInCfile() error: function definitions in .cpp files must end with a } without any leading white space" << endl;
+							exit(0);
+						}
+
+						currentIndexInFunction++;
 					}
-					else
-					{
-						newLineFound = false;
-					}
-
-					if(c == '\n')
-					{
-						newLineFound = true;
-					}
-
-					if(currentIndexInFunction > CS_MAX_NUM_CHARACTERS_PER_FUNCTION)
-					{
-						cout << "getFunctionReferenceNamesFromFunctionsInCfile() error: function definitions in .cpp files must end with a } without any leading white space" << endl;
-						exit(0);
-					}
-
-					currentIndexInFunction++;
-				}
-				int positionOfFunctionReferenceEnd = currentIndexInFunction;
-				string functionContentsString = fileContentsString.substr(positionOfFunctionReference+fullFunctionName.length(), (positionOfFunctionReferenceEnd-positionOfFunctionReference)-fullFunctionName.length());
+					int positionOfFunctionReferenceEnd = currentIndexInFunction;
+					string functionContentsString = fileContentsString.substr(positionOfFunctionReference+fullFunctionName.length(), (positionOfFunctionReferenceEnd-positionOfFunctionReference)-fullFunctionName.length());
 
 
 
 
 
-				//3. search this string for any of the function (not full function names) across all include/header files
-				CSfunctionReference * newfirstReferenceInFunctionReferenceList = new CSfunctionReference();
-				currentReference->firstReferenceInFunctionReferenceList = newfirstReferenceInFunctionReferenceList;
+					//3. search this string for any of the function (not full function names) across all include/header files
+					CSfunctionReference * newfirstReferenceInFunctionReferenceList = new CSfunctionReference();
+					currentReference->firstReferenceInFunctionReferenceList = newfirstReferenceInFunctionReferenceList;
 
-				#ifdef CS_DEBUG
-				/*
-				cout << "file topLevelFileName = " << topLevelFileName << endl;
-				cout << "topLevelReference->name = " << topLevelReference->name << endl;
-				cout << "function currentReference->name = " << currentReference->name << endl;
-				cout << "positionOfFunctionReference = " << positionOfFunctionReference << endl;
-				//cout << "functionContentsString = " << functionContentsString << endl;
-				*/
-				/*
-				for(int i=0; i<level; i++)
-				{
-					cout << "\t";
-				}
-				cout << "\tcurrentReference->name = " << currentReference->name << endl;
-				*/
-				#endif
-
-				CSfunctionReference * currentReferenceInFunctionReferenceList = currentReference->firstReferenceInFunctionReferenceList;
-				//cout << "search current file for function references;" << endl;
-				#ifdef CS_DEBUG
-				//cout << "firstReferenceInIncludeFileList->name = " << firstReferenceInIncludeFileList->name << endl;
-				#endif
-				//search current file for function references;
-				currentReferenceInFunctionReferenceList = searchFunctionStringForFunctionReferences(firstReferenceInIncludeFileList, topLevelReference, currentReferenceInFunctionReferenceList, functionContentsString);
-
-				#ifdef CS_DEBUG
-				/*
-				CSfunctionReference * temp1acurrentReferenceInFunctionList = currentReference->firstReferenceInFunctionReferenceList;
-				while(temp1acurrentReferenceInFunctionList->next != NULL)
-				{
+					#ifdef CS_DEBUG
+					/*
+					cout << "file topLevelFileName = " << topLevelFileName << endl;
+					cout << "topLevelReference->name = " << topLevelReference->name << endl;
+					cout << "function currentReference->name = " << currentReference->name << endl;
+					cout << "positionOfFunctionReference = " << positionOfFunctionReference << endl;
+					//cout << "functionContentsString = " << functionContentsString << endl;
+					*/
+					/*
 					for(int i=0; i<level; i++)
 					{
 						cout << "\t";
 					}
-					cout << "\t\ttemp1acurrentReferenceInFunctionList->name = " << temp1acurrentReferenceInFunctionList->name << endl;
-					temp1acurrentReferenceInFunctionList = temp1acurrentReferenceInFunctionList->next;
-				}
-				*/
-				#endif
+					cout << "\tcurrentReference->name = " << currentReference->name << endl;
+					*/
+					#endif
 
+					CSfunctionReference * currentReferenceInFunctionReferenceList = currentReference->firstReferenceInFunctionReferenceList;
+					//cout << "search current file for function references;" << endl;
+					#ifdef CS_DEBUG
+					//cout << "firstReferenceInIncludeFileList->name = " << firstReferenceInIncludeFileList->name << endl;
+					#endif
+					//search current file for function references;
+					currentReferenceInFunctionReferenceList = searchFunctionStringForFunctionReferences(firstReferenceInIncludeFileList, topLevelReference, currentReferenceInFunctionReferenceList, functionContentsString);
 
-				//cout << "search include files for function references;;" << endl;
-				#ifdef CS_DEBUG
-				//cout << "firstReferenceInIncludeFileList->name = " << firstReferenceInIncludeFileList->name << endl;
-				#endif
-				//search include files for function references;
-				currentReferenceInFunctionReferenceList = searchFunctionStringForFunctionReferencesRecursive(firstReferenceInIncludeFileList, topLevelReference->firstReferenceInBelowList, currentReferenceInFunctionReferenceList, functionContentsString);
-
-				#ifdef CS_DEBUG
-				/*
-				CSfunctionReference * temp1bcurrentReferenceInFunctionList = currentReference->firstReferenceInFunctionReferenceList;
-				while(temp1bcurrentReferenceInFunctionList->next != NULL)
-				{
-					for(int i=0; i<level; i++)
+					#ifdef CS_DEBUG
+					/*
+					CSfunctionReference * temp1acurrentReferenceInFunctionList = currentReference->firstReferenceInFunctionReferenceList;
+					while(temp1acurrentReferenceInFunctionList->next != NULL)
 					{
-						cout << "\t";
+						for(int i=0; i<level; i++)
+						{
+							cout << "\t";
+						}
+						cout << "\t\ttemp1acurrentReferenceInFunctionList->name = " << temp1acurrentReferenceInFunctionList->name << endl;
+						temp1acurrentReferenceInFunctionList = temp1acurrentReferenceInFunctionList->next;
 					}
-					cout << "\t\ttemp1bcurrentReferenceInFunctionList->name = " << temp1bcurrentReferenceInFunctionList->name << endl;
-					temp1bcurrentReferenceInFunctionList = temp1bcurrentReferenceInFunctionList->next;
+					*/
+					#endif
+
+
+					//cout << "search include files for function references;;" << endl;
+					#ifdef CS_DEBUG
+					//cout << "firstReferenceInIncludeFileList->name = " << firstReferenceInIncludeFileList->name << endl;
+					#endif
+					//search include files for function references;
+					currentReferenceInFunctionReferenceList = searchFunctionStringForFunctionReferencesRecursive(firstReferenceInIncludeFileList, topLevelReference->firstReferenceInBelowList, currentReferenceInFunctionReferenceList, functionContentsString);
+
+					#ifdef CS_DEBUG
+					/*
+					CSfunctionReference * temp1bcurrentReferenceInFunctionList = currentReference->firstReferenceInFunctionReferenceList;
+					while(temp1bcurrentReferenceInFunctionList->next != NULL)
+					{
+						for(int i=0; i<level; i++)
+						{
+							cout << "\t";
+						}
+						cout << "\t\ttemp1bcurrentReferenceInFunctionList->name = " << temp1bcurrentReferenceInFunctionList->name << endl;
+						temp1bcurrentReferenceInFunctionList = temp1bcurrentReferenceInFunctionList->next;
+					}
+					*/
+					#endif
 				}
-				*/
-				#endif
-			}
-			else
-			{
-				cout << "error: function not found in file:" << endl;
-				cout << "fullFunctionName = " << fullFunctionName << endl;
-				cout << "fileName = " << codeFileName << endl;
-				exit(0);
+				else
+				{
+					cout << "error: function not found in file:" << endl;
+					cout << "fullFunctionName = " << fullFunctionName << endl;
+					cout << "fileName = " << codeFileName << endl;
+					exit(0);
+				}
+				currentReference->hasHadFunctionReferencesParsed = true;	//not used
 			}
 			currentReference = currentReference->next;
 		}

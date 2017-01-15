@@ -23,7 +23,7 @@
  * File Name: CSreferenceClass.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c3g 18-November-2012
+ * Project Version: 3c3h 19-November-2012
  *
  *******************************************************************************/
 
@@ -84,12 +84,17 @@ public:
 	string name;		//file/function
 	int col;		//	file/function colour + connection colour to all children
 	bool printed;		//file/function printed
+	#ifdef CS_HTML_DOCUMENTATION_GENERATE_FILE_CODE_STRUCTURE_DIAGRAMS
+	bool singleFileOnlyPrinted;	//file/function printed
+	#endif	
 	int printX;		//file/function printX
 	int printY;		//file/function printY
 	int printXIndex;	//file/function printXIndex
 	int printYIndex;	//file/function printYIndex
 	int printTextX;		//file/function printXIndex
 	int printTextY;		//file/function printYIndex
+	int filePrintXrecordForSingleFileOnly;	//file/function printX
+	int filePrintYrecordForSingleFileOnly;	//file/function printY	
 	bool HTMLgenerated;	//file/function HTML generated
 	
 	CSfunctionReference * next;
@@ -101,6 +106,7 @@ public:
 	//function reference only
 	string nameFull;	//function only
 	CSfunctionReference * firstReferenceInFunctionReferenceList;
+	bool hasHadFunctionReferencesParsed;
 	bool isFunctionReference;
 	bool isFunctionReferenceReference;
 	int numTopLevelFunctionsInFileAlreadyPrinted;
