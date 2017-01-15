@@ -26,7 +26,7 @@
  * File Name: CSdraw.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3d5c 05-August-2014
+ * Project Version: 3d6a 05-August-2014
  *
  *******************************************************************************/
 
@@ -1022,17 +1022,21 @@ Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentRe
 
 						double xOffset = 0.0;
 						#ifdef CS_DRAW_APPLY_EVEN_ODD_X_OFFSET
+						/*
 						#ifdef CS_SUPPORT_PREDEFINED_GRID
 						if(!usePredefinedGrid)
 						{
 						#endif
+						*/
 							if((newFunctionLevel % 2) == 0)
 							{
 								xOffset = CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR/0.5 / 2.0;
 							}
+						/*
 						#ifdef CS_SUPPORT_PREDEFINED_GRID
 						}
 						#endif
+						*/
 						#endif
 						functionReference->printX = fileReference->printX + (fileReference->maxFunctionPrintXAtAParticularY[newFunctionLevel])*CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR/0.5 + xOffset - (CS_FILE_FUNCTIONS_ENABLED_VECTOROBJECTS_SCALE_FACTOR*0.5 * CS_FILE_FUNCTIONS_ENABLED_LARGE_BOX_SCALE_FACTOR_X * 0.5);
 						functionReference->printY = fileReference->printY + (1+newFunctionLevel)*CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR*CS_FUNCTION_TEXT_BOX_SCALE_FACTOR_Y_SPACING_FRACTION;
