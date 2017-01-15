@@ -23,7 +23,7 @@
  * File Name: CSmain.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c3d 17-November-2012
+ * Project Version: 3c3e 17-November-2012
  *
  *******************************************************************************/
 
@@ -31,7 +31,7 @@
 #include "CSmain.h"
 #include "CSexecflow.h"
 #include "CSdataflow.h"
-#include "CSpreprocessorfilter.h"
+#include "CSpreprocessorFilter.h"
 #include "CSdraw.h"
 #include "XMLrulesClass.h"
 #include "LDsprite.h"
@@ -74,17 +74,17 @@ static char errmessage[] = "Usage:  OpenCS.exe [options]"
 
 int main(int argc,char **argv)
 {
-	bool useOutputLDRFile = false;
-	string outputLDRFileName = "codeStructureNet.ldr";
+	bool useOutputLDRfile = false;
+	string outputLDRfileName = "codeStructureNet.ldr";
 
-	bool useOutputPPMFile = false;
-	string outputPPMFileName = "codeStructureNet.ppm";
+	bool useOutputPPMfile = false;
+	string outputPPMfileName = "codeStructureNet.ppm";
 
 	bool useOutputSVGFile = false;
-	string outputSVGFileName = "codeStructureNet.svg";
+	string outputSVGfileName = "codeStructureNet.svg";
 
-	bool useOutputHTMLFile = false;
-	string outputHTMLFileName = "codeStructureNet.html";
+	bool useOutputHTMLfile = false;
+	string outputHTMLfileName = "codeStructureNet.html";
 	
 	bool useOutputAllFile = false;
 	string outputAllFileName = "codeStructureNet";
@@ -107,61 +107,61 @@ int main(int argc,char **argv)
 	
 	bool passInputReq = true;
 	bool outputFunctionsConnectivity = false;
-	bool traceAFunctionUpwards = false;
+	bool traceFunctionUpwards = false;
 
 	int rasterImageWidth = 1600;
 	int rasterImageHeight = 1000;
 
-	if (exists_argument(argc,argv,"-mode"))
+	if (argumentExists(argc,argv,"-mode"))
 	{
-		mode = get_float_argument(argc,argv,"-mode");
+		mode = getFloatArgument(argc,argv,"-mode");
 	}
 	
-	if(exists_argument(argc,argv,"-oldr"))
+	if(argumentExists(argc,argv,"-oldr"))
 	{
-		outputLDRFileName=get_char_argument(argc,argv,"-oldr");
-		useOutputLDRFile = true;
+		outputLDRfileName=getCharArgument(argc,argv,"-oldr");
+		useOutputLDRfile = true;
 		printOutput = true;
 	}
 
-	if(exists_argument(argc,argv,"-oppm"))
+	if(argumentExists(argc,argv,"-oppm"))
 	{
-		outputPPMFileName=get_char_argument(argc,argv,"-oppm");
-		useOutputPPMFile = true;
+		outputPPMfileName=getCharArgument(argc,argv,"-oppm");
+		useOutputPPMfile = true;
 		printOutput = true;
 	}
 
-	if(exists_argument(argc,argv,"-osvg"))
+	if(argumentExists(argc,argv,"-osvg"))
 	{
-		outputSVGFileName=get_char_argument(argc,argv,"-osvg");
+		outputSVGfileName=getCharArgument(argc,argv,"-osvg");
 		useOutputSVGFile = true;
 		printOutput = true;
 	}
 	
-	if(exists_argument(argc,argv,"-ohtml"))
+	if(argumentExists(argc,argv,"-ohtml"))
 	{
-		outputHTMLFileName=get_char_argument(argc,argv,"-ohtml");
-		useOutputHTMLFile = true;
+		outputHTMLfileName=getCharArgument(argc,argv,"-ohtml");
+		useOutputHTMLfile = true;
 	}
 	
-	if(exists_argument(argc,argv,"-oall"))
+	if(argumentExists(argc,argv,"-oall"))
 	{
-		outputAllFileName=get_char_argument(argc,argv,"-oall");
+		outputAllFileName=getCharArgument(argc,argv,"-oall");
 		useOutputAllFile = true;
 		printOutput = true;
 	}
 
-	if(exists_argument(argc,argv,"-file"))
+	if(argumentExists(argc,argv,"-file"))
 	{
-		topLevelFileName=get_char_argument(argc,argv,"-file");
+		topLevelFileName=getCharArgument(argc,argv,"-file");
 	}
 	else
 	{
 		passInputReq = false;
 	}
-	if(exists_argument(argc,argv,"-function"))
+	if(argumentExists(argc,argv,"-function"))
 	{
-		topLevelFunctionName=get_char_argument(argc,argv,"-function");
+		topLevelFunctionName=getCharArgument(argc,argv,"-function");
 	}
 	else
 	{
@@ -171,31 +171,31 @@ int main(int argc,char **argv)
 
 
 
-	if(exists_argument(argc,argv,"-notshow"))
+	if(argumentExists(argc,argv,"-notshow"))
 	{
 		displayInOpenGLAndOutputScreenshot = false;
 	}
 
-	if(exists_argument(argc,argv,"-width"))
+	if(argumentExists(argc,argv,"-width"))
 	{
-		rasterImageWidth = get_float_argument(argc,argv,"-width");
+		rasterImageWidth = getFloatArgument(argc,argv,"-width");
 	}
 	
-	if(exists_argument(argc,argv,"-height"))
+	if(argumentExists(argc,argv,"-height"))
 	{
-		rasterImageHeight = get_float_argument(argc,argv,"-height");
+		rasterImageHeight = getFloatArgument(argc,argv,"-height");
 	}
 	
-	if(exists_argument(argc,argv,"-enablefunctions"))
+	if(argumentExists(argc,argv,"-enablefunctions"))
 	{
 		outputFunctionsConnectivity = true;
 	}
 
-	if(exists_argument(argc,argv,"-trace"))
+	if(argumentExists(argc,argv,"-trace"))
 	{
 		if(outputFunctionsConnectivity)
 		{
-			traceAFunctionUpwards = true;
+			traceFunctionUpwards = true;
 
 		}
 		else
@@ -204,16 +204,16 @@ int main(int argc,char **argv)
 			passInputReq = false;
 		}
 	}
-	if(exists_argument(argc,argv,"-tracefunction"))
+	if(argumentExists(argc,argv,"-tracefunction"))
 	{
-		bottomLevelFunctionNameToTraceUpwards=get_char_argument(argc,argv,"-tracefunction");
+		bottomLevelFunctionNameToTraceUpwards=getCharArgument(argc,argv,"-tracefunction");
 	}
 				
 
-	if(exists_argument(argc,argv,"-html"))
+	if(argumentExists(argc,argv,"-html"))
 	{
 		generateHTMLdocumentationMode = CS_GENERATE_HTML_DOCUMENTATION_MODE_ON;
-		//get_float_argument(argc,argv,"-html");
+		//getFloatArgument(argc,argv,"-html");
 	}
 			
 	char currentFolder[EXE_FOLDER_PATH_MAX_LENGTH];
@@ -223,25 +223,25 @@ int main(int argc,char **argv)
 	::GetCurrentDirectory(EXE_FOLDER_PATH_MAX_LENGTH, currentFolder);
 	#endif
 
-	if(exists_argument(argc,argv,"-workingfolder"))
+	if(argumentExists(argc,argv,"-workingfolder"))
 	{
-		workingFolderCharStar=get_char_argument(argc,argv,"-workingfolder");
+		workingFolderCharStar=getCharArgument(argc,argv,"-workingfolder");
 	}
 	else
 	{
 		workingFolderCharStar = currentFolder;
 	}
-	if(exists_argument(argc,argv,"-exefolder"))
+	if(argumentExists(argc,argv,"-exefolder"))
 	{
-		exeFolderCharStar=get_char_argument(argc,argv,"-exefolder");
+		exeFolderCharStar=getCharArgument(argc,argv,"-exefolder");
 	}
 	else
 	{
 		exeFolderCharStar = currentFolder;
 	}
-	if(exists_argument(argc,argv,"-tempfolder"))
+	if(argumentExists(argc,argv,"-tempfolder"))
 	{
-		tempFolderCharStar=get_char_argument(argc,argv,"-tempfolder");
+		tempFolderCharStar=getCharArgument(argc,argv,"-tempfolder");
 	}
 	else
 	{
@@ -254,9 +254,9 @@ int main(int argc,char **argv)
 	::SetCurrentDirectory(workingFolderCharStar);
 	#endif
 
-	if(exists_argument(argc,argv,"-version"))
+	if(argumentExists(argc,argv,"-version"))
 	{
-		cout << "OpenCS.exe - Project Version: 3c3d 17-November-2012" << endl;
+		cout << "OpenCS.exe - Project Version: 3c3e 17-November-2012" << endl;
 		exit(1);
 	}
 
@@ -283,37 +283,37 @@ int main(int argc,char **argv)
 
 	if(printOutput)
 	{
-		if(!useOutputLDRFile)
+		if(!useOutputLDRfile)
 		{
 			if(useOutputAllFile || displayInOpenGLAndOutputScreenshot)		//LDR output is always required when displaying semantic network in OpenGL and outputing screenshot
 			{
-				useOutputLDRFile = true;
-				outputLDRFileName = outputAllFileName + ".ldr";
+				useOutputLDRfile = true;
+				outputLDRfileName = outputAllFileName + ".ldr";
 			}
 		}
 		if(!useOutputSVGFile)
 		{
 			useOutputSVGFile = true;	//SVG output is always required when printing/drawing semantic network
-			outputSVGFileName = outputAllFileName + ".svg";
+			outputSVGfileName = outputAllFileName + ".svg";
 		}
-		if(!useOutputPPMFile)
+		if(!useOutputPPMfile)
 		{
 			if(useOutputAllFile)
 			{
-				useOutputPPMFile = true;
-				outputPPMFileName = outputAllFileName + ".ppm";
+				useOutputPPMfile = true;
+				outputPPMfileName = outputAllFileName + ".ppm";
 			}
 		}
 	}
 	/*
 	if(generateHTMLdocumentationMode != CS_GENERATE_HTML_DOCUMENTATION_MODE_OFF)
 	{//only print html when explicitly set to do so
-		if(!useOutputHTMLFile)
+		if(!useOutputHTMLfile)
 		{
 			if(useOutputAllFile)
 			{
-				useOutputHTMLFile = true;
-				outputHTMLFileName = outputAllFileName + ".html";
+				useOutputHTMLfile = true;
+				outputHTMLfileName = outputAllFileName + ".html";
 			}
 		}	
 	}
@@ -321,18 +321,18 @@ int main(int argc,char **argv)
 	
 
 
-	if(!parseCSRulesXMLFile())
+	if(!parseCSrulesXMLfile())
 	{
 		cout << "error: no rules file detected" << endl;
 		exit(0);
 	}
-	fillInLDSpriteExternVariables();
-	fillInCSRulesExternVariables();
+	fillInLDspriteExternVariables();
+	fillInCSrulesExternVariables();
 
 
 	if(mode == CS_MODE_OUTPUT_EXECUTION_FLOW)
 	{
-		printCS(topLevelFileName, topLevelFunctionName, rasterImageWidth, rasterImageHeight, outputLDRFileName, outputSVGFileName, outputPPMFileName, outputHTMLFileName, useOutputLDRFile, useOutputPPMFile, useOutputHTMLFile, generateHTMLdocumentationMode, displayInOpenGLAndOutputScreenshot, outputFunctionsConnectivity, traceAFunctionUpwards, bottomLevelFunctionNameToTraceUpwards);
+		printCS(topLevelFileName, topLevelFunctionName, rasterImageWidth, rasterImageHeight, outputLDRfileName, outputSVGfileName, outputPPMfileName, outputHTMLfileName, useOutputLDRfile, useOutputPPMfile, useOutputHTMLfile, generateHTMLdocumentationMode, displayInOpenGLAndOutputScreenshot, outputFunctionsConnectivity, traceFunctionUpwards, bottomLevelFunctionNameToTraceUpwards);
 	}
 	else if(mode == CS_MODE_OUTPUT_DATA_FLOW)
 	{

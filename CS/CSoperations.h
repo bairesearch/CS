@@ -23,7 +23,7 @@
  * File Name: CSoperations.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c3d 17-November-2012
+ * Project Version: 3c3e 17-November-2012
  *
  *******************************************************************************/
 
@@ -37,14 +37,14 @@
 
 
 
-bool getIncludeFileNamesFromCorHFile(CSFileReference * firstReferenceInIncludeFileList, CSFileReference * topLevelReference, string topLevelReferenceName, int level);
-	bool getFunctionNamesFromFunctionDeclarationsInHFile(CSFunctionReference * firstReferenceInFunctionList, string topLevelFileName, int level);
-	void getFunctionReferenceNamesFromFunctionsInCFile(CSFileReference * firstReferenceInIncludeFileList, CSFunctionReference * firstReferenceInFunctionList, CSFileReference * topLevelReference, string topLevelFileName, int level);
-		CSFunctionReference * searchFunctionStringForFunctionReferencesRecursive(CSFileReference * firstReferenceInIncludeFileList, CSFileReference * firstFileNameInLayerContainingFunctionReferencesToSearchFor, CSFunctionReference * firstReferenceInFunctionReferenceList, string functionContentsString);
-			CSFunctionReference * searchFunctionStringForFunctionReferences(CSFileReference * firstReferenceInIncludeFileList, CSFileReference * fileNameContainingFunctionReferencesToSearchFor, CSFunctionReference * firstReferenceInFunctionReferenceList, string functionContentsString);
+bool getIncludeFileNamesFromCorHFile(CSfileReference * firstReferenceInIncludeFileList, CSfileReference * topLevelReference, string topLevelReferenceName, int level);
+	bool getFunctionNamesFromFunctionDeclarationsInHFile(CSfunctionReference * firstReferenceInFunctionList, string topLevelFileName, int level);
+	void getFunctionReferenceNamesFromFunctionsInCFile(CSfileReference * firstReferenceInIncludeFileList, CSfunctionReference * firstReferenceInFunctionList, CSfileReference * topLevelReference, string topLevelFileName, int level);
+		CSfunctionReference * searchFunctionStringForFunctionReferencesRecursive(CSfileReference * firstReferenceInIncludeFileList, CSfileReference * firstFileNameInLayerContainingFunctionReferencesToSearchFor, CSfunctionReference * firstReferenceInFunctionReferenceList, string functionContentsString);
+			CSfunctionReference * searchFunctionStringForFunctionReferences(CSfileReference * firstReferenceInIncludeFileList, CSfileReference * fileNameContainingFunctionReferencesToSearchFor, CSfunctionReference * firstReferenceInFunctionReferenceList, string functionContentsString);
 
 
-CSFileReference * findReferenceInIncludeFileList(CSFileReference * firstReferenceInAboveLevelBelowList, string referenceName, CSFileReference * foundReference, bool * referenceFound);
+CSfileReference * findReferenceInIncludeFileList(CSfileReference * firstReferenceInAboveLevelBelowList, string referenceName, CSfileReference * foundReference, bool * referenceFound);
 
 
 

@@ -23,7 +23,7 @@
  * File Name: CSexecflow.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c3d 17-November-2012
+ * Project Version: 3c3e 17-November-2012
  *
  *******************************************************************************/
 
@@ -33,7 +33,7 @@
 #include "CSglobalDefs.h"
 #include "CSreferenceClass.h"
 #include "LDreferenceManipulation.h"
-#include "XMLParserClass.h"
+#include "XMLparserClass.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -54,11 +54,11 @@ using namespace std;
 	#define SYSTEM_COPY_COMMAND "copy"
 #endif
 				
-void printCS(string topLevelFileName, string topLevelFunctionName, int width, int height, string outputLDRFileName, string outputSVGFileName, string outputPPMFileName, string outputHTMLFileName, bool useOutputLDRFile, bool useOutputPPMFile, bool useOutputHTMLFile, int generateHTMLdocumentationMode, bool display, bool outputFunctionsConnectivity, bool traceAFunctionUpwards, string bottomLevelFunctionNameToTraceUpwards);
+void printCS(string topLevelFileName, string topLevelFunctionName, int width, int height, string outputLDRfileName, string outputSVGfileName, string outputPPMfileName, string outputHTMLfileName, bool useOutputLDRfile, bool useOutputPPMfile, bool useOutputHTMLfile, int generateHTMLdocumentationMode, bool display, bool outputFunctionsConnectivity, bool traceFunctionUpwards, string bottomLevelFunctionNameToTraceUpwards);
 	string generateHTMLdocumentationHeader(string name, bool htmlFileHeader);
 	string generateHTMLdocumentationFooter(bool htmlFileFooter);
-	void generateHTMLdocumentationForAllFunctions(CSFileReference * firstReferenceInAboveLevelBelowList, Reference * currentReferenceInPrintList, CSFileReference * firstReferenceInTopLevelBelowList, string topLevelFunctionName, int generateHTMLdocumentationMode, bool useOutputHTMLFile, string * HTMLdocumentationBody, XMLParserTag * firstTagInSVGFile, XMLParserTag * lastTagInSVGFile, bool traceAFunctionUpwards);
-		void generateHTMLdocumentationForFunction(Reference * currentReferenceInPrintList, CSFileReference * firstReferenceInTopLevelBelowList, CSFunctionReference * bottomLevelFunctionToTraceUpwards, string fileNameHoldingFunction, XMLParserTag ** currentTag, string topLevelFunctionName, int generateHTMLdocumentationMode, string * HTMLdocumentationFunctionBody, string * outputSVGFileNameFunction, bool useOutputHTMLFile, string outputHTMLFileName, bool traceAFunctionUpwards);
+	void generateHTMLdocumentationForAllFunctions(CSfileReference * firstReferenceInAboveLevelBelowList, Reference * currentReferenceInPrintList, CSfileReference * firstReferenceInTopLevelBelowList, string topLevelFunctionName, int generateHTMLdocumentationMode, bool useOutputHTMLfile, string * HTMLdocumentationBody, XMLparserTag * firstTagInSVGFile, XMLparserTag * lastTagInSVGFile, bool traceFunctionUpwards);
+		void generateHTMLdocumentationForFunction(Reference * currentReferenceInPrintList, CSfileReference * firstReferenceInTopLevelBelowList, CSfunctionReference * bottomLevelFunctionToTraceUpwards, string fileNameHoldingFunction, XMLparserTag ** currentTag, string topLevelFunctionName, int generateHTMLdocumentationMode, string * HTMLdocumentationFunctionBody, string * outputSVGFileNameFunction, bool useOutputHTMLfile, string outputHTMLfileName, bool traceFunctionUpwards);
 			void generateHTMLdocumentationFunctionSummary(string * functionName, string * functionNameFull, string * HTMLdocumentationFunctionSummary);
 			void generateHTMLdocumentationFunctionInputArguments(string * functionName, string * functionNameFull, string * HTMLdocumentationFunctionInputArguments);
 				int findEndPositionOfArgument(string * functionArgumentsRaw, int startPositionOfArgument);
@@ -66,7 +66,7 @@ void printCS(string topLevelFileName, string topLevelFunctionName, int width, in
 				string createDescriptionFromCaseSensitiveMultiwordString(string str);
 			string generateHTMLdocumentationFunctionTraceImagePlaceHolder(string * traceImageFileName);
 	void writeStringToFileObject(string * s, ofstream * writeFileObject);
-	void addToHTMLdocumentationFileFunctionList(CSFunctionReference * currentFunctionReference, string * HTMLdocumentationFileFunctionList, int * previousIndentation, bool * previousIndentationFirst);
+	void addToHTMLdocumentationFileFunctionList(CSfunctionReference * currentFunctionReference, string * HTMLdocumentationFileFunctionList, int * previousIndentation, bool * previousIndentationFirst);
 
 
 #endif

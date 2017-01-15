@@ -23,7 +23,7 @@
  * File Name: CSreferenceClass.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c3d 17-November-2012
+ * Project Version: 3c3e 17-November-2012
  *
  *******************************************************************************/
 
@@ -32,13 +32,13 @@
 
 
 
-CSFileReferenceContainer::CSFileReferenceContainer(void)
+CSfileReferenceContainer::CSfileReferenceContainer(void)
 {
 	next = NULL;
 	name = "";
 }
 
-CSFileReferenceContainer::~CSFileReferenceContainer(void)
+CSfileReferenceContainer::~CSfileReferenceContainer(void)
 {
 	if(next != NULL)
 	{
@@ -46,7 +46,7 @@ CSFileReferenceContainer::~CSFileReferenceContainer(void)
 	}
 }
 
-CSFileReference::CSFileReference(void)
+CSfileReference::CSfileReference(void)
 {
 	//file/function reference [shared]
 	id = 0;
@@ -64,7 +64,7 @@ CSFileReference::CSFileReference(void)
 	
 	next = NULL;
 	previous = NULL;
-	firstReferenceContainerInAboveReferenceList = new CSFileReferenceContainer();
+	firstReferenceContainerInAboveReferenceList = new CSfileReferenceContainer();
 	printedTrace = false;
 	printedTraceReset = false;
 	
@@ -81,7 +81,7 @@ CSFileReference::CSFileReference(void)
 
 }
 
-CSFileReference::~CSFileReference(void)
+CSfileReference::~CSfileReference(void)
 {
 	if(firstReferenceInBelowList != NULL)
 	{
@@ -99,13 +99,13 @@ CSFileReference::~CSFileReference(void)
 
 
 
-CSFunctionReferenceContainer::CSFunctionReferenceContainer(void)
+CSfunctionReferenceContainer::CSfunctionReferenceContainer(void)
 {
 	next = NULL;
 	name = "";
 }
 
-CSFunctionReferenceContainer::~CSFunctionReferenceContainer(void)
+CSfunctionReferenceContainer::~CSfunctionReferenceContainer(void)
 {
 	if(next != NULL)
 	{
@@ -113,7 +113,7 @@ CSFunctionReferenceContainer::~CSFunctionReferenceContainer(void)
 	}
 }
 
-CSFunctionReference::CSFunctionReference(void)
+CSfunctionReference::CSfunctionReference(void)
 {
 	//file/function reference [shared]
 	id = 0;
@@ -131,7 +131,7 @@ CSFunctionReference::CSFunctionReference(void)
 	
 	next = NULL;
 	previous = NULL;
-	firstReferenceContainerInAboveReferenceList = new CSFunctionReferenceContainer();
+	firstReferenceContainerInAboveReferenceList = new CSfunctionReferenceContainer();
 	printedTrace = false;
 	printedTraceReset = false;
 
@@ -152,7 +152,7 @@ CSFunctionReference::CSFunctionReference(void)
 
 }
 
-CSFunctionReference::~CSFunctionReference(void)
+CSfunctionReference::~CSfunctionReference(void)
 {
 	/*
 	if(firstReferenceInBelowList != NULL)
@@ -173,7 +173,7 @@ CSFunctionReference::~CSFunctionReference(void)
 
 
 
-void printCSFileReference(CSFileReference * ref)
+void printCSFileReference(CSfileReference * ref)
 {
 	cout << "col = " << ref->col << endl;
 	cout << "id = " << ref->id << endl;
@@ -188,7 +188,7 @@ void printCSFileReference(CSFileReference * ref)
 	cout << "name = " << ref->name << endl;
 }
 
-void printCSFunctionReference(CSFunctionReference * ref)
+void printCSFunctionReference(CSfunctionReference * ref)
 {
 	cout << "col = " << ref->col << endl;
 	cout << "id = " << ref->id << endl;

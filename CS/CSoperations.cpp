@@ -23,7 +23,7 @@
  * File Name: CSoperations.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c3d 17-November-2012
+ * Project Version: 3c3e 17-November-2012
  *
  *******************************************************************************/
 
@@ -52,17 +52,17 @@ using namespace std;
 
 
 
-bool getIncludeFileNamesFromCorHFile(CSFileReference * firstReferenceInIncludeFileList, CSFileReference * topLevelReference, string topLevelReferenceName, int level)
+bool getIncludeFileNamesFromCorHFile(CSfileReference * firstReferenceInIncludeFileList, CSfileReference * topLevelReference, string topLevelReferenceName, int level)
 {
 	bool fileFound = false;
 
 	string parseFileName = topLevelReferenceName;
-	CSFileReference * previousReference = NULL;
+	CSfileReference * previousReference = NULL;
 
 	char * parseFileNamecharstar = const_cast<char*>(parseFileName.c_str());
 
 	ifstream * parseFileObject = new ifstream(parseFileNamecharstar);
-	CSFileReference * currentReferenceInIncludeFileList = firstReferenceInIncludeFileList;
+	CSfileReference * currentReferenceInIncludeFileList = firstReferenceInIncludeFileList;
 
 	if(!parseFileObject->rdbuf( )->is_open( ))
 	{
@@ -261,12 +261,12 @@ bool getIncludeFileNamesFromCorHFile(CSFileReference * firstReferenceInIncludeFi
 						currentReferenceInIncludeFileList->previous = previousReference;
 						id++;
 
-						CSFileReference * newCSReference = new CSFileReference();
+						CSfileReference * newCSReference = new CSfileReference();
 						currentReferenceInIncludeFileList->next = newCSReference;
 
 						previousReference = currentReferenceInIncludeFileList;
 
-						CSFileReference * newfirstReferenceInBelowList = new CSFileReference();
+						CSfileReference * newfirstReferenceInBelowList = new CSfileReference();
 						currentReferenceInIncludeFileList->firstReferenceInBelowList = newfirstReferenceInBelowList;
 
 						#ifdef CS_DISPLAY_INCLUDE_FILE_PARSING
@@ -291,7 +291,7 @@ bool getIncludeFileNamesFromCorHFile(CSFileReference * firstReferenceInIncludeFi
 						if(hFileFound)
 						{
 							//parse into .cpp file;
-							CSFileReference * lastReferenceInBelowList = currentReferenceInIncludeFileList->firstReferenceInBelowList;
+							CSfileReference * lastReferenceInBelowList = currentReferenceInIncludeFileList->firstReferenceInBelowList;
 							while(lastReferenceInBelowList->next != NULL)
 							{
 								lastReferenceInBelowList = lastReferenceInBelowList->next;
@@ -302,7 +302,7 @@ bool getIncludeFileNamesFromCorHFile(CSFileReference * firstReferenceInIncludeFi
 							if(cFileFound)
 							{
 								//fill function and function reference list using .h file;
-								CSFunctionReference * newfirstReferenceInFunctionList = new CSFunctionReference();
+								CSfunctionReference * newfirstReferenceInFunctionList = new CSfunctionReference();
 								currentReferenceInIncludeFileList->firstReferenceInFunctionList = newfirstReferenceInFunctionList;
 
 								bool hFileFound2 = getFunctionNamesFromFunctionDeclarationsInHFile(currentReferenceInIncludeFileList->firstReferenceInFunctionList, referenceName, level);
@@ -328,7 +328,7 @@ bool getIncludeFileNamesFromCorHFile(CSFileReference * firstReferenceInIncludeFi
 								#ifdef CS_DEBUG
 								//cout << "!cFileFound" << endl;
 								#endif
-								CSFunctionReference * newfirstReferenceInFunctionList = new CSFunctionReference();
+								CSfunctionReference * newfirstReferenceInFunctionList = new CSfunctionReference();
 								currentReferenceInIncludeFileList->firstReferenceInFunctionList = newfirstReferenceInFunctionList;
 							}
 						}
@@ -337,7 +337,7 @@ bool getIncludeFileNamesFromCorHFile(CSFileReference * firstReferenceInIncludeFi
 							#ifdef CS_DEBUG
 							//cout << "!hFileFound" << endl;
 							#endif
-							CSFunctionReference * newfirstReferenceInFunctionList = new CSFunctionReference();
+							CSfunctionReference * newfirstReferenceInFunctionList = new CSfunctionReference();
 							currentReferenceInIncludeFileList->firstReferenceInFunctionList = newfirstReferenceInFunctionList;
 						}
 
@@ -383,7 +383,7 @@ bool getIncludeFileNamesFromCorHFile(CSFileReference * firstReferenceInIncludeFi
 }
 
 
-bool getFunctionNamesFromFunctionDeclarationsInHFile(CSFunctionReference * firstReferenceInFunctionList, string topLevelFileName, int level)
+bool getFunctionNamesFromFunctionDeclarationsInHFile(CSfunctionReference * firstReferenceInFunctionList, string topLevelFileName, int level)
 {
 	bool fileFound = false;
 
@@ -392,8 +392,8 @@ bool getFunctionNamesFromFunctionDeclarationsInHFile(CSFunctionReference * first
 	char * parseFileNamecharstar = const_cast<char*>(parseFileName.c_str());
 
 	ifstream * parseFileObject = new ifstream(parseFileNamecharstar);
-	CSFunctionReference * currentReferenceInFunctionList = firstReferenceInFunctionList;
-	CSFunctionReference * currentReferenceInFunctionReferenceList = NULL;
+	CSfunctionReference * currentReferenceInFunctionList = firstReferenceInFunctionList;
+	CSfunctionReference * currentReferenceInFunctionReferenceList = NULL;
 
 	if(!parseFileObject->rdbuf( )->is_open( ))
 	{
@@ -677,7 +677,7 @@ bool getFunctionNamesFromFunctionDeclarationsInHFile(CSFunctionReference * first
 						currentReferenceInFunctionList->name = functionNameCpp;
 						currentReferenceInFunctionList->nameFull = functionNameFull;
 						currentReferenceInFunctionList->functionReferenceIndentationInHfile = functionReferenceIndentationInHfileTemp;
-						CSFunctionReference * newCSReference = new CSFunctionReference();
+						CSfunctionReference * newCSReference = new CSfunctionReference();
 						currentReferenceInFunctionList->next = newCSReference;
 
 						currentReferenceInFunctionList = currentReferenceInFunctionList->next;
@@ -738,7 +738,7 @@ bool getFunctionNamesFromFunctionDeclarationsInHFile(CSFunctionReference * first
 
 #define MAX_CODE_FILE_SIZE (1000000)
 
-void getFunctionReferenceNamesFromFunctionsInCFile(CSFileReference * firstReferenceInIncludeFileList, CSFunctionReference * firstReferenceInFunctionList, CSFileReference * topLevelReference, string topLevelFileName, int level)
+void getFunctionReferenceNamesFromFunctionsInCFile(CSfileReference * firstReferenceInIncludeFileList, CSfunctionReference * firstReferenceInFunctionList, CSfileReference * topLevelReference, string topLevelFileName, int level)
 {
 	string codeFileName = topLevelFileName;
 	char * codeFileNamecharstar = const_cast<char*>(codeFileName.c_str());
@@ -756,7 +756,7 @@ void getFunctionReferenceNamesFromFunctionsInCFile(CSFileReference * firstRefere
 	}
 	else
 	{
-		CSFunctionReference * currentReference = firstReferenceInFunctionList;
+		CSfunctionReference * currentReference = firstReferenceInFunctionList;
 
 		//0. for each fullfilename [identified in header];
 
@@ -924,7 +924,7 @@ void getFunctionReferenceNamesFromFunctionsInCFile(CSFileReference * firstRefere
 
 
 				//3. search this string for any of the function (not full function names) across all include/header files
-				CSFunctionReference * newfirstReferenceInFunctionReferenceList = new CSFunctionReference();
+				CSfunctionReference * newfirstReferenceInFunctionReferenceList = new CSfunctionReference();
 				currentReference->firstReferenceInFunctionReferenceList = newfirstReferenceInFunctionReferenceList;
 
 				#ifdef CS_DEBUG
@@ -944,7 +944,7 @@ void getFunctionReferenceNamesFromFunctionsInCFile(CSFileReference * firstRefere
 				*/
 				#endif
 
-				CSFunctionReference * currentReferenceInFunctionReferenceList = currentReference->firstReferenceInFunctionReferenceList;
+				CSfunctionReference * currentReferenceInFunctionReferenceList = currentReference->firstReferenceInFunctionReferenceList;
 				//cout << "search current file for function references;" << endl;
 				#ifdef CS_DEBUG
 				//cout << "firstReferenceInIncludeFileList->name = " << firstReferenceInIncludeFileList->name << endl;
@@ -954,7 +954,7 @@ void getFunctionReferenceNamesFromFunctionsInCFile(CSFileReference * firstRefere
 
 				#ifdef CS_DEBUG
 				/*
-				CSFunctionReference * temp1acurrentReferenceInFunctionList = currentReference->firstReferenceInFunctionReferenceList;
+				CSfunctionReference * temp1acurrentReferenceInFunctionList = currentReference->firstReferenceInFunctionReferenceList;
 				while(temp1acurrentReferenceInFunctionList->next != NULL)
 				{
 					for(int i=0; i<level; i++)
@@ -977,7 +977,7 @@ void getFunctionReferenceNamesFromFunctionsInCFile(CSFileReference * firstRefere
 
 				#ifdef CS_DEBUG
 				/*
-				CSFunctionReference * temp1bcurrentReferenceInFunctionList = currentReference->firstReferenceInFunctionReferenceList;
+				CSfunctionReference * temp1bcurrentReferenceInFunctionList = currentReference->firstReferenceInFunctionReferenceList;
 				while(temp1bcurrentReferenceInFunctionList->next != NULL)
 				{
 					for(int i=0; i<level; i++)
@@ -1003,10 +1003,10 @@ void getFunctionReferenceNamesFromFunctionsInCFile(CSFileReference * firstRefere
 
 }
 
-CSFunctionReference * searchFunctionStringForFunctionReferencesRecursive(CSFileReference * firstReferenceInIncludeFileList, CSFileReference * firstFileNameInLayerContainingFunctionReferencesToSearchFor, CSFunctionReference * firstReferenceInFunctionReferenceList, string functionContentsString)
+CSfunctionReference * searchFunctionStringForFunctionReferencesRecursive(CSfileReference * firstReferenceInIncludeFileList, CSfileReference * firstFileNameInLayerContainingFunctionReferencesToSearchFor, CSfunctionReference * firstReferenceInFunctionReferenceList, string functionContentsString)
 {
-	CSFunctionReference * currentReferenceInFunctionReferenceList = firstReferenceInFunctionReferenceList;
-	CSFileReference * currentReference = firstFileNameInLayerContainingFunctionReferencesToSearchFor;
+	CSfunctionReference * currentReferenceInFunctionReferenceList = firstReferenceInFunctionReferenceList;
+	CSfileReference * currentReference = firstFileNameInLayerContainingFunctionReferencesToSearchFor;
 
 	while(currentReference->next != NULL)
 	{
@@ -1023,11 +1023,11 @@ CSFunctionReference * searchFunctionStringForFunctionReferencesRecursive(CSFileR
 	return currentReferenceInFunctionReferenceList;
 }
 
-CSFunctionReference * searchFunctionStringForFunctionReferences(CSFileReference * firstReferenceInIncludeFileList, CSFileReference * fileNameContainingFunctionReferencesToSearchFor, CSFunctionReference * firstReferenceInFunctionReferenceList, string functionContentsString)
+CSfunctionReference * searchFunctionStringForFunctionReferences(CSfileReference * firstReferenceInIncludeFileList, CSfileReference * fileNameContainingFunctionReferencesToSearchFor, CSfunctionReference * firstReferenceInFunctionReferenceList, string functionContentsString)
 {
 	//only search those file names which include topLevelReference.h
 
-	CSFunctionReference * currentReferenceInFunctionReferenceList = firstReferenceInFunctionReferenceList;
+	CSfunctionReference * currentReferenceInFunctionReferenceList = firstReferenceInFunctionReferenceList;
 
 	//find reference to this file
 
@@ -1036,8 +1036,8 @@ CSFunctionReference * searchFunctionStringForFunctionReferences(CSFileReference 
 	#endif
 	
 	//now search function string for all functions within referenceFound;
-	//CSFunctionReference * currentFunction = foundReference->firstReferenceInFunctionList;
-	CSFunctionReference * currentFunction = fileNameContainingFunctionReferencesToSearchFor->firstReferenceInFunctionList;
+	//CSfunctionReference * currentFunction = foundReference->firstReferenceInFunctionList;
+	CSfunctionReference * currentFunction = fileNameContainingFunctionReferencesToSearchFor->firstReferenceInFunctionList;
 
 	while(currentFunction->next != NULL)
 	{
@@ -1062,7 +1062,7 @@ CSFunctionReference * searchFunctionStringForFunctionReferences(CSFileReference 
 			*/
 			#endif
 
-			CSFunctionReference * newfirstReferenceInFunctionReferenceList = new CSFunctionReference();
+			CSfunctionReference * newfirstReferenceInFunctionReferenceList = new CSfunctionReference();
 			currentReferenceInFunctionReferenceList->next = newfirstReferenceInFunctionReferenceList;
 			currentReferenceInFunctionReferenceList = currentReferenceInFunctionReferenceList->next;
 		}
@@ -1134,10 +1134,10 @@ CSFunctionReference * searchFunctionStringForFunctionReferences(CSFileReference 
 
 
 
-CSFileReference * findReferenceInIncludeFileList(CSFileReference * firstReferenceInAboveLevelBelowList, string referenceName, CSFileReference * foundReference, bool * referenceFound)
+CSfileReference * findReferenceInIncludeFileList(CSfileReference * firstReferenceInAboveLevelBelowList, string referenceName, CSfileReference * foundReference, bool * referenceFound)
 {
-	CSFileReference * foundReferenceNew = foundReference;
-	CSFileReference * currentReference = firstReferenceInAboveLevelBelowList;
+	CSfileReference * foundReferenceNew = foundReference;
+	CSfileReference * currentReference = firstReferenceInAboveLevelBelowList;
 	while(currentReference->next != NULL)
 	{
 		if(currentReference->name == referenceName)
