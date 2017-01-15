@@ -23,7 +23,7 @@
  * File Name: CSexecflow.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3b2a 28-September-2012
+ * Project Version: 3b2b 30-September-2012
  *
  *******************************************************************************/
 
@@ -58,6 +58,7 @@ void printCS(string topLevelFileName, string topLevelFunctionName, int width, in
 	string generateHTMLdocumentationFooter();
 	void generateHTMLdocumentationForAllFunctions(CSReference * firstReferenceInAboveLevelBelowList, Reference * currentReferenceInPrintList, CSReference * firstReferenceInTopLevelBelowList, string topLevelFunctionName, int generateHTMLdocumentationMode, bool useOutputHTMLFile, string * HTMLdocumentationBody, string * outputSVGFileName, bool traceAFunctionUpwards);
 		void generateHTMLdocumentationForFunction(Reference * currentReferenceInPrintList, CSReference * firstReferenceInTopLevelBelowList, CSReference * bottomLevelFunctionToTraceUpwards, string fileNameHoldingFunction, ofstream * writeFileObject, string topLevelFunctionName, int generateHTMLdocumentationMode, string * HTMLdocumentationFunction, string * outputSVGFileNameFunction, bool useOutputHTMLFile, string outputHTMLFileName, bool traceAFunctionUpwards);
+			void generateHTMLdocumentationFunctionSummary(string * functionName, string * functionNameFull, string * HTMLdocumentationFunctionSummary);
 			void generateHTMLdocumentationFunctionInputArguments(string * functionName, string * functionNameFull, string * HTMLdocumentationFunctionInputArguments);
 				int findEndPositionOfArgument(string * functionArgumentsRaw, int startPositionOfArgument);
 				string ensureHTMLTagSafe(string str);

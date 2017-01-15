@@ -23,7 +23,7 @@
  * File Name: CSreferenceClass.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3b2a 28-September-2012
+ * Project Version: 3b2b 30-September-2012
  *
  *******************************************************************************/
 

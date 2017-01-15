@@ -23,7 +23,7 @@
  * File Name: CSexecflow.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3b2a 28-September-2012
+ * Project Version: 3b2b 30-September-2012
  *
  *******************************************************************************/
 
@@ -242,7 +242,7 @@ void printCS(string topLevelFileName, string topLevelFunctionName, int width, in
 string generateHTMLdocumentationHeader(string name)
 {
 	string HTMLdocumentationHeader = "";
-	HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h2>" + name + " Documentation</h2><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3b2a 28-September-2012<p>\n";
+	HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h2>" + name + " Documentation</h2><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3b2b 30-September-2012<p>\n";
 	return HTMLdocumentationHeader;
 }
 
@@ -377,9 +377,10 @@ void generateHTMLdocumentationForFunction(Reference * currentReferenceInPrintLis
 		
 		string HTMLdocumentationFunctionInputIntroduction = "";
 		HTMLdocumentationFunctionInputIntroduction = HTMLdocumentationFunctionInputIntroduction + "<h3>" + (bottomLevelFunctionToTraceUpwards->name) + "()</h3>";
-		#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_DESCRIPTION
-		string HTMLdocumentationFunctionDescription = createDescriptionFromCaseSensitiveMultiwordString(bottomLevelFunctionToTraceUpwards->name);
-		HTMLdocumentationFunctionInputIntroduction = HTMLdocumentationFunctionInputIntroduction + "<p><b>Description:</b> " + HTMLdocumentationFunctionDescription + "</p>";
+		#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_SUMMARY
+		string HTMLdocumentationFunctionSummary = "";
+		generateHTMLdocumentationFunctionSummary(&(bottomLevelFunctionToTraceUpwards->name), &(bottomLevelFunctionToTraceUpwards->nameFull), &HTMLdocumentationFunctionSummary);
+		HTMLdocumentationFunctionInputIntroduction = HTMLdocumentationFunctionInputIntroduction + HTMLdocumentationFunctionSummary;
 		#endif
 			
 		string HTMLdocumentationFunctionInputArguments = "";
@@ -414,6 +415,21 @@ void generateHTMLdocumentationForFunction(Reference * currentReferenceInPrintLis
 	
 }
 
+void generateHTMLdocumentationFunctionSummary(string * functionName, string * functionNameFull, string * HTMLdocumentationFunctionSummary)
+{
+	*HTMLdocumentationFunctionSummary = "";
+	*HTMLdocumentationFunctionSummary = *HTMLdocumentationFunctionSummary + "\t<p><b>Function Summary</b><br /><table border=\"1\">\n\t\t<tr><th>" + "name" + "</th><th>" + "return type" + "</th><th>" + "description" + "</th></tr>\n";
+	string HTMLdocumentationFunctionDescription = createDescriptionFromCaseSensitiveMultiwordString(*functionName);
+	int endPositionOfReturnType = functionNameFull->find(*functionName) - 1;
+	int startPositionOfReturnType = 0;
+	string HTMLdocumentationFunctionReturnType = functionNameFull->substr(startPositionOfReturnType, endPositionOfReturnType-startPositionOfReturnType);
+	*HTMLdocumentationFunctionSummary = *HTMLdocumentationFunctionSummary + "\t\t<tr><td>" + *functionName + "</td><td>" + HTMLdocumentationFunctionReturnType + "</td><td>" + HTMLdocumentationFunctionDescription + "</td></tr>\n";
+	*HTMLdocumentationFunctionSummary = *HTMLdocumentationFunctionSummary + "\t</table>\n";
+	*HTMLdocumentationFunctionSummary = *HTMLdocumentationFunctionSummary + "\t</p>\n";
+	#ifdef CS_DEBUG_HTML_DOCUMENTATION
+	cout << "HTMLdocumentationFunctionSummary: " << *HTMLdocumentationFunctionSummary << endl;
+	#endif
+}
 
 void generateHTMLdocumentationFunctionInputArguments(string * functionName, string * functionNameFull, string * HTMLdocumentationFunctionInputArguments)
 {
