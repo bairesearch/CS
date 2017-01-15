@@ -23,7 +23,7 @@
  * File Name: CSexecflow.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3b2b 30-September-2012
+ * Project Version: 3c1a 11-October-2012
  *
  *******************************************************************************/
 
@@ -57,6 +57,8 @@ using namespace std;
 
 void printCS(string topLevelFileName, string topLevelFunctionName, int width, int height, string outputLDRFileName, string outputSVGFileName, string outputPPMFileName, string outputHTMLFileName, bool useOutputLDRFile, bool useOutputPPMFile, bool useOutputHTMLFile, int generateHTMLdocumentationMode, bool display, bool outputFunctionsConnectivity, bool traceAFunctionUpwards, string bottomLevelFunctionNameToTraceUpwards)
 {
+	bool result = true;
+	
 	bool htmlDocumentationGenerationPreventsDisplay = false;
 	
 	#ifdef CS_DEBUG_HTML_DOCUMENTATION
@@ -100,12 +102,12 @@ void printCS(string topLevelFileName, string topLevelFunctionName, int width, in
 	#else
 	::SetCurrentDirectory(tempFolderCharStar);
 	#endif
-
-	ofstream writeFileObject(outputFileNameSVGcharstar);
-	writeSVGHeader(&writeFileObject);
-
-	Reference * currentReferenceInPrintList = createFileReferenceListBoxes(firstReferenceInPrintList, firstReferenceInTopLevelBelowList, firstReferenceInTopLevelBelowList, &writeFileObject, outputFunctionsConnectivity, traceAFunctionUpwards);
-	currentReferenceInPrintList = createFileReferenceListConnections(currentReferenceInPrintList, firstReferenceInTopLevelBelowList, firstReferenceInTopLevelBelowList, &writeFileObject, traceAFunctionUpwards);
+	
+	XMLParserTag * firstTagInSVGFile = new XMLParserTag();
+	XMLParserTag * currentTagInSVGFile = firstTagInSVGFile;
+	
+	Reference * currentReferenceInPrintList = createFileReferenceListBoxes(firstReferenceInPrintList, firstReferenceInTopLevelBelowList, firstReferenceInTopLevelBelowList, &currentTagInSVGFile, outputFunctionsConnectivity, traceAFunctionUpwards);
+	currentReferenceInPrintList = createFileReferenceListConnections(currentReferenceInPrintList, firstReferenceInTopLevelBelowList, firstReferenceInTopLevelBelowList, &currentTagInSVGFile, traceAFunctionUpwards);
 
 	if(outputFunctionsConnectivity)
 	{
@@ -125,7 +127,7 @@ void printCS(string topLevelFileName, string topLevelFunctionName, int width, in
 		CSReference * currentReferenceInFunctionReferenceList = topLevelFunctionReference->firstReferenceInFunctionReferenceList;
 		while(currentReferenceInFunctionReferenceList->next != NULL)
 		{
-			currentReferenceInPrintList = createFunctionReferenceListBoxesAndConnections(currentReferenceInPrintList, firstReferenceInTopLevelBelowList, topLevelFunctionReference, firstReferenceInTopLevelBelowList, 0, currentReferenceInFunctionReferenceList->name, &writeFileObject, traceAFunctionUpwards);
+			currentReferenceInPrintList = createFunctionReferenceListBoxesAndConnections(currentReferenceInPrintList, firstReferenceInTopLevelBelowList, topLevelFunctionReference, firstReferenceInTopLevelBelowList, 0, currentReferenceInFunctionReferenceList->name, &currentTagInSVGFile, traceAFunctionUpwards);
 			currentReferenceInFunctionReferenceList = currentReferenceInFunctionReferenceList->next;
 		}
 
@@ -145,7 +147,7 @@ void printCS(string topLevelFileName, string topLevelFunctionName, int width, in
 					}
 				}
 				string HTMLdocumentationFunctionNOTUSED = "";
-				generateHTMLdocumentationForFunction(currentReferenceInPrintList, firstReferenceInTopLevelBelowList, bottomLevelFunctionToTraceUpwards, fileNameHoldingFunction, &writeFileObject, topLevelFunctionName, generateHTMLdocumentationMode, &HTMLdocumentationFunctionNOTUSED, &outputSVGFileName, useOutputHTMLFile, outputHTMLFileName, traceAFunctionUpwards);							
+				generateHTMLdocumentationForFunction(currentReferenceInPrintList, firstReferenceInTopLevelBelowList, bottomLevelFunctionToTraceUpwards, fileNameHoldingFunction, &currentTagInSVGFile, topLevelFunctionName, generateHTMLdocumentationMode, &HTMLdocumentationFunctionNOTUSED, &outputSVGFileName, useOutputHTMLFile, outputHTMLFileName, traceAFunctionUpwards);							
 			}
 			else
 			{
@@ -158,11 +160,18 @@ void printCS(string topLevelFileName, string topLevelFunctionName, int width, in
 			if(generateHTMLdocumentationMode == CS_GENERATE_HTML_DOCUMENTATION_MODE_ON)
 			{//generate documentation for all functions...
 				
-				writeFileObject.close();
-						
+				//find last tag in svg file;
+				XMLParserTag * lastTagInSVGFile = firstTagInSVGFile;
+				XMLParserTag * tempTagInSVGFile = firstTagInSVGFile;
+				while(tempTagInSVGFile->nextTag != NULL)
+				{
+					lastTagInSVGFile = tempTagInSVGFile;
+					tempTagInSVGFile = tempTagInSVGFile->nextTag;
+				}
+										
 				string HTMLdocumentationBody = "";
 				Reference * firstReferenceInPrintListFunction = new Reference();								
-				generateHTMLdocumentationForAllFunctions(firstReferenceInTopLevelBelowList, firstReferenceInPrintListFunction, firstReferenceInTopLevelBelowList, topLevelFunctionName, generateHTMLdocumentationMode, useOutputHTMLFile, &HTMLdocumentationBody, &outputSVGFileName, traceAFunctionUpwards);
+				generateHTMLdocumentationForAllFunctions(firstReferenceInTopLevelBelowList, firstReferenceInPrintListFunction, firstReferenceInTopLevelBelowList, topLevelFunctionName, generateHTMLdocumentationMode, useOutputHTMLFile, &HTMLdocumentationBody, firstTagInSVGFile, lastTagInSVGFile, traceAFunctionUpwards);
 				delete firstReferenceInPrintListFunction;	//should delete this, as it will contain far too many LD vector graphics references (ie a set of traced references for each function)
 				htmlDocumentationGenerationPreventsDisplay = true;	//cannot display in OpenGL/save to file, as LD vector graphics references have been deleted
 				
@@ -181,8 +190,11 @@ void printCS(string topLevelFileName, string topLevelFunctionName, int width, in
 	if(!htmlDocumentationGenerationPreventsDisplay)
 	{//do not display if generating html (unless tracing single file)
 		
-		writeSVGFooter(&writeFileObject);
-		writeFileObject.close();
+		if(!writeSVGFile(outputFileNameSVGcharstar, firstTagInSVGFile))
+		{
+			result = false;
+		}
+		delete firstTagInSVGFile;
 			
 		if(useOutputLDRFile || display)
 		{
@@ -242,7 +254,7 @@ void printCS(string topLevelFileName, string topLevelFunctionName, int width, in
 string generateHTMLdocumentationHeader(string name)
 {
 	string HTMLdocumentationHeader = "";
-	HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h2>" + name + " Documentation</h2><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3b2b 30-September-2012<p>\n";
+	HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h2>" + name + " Documentation</h2><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3c1a 11-October-2012<p>\n";
 	return HTMLdocumentationHeader;
 }
 
@@ -259,8 +271,10 @@ void writeStringToFileObject(string * s, ofstream * writeFileObject)
 	}
 }
 
-void generateHTMLdocumentationForAllFunctions(CSReference * firstReferenceInAboveLevelBelowList, Reference * currentReferenceInPrintList, CSReference * firstReferenceInTopLevelBelowList, string topLevelFunctionName, int generateHTMLdocumentationMode, bool useOutputHTMLFile, string * HTMLdocumentationBody, string * outputSVGFileName, bool traceAFunctionUpwards)
+void generateHTMLdocumentationForAllFunctions(CSReference * firstReferenceInAboveLevelBelowList, Reference * currentReferenceInPrintList, CSReference * firstReferenceInTopLevelBelowList, string topLevelFunctionName, int generateHTMLdocumentationMode, bool useOutputHTMLFile, string * HTMLdocumentationBody, XMLParserTag * firstTagInSVGFile, XMLParserTag * lastTagInSVGFile, bool traceAFunctionUpwards)
 {
+	bool result = true;
+	
 	CSReference * currentFileReference = firstReferenceInAboveLevelBelowList;
 
 	while(currentFileReference->next != NULL)
@@ -291,32 +305,29 @@ void generateHTMLdocumentationForAllFunctions(CSReference * firstReferenceInAbov
 							currentFunctionReference->HTMLgenerated = true;
 
 							string outputSVGFileNameFunction = "";	//only used with traceAFunctionUpwards
-							ofstream writeFileObjectFunction;	//only used with traceAFunctionUpwards
+							XMLParserTag * firstTagInSVGFileFunction = new XMLParserTag();	//only used with traceAFunctionUpwards
+							XMLParserTag * currentTagInSVGFileFunction = firstTagInSVGFileFunction;
 							if(traceAFunctionUpwards)
 							{
 								outputSVGFileNameFunction = currentFunctionReference->name + SVG_EXTENSION;
-
-								string commandCopyOutputSVGFileName = "";
-								commandCopyOutputSVGFileName = commandCopyOutputSVGFileName + SYSTEM_COPY_COMMAND + " " + *outputSVGFileName + " " + outputSVGFileNameFunction;	//this is required because Stanford CoreNLP cannot output a file of a given name, it can only output a file with a modified extension
-								#ifdef CS_DISPLAY_INCLUDE_FILE_PARSING
-								cout << "outputSVGFileNameFunction = " << outputSVGFileNameFunction << endl;				
-								#endif
-								system(commandCopyOutputSVGFileName.c_str());
-
-								writeFileObjectFunction.open(outputSVGFileNameFunction.c_str(), ofstream::app);
 							}
 
 							string HTMLdocumentationFunction = "";
-							generateHTMLdocumentationForFunction(currentReferenceInPrintList, firstReferenceInTopLevelBelowList, currentFunctionReference, fileNameHoldingFunction, &writeFileObjectFunction, topLevelFunctionName, generateHTMLdocumentationMode, &HTMLdocumentationFunction, &outputSVGFileNameFunction, false, "", traceAFunctionUpwards);		
+							generateHTMLdocumentationForFunction(currentReferenceInPrintList, firstReferenceInTopLevelBelowList, currentFunctionReference, fileNameHoldingFunction, &currentTagInSVGFileFunction, topLevelFunctionName, generateHTMLdocumentationMode, &HTMLdocumentationFunction, &outputSVGFileNameFunction, false, "", traceAFunctionUpwards);		
 							*HTMLdocumentationBody = *HTMLdocumentationBody + HTMLdocumentationFunction; 
 							#ifdef CS_DEBUG_HTML_DOCUMENTATION
 							//cout << "HTMLdocumentationFunction = " << HTMLdocumentationFunction << endl;
 							#endif
 							
 							if(traceAFunctionUpwards)
-							{						
-								writeSVGFooter(&writeFileObjectFunction);
-								writeFileObjectFunction.close();
+							{
+								lastTagInSVGFile->nextTag = firstTagInSVGFileFunction;
+								if(!writeSVGFile(outputSVGFileNameFunction, firstTagInSVGFile))
+								{
+									result = false;
+								}
+								lastTagInSVGFile->nextTag = NULL;
+								delete firstTagInSVGFileFunction;
 							}
 						}
 
@@ -341,7 +352,7 @@ void generateHTMLdocumentationForAllFunctions(CSReference * firstReferenceInAbov
 
 				if(currentFileReference->firstReferenceInBelowList != NULL)
 				{
-					generateHTMLdocumentationForAllFunctions(currentFileReference->firstReferenceInBelowList, currentReferenceInPrintList, firstReferenceInTopLevelBelowList, topLevelFunctionName, generateHTMLdocumentationMode, useOutputHTMLFile, HTMLdocumentationBody, outputSVGFileName, traceAFunctionUpwards);
+					generateHTMLdocumentationForAllFunctions(currentFileReference->firstReferenceInBelowList, currentReferenceInPrintList, firstReferenceInTopLevelBelowList, topLevelFunctionName, generateHTMLdocumentationMode, useOutputHTMLFile, HTMLdocumentationBody, firstTagInSVGFile, lastTagInSVGFile, traceAFunctionUpwards);
 				}
 			}
 		}
@@ -350,7 +361,7 @@ void generateHTMLdocumentationForAllFunctions(CSReference * firstReferenceInAbov
 	}
 }
 
-void generateHTMLdocumentationForFunction(Reference * currentReferenceInPrintList, CSReference * firstReferenceInTopLevelBelowList, CSReference * bottomLevelFunctionToTraceUpwards, string fileNameHoldingFunction, ofstream * writeFileObject, string topLevelFunctionName, int generateHTMLdocumentationMode, string * HTMLdocumentationFunction, string * outputSVGFileNameFunction, bool useOutputHTMLFile, string outputHTMLFileName, bool traceAFunctionUpwards)
+void generateHTMLdocumentationForFunction(Reference * currentReferenceInPrintList, CSReference * firstReferenceInTopLevelBelowList, CSReference * bottomLevelFunctionToTraceUpwards, string fileNameHoldingFunction, XMLParserTag ** currentTag, string topLevelFunctionName, int generateHTMLdocumentationMode, string * HTMLdocumentationFunction, string * outputSVGFileNameFunction, bool useOutputHTMLFile, string outputHTMLFileName, bool traceAFunctionUpwards)
 {		
 	if(generateHTMLdocumentationMode == CS_GENERATE_HTML_DOCUMENTATION_MODE_OFF)
 	{
@@ -363,7 +374,7 @@ void generateHTMLdocumentationForFunction(Reference * currentReferenceInPrintLis
 	string HTMLdocumentationFunctionTraceTableRows = "";
 	if(traceAFunctionUpwards)
 	{
-		currentReferenceInPrintList = traceFunctionsUpwardsAndDrawOrHighLightThese(currentReferenceInPrintList, firstReferenceInTopLevelBelowList, bottomLevelFunctionToTraceUpwards, writeFileObject, topLevelFunctionName, generateHTMLdocumentationMode, &HTMLdocumentationFunctionTraceTableRows);
+		currentReferenceInPrintList = traceFunctionsUpwardsAndDrawOrHighLightThese(currentReferenceInPrintList, firstReferenceInTopLevelBelowList, bottomLevelFunctionToTraceUpwards, currentTag, topLevelFunctionName, generateHTMLdocumentationMode, &HTMLdocumentationFunctionTraceTableRows);
 	
 		traceFunctionsUpwardsAndDrawOrHighLightTheseReset(firstReferenceInTopLevelBelowList, bottomLevelFunctionToTraceUpwards, topLevelFunctionName);	//this is required for multiple traces per CS execution
 	}

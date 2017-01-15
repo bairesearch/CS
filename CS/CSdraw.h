@@ -23,7 +23,7 @@
  * File Name: CSdraw.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3b2b 30-September-2012
+ * Project Version: 3c1a 11-October-2012
  *
  *******************************************************************************/
 
@@ -31,6 +31,7 @@
 #define HEADER_CS_DRAW
 
 #include "LDreferenceClass.h"
+#include "XMLParserClass.h"
 #include "CSreferenceClass.h"
 #include "CSglobalDefs.h"
 
@@ -145,30 +146,30 @@
 
 void initiateMaxXAtAParticularY();
 
-Reference * createFileReferenceListBoxes(Reference * currentReferenceInPrintList, CSReference * firstReferenceInAboveLevelBelowList, CSReference * firstReferenceInTopLevelBelowList, ofstream * writeFileObject, bool outputFunctionsConnectivity, bool traceAFunctionUpwards);
+Reference * createFileReferenceListBoxes(Reference * currentReferenceInPrintList, CSReference * firstReferenceInAboveLevelBelowList, CSReference * firstReferenceInTopLevelBelowList, XMLParserTag ** currentTag, bool outputFunctionsConnectivity, bool traceAFunctionUpwards);
 	bool hasAPreviousReferenceWithThisNameHasbeenPrinted(string name, CSReference * firstReferenceInAboveLevelBelowList, int *maxYPos);
 	void addShortcutsToPrintedVersionOfReference(CSReference * reference, string name, CSReference * firstReferenceInAboveLevelBelowList);
 
-Reference * createFileReferenceListConnections(Reference * currentReferenceInPrintList, CSReference * firstReferenceInAboveLevelBelowList, CSReference * firstReferenceInTopLevelBelowList, ofstream * writeFileObject, bool traceAFunctionUpwards);
-	Reference * findAndLinkAllFileReferencesWithSameName(Reference * currentReferenceInPrintList, CSReference * reference, CSReference * firstReferenceInAboveLevelBelowList, CSReference * firstReferenceInTopLevelBelowList, ofstream * writeFileObject, bool traceAFunctionUpwards);
+Reference * createFileReferenceListConnections(Reference * currentReferenceInPrintList, CSReference * firstReferenceInAboveLevelBelowList, CSReference * firstReferenceInTopLevelBelowList, XMLParserTag ** currentTag, bool traceAFunctionUpwards);
+	Reference * findAndLinkAllFileReferencesWithSameName(Reference * currentReferenceInPrintList, CSReference * reference, CSReference * firstReferenceInAboveLevelBelowList, CSReference * firstReferenceInTopLevelBelowList, XMLParserTag ** currentTag, bool traceAFunctionUpwards);
 	CSReference * findPrintedFileReferenceWithName(string name, CSReference * reference, CSReference * firstReferenceInAboveLevelBelowList, bool * foundPrintedReferenceWithName);
 
-Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentReferenceInPrintList, CSReference * aboveLevelFileReference, CSReference * aboveLevelFunctionReference, CSReference * firstReferenceInTopLevelBelowList, int functionLevel, string functionReferenceNameToFind, ofstream * writeFileObject, bool traceAFunctionUpwards);
+Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentReferenceInPrintList, CSReference * aboveLevelFileReference, CSReference * aboveLevelFunctionReference, CSReference * firstReferenceInTopLevelBelowList, int functionLevel, string functionReferenceNameToFind, XMLParserTag ** currentTag, bool traceAFunctionUpwards);
 	CSReferenceArray findFunctionReferenceInAPrintedFileReferenceRecursive(CSReference * fileReferenceToSearchIn, string functionReferenceNameToFind, CSReferenceArray * foundFileAndFunctionReference, bool * referenceFound);
 		CSReferenceArray findFunctionReferenceInPrintedFileReference(CSReference * fileReferenceToSearchIn, string functionReferenceNameToFind, CSReferenceArray * foundFileAndFunctionReference, bool * referenceFound);
 
 	Reference * createFileOrFunctionReferenceBox(Reference * currentReferenceInPrintList, CSReference * reference, double scaleFactor, int colour, double maxTextLength, double zPosition);
-	Reference * createFileOrFunctionReferenceConnection(Reference * currentReferenceInPrintList, CSReference * reference,  CSReference * currentReferenceInAboveList, int colour, bool fileOrFunction, bool traceAFunctionUpwardsAndNotCurrentlyTracing, ofstream * writeFileObject);
+	Reference * createFileOrFunctionReferenceConnection(Reference * currentReferenceInPrintList, CSReference * reference,  CSReference * currentReferenceInAboveList, int colour, bool fileOrFunction, bool traceAFunctionUpwardsAndNotCurrentlyTracing, XMLParserTag ** currentTag);
 	Reference * createBox(Reference * currentReferenceInPrintList, vec * vect, double width, double height, int colour);
 
 int calculateCSBoxAndConnectionColourBasedUponLevel(int yIndex);
 
 CSReference * findPrintedFunctionReferenceWithName(string name, CSReference * reference, CSReference * firstReferenceInAboveLevelBelowList, bool * foundPrintedReferenceWithName, string * fileNameHoldingFunction);
-Reference * traceFunctionsUpwardsAndDrawOrHighLightThese(Reference * currentReferenceInPrintList, CSReference * firstReferenceInTopLevelBelowList, CSReference * currentFunctionBeingTraced, ofstream * writeFileObject, string topLevelFunctionName, int generateHTMLdocumentationMode, string * HTMLdocumentationFunctionTraceTableRows);
+Reference * traceFunctionsUpwardsAndDrawOrHighLightThese(Reference * currentReferenceInPrintList, CSReference * firstReferenceInTopLevelBelowList, CSReference * currentFunctionBeingTraced, XMLParserTag ** currentTag, string topLevelFunctionName, int generateHTMLdocumentationMode, string * HTMLdocumentationFunctionTraceTableRows);
 	void traceFunctionsUpwardsAndDrawOrHighLightTheseReset(CSReference * firstReferenceInTopLevelBelowList, CSReference * currentFunctionBeingTraced, string topLevelFunctionName);
 
-void writeFileOrFunctionSVGBox(ofstream * writeFileObject, vec * pos, int textLength, double scaleFactor, double maxTextLength, int col, double boxOutlineWidth);
-void writeFileOrFunctionSVGBoxTransparent(ofstream * writeFileObject, vec * pos, int textLength, double scaleFactor, double maxTextLength, int col, double boxOutlineWidth, double fillOpacity);
+void writeFileOrFunctionSVGBox(XMLParserTag ** currentTag, vec * pos, int textLength, double scaleFactor, double maxTextLength, int col, double boxOutlineWidth);
+void writeFileOrFunctionSVGBoxTransparent(XMLParserTag ** currentTag, vec * pos, int textLength, double scaleFactor, double maxTextLength, int col, double boxOutlineWidth, double fillOpacity);
 
 //void fillInCSRulesExternVariables(RulesClass * firstReferenceInCSrulesDraw);
 void fillInCSRulesExternVariables();

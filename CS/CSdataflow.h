@@ -23,7 +23,7 @@
  * File Name: CSdataflow.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3b2b 30-September-2012
+ * Project Version: 3c1a 11-October-2012
  *
  *******************************************************************************/
 
