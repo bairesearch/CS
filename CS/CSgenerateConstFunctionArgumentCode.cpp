@@ -21,7 +21,7 @@
  * File Name: CSgenerateConstFunctionArgumentCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h9b 09-December-2015
+ * Project Version: 3h10a 09-December-2015
  *
  *******************************************************************************/
 
@@ -886,6 +886,19 @@ bool checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 		}
 	}
 	#endif
+	
+	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_MAKE_ALL_POINTER_ARRAY_TYPES_NON_CONST
+	if(detectPointerArray(currentFunctionArgumentInFunction->argument))
+	{
+		isNotConst = true;
+	}	
+	#endif
+	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_MAKE_ALL_DOUBLE_POINTER_TYPES_NON_CONST
+	if(detectDoublePointer(currentFunctionArgumentInFunction->argument))
+	{
+		isNotConst = true;
+	}
+	#endif
 
 	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
 	cout << "end checkIfVariableIsBeingModifiedInFunction{}: functionDeclarationArgument = " << functionDeclarationArgument << endl;
@@ -996,11 +1009,34 @@ bool charInString(string text, char* charArray, int arraySize)
 	return result;
 }
 
-#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_ASSIGNMENT_OF_DOUBLE_POINTERS
+//or ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_MAKE_ALL_DOUBLE_POINTER_TYPES_NON_CONST
+#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_ASSIGNMENT_OF_DOUBLE_POINTERS	
 bool detectDoublePointer(string functionArgument)
 {
 	bool result = false;
 	if(functionArgument.find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_DOUBLE_POINTER_TYPE) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+	{
+		result = true;
+	}
+	return result;
+}
+#endif
+
+#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_MAKE_ALL_POINTER_ARRAY_TYPES_NON_CONST
+bool detectPointerArray(string functionArgument)
+{
+	bool result = false;
+	bool pointerTypeDetected = false;
+	if(functionArgument.find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_POINTER_TYPE) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+	{
+		pointerTypeDetected = true;
+	}
+	bool arrayTypeDetected = false;
+	if(functionArgument.find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_ARRAY_TYPE) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+	{
+		arrayTypeDetected = true;
+	}
+	if(pointerTypeDetected && arrayTypeDetected)
 	{
 		result = true;
 	}

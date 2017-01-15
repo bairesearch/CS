@@ -26,7 +26,7 @@
  * File Name: CSglobalsDefs.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h9b 09-December-2015
+ * Project Version: 3h10a 09-December-2015
  * Description: CS specific global definitions
  *
  *******************************************************************************/
@@ -46,6 +46,12 @@
 	#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS	//added 3h1a/14-November-2014	//requires CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST
 	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DISABLE_OUTPUT	//safe for debug (no source/header file overwrites)
+		
+		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_MAKE_ALL_POINTER_ARRAY_TYPES_NON_CONST	//3h10a //make all function argument pointer array types (typeX* argumentname[]) non const (as GCC/VS compiler interprets them as double pointers, and compiler can't convert typeX** to const typeX**)
+		#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_MAKE_ALL_POINTER_ARRAY_TYPES_NON_CONST
+			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_ARRAY_TYPE "[]"
+		#endif
+		//#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_MAKE_ALL_DOUBLE_POINTER_TYPES_NON_CONST	//3h10a (disabled)	//make all function argument double pointers non const [NB this update is not required because explicit double pointers are always modified by the code [unlike pointer arrays] and are therefore set as non-const, but could be implemented for consistency)
 		
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_RETURN_OBJECTS	//3h7a
 		#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_RETURN_OBJECTS

@@ -21,7 +21,7 @@
  * File Name: CSgenerateConstFunctionArgumentCode.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h9b 09-December-2015
+ * Project Version: 3h10a 09-December-2015
  *
  *******************************************************************************/
 
@@ -42,13 +42,15 @@ bool generateConstFunctionArguments(CSfileContainer* firstObjectInTopLevelBelowL
 						bool checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject, CSfunctionArgument* currentFunctionArgumentInFunction, string functionDeclarationArgument, bool ignoreListIterationNextAssignments);
 							bool functionArgumentReferenceWholeWordCheck(string* functionText, string functionDeclarationArgument, int indexOfFunctionArgument);
 							bool charInString(string text, char* charArray, int arraySize);
+							#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_ASSIGNMENT_OF_DOUBLE_POINTERS
+							bool detectDoublePointer(string functionArgument);
+							#endif	
+							#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_MAKE_ALL_POINTER_ARRAY_TYPES_NON_CONST
+							bool detectPointerArray(string functionArgument);
+							#endif
 						string extractFullVariableName(string* functionText, int indexOfStartOfVariableName);
 						string extractFullVariableNameReverse(string* functionText, int indexOfEndOfVariableName, int* indexOfStartOfVariableName);
-				#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_ASSIGNMENT_OF_DOUBLE_POINTERS
-				bool detectDoublePointer(string functionArgument);
-				#endif
-			string replaceAllOccurancesOfFunctionObjectFunctionArgumentSecondaryAssignmentDeclarationInFunction(string* functionTextOrig, string functionArgumentSecondaryAssignmentName, bool* foundAtLeastOneInstance);
-		
+			string replaceAllOccurancesOfFunctionObjectFunctionArgumentSecondaryAssignmentDeclarationInFunction(string* functionTextOrig, string functionArgumentSecondaryAssignmentName, bool* foundAtLeastOneInstance);		
 
 #endif
 
