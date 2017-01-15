@@ -26,7 +26,7 @@
  * File Name: CSreferenceContainerClass.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h1a 14-November-2015
+ * Project Version: 3h1b 14-November-2015
  *
  *******************************************************************************/
 
@@ -85,6 +85,7 @@ int findEndPositionOfArgument(string* functionArgumentsRaw, int startPositionOfA
 	int bracketLevel = 1;
 	int pos = startPositionOfArgument;
 	bool stillFindingEndPositionOfArgument = true;
+	char cPrevious = 'a';
 	while(stillFindingEndPositionOfArgument)
 	{
 		char c = (*functionArgumentsRaw)[pos];
@@ -106,9 +107,13 @@ int findEndPositionOfArgument(string* functionArgumentsRaw, int startPositionOfA
 		}
 		else if(c == CLASS_TYPE_CLOSE_TAG)
 		{
-			bracketLevel--;
+			if(cPrevious != string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_OBJECT_REFERENCE_DELIMITER)[0])
+			{
+				bracketLevel--;
+			}
 		}	
 		pos++;
+		cPrevious = c;
 	}
 	return endPositionOfArgument;
 

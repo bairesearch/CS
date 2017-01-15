@@ -26,7 +26,7 @@
  * File Name: CSmain.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h1a 14-November-2015
+ * Project Version: 3h1b 14-November-2015
  *
  *******************************************************************************/
 
@@ -294,7 +294,7 @@ int main(int argc,char* *argv)
 
 	if(argumentExists(argc,argv,"-version"))
 	{
-		cout << "OpenCS.exe - Project Version: 3h1a 14-November-2015" << endl;
+		cout << "OpenCS.exe - Project Version: 3h1b 14-November-2015" << endl;
 		exit(1);
 	}
 
@@ -318,6 +318,7 @@ int main(int argc,char* *argv)
 		cout << "function contents cannot include a reference to themselves in comments of their contents (required for HTML generation function reference list and generateoo)" << endl;
 		cout << "CS does not support 2 identical function declarations (with identical arguments) for a single function in a header file (separated by preprocessor definitions)" << endl;
 		cout << "CS does not support 2 function declarations with different arguments for a single function in a header file (separated by preprocessor defintions)" << endl;
+		cout << "CS doesn't support couts containing function references" << endl;
 		cout << "****************************" << endl;
 		exit(0);
 	}

@@ -26,7 +26,7 @@
  * File Name: CSgenerateHTMLdocumentation.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h1a 14-November-2015
+ * Project Version: 3h1b 14-November-2015
  *
  *******************************************************************************/
 
@@ -69,7 +69,7 @@ string generateHTMLdocumentationHeader(string name, bool htmlHeader, bool isFile
 	string HTMLdocumentationHeader = "";
 	if(htmlHeader)
 	{
-		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3h1a 14-November-2015<p>\n";
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3h1b 14-November-2015<p>\n";
 	}
 	else
 	{
@@ -359,7 +359,7 @@ void generateHTMLdocumentationFunctionInputArguments(string* functionName, strin
 		#endif
 
 		int startPositionOfFunctionArguments = startPositionOfFunctionBrackets+1;
-		int endPositionOfFunctionArguments = endPositionOfFunctionBrackets-1;
+		int endPositionOfFunctionArguments = endPositionOfFunctionBrackets;
 		string functionArgumentsRaw = functionNameFull->substr(startPositionOfFunctionArguments, endPositionOfFunctionArguments-startPositionOfFunctionArguments+1);
 
 		bool stillParsingArguments = true;
@@ -373,7 +373,7 @@ void generateHTMLdocumentationFunctionInputArguments(string* functionName, strin
 				stillParsingArguments = false;
 			}
 
-			string currentArgument = functionArgumentsRaw.substr(startPositionOfArgument, endPositionOfArgument-startPositionOfArgument+1);
+			string currentArgument = functionArgumentsRaw.substr(startPositionOfArgument, endPositionOfArgument-startPositionOfArgument);
 
 			int startPositionOfArgumentName = currentArgument.rfind(CHAR_SPACE) + 1;	//last space
 			if(startPositionOfArgumentName == CPP_STRING_FIND_RESULT_FAIL_VALUE)
@@ -381,11 +381,15 @@ void generateHTMLdocumentationFunctionInputArguments(string* functionName, strin
 				cout << "generateHTMLdocumentationFunctionInputArguments{} error: (startPositionOfArgumentName == CPP_STRING_FIND_RESULT_FAIL_VALUE)" << endl;
 				exit(0);
 			}
-			string currentArgumentName = currentArgument.substr(startPositionOfArgumentName, endPositionOfArgument-startPositionOfArgumentName+1);
+			string currentArgumentName = currentArgument.substr(startPositionOfArgumentName, endPositionOfArgument-startPositionOfArgumentName);
 			string currentArgumentType = currentArgument.substr(0, startPositionOfArgumentName);
 			string currentArgumentDescription = createDescriptionFromCaseSensitiveMultiwordString(currentArgumentName);
 
 			#ifdef CS_DEBUG_HTML_DOCUMENTATION
+			cout << "generateHTMLdocumentationFunctionInputArguments{}: functionNameFull = " << *functionNameFull << endl;
+			cout << "generateHTMLdocumentationFunctionInputArguments{}: currentArgument = " << currentArgument << endl;
+			cout << "generateHTMLdocumentationFunctionInputArguments{}: currentArgumentName = " << currentArgumentName << endl;
+			cout << "generateHTMLdocumentationFunctionInputArguments{}: currentArgumentType = " << currentArgumentType << endl;
 			/*
 			if(*functionName == "...")
 			{

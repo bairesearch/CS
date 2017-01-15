@@ -26,7 +26,7 @@
  * File Name: CSglobalsDefs.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h1a 14-November-2015
+ * Project Version: 3h1b 14-November-2015
  * Description: CS specific global definitions
  *
  *******************************************************************************/
@@ -43,14 +43,15 @@
 	#define CS_GENERATE_CODE_GENERIC_SOURCE_FILE_EXTENSION "cpp"
 	#define CS_GENERATE_CODE_GENERIC_HEADER_FILE_EXTENSION "hpp"
 
-	//#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS	//added 3h1a/14-November-2014	//requires CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST
+	#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS	//added 3h1a/14-November-2014	//requires CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST
 	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
 		#define CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS_DISABLE_OUTPUT	//safe for debug (no source/header file overwrites)
-		#define CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+		//#define CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_END_OF_COMMAND ";"
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_EQUALS_SET "="
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_EQUALS_TEST "=="
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_CONST "const "
+		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_OBJECT_REFERENCE_DELIMITER "->"
 	#endif
 	#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_FUNCTION_ARGUMENT_DELIMITER ','
 

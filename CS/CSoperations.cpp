@@ -26,7 +26,7 @@
  * File Name: CSoperations.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h1a 14-November-2015
+ * Project Version: 3h1b 14-November-2015
  *
  *******************************************************************************/
 
@@ -1197,61 +1197,116 @@ bool searchFunctionStringForFunctionReferences(CSfile* firstFileInIncludeFileLis
 
 
 #ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
+//limitations; doesn't support couts containing function references, e.g. "cout << "Error: getFloatArgument(" << keystr << ")" << endl;" (NB '<' is interpreted as CLASS_TYPE_OPEN_TAG)
 void identifyFunctionReferenceArguments(CSfunction* currentReferenceInFunctionReferenceListRepeats, string* functionContentsString, int indexToFunctionObject)
 {
 	//designed to support embedded function references (although this is not currently used by CSgenerateConstFunctionArgumentCode)
+
+	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+	cout << "start identifyFunctionReferenceArguments{}..." << endl;
+	cout << "currentReferenceInFunctionReferenceListRepeats->name = " << currentReferenceInFunctionReferenceListRepeats->name << endl;
+	//cout << "functionContentsString = " << *functionContentsString << endl;
+	#endif
 	
 	CSfunctionArgument* currentFunctionArgumentInFunctionReference = currentReferenceInFunctionReferenceListRepeats->firstFunctionArgumentInFunction;
 	
 	string functionName = currentReferenceInFunctionReferenceListRepeats->name;
 	
 	int startPositionOfFunctionBrackets = functionContentsString->find(CHAR_OPEN_BRACKET, indexToFunctionObject);
+	int endPositionOfFunctionBracketsTemp = functionContentsString->find(CHAR_CLOSE_BRACKET, indexToFunctionObject);
 	if(startPositionOfFunctionBrackets != indexToFunctionObject+functionName.length())
 	{
 		cout << "identifyFunctionReferenceArguments{} error: startPositionOfFunctionBrackets != indexToFunctionObject+functionName.length()" << endl;
 		exit(0);
 	}
-	int bracketLevel = 1;
-	int pos = startPositionOfFunctionBrackets+1;
-	int posStartOfFunctionArgument = pos;
-	while(bracketLevel > 0)
+	bool functionHasArguments = false;
+	if(endPositionOfFunctionBracketsTemp != startPositionOfFunctionBrackets+1)
 	{
-		char c = (*functionContentsString)[pos];
-		if(bracketLevel == 1)
-		{//only detect base level function reference commas (not commas for embedded function reference arguments)
-			if((c == CS_GENERATE_CONST_FUNCTION_ARGUMENTS_FUNCTION_ARGUMENT_DELIMITER) || (c == CHAR_CLOSE_BRACKET))
-			{
-				currentFunctionArgumentInFunctionReference->argument = functionContentsString->substr(posStartOfFunctionArgument, pos-posStartOfFunctionArgument);
-				currentFunctionArgumentInFunctionReference->next = new CSfunctionArgument();
-				currentFunctionArgumentInFunctionReference = currentFunctionArgumentInFunctionReference->next;
-				posStartOfFunctionArgument = pos+1;	//account for comma
-				#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
-				cout << "identifyFunctionReferenceArguments{}: currentFunctionArgumentInFunctionReference->argumentName = " << currentFunctionArgumentInFunctionReference->argumentName << endl;
-				#endif
-			}
-		}
-		if(c == CHAR_OPEN_BRACKET)
-		{
-			bracketLevel++;
-		}
-		else if(c == CHAR_CLOSE_BRACKET)
-		{
-			bracketLevel--;
-		}	
-		if(c == CLASS_TYPE_OPEN_TAG)
-		{
-			bracketLevel++;
-		}
-		else if(c == CLASS_TYPE_CLOSE_TAG)
-		{
-			bracketLevel--;
-		}	
-		pos++;
+		functionHasArguments = true;
 	}
-	currentReferenceInFunctionReferenceListRepeats->nameFull = functionContentsString->substr(indexToFunctionObject, pos-indexToFunctionObject);
+	if(functionHasArguments)
+	{
+		int bracketLevel = 1;
+		int pos = startPositionOfFunctionBrackets+1;
+		int posStartOfFunctionArgument = pos;
+		char cPrevious = 'a';
+		while(bracketLevel > 0)
+		{
+			char c = (*functionContentsString)[pos];
+			if(bracketLevel == 1)
+			{//only detect base level function reference commas (not commas for embedded function reference arguments)
+				if((c == CS_GENERATE_CONST_FUNCTION_ARGUMENTS_FUNCTION_ARGUMENT_DELIMITER) || (c == CHAR_CLOSE_BRACKET))
+				{
+					string argument = functionContentsString->substr(posStartOfFunctionArgument, pos-posStartOfFunctionArgument);
+					currentFunctionArgumentInFunctionReference->argument = removePrependedWhiteSpace(argument);
+					#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+					cout << "identifyFunctionReferenceArguments{}: currentFunctionArgumentInFunctionReference->argument = " << currentFunctionArgumentInFunctionReference->argument << endl;
+					#endif
+					currentFunctionArgumentInFunctionReference->next = new CSfunctionArgument();
+					currentFunctionArgumentInFunctionReference = currentFunctionArgumentInFunctionReference->next;
+					posStartOfFunctionArgument = pos+1;	//account for comma
+				}
+			}
+			if(c == CHAR_OPEN_BRACKET)
+			{
+				bracketLevel++;
+			}
+			else if(c == CHAR_CLOSE_BRACKET)
+			{
+				bracketLevel--;
+			}	
+			if(c == CLASS_TYPE_OPEN_TAG)
+			{
+				bracketLevel++;
+			}
+			else if(c == CLASS_TYPE_CLOSE_TAG)
+			{
+				if(cPrevious != string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_OBJECT_REFERENCE_DELIMITER)[0])
+				{
+					bracketLevel--;
+				}
+			}	
+			pos++;
+			cPrevious = c;
+		}
+		currentReferenceInFunctionReferenceListRepeats->nameFull = functionContentsString->substr(indexToFunctionObject, pos-indexToFunctionObject);
+	}
+	else
+	{
+		currentReferenceInFunctionReferenceListRepeats->nameFull = functionContentsString->substr(indexToFunctionObject, endPositionOfFunctionBracketsTemp-indexToFunctionObject+1);
+	}
 	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
 	cout << "identifyFunctionReferenceArguments{}: currentReferenceInFunctionReferenceListRepeats->nameFull = " << currentReferenceInFunctionReferenceListRepeats->nameFull << endl;
+	cout << "end identifyFunctionReferenceArguments{}..." << endl;
+	//exit(0);
 	#endif
+}
+
+//NB this function is not necessary for the current implementation, but is used for neatness 
+string removePrependedWhiteSpace(string argument)
+{
+	string argumentWithoutPrependedWhitespace = "";
+	bool findingWhitespace = true;
+	for(int i=0; i<argument.length(); i++)
+	{
+		if(findingWhitespace)
+		{
+			if(argument[i] == CHAR_SPACE)
+			{
+
+			}
+			else
+			{
+				findingWhitespace = false;
+				argumentWithoutPrependedWhitespace = argumentWithoutPrependedWhitespace + argument[i];
+			}
+		}
+		else
+		{
+			argumentWithoutPrependedWhitespace = argumentWithoutPrependedWhitespace + argument[i];
+		}
+	}
+	return argumentWithoutPrependedWhitespace;
 }
 
 void identifyFunctionDeclarationArguments(CSfunction* currentReferenceInFunctionReferenceList, string* functionNameFull)
@@ -1292,9 +1347,6 @@ void identifyFunctionDeclarationArguments(CSfunction* currentReferenceInFunction
 			}
 
 			string currentArgument = functionArgumentsRaw.substr(startPositionOfArgument, endPositionOfArgument-startPositionOfArgument);
-			#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
-			cout << "identifyFunctionDeclarationArguments{}: currentArgument = " << currentArgument << endl;
-			#endif
 			
 			int startPositionOfArgumentName = currentArgument.rfind(CHAR_SPACE) + 1;	//last space
 			if(startPositionOfArgumentName == CPP_STRING_FIND_RESULT_FAIL_VALUE)
@@ -1302,12 +1354,15 @@ void identifyFunctionDeclarationArguments(CSfunction* currentReferenceInFunction
 				cout << "generateHTMLdocumentationFunctionInputArguments{} error: (startPositionOfArgumentName == CPP_STRING_FIND_RESULT_FAIL_VALUE)" << endl;
 				exit(0);
 			}
-			string currentArgumentName = currentArgument.substr(startPositionOfArgumentName, endPositionOfArgument-startPositionOfArgumentName+1);
+			string currentArgumentName = currentArgument.substr(startPositionOfArgumentName, endPositionOfArgument-startPositionOfArgumentName);
 			string currentArgumentType = currentArgument.substr(0, startPositionOfArgumentName);
 
 			#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
 			cout << "identifyFunctionDeclarationArguments{}: functionNameFull = " << *functionNameFull << endl;
-			cout << "currentArgumentName = " << currentArgumentName << ", currentArgumentType = " << currentArgumentType << endl;			
+			cout << "identifyFunctionDeclarationArguments{}: currentArgument = " << currentArgument << endl;
+			cout << "identifyFunctionDeclarationArguments{}: currentArgumentName = " << currentArgumentName << endl;
+			cout << "identifyFunctionDeclarationArguments{}: currentArgumentType = " << currentArgumentType << endl;
+			//cout << "currentArgumentName = " << currentArgumentName << ", currentArgumentType = " << currentArgumentType << endl;			
 			//if(*functionName == "...")
 			//{
 			//	cout << "functionArgumentsRaw = " << functionArgumentsRaw << endl;
