@@ -26,7 +26,7 @@
  * File Name: CSgenerateHTMLdocumentation.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h1b 14-November-2015
+ * Project Version: 3h1c 14-November-2015
  *
  *******************************************************************************/
 
@@ -69,7 +69,7 @@ string generateHTMLdocumentationHeader(string name, bool htmlHeader, bool isFile
 	string HTMLdocumentationHeader = "";
 	if(htmlHeader)
 	{
-		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3h1b 14-November-2015<p>\n";
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3h1c 14-November-2015<p>\n";
 	}
 	else
 	{
@@ -618,7 +618,7 @@ void addToHTMLdocumentationIndentedList(string currentFunctionObjectName, int cu
 {
 	string functionNameCompact = currentFunctionObjectName;	// + "{}";
 
-	int differenceBetweenPreviousIndentation = currentFunctionObjectIndentation -* previousIndentation;
+	int differenceBetweenPreviousIndentation = currentFunctionObjectIndentation - *previousIndentation;
 	string rawIndentationText = "\n";
 	for(int i=0; i<currentFunctionObjectIndentation; i++)
 	{

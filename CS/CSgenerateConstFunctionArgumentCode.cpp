@@ -21,7 +21,7 @@
  * File Name: CSgenerateConstFunctionArgumentCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h1b 14-November-2015
+ * Project Version: 3h1c 14-November-2015
  *
  *******************************************************************************/
 
@@ -174,6 +174,16 @@ bool generateConstFunctionArgumentsFunction(CSfunction* currentFunctionObject)
 				if(functionReferenceTarget != NULL)
 				{
 					CSfunctionArgument* currentFunctionArgumentInFunctionReference = currentFunctionReference->firstFunctionArgumentInFunction;
+					
+					//debug only;
+					int functionReferenceArgumentCount = 0;
+					while(currentFunctionArgumentInFunctionReference->next != NULL)
+					{
+						functionReferenceArgumentCount++;
+						currentFunctionArgumentInFunctionReference = currentFunctionArgumentInFunctionReference->next;
+					}
+					
+					currentFunctionArgumentInFunctionReference = currentFunctionReference->firstFunctionArgumentInFunction;
 					int functionReferenceArgumentIndex = 0;
 					while(currentFunctionArgumentInFunctionReference->next != NULL)
 					{	
@@ -183,11 +193,20 @@ bool generateConstFunctionArgumentsFunction(CSfunction* currentFunctionObject)
 							generateConstFunctionArgumentsFunction(functionReferenceTarget);
 							
 							CSfunctionArgument* currentFunctionArgumentInFunctionReferenceTarget = functionReferenceTarget->firstFunctionArgumentInFunction;
-							for(int i=0; i<functionReferenceArgumentIndex; i++)
+							int i=0;
+							for(i=0; i<functionReferenceArgumentIndex; i++)
 							{
 								currentFunctionArgumentInFunctionReferenceTarget = currentFunctionArgumentInFunctionReferenceTarget->next;
-								i++;
 							}
+							
+							//debug only;
+							if(i != functionReferenceArgumentCount)
+							{
+								cout << "generateConstFunctionArgumentsFunction{} error: (i != functionReferenceArgumentCount)" << endl;
+								cout << "functionNameFull = " << functionNameFull << endl;
+								exit(0);
+							}
+							
 							if(currentFunctionArgumentInFunctionReferenceTarget->isConst)
 							{
 								//currentFunctionArgumentInFunctionReference->isConst = true;	//redundant
@@ -209,33 +228,51 @@ bool generateConstFunctionArgumentsFunction(CSfunction* currentFunctionObject)
 				int indexOfFunctionArgument = -1;
 				while((indexOfFunctionArgument = (currentFunctionObject->functionText).find(currentFunctionArgumentInFunction->argumentName, indexOfFunctionArgument+1)) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 				{
-					//find next occurance of ';' on same line
-					cout << "indexOfFunctionArgument = " << indexOfFunctionArgument << endl;
-					int indexOfEndOfCommand = (currentFunctionObject->functionText).find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_END_OF_COMMAND, indexOfFunctionArgument);
-					int indexOfEndOfNewline = (currentFunctionObject->functionText).find(STRING_NEW_LINE, indexOfFunctionArgument);
-					if(indexOfEndOfCommand < indexOfEndOfNewline)
+					//added condition CS 3h1c - ensure previous character is not a letter (this ensures that ABCargumentName is not found when searching for argumentName)
+					if((indexOfFunctionArgument == 0) || !charInCharArray((currentFunctionObject->functionText)[indexOfFunctionArgument-1], functionOrVariableNameCharacters, CS_FUNCTION_OR_VARIABLE_NAME_CHARACTERS_NUMBER_OF_TYPES))
 					{
-						cout << "(indexOfEndOfCommand < indexOfEndOfNewline)" << endl;
-						//now see if the function argument has been reassigned in this command
-						int indexOfEndOfEqualsSet = (currentFunctionObject->functionText).find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_EQUALS_SET, indexOfFunctionArgument);
-						int indexOfEndOfEqualsTest = (currentFunctionObject->functionText).find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_EQUALS_TEST, indexOfFunctionArgument);						
-						if(indexOfEndOfEqualsSet < indexOfEndOfCommand)
+						//added condition CS 3h1c - ensure next character is not a letter (this ensures that argumentNameABC is not found when searching for argumentName)
+						if(((currentFunctionObject->functionText).length() == indexOfFunctionArgument) || !charInCharArray((currentFunctionObject->functionText)[indexOfFunctionArgument+(currentFunctionArgumentInFunction->argumentName).length()], functionOrVariableNameCharacters, CS_FUNCTION_OR_VARIABLE_NAME_CHARACTERS_NUMBER_OF_TYPES))
 						{
-							if(indexOfEndOfEqualsSet != indexOfEndOfEqualsTest)
+							/*
+							if(currentFunctionArgumentInFunction->argumentName == "currentFunctionObjectIndentation" && currentFunctionObject->name == "addToHTMLdocumentationIndentedList")
 							{
-								isConst = false;
-								/*
-								e.g.
-								functionArgument = 5;
-								*functionArgument = 5;
-								functionArgument->parameter = 5;
-								*/
+								cout << "currentFunctionArgumentInFunction->argumentName = " << currentFunctionArgumentInFunction->argumentName << endl;
+								cout << "(currentFunctionObject->functionText)[indexOfFunctionArgument-1] = " << (currentFunctionObject->functionText)[indexOfFunctionArgument-1] << endl;
+							}
+							*/
+							
+
+							//find next occurance of ';' on same line
+							//cout << "indexOfFunctionArgument = " << indexOfFunctionArgument << endl;
+							int indexOfEndOfCommand = (currentFunctionObject->functionText).find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_END_OF_COMMAND, indexOfFunctionArgument);
+							int indexOfEndOfNewline = (currentFunctionObject->functionText).find(STRING_NEW_LINE, indexOfFunctionArgument);
+							if(indexOfEndOfCommand < indexOfEndOfNewline)
+							{
+								//cout << "(indexOfEndOfCommand < indexOfEndOfNewline)" << endl;
+								//now see if the function argument has been reassigned in this command
+								int indexOfEndOfEqualsSet = (currentFunctionObject->functionText).find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_EQUALS_SET, indexOfFunctionArgument);
+								int indexOfEndOfEqualsTest = (currentFunctionObject->functionText).find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_EQUALS_TEST, indexOfFunctionArgument);
+								int indexOfEndOfNotEqualsTest = (currentFunctionObject->functionText).find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_NOT_EQUALS_TEST, indexOfFunctionArgument);					
+								if(indexOfEndOfEqualsSet < indexOfEndOfCommand)
+								{
+									if((indexOfEndOfEqualsSet != indexOfEndOfEqualsTest) && (indexOfEndOfEqualsSet != indexOfEndOfNotEqualsTest))	//not required for multiline logical conditions because checking for (indexOfEndOfEqualsSet < indexOfEndOfCommand), e.g. if(chicken == 5). Only required for single line logical conditions, eg. if(chicken == 5) bat = 2;
+									{
+										isConst = false;
+										/*
+										e.g.
+										functionArgument = 5;
+										*functionArgument = 5;
+										functionArgument->parameter = 5;
+										*/
+									}
+								}
+							}
+							else
+							{
+								//function reference argument detected; ignore (as this is dealt with in step 2)
 							}
 						}
-					}
-					else
-					{
-						//function reference argument detected; ignore (as this is dealt with in step 2)
 					}
 
 				}
@@ -251,6 +288,13 @@ bool generateConstFunctionArgumentsFunction(CSfunction* currentFunctionObject)
 		
 		currentFunctionObject->functionArgumentConstsIdentified = true;
 	}
+	
+	/*
+	if(currentFunctionObject->name == "addToHTMLdocumentationIndentedList")
+	{
+		exit(0);
+	}	
+	*/					
 	return result;
 }
 

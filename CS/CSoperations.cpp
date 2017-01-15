@@ -26,7 +26,7 @@
  * File Name: CSoperations.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h1b 14-November-2015
+ * Project Version: 3h1c 14-November-2015
  *
  *******************************************************************************/
 
@@ -1125,7 +1125,7 @@ bool searchFunctionStringForFunctionReferences(CSfile* firstFileInIncludeFileLis
 		while(CPP_STRING_FIND_RESULT_FAIL_VALUE != (startPosOfFunctionReferenceInFunction = functionContentsString->find((currentFunction->name + CHAR_OPEN_BRACKET), startPosOfFunctionReferenceInFunction)))
 		{
 			//added condition CS 3f1b - ensure previous character is not a letter (this ensures that ABCfunctionName is not found when searching for functionName)
-			if((startPosOfFunctionReferenceInFunction == 0) || !charInCharArray((*functionContentsString)[startPosOfFunctionReferenceInFunction-1], functionNameCharacters, CS_FUNCTION_NAME_CHARACTERS_NUMBER_OF_TYPES))
+			if((startPosOfFunctionReferenceInFunction == 0) || !charInCharArray((*functionContentsString)[startPosOfFunctionReferenceInFunction-1], functionOrVariableNameCharacters, CS_FUNCTION_OR_VARIABLE_NAME_CHARACTERS_NUMBER_OF_TYPES))
 			{
 				//cout << "startPosOfFunctionReferenceInFunction = " << startPosOfFunctionReferenceInFunction << endl;
 
@@ -1347,7 +1347,8 @@ void identifyFunctionDeclarationArguments(CSfunction* currentReferenceInFunction
 			}
 
 			string currentArgument = functionArgumentsRaw.substr(startPositionOfArgument, endPositionOfArgument-startPositionOfArgument);
-			
+			currentArgument = removePrependedWhiteSpace(currentArgument);
+
 			int startPositionOfArgumentName = currentArgument.rfind(CHAR_SPACE) + 1;	//last space
 			if(startPositionOfArgumentName == CPP_STRING_FIND_RESULT_FAIL_VALUE)
 			{

@@ -21,7 +21,7 @@
  * File Name: CSgenerateObjectOrientedCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h1b 14-November-2015
+ * Project Version: 3h1c 14-November-2015
  *
  *******************************************************************************/
 
@@ -328,7 +328,7 @@ string replaceAllOccurancesOfFunctionObjectReferenceNameInFunction(string* funct
 		{//only update function reference within functionText once
 
 			//added condition CS 3f1b - ensure previous character is not a letter (this ensures that ABCfunctionName is not found when searching for functionName)
-			if((pos == 0) || !charInCharArray(functionTextUpdated[pos-1], functionNameCharacters, CS_FUNCTION_NAME_CHARACTERS_NUMBER_OF_TYPES))
+			if((pos == 0) || !charInCharArray(functionTextUpdated[pos-1], functionOrVariableNameCharacters, CS_FUNCTION_OR_VARIABLE_NAME_CHARACTERS_NUMBER_OF_TYPES))
 			{	
 				functionTextUpdated.replace(pos, functionReferenceName.length(), functionReferenceNameUpdated);
 				pos = pos + functionReferenceNameUpdated.length();
@@ -521,7 +521,10 @@ bool moveIncludeFileStatementsToHeader(CSfile* firstReferenceInAboveLevelBelowLi
 	{
 		CSfile* currentFileObject = currentFileObjectContainer->fileObject;
 		
-		//if(currentFileObject->name != firstReferenceInAboveLevelBelowList->name){	//do not modify include .h of .c file - not required because of "if(hashIncludeFileName != topLevelReference->name)	//this is added so that do not parse method.h from within method.cpp!"
+		/*
+		//if(currentFileObject->name != firstReferenceInAboveLevelBelowList->name){	
+		//do not modify include .h of .c file - not required because of "if(hashIncludeFileName != topLevelReference->name)	//this is added so that do not parse method.h from within method.cpp!"
+		*/
 		string includeStatement = string(CS_GENERATE_CPP_CLASSES_INCLUDE_START) + currentFileObject->name + CS_GENERATE_CPP_CLASSES_INCLUDE_END;
 		
 		int positionOfIncludeStatementHeader = firstReferenceInAboveLevelBelowList->headerFileText.find(includeStatement);
