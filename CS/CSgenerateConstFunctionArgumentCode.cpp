@@ -21,7 +21,7 @@
  * File Name: CSgenerateConstFunctionArgumentCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h11e 10-December-2015
+ * Project Version: 3h12a 11-December-2015
  *
  *******************************************************************************/
 
@@ -214,8 +214,10 @@ bool generateConstFunctionArgumentsFile(CSfile* currentFileObject)
 		writeStringToFile(currentFileObject->sourceFileName, &(currentFileObject->sourceFileText));
 	}
 	#else
+	#ifndef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DISABLE_OUTPUT_DISABLE_PRINT_DEBUG
 	cout << "currentFileObject->headerFileText = \n" << currentFileObject->headerFileText << endl;
 	cout << "currentFileObject->sourceFileText = \n" << currentFileObject->sourceFileText << endl;	
+	#endif
 	#endif
 	
 	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
@@ -288,12 +290,13 @@ bool generateConstFunctionArgumentsFunction(CSfunction* currentFunctionObject)
 	string* functionText = &(currentFunctionObject->functionText);
 	
 	bool result = true;
-	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
-	cout << "generateConstFunctionArgumentsFunction{}: currentFunctionObject->name = " << currentFunctionObject->name << endl;	
-	#endif
 			
 	if(!(currentFunctionObject->functionArgumentConstsIdentified))
 	{	
+		#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+		cout << "generateConstFunctionArgumentsFunction{}: currentFunctionObject->name = " << currentFunctionObject->name << endl;	
+		#endif
+	
 		currentFunctionObject->functionArgumentConstsIdentified = true;		//moved condition CS3h1d; ignore recursive function references
 
 		string functionNameFull = currentFunctionObject->nameFull;
@@ -319,6 +322,23 @@ bool generateConstFunctionArgumentsFunction(CSfunction* currentFunctionObject)
 			currentFunctionArgumentInFunction = currentFunctionArgumentInFunction->next;
 		}
 		currentFunctionObject->parseSecondaryReferencesOnly = false;
+		#endif
+		
+		#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_PERFORM_SEPARATE_PASSES_TO_SUPPORT_RECURSION
+		currentFunctionObject->parseSecondaryReferencesAndModificationsOnly = true;
+		currentFunctionArgumentInFunction = currentFunctionObject->firstFunctionArgumentInFunction;
+		while(currentFunctionArgumentInFunction->next != NULL)
+		{	
+			string functionDeclarationArgument = currentFunctionArgumentInFunction->argumentName;
+				
+			if(generateConstFunctionArgumentAndSearchForSecondaryReferences(currentFunctionObject, currentFunctionArgumentInFunction, functionDeclarationArgument, false))
+			{
+
+			}
+			
+			currentFunctionArgumentInFunction = currentFunctionArgumentInFunction->next;
+		}
+		currentFunctionObject->parseSecondaryReferencesAndModificationsOnly = false;		
 		#endif
 		
 		currentFunctionArgumentInFunction = currentFunctionObject->firstFunctionArgumentInFunction;
@@ -352,6 +372,8 @@ bool generateConstFunctionArgumentAndSearchForSecondaryReferences(CSfunction* cu
 	cout << "generateConstFunctionArgumentAndSearchForSecondaryReferences{}: functionDeclarationArgument = " << functionDeclarationArgument << endl;
 	#endif
 	
+	bool result = true;
+	
 	string* functionText = &(currentFunctionObject->functionText);
 	
 	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_ASSIGNMENT_OF_ALIASES
@@ -361,12 +383,7 @@ bool generateConstFunctionArgumentAndSearchForSecondaryReferences(CSfunction* cu
 		currentFunctionArgumentInFunction->argumentNameAliasList.push_back(functionDeclarationArgument);
 	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_ASSIGNMENT_OF_ALIASES
 	}
-	#endif	
-												
-	bool result = true;
-
-	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_ASSIGNMENT_OF_ALIASES
-	if(!(currentFunctionObject->parseSecondaryReferencesOnly))
+	else
 	{
 	#endif		
 		if(generateConstFunctionArgument(currentFunctionObject, currentFunctionArgumentInFunction, functionDeclarationArgument, ignoreListIterationNextAssignments))
@@ -544,77 +561,88 @@ bool generateConstFunctionArgument(CSfunction* currentFunctionObject, CSfunction
 	cout << "currentFunctionArgumentInFunction->argumentType/Name = " << currentFunctionArgumentInFunction->argumentType << " " << currentFunctionArgumentInFunction->argumentName << endl;
 	#endif
 
-	//step 1: check function text to see if it contains a modification of the function argument
-	if(checkIfVariableIsBeingModifiedInFunction(currentFunctionObject, currentFunctionArgumentInFunction, functionDeclarationArgument, ignoreListIterationNextAssignments))
-	{	
-		currentFunctionArgumentInFunction->isNotConst = true;
-	}
-
-	if(!(currentFunctionArgumentInFunction->isNotConst))
-	{	
-		//step 2: check function references to see if function argument has been passed to a child function (and if so whether it has been modified by the child function)
-		//condition 2: the same requirement must be met by all functions called by functionX with the argument varnameX
-		CSfunction* currentFunctionReference = currentFunctionObject->firstReferenceInFunctionReferenceListRepeats;
-		int currentFunctionReferenceIndex = 0;
-		while(currentFunctionReference->next != NULL)
-		{
-			CSfile* fileObjectHoldingFunction = currentFunctionReference->functionReferenceTargetFileOwner;
-			CSfunction* functionReferenceTarget = currentFunctionReference->functionReferenceTarget;
-			if(functionReferenceTarget != NULL)
-			{
-				CSfunctionArgument* currentFunctionArgumentInFunctionReference = currentFunctionReference->firstFunctionArgumentInFunction;
-
-				//debug only;
-				int functionReferenceArgumentCount = 0;
-				while(currentFunctionArgumentInFunctionReference->next != NULL)
-				{
-					functionReferenceArgumentCount++;
-					currentFunctionArgumentInFunctionReference = currentFunctionArgumentInFunctionReference->next;
-				}
-
-				currentFunctionArgumentInFunctionReference = currentFunctionReference->firstFunctionArgumentInFunction;
-				int functionReferenceArgumentIndex = 0;
-				while(currentFunctionArgumentInFunctionReference->next != NULL)
-				{	
-					if((currentFunctionArgumentInFunctionReference->argument).find(functionDeclarationArgument) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
-					{
-						//now recurse and see if this function argument is considered const 
-						generateConstFunctionArgumentsFunction(functionReferenceTarget);
-
-						CSfunctionArgument* currentFunctionArgumentInFunctionReferenceTarget = functionReferenceTarget->firstFunctionArgumentInFunction;
-
-						//debug only;
-						int i = 0;
-						while(currentFunctionArgumentInFunctionReferenceTarget->next != NULL)
-						{
-							currentFunctionArgumentInFunctionReferenceTarget = currentFunctionArgumentInFunctionReferenceTarget->next;
-							i++;
-						}
-						if(i != functionReferenceArgumentCount)
-						{
-							cout << "generateConstFunctionArgumentsFunction{} error: (i != functionReferenceArgumentCount)" << endl;
-							exit(0);
-						}
-
-						currentFunctionArgumentInFunctionReferenceTarget = functionReferenceTarget->firstFunctionArgumentInFunction;
-						for(int i=0; i<functionReferenceArgumentIndex; i++)
-						{
-							currentFunctionArgumentInFunctionReferenceTarget = currentFunctionArgumentInFunctionReferenceTarget->next;
-						}
-						if(currentFunctionArgumentInFunctionReferenceTarget->isNotConst)
-						{
-							currentFunctionArgumentInFunction->isNotConst = true;
-						}
-					}
-					currentFunctionArgumentInFunctionReference = currentFunctionArgumentInFunctionReference->next;
-					functionReferenceArgumentIndex++;
-				}
-			}
-			currentFunctionReferenceIndex++;
-			currentFunctionReference = currentFunctionReference->next;
+	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_PERFORM_SEPARATE_PASSES_TO_SUPPORT_RECURSION
+	if(currentFunctionObject->parseSecondaryReferencesAndModificationsOnly)
+	{
+	#endif	
+		//step 1: check function text to see if it contains a modification of the function argument
+		if(checkIfVariableIsBeingModifiedInFunction(currentFunctionObject, currentFunctionArgumentInFunction, functionDeclarationArgument, ignoreListIterationNextAssignments))
+		{	
+			currentFunctionArgumentInFunction->isNotConst = true;
 		}
+	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_PERFORM_SEPARATE_PASSES_TO_SUPPORT_RECURSION
 	}
+	else
+	{
+	#endif	
+		if(!(currentFunctionArgumentInFunction->isNotConst))
+		{	
+			//step 2: check function references to see if function argument has been passed to a child function (and if so whether it has been modified by the child function)
+			//condition 2: the same requirement must be met by all functions called by functionX with the argument varnameX
+			CSfunction* currentFunctionReference = currentFunctionObject->firstReferenceInFunctionReferenceListRepeats;
+			int currentFunctionReferenceIndex = 0;
+			while(currentFunctionReference->next != NULL)
+			{
+				CSfile* fileObjectHoldingFunction = currentFunctionReference->functionReferenceTargetFileOwner;
+				CSfunction* functionReferenceTarget = currentFunctionReference->functionReferenceTarget;
+				if(functionReferenceTarget != NULL)
+				{
+					CSfunctionArgument* currentFunctionArgumentInFunctionReference = currentFunctionReference->firstFunctionArgumentInFunction;
 
+					//debug only;
+					int functionReferenceArgumentCount = 0;
+					while(currentFunctionArgumentInFunctionReference->next != NULL)
+					{
+						functionReferenceArgumentCount++;
+						currentFunctionArgumentInFunctionReference = currentFunctionArgumentInFunctionReference->next;
+					}
+
+					currentFunctionArgumentInFunctionReference = currentFunctionReference->firstFunctionArgumentInFunction;
+					int functionReferenceArgumentIndex = 0;
+					while(currentFunctionArgumentInFunctionReference->next != NULL)
+					{	
+						if((currentFunctionArgumentInFunctionReference->argument).find(functionDeclarationArgument) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+						{
+							//now recurse and see if this function argument is considered const 
+							generateConstFunctionArgumentsFunction(functionReferenceTarget);
+
+							CSfunctionArgument* currentFunctionArgumentInFunctionReferenceTarget = functionReferenceTarget->firstFunctionArgumentInFunction;
+
+							//debug only;
+							int i = 0;
+							while(currentFunctionArgumentInFunctionReferenceTarget->next != NULL)
+							{
+								currentFunctionArgumentInFunctionReferenceTarget = currentFunctionArgumentInFunctionReferenceTarget->next;
+								i++;
+							}
+							if(i != functionReferenceArgumentCount)
+							{
+								cout << "generateConstFunctionArgumentsFunction{} error: (i != functionReferenceArgumentCount)" << endl;
+								exit(0);
+							}
+
+							currentFunctionArgumentInFunctionReferenceTarget = functionReferenceTarget->firstFunctionArgumentInFunction;
+							for(int i=0; i<functionReferenceArgumentIndex; i++)
+							{
+								currentFunctionArgumentInFunctionReferenceTarget = currentFunctionArgumentInFunctionReferenceTarget->next;
+							}
+							if(currentFunctionArgumentInFunctionReferenceTarget->isNotConst)
+							{
+								currentFunctionArgumentInFunction->isNotConst = true;
+							}
+						}
+						currentFunctionArgumentInFunctionReference = currentFunctionArgumentInFunctionReference->next;
+						functionReferenceArgumentIndex++;
+					}
+				}
+				currentFunctionReferenceIndex++;
+				currentFunctionReference = currentFunctionReference->next;
+			}
+		}
+	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_PERFORM_SEPARATE_PASSES_TO_SUPPORT_RECURSION
+	}
+	#endif	
+	
 	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
 	cout << "end generateConstFunctionArgument{}: functionDeclarationArgument = " << functionDeclarationArgument << endl;
 	#endif

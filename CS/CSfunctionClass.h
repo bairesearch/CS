@@ -26,7 +26,7 @@
  * File Name: CSfunctionClass.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h11e 10-December-2015
+ * Project Version: 3h12a 11-December-2015
  *
  *******************************************************************************/
 
@@ -92,10 +92,15 @@ public:
 	bool isFunction;	//always true?
 	bool isFunctionReference;
 	string nameFull;
+	
 	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
+	bool functionArgumentConstsIdentified;
 	CSfunctionArgument* firstFunctionArgumentInFunction;
 	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_ASSIGNMENT_OF_ALIASES
 	bool parseSecondaryReferencesOnly;	//added 3h6a
+	#endif
+	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_PERFORM_SEPARATE_PASSES_TO_SUPPORT_RECURSION
+	bool parseSecondaryReferencesAndModificationsOnly;
 	#endif
 	#endif
 
@@ -113,9 +118,6 @@ public:
 	string functionTextRaw;	//function contents with comments?
 	string headerFunctionNameFullUpdated;
 	string sourceFunctionNameFullUpdated;
-	#endif
-	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
-	bool functionArgumentConstsIdentified;
 	#endif
 			
 	//function reference only
