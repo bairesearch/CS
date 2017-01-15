@@ -26,7 +26,7 @@
  * File Name: CSfunctionClass.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h15a 29-February-2016
+ * Project Version: 3h15b 29-February-2016
  *
  *******************************************************************************/
 
@@ -34,7 +34,6 @@
 
 
 
-#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
 CSfunctionArgument::CSfunctionArgument(void)
 {
 	argument = "";
@@ -47,7 +46,6 @@ CSfunctionArgument::CSfunctionArgument(void)
 	constIdentified = false;
 	next = NULL;
 }
-#endif
 
 CSfunction::CSfunction(void)
 {
@@ -78,15 +76,15 @@ CSfunction::CSfunction(void)
 	{
 		maxFunctionPrintXAtAParticularY[i] = 0;
 	}
-	
+
 	//function/functionReference
 	isFunction = false;
 	isFunctionReference = false;
 	nameFull = "";
-	
+
+	firstFunctionArgumentInFunction = new CSfunctionArgument();
 	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
 	functionArgumentConstsIdentified = false;
-	firstFunctionArgumentInFunction = new CSfunctionArgument();
 	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_ASSIGNMENT_OF_ALIASES
 	parseSecondaryReferencesOnly = false;
 	#endif
@@ -94,7 +92,7 @@ CSfunction::CSfunction(void)
 	parseSecondaryReferencesAndModificationsOnly = false;
 	#endif
 	#endif
-		
+
 	//function only
 	next = NULL;
 	previous = NULL;
@@ -105,13 +103,13 @@ CSfunction::CSfunction(void)
 	string functionText;
 	firstReferenceInFunctionReferenceListRepeats = NULL;
 	#endif
-	#ifdef CS_GENERATE_CODE_GENERIC 
+	#ifdef CS_GENERATE_CODE_GENERIC
 	functionTextRaw = "";
 	headerFunctionNameFullUpdated = "";
 	sourceFunctionNameFullUpdated = "";
 	#endif
 
-	
+
 	//function reference only
 	#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST
 	functionReferenceCharacterIndex = 0;
@@ -121,7 +119,7 @@ CSfunction::CSfunction(void)
 	#endif
 	functionReferenceTarget = NULL;
 	functionReferenceTargetFileOwner = NULL;
-	
+
 }
 
 CSfunction::~CSfunction(void)

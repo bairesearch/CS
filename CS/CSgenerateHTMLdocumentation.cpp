@@ -26,7 +26,7 @@
  * File Name: CSgenerateHTMLdocumentation.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h15a 29-February-2016
+ * Project Version: 3h15b 29-February-2016
  *
  *******************************************************************************/
 
@@ -39,7 +39,7 @@
 
 //generate documentation for all functions...
 void generateHTMLdocumentationFunctions(XMLparserTag* firstTagInSVGFile, CSfileContainer* firstObjectInTopLevelBelowListContainer, int generateHTMLdocumentationMode, bool useOutputHTMLfile, bool traceFunctionUpwards, bool usePredefinedGrid, string outputHTMLfileName)
-{	
+{
 	//find last tag in svg file;
 	XMLparserTag* lastTagInSVGFile = firstTagInSVGFile;
 	XMLparserTag* tempTagInSVGFile = firstTagInSVGFile;
@@ -63,13 +63,13 @@ void generateHTMLdocumentationFunctions(XMLparserTag* firstTagInSVGFile, CSfileC
 		writeStringPointerToFileObject(&HTMLdocumentation, &writeFileObjectHTML);
 	}
 }
-				
+
 string generateHTMLdocumentationHeader(string name, bool htmlHeader, bool isFile)
 {
 	string HTMLdocumentationHeader = "";
 	if(htmlHeader)
 	{
-		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3h15a 29-February-2016<p>\n";
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3h15b 29-February-2016<p>\n";
 	}
 	else
 	{
@@ -528,7 +528,7 @@ void generateHTMLdocumentationFunctionReferenceList(CSfunction* function, string
 	bool foundReferences = false;
 
 	map<int, CSfunction*> CSfunctionReferenceListOrdered;
-	
+
 	/*
 	if(function->name == "createImage")
 	{
@@ -539,9 +539,9 @@ void generateHTMLdocumentationFunctionReferenceList(CSfunction* function, string
 	{
 		//cout << "foundReferences" << endl;
 		//cout << "currentReferenceInFunctionReferenceListRepeats->functionReferenceCharacterIndex = " << currentReferenceInFunctionReferenceListRepeats->functionReferenceCharacterIndex << endl;
-		
+
 		foundReferences = true;
-		
+
 		CSfunctionReferenceListOrdered.insert(pair<int, CSfunction*>(currentReferenceInFunctionReferenceListRepeats->functionReferenceCharacterIndex, currentReferenceInFunctionReferenceListRepeats));
 
 		currentReferenceInFunctionReferenceListRepeats = currentReferenceInFunctionReferenceListRepeats->next;
@@ -581,7 +581,7 @@ void generateHTMLdocumentationFunctionReferenceList(CSfunction* function, string
 		exit(0);
 	}
 	*/
-	
+
 	#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST_WITH_INDENTATION_ADVANCED
 	for(int i=0; i<previousIndentation; i++)
 	{
@@ -693,7 +693,7 @@ void generateFileDiagramFunctionsHeirachy(CSfile* currentFileObject, string outp
 			{
 				cout << currentTopLevelFunctionObject->name << endl;
 				//cout << "currentTopLevelFunctionObject->name = " << currentTopLevelFunctionObject->name << endl;
-					
+
 				//print function box for top level functions (added 3d3b);
 				//cout << "currentTopLevelFunctionObject->level = " << currentTopLevelFunctionObject->level << endl;
 				if(currentTopLevelFunctionObject->printYIndex == 0)

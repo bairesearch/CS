@@ -26,7 +26,7 @@
  * File Name: CSdraw.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h15a 29-February-2016
+ * Project Version: 3h15b 29-February-2016
  *
  *******************************************************************************/
 
@@ -405,7 +405,7 @@ LDreference* createFileObjectListBoxes(LDreference* currentReferenceInPrintList,
 	while(currentFileObjectContainer->next != NULL)
 	{
 		CSfile* currentFileObject = currentFileObjectContainer->fileObject;
-		
+
 		/*
 		if(currentFileObjectContainer->name != "")
 		{
@@ -658,7 +658,7 @@ LDreference* createFileObjectListConnections(LDreference* currentReferenceInPrin
 
 				newCurrentReferenceInPrintList = createFileObjectConnection(newCurrentReferenceInPrintList, currentReference, aboveLevelObject, colour, traceFunctionUpwards, currentTag);	//add line
 			}
-		#ifdef CS_ASSUME_TOP_LEVEL_FILE_IS_SOURCE_FILE	
+		#ifdef CS_ASSUME_TOP_LEVEL_FILE_IS_SOURCE_FILE
 		}
 		#endif
 
@@ -672,14 +672,14 @@ LDreference* createFileObjectListConnections(LDreference* currentReferenceInPrin
 
 		currentReferenceContainer = currentReferenceContainer->next;
 	}
-	
+
 	#ifdef CS_ASSUME_TOP_LEVEL_FILE_IS_SOURCE_FILE
 	if(aboveLevelObject != NULL)
 	{
 		aboveLevelObject->printedFileConnections = true;
 	}
 	#endif
-	
+
 	return newCurrentReferenceInPrintList;
 }
 
@@ -717,7 +717,7 @@ LDreference* createFunctionObjectListBoxesAndConnections(LDreference* currentRef
 	#else
 	bool countArguments = false;
 	#endif
-	
+
 	LDreference* newCurrentReferenceInPrintList = currentReferenceInPrintList;
 
 	if(!(aboveLevelFunctionObject->printedFunctionConnections))	//added CS 3d2g
@@ -1274,7 +1274,7 @@ LDreference* createFunctionObjectConnection(LDreference* currentReferenceInPrint
 			currentReferenceContainerInAboveFileOrFunctionObjectList = currentReferenceContainerInAboveFileOrFunctionObjectList->next;
 		}
 		currentReferenceContainerInAboveFileOrFunctionObjectList->functionObject = currentReferenceInAboveList;
-		currentReferenceContainerInAboveFileOrFunctionObjectList->fileObjectHoldingFunction = currentFileObjectInAboveList;		
+		currentReferenceContainerInAboveFileOrFunctionObjectList->fileObjectHoldingFunction = currentFileObjectInAboveList;
 		CSfunctionContainer* newCSRefContainer = new CSfunctionContainer();
 		currentReferenceContainerInAboveFileOrFunctionObjectList->next = newCSRefContainer;
 		//cout << "h2" << endl;
@@ -1579,13 +1579,13 @@ int calculateCSBoxAndConnectionColourBasedUponFileName(CSfile* currentFileObject
 bool findPrintedFunctionObjectWithName(string name, CSfileContainer* firstObjectInAboveLevelBelowListContainer, CSfile** fileObjectHoldingFunction, CSfunction** updatedFunctionObject)
 {
 	bool foundPrintedReferenceWithName = false;
-	
+
 	CSfileContainer* currentFileObjectContainer = firstObjectInAboveLevelBelowListContainer;
 
 	while(currentFileObjectContainer->next != NULL)
 	{
 		CSfile* currentFileObject = currentFileObjectContainer->fileObject;
-		
+
 		CSfunction* currentFunctionObject = currentFileObject->firstFunctionInFunctionList;
 		while(currentFunctionObject->next != NULL)
 		{
@@ -1654,7 +1654,7 @@ LDreference* traceFunctionsUpwardsAndDrawOrHighLightThese(LDreference* currentRe
 	currentFunctionBeingTraced->printedTraceReset = false;
 
 	//add currentReferenceInAboveList to reference's above list for reverse lookup / function upwards trace
-	
+
 	if(currentFunctionBeingTraced->firstReferenceContainerInAboveReferenceList != NULL)
 	{
 		CSfunctionContainer* currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionObjectList = currentFunctionBeingTraced->firstReferenceContainerInAboveReferenceList;

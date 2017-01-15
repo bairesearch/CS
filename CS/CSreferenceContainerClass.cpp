@@ -26,7 +26,7 @@
  * File Name: CSreferenceContainerClass.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h15a 29-February-2016
+ * Project Version: 3h15b 29-February-2016
  *
  *******************************************************************************/
 
@@ -111,7 +111,7 @@ int findEndPositionOfArgument(string* functionArgumentsRaw, int startPositionOfA
 			{
 				bracketLevel--;
 			}
-		}	
+		}
 		pos++;
 		cPrevious = c;
 	}
@@ -191,9 +191,9 @@ bool findFunctionReferenceTarget(CSfunction* functionReference, CSfile* currentF
 {
 	string name = functionReference->name;
 	int numArguments = countArgumentList(functionReference->firstFunctionArgumentInFunction);
-	
+
 	bool foundPrintedReferenceWithName = false;
-	
+
 	CSfunction* currentFunctionObject = currentFileObject->firstFunctionInFunctionList;
 	while(currentFunctionObject->next != NULL)
 	{
@@ -205,7 +205,7 @@ bool findFunctionReferenceTarget(CSfunction* functionReference, CSfile* currentF
 				if(countArgumentList(currentFunctionObject->firstFunctionArgumentInFunction) == numArguments)
 				{
 					conditions = true;
-				} 
+				}
 			}
 			else
 			{
@@ -238,13 +238,13 @@ bool findFunctionReferenceTargetRecurse(CSfunction* functionReference, CSfileCon
 
 	string name = functionReference->name;
 	int numArguments = countArgumentList(functionReference->firstFunctionArgumentInFunction);
-		
+
 	CSfileContainer* currentFileObjectContainer = firstObjectInAboveLevelBelowListContainer;
 
 	while(currentFileObjectContainer->next != NULL)
 	{
 		CSfile* currentFileObject = currentFileObjectContainer->fileObject;
-		
+
 		CSfunction* currentFunctionObject = currentFileObject->firstFunctionInFunctionList;
 		while(currentFunctionObject->next != NULL)
 		{
@@ -256,7 +256,7 @@ bool findFunctionReferenceTargetRecurse(CSfunction* functionReference, CSfileCon
 					if(countArgumentList(currentFunctionObject->firstFunctionArgumentInFunction) == numArguments)
 					{
 						conditions = true;
-					} 
+					}
 				}
 				else
 				{

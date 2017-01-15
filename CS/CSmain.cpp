@@ -26,7 +26,7 @@
  * File Name: CSmain.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h15a 29-February-2016
+ * Project Version: 3h15b 29-February-2016
  *
  *******************************************************************************/
 
@@ -132,7 +132,7 @@ int main(int argc,char* *argv)
 	//#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
 	bool generateConstFunctionArgumentsCode = false;
 	//#endif
-	
+
 	bool passInputReq = true;
 	bool outputFunctionsConnectivity = false;
 	bool traceFunctionUpwards = false;
@@ -255,13 +255,13 @@ int main(int argc,char* *argv)
 	{
 		generateOOcode = true;
 	}
-	#endif	
+	#endif
 	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
 	if(argumentExists(argc,argv,"-generateconst"))
 	{
 		generateConstFunctionArgumentsCode = true;
 	}
-	#endif		
+	#endif
 
 	string currentFolder = getCurrentDirectory();
 
@@ -294,7 +294,7 @@ int main(int argc,char* *argv)
 
 	if(argumentExists(argc,argv,"-version"))
 	{
-		cout << "OpenCS.exe - Project Version: 3h15a 29-February-2016" << endl;
+		cout << "OpenCS.exe - Project Version: 3h15b 29-February-2016" << endl;
 		exit(1);
 	}
 
@@ -317,7 +317,7 @@ int main(int argc,char* *argv)
 		cout << "make sure the temp folder is clear of all output files (ie svg/html files of the same name as expected output files)" << endl;
 		cout << "function contents cannot include a reference to themselves in comments (required for HTML generation function reference list and generateoo)" << endl;
 		cout << "function contents cannot include a reference to themselves in cout statements (e.g. cout << \"dothis()\")" << endl;
-		cout << "function contents cannot include a reference to their name in cout statements followed by an equals sign, unless it is referenced at the start of the comment (e.g. cout << \"generateHTMLdocumentationMode = \" ...)" << endl;				
+		cout << "function contents cannot include a reference to their name in cout statements followed by an equals sign, unless it is referenced at the start of the comment (e.g. cout << \"generateHTMLdocumentationMode = \" ...)" << endl;
 		cout << "CS does not support 2 identical function declarations (with identical arguments) for a single function in a header file (separated by preprocessor definitions)" << endl;
 		cout << "CS does not support 2 function declarations with different arguments for a single function in a header file (separated by preprocessor defintions)" << endl;
 		cout << "CS doesn't support overloaded functions with the same number of arguments (required for precise referencing)" << endl;

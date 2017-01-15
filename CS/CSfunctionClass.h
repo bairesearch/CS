@@ -26,7 +26,7 @@
  * File Name: CSfunctionClass.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h15a 29-February-2016
+ * Project Version: 3h15b 29-February-2016
  *
  *******************************************************************************/
 
@@ -38,12 +38,11 @@
 
 #define MAX_INCLUDE_DEPTH_FUNCTION (20)	//for a function within a file
 
-#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
 class CSfunctionArgument
 {
 public:
 	CSfunctionArgument(void);
-	string argument;	//for function declaration (header) arguments (includes type and name), and for function reference argument contents 
+	string argument;	//for function declaration (header) arguments (includes type and name), and for function reference argument contents
 	string argumentName;	//for function declaration (header) arguments, not for function references arguments
 	string argumentType;	//for function declaration (header) arguments, not for function references arguments
 	bool isNotConst;	//for function declaration (header) arguments, not for function references arguments
@@ -51,10 +50,9 @@ public:
 	bool isConstEffective;	//for function declaration (header) arguments, not for function references arguments
 	//#endif
 	bool constIdentified;	//for function declaration (header) arguments, not for function references arguments
-	CSfunctionArgument* next;	//for function declaration (header) arguments (includes type and name), and for function reference argument contents 
+	CSfunctionArgument* next;	//for function declaration (header) arguments (includes type and name), and for function reference argument contents
 	vector<string> argumentNameAliasList;	//for function declaration (header) arguments, not for function references arguments
 };
-#endif
 
 class CSfile;
 class CSfunctionContainer;
@@ -90,15 +88,15 @@ public:
 	bool printedTrace;
 	bool printedTraceReset;		//used for html generation
 	int maxFunctionPrintXAtAParticularY[MAX_INCLUDE_DEPTH_FUNCTION];
-	
+
 	//function/functionReference
 	bool isFunction;	//always true?
 	bool isFunctionReference;
 	string nameFull;
-	
+
+	CSfunctionArgument* firstFunctionArgumentInFunction;
 	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
 	bool functionArgumentConstsIdentified;
-	CSfunctionArgument* firstFunctionArgumentInFunction;
 	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_ASSIGNMENT_OF_ALIASES
 	bool parseSecondaryReferencesOnly;	//added 3h6a
 	#endif
@@ -112,20 +110,20 @@ public:
 	CSfunction* previous;
 	CSfunction* firstReferenceInFunctionReferenceList;
 	bool hasHadFunctionReferencesParsed;
-	int numTopLevelFunctionsInFileAlreadyPrinted;	
+	int numTopLevelFunctionsInFileAlreadyPrinted;
 	#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST
 	string functionText;
 	CSfunction* firstReferenceInFunctionReferenceListRepeats;
 	#endif
-	#ifdef CS_GENERATE_CODE_GENERIC 
+	#ifdef CS_GENERATE_CODE_GENERIC
 	string functionTextRaw;	//function contents with comments?
 	string headerFunctionNameFullUpdated;
 	string sourceFunctionNameFullUpdated;
 	#endif
-			
+
 	//function reference only
 	#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST
-	int functionReferenceCharacterIndex;	
+	int functionReferenceCharacterIndex;
 	#endif
 	#ifdef CS_HTML_DOCUMENTATION_RECORD_FUNCTION_INDENTATION
 	int functionReferenceIndentation;

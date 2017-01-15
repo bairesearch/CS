@@ -26,7 +26,7 @@
  * File Name: CSglobalsDefs.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h15a 29-February-2016
+ * Project Version: 3h15b 29-February-2016
  * Description: CS specific global definitions
  *
  *******************************************************************************/
@@ -42,40 +42,40 @@
 
 #define CS_GENERATE_CODE_GENERIC
 #ifdef CS_GENERATE_CODE_GENERIC
-	
-	#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS	//added 3h1a/14-November-2014	//requires CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST
+
+	//#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS	//added 3h1a/14-November-2014	//requires CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST
 	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
-				
+
 		//#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DISABLE_OUTPUT	//safe for debug (no source/header file overwrites)
-			
+
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_SUPPORT_PSEUDO_CONSTS	//2h13a		//relies on "#define constEffective" being defined in target code	//OLD: user must manually replace all instances of "constEffective " with "" before compiling code
 		//#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_SUPPORT_PSEUDO_CONSTS
 			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_CONST_EFFECTIVE "constEffective "
 		//#endif
-		
+
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_PERFORM_SEPARATE_PASSES_TO_SUPPORT_RECURSION	//3h12a
-	
+
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_NON_CONST_GLOBAL_ASSIGNMENTS	//3h11c
 		#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_NON_CONST_GLOBAL_ASSIGNMENTS
 			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_NON_CONST_GLOBAL_ASSIGNMENTS_NUMBER_OF_TYPES (12)
-			static string specialCaseTextForAssignmentOfNonConstGlobal[CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_NON_CONST_GLOBAL_ASSIGNMENTS_NUMBER_OF_TYPES] = {"entityNodesActiveListComplete", "entityNodesActiveListConcepts", "entityNodesActiveListSubstances", "entityNodesActiveListActions", "entityNodesActiveListConditions", "entityNodesActiveListCompleteFastIndex", "comparisonVariableNode", "DBconceptEntityNodesLoadedList", "DBconceptEntityNodesLoadedList", "entityNodesActiveListCompleteFastIndexDBcache", "entityNodesActiveListCompleteFastIndexDBactive", "firstNLCsentenceInListLocal"};					
+			static string specialCaseTextForAssignmentOfNonConstGlobal[CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_NON_CONST_GLOBAL_ASSIGNMENTS_NUMBER_OF_TYPES] = {"entityNodesActiveListComplete", "entityNodesActiveListConcepts", "entityNodesActiveListSubstances", "entityNodesActiveListActions", "entityNodesActiveListConditions", "entityNodesActiveListCompleteFastIndex", "comparisonVariableNode", "DBconceptEntityNodesLoadedList", "DBconceptEntityNodesLoadedList", "entityNodesActiveListCompleteFastIndexDBcache", "entityNodesActiveListCompleteFastIndexDBactive", "firstNLCsentenceInListLocal"};
 		#endif
-		
+
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_TEMPLATE_USE_OPEN '<'
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_TEMPLATE_USE_CLOSE '>'
-		
+
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_NONCONST_BASED_ON_EXISTENCE_OF_ARBITRARY_SPECIAL_CASE_TEXT	//3h11a
 		#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_NONCONST_BASED_ON_EXISTENCE_OF_ARBITRARY_SPECIAL_CASE_TEXT
 			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_SPECIAL_CASES_NUMBER_OF_TYPES (4)
-			static string specialCaseTextForAssignmentOfNonConst[CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_SPECIAL_CASES_NUMBER_OF_TYPES] = {"GIAgenericEntityInterpretationParameters param(", "GIAgenericDepRelInterpretationParameters param(", "GIAgenericEntityInterpretationParameters paramEntity(", "GIAgenericDepRelInterpretationParameters paramDepRel("};			
+			static string specialCaseTextForAssignmentOfNonConst[CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_SPECIAL_CASES_NUMBER_OF_TYPES] = {"GIAgenericEntityInterpretationParameters param(", "GIAgenericDepRelInterpretationParameters param(", "GIAgenericEntityInterpretationParameters paramEntity(", "GIAgenericDepRelInterpretationParameters paramDepRel("};
 		#endif
-		
+
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_MAKE_ALL_POINTER_ARRAY_TYPES_NON_CONST	//3h10a //make all function argument pointer array types (typeX* argumentname[]) non const (as GCC/VS compiler interprets them as double pointers, and compiler can't convert typeX** to const typeX**)
 		#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_MAKE_ALL_POINTER_ARRAY_TYPES_NON_CONST
 			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_ARRAY_TYPE "[]"
 		#endif
 		//#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_MAKE_ALL_DOUBLE_POINTER_TYPES_NON_CONST	//3h10a (disabled)	//make all function argument double pointers non const [NB this update is not required because explicit double pointers are always modified by the code [unlike pointer arrays] and are therefore set as non-const, but could be implemented for consistency)
-		
+
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_RETURN_OBJECTS	//3h7a
 		#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_RETURN_OBJECTS
 			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_RETURN "\treturn "
@@ -90,9 +90,9 @@
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_CSTDLIB_NON_OBJECT_FUNCTION_EXECUTIONS	//3h8a
 		#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_CSTDLIB_NON_OBJECT_FUNCTION_EXECUTIONS
 			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_CSTDLIB_NON_OBJECT_FUNCTIONS_NUMBER_OF_TYPES (2)
-			static string cstdlibNonObjectFunctions[CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_CSTDLIB_NON_OBJECT_FUNCTIONS_NUMBER_OF_TYPES] = {"free", "fclose"};	
+			static string cstdlibNonObjectFunctions[CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_CSTDLIB_NON_OBJECT_FUNCTIONS_NUMBER_OF_TYPES] = {"free", "fclose"};
 		#endif
-		
+
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_PRECODED_CONST_ARGUMENTS	//3h7a
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_INCREMENT_DECREMENTS 	//3h7a
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_ASSIGNMENT_OF_ALIASES	//3h6a
@@ -104,16 +104,15 @@
 			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_DOUBLE_POINTER_TYPE "** "
 			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_ASSIGNMENT_OF_DOUBLE_POINTERS_STRICT	//2h13a
 		#endif
-		
+
 		#define CS_GENERATE_CODE_GENERIC_SOURCE_FILE_EXTENSION "cpp"
 		#define CS_GENERATE_CODE_GENERIC_HEADER_FILE_EXTENSION "h"
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_END_OF_COMMAND ";"
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET " = "
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_INCREMENT "++"
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_DECREMENT "--"
-		
+
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_CONST "const "
-		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_OBJECT_REFERENCE_DELIMITER "->"
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_FEED_OUT " << "
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_FEED_IN " >> "
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_COUT_START "cout << \""
@@ -122,37 +121,36 @@
 
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_ARRAY_INDEX_OPEN "["
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_ARRAY_INDEX_CLOSE "]"
-		
+
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_REFERENCE_NUMBER_OF_TYPES (2)
 		static char codeReferenceLastCharacters[CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_REFERENCE_NUMBER_OF_TYPES] = {'.', '>'};
 		static string codeReference[CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_REFERENCE_NUMBER_OF_TYPES] = {".", "->"};
-				
-		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_POINTER_TYPE "* "		//e.g. classType* objectName 
+
+		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_POINTER_TYPE "* "		//e.g. classType* objectName
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_POINTER "*"			//for referencing
-		
+
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_PARSE_LISTS	//3h2a
 		#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_PARSE_LISTS
 			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_LIST_VARIABLE_PREFIX_START "first"		//BAI standard prefix for object list start pointers
 			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_LIST_VARIABLE_PREFIX_CURRENT "current"  	//BAI standard prefix for object list iterator pointers
-			
-			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_VECTOR_OR_MAP_ITERATOR "::iterator "	
-			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_VECTOR_OR_MAP_ITERATOR_REVERSE "::reverse_iterator "	
-			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_VECTOR_OR_MAP_START "begin()"	
-			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_VECTOR_OR_MAP_FIND "find("	
-			
+
+			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_VECTOR_OR_MAP_ITERATOR "::iterator "
+			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_VECTOR_OR_MAP_ITERATOR_REVERSE "::reverse_iterator "
+			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_VECTOR_OR_MAP_START "begin()"
+			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_VECTOR_OR_MAP_FIND "find("
+
 			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_OPEN_PARAMETER_SPACE '('	//for vector iterator referencing
 			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_CLOSE_PARAMETER_SPACE ')'	//for vector iterator referencing
 			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_MAP_ITERATOR_FIRST "->first"
 			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_MAP_ITERATOR_SECOND "->second"
 		#endif
 	#endif
+	#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_OBJECT_REFERENCE_DELIMITER "->"
 	#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_FUNCTION_ARGUMENT_DELIMITER ','
 
-	#define CS_GENERATE_CPP_CLASSES	//added 3e1a/27-August-2014
+	//#define CS_GENERATE_CPP_CLASSES	//added 3e1a/27-August-2014
 	#ifdef CS_GENERATE_CPP_CLASSES
 		//#define CS_GENERATE_CPP_CLASSES_DISABLE_OUTPUT	//safe for debug (no source/header file overwrites)
-		#define CS_GENERATE_CODE_GENERIC_SOURCE_FILE_EXTENSION "cpp"
-		#define CS_GENERATE_CODE_GENERIC_HEADER_FILE_EXTENSION "hpp"
 		#define CS_GENERATE_CPP_CLASSES_TEXT_FUNCTION_PRIVATE "private: "
 		#define CS_GENERATE_CPP_CLASSES_TEXT_FUNCTION_PUBLIC "public: "
 		#define CS_GENERATE_CPP_CLASSES_TEXT_CLASS_PERMISSIONS_IDENTIFIER "::"	//class membership
@@ -170,6 +168,8 @@
 		#define CS_GENERATE_CPP_CLASSES_TEXT_STATIC "static"
 		#define CS_GENERATE_CPP_CLASSES_TEXT_NEW "new"
 	#endif
+	#define CS_GENERATE_CODE_GENERIC_SOURCE_FILE_EXTENSION "cpp"
+	#define CS_GENERATE_CODE_GENERIC_HEADER_FILE_EXTENSION "hpp"
 #endif
 
 #define CS_ASSUME_TOP_LEVEL_FILE_IS_SOURCE_FILE	//will not write connections between top level source file and its child (top level source header)

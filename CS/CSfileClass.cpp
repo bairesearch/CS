@@ -26,7 +26,7 @@
  * File Name: CSfileClass.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h15a 29-February-2016
+ * Project Version: 3h15b 29-February-2016
  *
  *******************************************************************************/
 
@@ -57,11 +57,11 @@ CSfile::CSfile(void)
 	{
 		maxFunctionPrintXAtAParticularY[i] = 0;
 	}
-	
+
 	//file only
 	firstFileInBelowListContainer = NULL;
 	firstFunctionInFunctionList = NULL;
-	
+
 	#ifdef CS_GENERATE_CODE_GENERIC
 	printedCodeGeneric = false;
 	sourceFileNameOrig = "";
@@ -71,7 +71,7 @@ CSfile::CSfile(void)
 	sourceFileName = "";
 	sourceFileText = "";
 	headerFileText = "";
-	#endif	
+	#endif
 }
 
 CSfile::~CSfile(void)

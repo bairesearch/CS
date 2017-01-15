@@ -26,7 +26,7 @@
  * File Name: CSoperations.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h15a 29-February-2016
+ * Project Version: 3h15b 29-February-2016
  *
  *******************************************************************************/
 
@@ -45,8 +45,8 @@ bool getIncludeFileNamesFromCorHfile(CSfileContainer* firstReferenceInIncludeFil
 		bool searchFunctionStringForFunctionReferencesRecursive(CSfile* firstFileInIncludeFileList, CSfileContainer* firstFileNameInLayerContainingFunctionReferencesToSearchFor, CSfunction** currentReferenceInFunctionReferenceList, CSfunction** currentReferenceInFunctionReferenceListRepeats, string* functionContentsString);
 			bool searchFunctionStringForFunctionReferences(CSfile* firstFileInIncludeFileList, CSfile* fileNameContainingFunctionReferencesToSearchFor, CSfunction** currentReferenceInFunctionReferenceList, CSfunction** currentReferenceInFunctionReferenceListRepeats, string* functionContentsString);
 				void identifyFunctionReferenceArguments(CSfunction* currentReferenceInFunctionReferenceListRepeats, string* functionContentsString, int indexToFunctionObject);
-				#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS	
 					string removePrependedWhiteSpace(string argument);
+				#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
 				void identifyFunctionDeclarationArguments(CSfunction* currentReferenceInFunctionReferenceList, string* functionNameFull);
 				#endif
 

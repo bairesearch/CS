@@ -26,7 +26,7 @@
  * File Name: CSexecflow.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h15a 29-February-2016
+ * Project Version: 3h15b 29-February-2016
  *
  *******************************************************************************/
 
@@ -98,7 +98,7 @@ void generateCodeStructure(string topLevelFileName, int width, int height, strin
 	{
 		cout << "generateCodeStructure{} error: !hFileFound: " << topLevelFileName << endl;
 	}
-	
+
 	CSfile* firstReferenceInTopLevelBelowList = firstObjectInTopLevelBelowListContainer->fileObject;
 
 	attachFunctionReferenceTargets(firstObjectInTopLevelBelowListContainer);	//added 3h1a
@@ -186,7 +186,7 @@ void generateCodeStructure(string topLevelFileName, int width, int height, strin
 				CSfile* fileObjectHoldingFunction = NULL;
 				CSfunction* bottomLevelFunctionToTraceUpwards = NULL;
 				bool foundBottomLevelFunctionRef = findPrintedFunctionObjectWithName(bottomLevelFunctionNameToTraceUpwards, firstObjectInTopLevelBelowListContainer, &fileObjectHoldingFunction, &bottomLevelFunctionToTraceUpwards);
-				
+
 				if(foundBottomLevelFunctionRef)
 				{
 					string fileNameHoldingFunction = fileObjectHoldingFunction->name;
@@ -223,7 +223,7 @@ void generateCodeStructure(string topLevelFileName, int width, int height, strin
 			exit(0);
 		}
 	}
-	
+
 	#ifdef CS_GENERATE_CPP_CLASSES
 	if(generateOOcode)
 	{
@@ -241,9 +241,9 @@ void generateCodeStructure(string topLevelFileName, int width, int height, strin
 			result = false;
 		}
 	}
-	#endif	
-	
-	
+	#endif
+
+
 	if(!htmlDocumentationGenerationPreventsDisplay)
 	{//do not display if generating html (unless tracing single file)
 
@@ -305,11 +305,11 @@ void generateCodeStructure(string topLevelFileName, int width, int height, strin
 			//must use an external program to view the .ldr file (Eg LDView)
 		}
 	}
-	
+
 	if(display)
 	{
 		exitOpenGL();
-	}	
+	}
 
 }
 
