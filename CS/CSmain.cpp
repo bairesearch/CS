@@ -24,9 +24,9 @@
 /*******************************************************************************
  *
  * File Name: CSmain.cpp
- * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
+ * Author: Richard Bruce Baxter - Copyright (c) 2005-2016 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3i15a 11-August-2016
+ * Project Version: 3i15b 11-August-2016
  *
  *******************************************************************************/
 
@@ -142,56 +142,56 @@ int main(int argc,char* *argv)
 
 	bool outputFileConnections = true;
 
-	if (argumentExists(argc,argv,"-mode"))
+	if (argumentExists(argc, argv, "-mode"))
 	{
-		mode = getFloatArgument(argc,argv,"-mode");
+		mode = getFloatArgument(argc, argv, "-mode");
 	}
 
-	if(argumentExists(argc,argv,"-oldr"))
+	if(argumentExists(argc, argv, "-oldr"))
 	{
-		outputLDRfileName=getStringArgument(argc,argv,"-oldr");
+		outputLDRfileName = getStringArgument(argc, argv, "-oldr");
 		useOutputLDRfile = true;
 		printOutput = true;
 	}
 
-	if(argumentExists(argc,argv,"-oppm"))
+	if(argumentExists(argc, argv, "-oppm"))
 	{
-		outputPPMfileName=getStringArgument(argc,argv,"-oppm");
+		outputPPMfileName = getStringArgument(argc, argv, "-oppm");
 		useOutputPPMfile = true;
 		printOutput = true;
 	}
 
-	if(argumentExists(argc,argv,"-osvg"))
+	if(argumentExists(argc, argv, "-osvg"))
 	{
-		outputSVGfileName=getStringArgument(argc,argv,"-osvg");
+		outputSVGfileName = getStringArgument(argc, argv, "-osvg");
 		useOutputSVGFile = true;
 		printOutput = true;
 	}
 
-	if(argumentExists(argc,argv,"-ohtml"))
+	if(argumentExists(argc, argv, "-ohtml"))
 	{
-		outputHTMLfileName=getStringArgument(argc,argv,"-ohtml");
+		outputHTMLfileName = getStringArgument(argc, argv, "-ohtml");
 		useOutputHTMLfile = true;
 	}
 
-	if(argumentExists(argc,argv,"-oall"))
+	if(argumentExists(argc, argv, "-oall"))
 	{
-		outputAllFileName=getStringArgument(argc,argv,"-oall");
+		outputAllFileName = getStringArgument(argc, argv, "-oall");
 		useOutputAllFile = true;
 		printOutput = true;
 	}
 
-	if(argumentExists(argc,argv,"-file"))
+	if(argumentExists(argc, argv, "-file"))
 	{
-		topLevelFileName=getStringArgument(argc,argv,"-file");
+		topLevelFileName = getStringArgument(argc, argv, "-file");
 	}
 	else
 	{
 		passInputReq = false;
 	}
-	if(argumentExists(argc,argv,"-function"))
+	if(argumentExists(argc, argv, "-function"))
 	{
-		topLevelFunctionName=getStringArgument(argc,argv,"-function");
+		topLevelFunctionName = getStringArgument(argc, argv, "-function");
 	}
 	else
 	{
@@ -201,31 +201,31 @@ int main(int argc,char* *argv)
 
 
 
-	if(argumentExists(argc,argv,"-notshow"))
+	if(argumentExists(argc, argv, "-notshow"))
 	{
 		displayInOpenGLAndOutputScreenshot = false;
 	}
 
-	if(argumentExists(argc,argv,"-width"))
+	if(argumentExists(argc, argv, "-width"))
 	{
-		rasterImageWidth = getFloatArgument(argc,argv,"-width");
+		rasterImageWidth = getFloatArgument(argc, argv, "-width");
 	}
 
-	if(argumentExists(argc,argv,"-height"))
+	if(argumentExists(argc, argv, "-height"))
 	{
-		rasterImageHeight = getFloatArgument(argc,argv,"-height");
+		rasterImageHeight = getFloatArgument(argc, argv, "-height");
 	}
 
-	if(argumentExists(argc,argv,"-enablefunctions"))
+	if(argumentExists(argc, argv, "-enablefunctions"))
 	{
 		outputFunctionsConnectivity = true;
 	}
-	if(argumentExists(argc,argv,"-disablefileconnections"))
+	if(argumentExists(argc, argv, "-disablefileconnections"))
 	{
 		outputFileConnections = false;
 	}
 
-	if(argumentExists(argc,argv,"-trace"))
+	if(argumentExists(argc, argv, "-trace"))
 	{
 		if(outputFunctionsConnectivity)
 		{
@@ -238,26 +238,26 @@ int main(int argc,char* *argv)
 			passInputReq = false;
 		}
 	}
-	if(argumentExists(argc,argv,"-tracefunction"))
+	if(argumentExists(argc, argv, "-tracefunction"))
 	{
-		bottomLevelFunctionNameToTraceUpwards=getStringArgument(argc,argv,"-tracefunction");
+		bottomLevelFunctionNameToTraceUpwards = getStringArgument(argc, argv, "-tracefunction");
 	}
 
 
-	if(argumentExists(argc,argv,"-html"))
+	if(argumentExists(argc, argv, "-html"))
 	{
 		generateHTMLdocumentationMode = CS_GENERATE_HTML_DOCUMENTATION_MODE_ON;
-		//getFloatArgument(argc,argv,"-html");
+		//getFloatArgument(argc, argv, "-html");
 	}
 
 	#ifdef CS_GENERATE_CPP_CLASSES
-	if(argumentExists(argc,argv,"-generateoo"))
+	if(argumentExists(argc, argv, "-generateoo"))
 	{
 		generateOOcode = true;
 	}
 	#endif
 	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
-	if(argumentExists(argc,argv,"-generateconst"))
+	if(argumentExists(argc, argv, "-generateconst"))
 	{
 		generateConstFunctionArgumentsCode = true;
 	}
@@ -265,25 +265,25 @@ int main(int argc,char* *argv)
 
 	string currentFolder = getCurrentDirectory();
 
-	if(argumentExists(argc,argv,"-workingfolder"))
+	if(argumentExists(argc, argv, "-workingfolder"))
 	{
-		workingFolder=getStringArgument(argc,argv,"-workingfolder");
+		workingFolder = getStringArgument(argc, argv, "-workingfolder");
 	}
 	else
 	{
 		workingFolder = currentFolder;
 	}
-	if(argumentExists(argc,argv,"-exefolder"))
+	if(argumentExists(argc, argv, "-exefolder"))
 	{
-		exeFolder=getStringArgument(argc,argv,"-exefolder");
+		exeFolder = getStringArgument(argc, argv, "-exefolder");
 	}
 	else
 	{
 		exeFolder = currentFolder;
 	}
-	if(argumentExists(argc,argv,"-tempfolder"))
+	if(argumentExists(argc, argv, "-tempfolder"))
 	{
-		tempFolder=getStringArgument(argc,argv,"-tempfolder");
+		tempFolder = getStringArgument(argc, argv, "-tempfolder");
 	}
 	else
 	{
@@ -292,9 +292,9 @@ int main(int argc,char* *argv)
 
 	setCurrentDirectory(workingFolder);
 
-	if(argumentExists(argc,argv,"-version"))
+	if(argumentExists(argc, argv, "-version"))
 	{
-		cout << "OpenCS.exe - Project Version: 3i15a 11-August-2016" << endl;
+		cout << "OpenCS.exe - Project Version: 3i15b 11-August-2016" << endl;
 		exit(1);
 	}
 
