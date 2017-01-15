@@ -23,7 +23,7 @@
  * File Name: CSreferenceClass.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3a12a 31-July-2012
+ * Project Version: 3b1a 27-September-2012
  *
  *******************************************************************************/
 
@@ -46,12 +46,14 @@ CSReference::CSReference(void)
 	printYIndex = 0;
 	printTextX = 0;
 	printTextY = 0;
-
+	HTMLgenerated = false;
+	
 	next = NULL;
 	previous = NULL;
 	firstReferenceContainerInAboveFileOrFunctionReferenceList = new CSReferenceContainer();
 	printedTrace = false;
-
+	printedTraceReset = false;
+	
 	//file reference only
 	firstReferenceInAboveList = NULL;
 	firstReferenceInBelowList = NULL;

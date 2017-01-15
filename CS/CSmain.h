@@ -23,12 +23,16 @@
  * File Name: CSmain.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3a12a 31-July-2012
+ * Project Version: 3b1a 27-September-2012
  *
  *******************************************************************************/
 
 #ifndef HEADER_CS_MAIN
 #define HEADER_CS_MAIN
+
+#define CS_MODE_OUTPUT_EXECUTION_FLOW (1)
+#define CS_MODE_OUTPUT_DATA_FLOW (2)
+#define CS_MODE_FILTER_CODE_USING_PREPROCESSOR_DEFINITIONS (3)
 
 int main(int argc,char **argv);
 

@@ -23,7 +23,7 @@
  * File Name: CSreferenceClass.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3a12a 31-July-2012
+ * Project Version: 3b1a 27-September-2012
  *
  *******************************************************************************/
 
@@ -45,6 +45,15 @@ using namespace std;
 
 #define MAX_INCLUDE_DEPTH (20)	//file
 #define MAX_INCLUDE_DEPTH_FUNCTION (20)	//for a function within a file
+
+
+#define CS_GENERATE_HTML_DOCUMENTATION_MODE_OFF (0)
+#define CS_GENERATE_HTML_DOCUMENTATION_MODE_ON (1)
+
+/*
+#define CS_GENERATE_HTML_DOCUMENTATION_MODE_SINGLE_FUNCTION
+#define CS_GENERATE_HTML_DOCUMENTATION_MODE_ALL_FUNCTIONS
+*/
 
 class CSReferenceContainer{
 private:
@@ -79,12 +88,14 @@ public:
 	int printYIndex;	//file/function printYIndex
 	int printTextX;		//file/function printXIndex
 	int printTextY;		//file/function printYIndex
-
+	bool HTMLgenerated;	//file/function HTML generated
+	
 	CSReference * next;
 	CSReference * previous;
 	CSReferenceContainer * firstReferenceContainerInAboveFileOrFunctionReferenceList;
 	bool printedTrace;
-
+	bool printedTraceReset;		//used for html generation
+	
 	//file reference only
 	CSReference * firstReferenceInAboveList;	//filefirstReferenceInAboveList
 	CSReference * firstReferenceInBelowList; 	//filefirstReferenceInBelowList
