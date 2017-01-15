@@ -506,19 +506,6 @@ string generateReferencedClassesDeclarations(ReferencedClass * firstReferencedCl
 	return referencedClassesDeclarations;
 }
 
-void writeStringToFile(string * fileName, string * s)
-{
-	ofstream writeFileObject(fileName->c_str());
-
-	for(int i=0; i < s->size(); i++)
-	{
-		writeFileObject.put((*s)[i]);
-	}
-
-	writeFileObject.close();
-}
-
-
 bool moveIncludeFileStatementsToHeader(CSfileReference * firstReferenceInAboveLevelBelowList)	
 {
 	bool result = true;

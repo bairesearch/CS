@@ -60,7 +60,6 @@ bool generateCPPclasses(CSfileReference * firstReferenceInTopLevelBelowList);
 			string convertFunctionNameToClassFunctionNameHeader(string fullFunctionName, string functionName, string className, bool foundPublicReference, bool foundStaticReference);
 			string generateReferencedClassesDeclarations(ReferencedClass * firstReferencedClassInList);
 			bool findReferencedClassInList(ReferencedClass * firstReferencedClassInList, string classNameToFind);
-			void writeStringToFile(string * fileName, string * s);
 			bool moveIncludeFileStatementsToHeader(CSfileReference * firstReferenceInAboveLevelBelowList);
 bool findFunctionReferenceWithName(string name, CSfileReference * firstReferenceInAboveLevelBelowList, CSfileReference ** fileReferenceHoldingFunction, CSfunctionReference ** updatedFunctionReference);
 
