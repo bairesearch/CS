@@ -26,7 +26,7 @@
  * File Name: CSgenerateHTMLdocumentation.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3f2b 22-June-2015
+ * Project Version: 3f3a 10-July-2015
  *
  *******************************************************************************/
 
@@ -69,7 +69,7 @@ string generateHTMLdocumentationHeader(string name, bool htmlHeader, bool isFile
 	string HTMLdocumentationHeader = "";
 	if(htmlHeader)
 	{
-		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3f2b 22-June-2015<p>\n";
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3f3a 10-July-2015<p>\n";
 	}
 	else
 	{
@@ -762,7 +762,7 @@ void generateFileDiagramFunctionsHeirachy(CSfileReference* currentFileReference,
 		LDreference* firstReferenceInPrintList = new LDreference();
 		LDreference* currentReferenceInPrintList = firstReferenceInPrintList;
 
-		setCurrentDirectory(tempFolderCharStar);
+		setCurrentDirectory(tempFolder);
 
 		XMLparserTag* firstTagInSVGFile = new XMLparserTag();
 		XMLparserTag* currentTagInSVGFile = firstTagInSVGFile;

@@ -26,7 +26,7 @@
  * File Name: CSmain.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3f2b 22-June-2015
+ * Project Version: 3f3a 10-July-2015
  *
  *******************************************************************************/
 
@@ -143,41 +143,41 @@ int main(int argc,char* *argv)
 
 	if(argumentExists(argc,argv,"-oldr"))
 	{
-		outputLDRfileName=getCharArgument(argc,argv,"-oldr");
+		outputLDRfileName=getStringArgument(argc,argv,"-oldr");
 		useOutputLDRfile = true;
 		printOutput = true;
 	}
 
 	if(argumentExists(argc,argv,"-oppm"))
 	{
-		outputPPMfileName=getCharArgument(argc,argv,"-oppm");
+		outputPPMfileName=getStringArgument(argc,argv,"-oppm");
 		useOutputPPMfile = true;
 		printOutput = true;
 	}
 
 	if(argumentExists(argc,argv,"-osvg"))
 	{
-		outputSVGfileName=getCharArgument(argc,argv,"-osvg");
+		outputSVGfileName=getStringArgument(argc,argv,"-osvg");
 		useOutputSVGFile = true;
 		printOutput = true;
 	}
 
 	if(argumentExists(argc,argv,"-ohtml"))
 	{
-		outputHTMLfileName=getCharArgument(argc,argv,"-ohtml");
+		outputHTMLfileName=getStringArgument(argc,argv,"-ohtml");
 		useOutputHTMLfile = true;
 	}
 
 	if(argumentExists(argc,argv,"-oall"))
 	{
-		outputAllFileName=getCharArgument(argc,argv,"-oall");
+		outputAllFileName=getStringArgument(argc,argv,"-oall");
 		useOutputAllFile = true;
 		printOutput = true;
 	}
 
 	if(argumentExists(argc,argv,"-file"))
 	{
-		topLevelFileName=getCharArgument(argc,argv,"-file");
+		topLevelFileName=getStringArgument(argc,argv,"-file");
 	}
 	else
 	{
@@ -185,7 +185,7 @@ int main(int argc,char* *argv)
 	}
 	if(argumentExists(argc,argv,"-function"))
 	{
-		topLevelFunctionName=getCharArgument(argc,argv,"-function");
+		topLevelFunctionName=getStringArgument(argc,argv,"-function");
 	}
 	else
 	{
@@ -234,7 +234,7 @@ int main(int argc,char* *argv)
 	}
 	if(argumentExists(argc,argv,"-tracefunction"))
 	{
-		bottomLevelFunctionNameToTraceUpwards=getCharArgument(argc,argv,"-tracefunction");
+		bottomLevelFunctionNameToTraceUpwards=getStringArgument(argc,argv,"-tracefunction");
 	}
 
 
@@ -251,39 +251,38 @@ int main(int argc,char* *argv)
 	}
 	#endif		
 
-	char currentFolder[EXE_FOLDER_PATH_MAX_LENGTH];
-	getCurrentDirectory(currentFolder);
+	string currentFolder = getCurrentDirectory();
 
 	if(argumentExists(argc,argv,"-workingfolder"))
 	{
-		workingFolderCharStar=getCharArgument(argc,argv,"-workingfolder");
+		workingFolder=getStringArgument(argc,argv,"-workingfolder");
 	}
 	else
 	{
-		workingFolderCharStar = currentFolder;
+		workingFolder = currentFolder;
 	}
 	if(argumentExists(argc,argv,"-exefolder"))
 	{
-		exeFolderCharStar=getCharArgument(argc,argv,"-exefolder");
+		exeFolder=getStringArgument(argc,argv,"-exefolder");
 	}
 	else
 	{
-		exeFolderCharStar = currentFolder;
+		exeFolder = currentFolder;
 	}
 	if(argumentExists(argc,argv,"-tempfolder"))
 	{
-		tempFolderCharStar=getCharArgument(argc,argv,"-tempfolder");
+		tempFolder=getStringArgument(argc,argv,"-tempfolder");
 	}
 	else
 	{
-		tempFolderCharStar = currentFolder;
+		tempFolder = currentFolder;
 	}
 
-	setCurrentDirectory(workingFolderCharStar);
+	setCurrentDirectory(workingFolder);
 
 	if(argumentExists(argc,argv,"-version"))
 	{
-		cout << "OpenCS.exe - Project Version: 3f2b 22-June-2015" << endl;
+		cout << "OpenCS.exe - Project Version: 3f3a 10-July-2015" << endl;
 		exit(1);
 	}
 

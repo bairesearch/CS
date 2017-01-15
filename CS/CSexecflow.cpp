@@ -26,7 +26,7 @@
  * File Name: CSexecflow.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3f2b 22-June-2015
+ * Project Version: 3f3a 10-July-2015
  *
  *******************************************************************************/
 
@@ -101,7 +101,7 @@ void generateCodeStructure(string topLevelFileName, int width, int height, strin
 	initiateMaxXatParticularY();
 	LDreference* firstReferenceInPrintList = new LDreference();
 
-	setCurrentDirectory(tempFolderCharStar);
+	setCurrentDirectory(tempFolder);
 
 	XMLparserTag* firstTagInSVGFile = new XMLparserTag();
 	XMLparserTag* currentTagInSVGFile = firstTagInSVGFile;
