@@ -23,7 +23,7 @@
  * File Name: CSmain.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c4a 30-November-2012
+ * Project Version: 3c4b 01-December-2012
  *
  *******************************************************************************/
 
@@ -262,7 +262,7 @@ int main(int argc,char **argv)
 
 	if(argumentExists(argc,argv,"-version"))
 	{
-		cout << "OpenCS.exe - Project Version: 3c4a 30-November-2012" << endl;
+		cout << "OpenCS.exe - Project Version: 3c4b 01-December-2012" << endl;
 		exit(1);
 	}
 

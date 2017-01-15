@@ -23,7 +23,7 @@
  * File Name: CSdraw.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c4a 30-November-2012
+ * Project Version: 3c4b 01-December-2012
  *
  *******************************************************************************/
 
@@ -420,6 +420,20 @@ Reference * createFileReferenceListBoxes(Reference * currentReferenceInPrintList
 
 				//print box
 
+			#ifdef CS_WRITE_SVG_GROUPS
+			XMLparserTag * nextTagOnOriginalLayer = NULL;
+			#ifdef CS_DO_NOT_DRAW_ALL_FUNCTION_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
+			if(!traceFunctionUpwards)
+			{//only print connections when not tracing a bottom level function upwards - saves space
+			#endif
+				
+				string groupID = createGroupID(currentFileReference->name, currentFileReference->printX, currentFileReference->printY);
+				nextTagOnOriginalLayer = writeSVGgroup(currentTag, &groupID);
+			#ifdef CS_DO_NOT_DRAW_ALL_FUNCTION_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
+			}
+			#endif	
+			#endif	
+						
 			#ifdef CS_DO_NOT_DRAW_ALL_FILE_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
 			if(!traceFunctionUpwards)
 			{//only print connections when not tracing a bottom level function upwards - saves space
@@ -465,6 +479,17 @@ Reference * createFileReferenceListBoxes(Reference * currentReferenceInPrintList
 			}
 			#endif
 
+			#ifdef CS_WRITE_SVG_GROUPS
+			#ifdef CS_DO_NOT_DRAW_ALL_FUNCTION_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
+			if(!traceFunctionUpwards)
+			{//only print connections when not tracing a bottom level function upwards - saves space
+			#endif
+				(*currentTag) = nextTagOnOriginalLayer;
+			#ifdef CS_DO_NOT_DRAW_ALL_FUNCTION_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
+			}
+			#endif	
+			#endif	
+				
 			currentFileReference->printed = true;
 			currentFileReference->shortcutToPrintedVersionOfReference = currentFileReference;
 
@@ -886,8 +911,8 @@ Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentRe
 
 				//print function connections;
 				newCurrentReferenceInPrintList = createFunctionReferenceConnection(newCurrentReferenceInPrintList, functionReference, aboveLevelFunctionReference, aboveConnectionColour, traceFunctionUpwards, prepareForTrace, currentTag);
-
-
+						
+			
 				//apply hack
 				if(useSingleFileOnly)
 				{				
@@ -898,6 +923,19 @@ Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentRe
 					}
 				}
 				
+				#ifdef CS_WRITE_SVG_GROUPS
+				XMLparserTag * nextTagOnOriginalLayer = NULL;
+				#ifdef CS_DO_NOT_DRAW_ALL_FUNCTION_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
+				if(!traceFunctionUpwards)
+				{//only print connections when not tracing a bottom level function upwards - saves space
+				#endif
+					string groupID = createGroupID(functionReference->name, functionReference->printX, functionReference->printY);
+					nextTagOnOriginalLayer = writeSVGgroup(currentTag, &groupID);
+				#ifdef CS_DO_NOT_DRAW_ALL_FUNCTION_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
+				}
+				#endif	
+				#endif	
+								
 				#ifdef CS_DO_NOT_DRAW_ALL_FUNCTION_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
 				if(!traceFunctionUpwards)
 				{//only print connections when not tracing a bottom level function upwards - saves space
@@ -942,6 +980,18 @@ Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentRe
 				#ifdef CS_DO_NOT_DRAW_ALL_FUNCTION_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
 				}
 				#endif
+				
+				
+				#ifdef CS_WRITE_SVG_GROUPS
+				#ifdef CS_DO_NOT_DRAW_ALL_FUNCTION_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
+				if(!traceFunctionUpwards)
+				{//only print connections when not tracing a bottom level function upwards - saves space
+				#endif
+					(*currentTag) = nextTagOnOriginalLayer;
+				#ifdef CS_DO_NOT_DRAW_ALL_FUNCTION_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
+				}
+				#endif	
+				#endif				
 
 				//apply hack
 				if(useSingleFileOnly)
@@ -1260,8 +1310,10 @@ Reference * createFileReferenceConnection(Reference * currentReferenceInPrintLis
 	vec currentReferenceInAboveListPrintPos;
 	currentReferenceInAboveListPrintPos.x = currentReferenceInAboveList->printX;
 	currentReferenceInAboveListPrintPos.y = currentReferenceInAboveList->printY;
-		
-	return configureFileOrFunctionReferenceConnection(currentReferenceInPrintList, &referencePrintPos, &currentReferenceInAboveListPrintPos, colour, true, traceAFunctionUpwardsAndNotCurrentlyTracing, currentTag);		
+ 	string startGroupID = createGroupID(reference->name, reference->printX, reference->printY);
+ 	string endGroupID = createGroupID(currentReferenceInAboveList->name, currentReferenceInAboveList->printX, currentReferenceInAboveList->printY);
+ 		
+	return configureFileOrFunctionReferenceConnection(currentReferenceInPrintList, &referencePrintPos, &currentReferenceInAboveListPrintPos, colour, true, traceAFunctionUpwardsAndNotCurrentlyTracing, currentTag, &startGroupID, &endGroupID);		
 }
 
 Reference * createFunctionReferenceConnection(Reference * currentReferenceInPrintList, CSfunctionReference * reference,  CSfunctionReference * currentReferenceInAboveList, int colour, bool traceAFunctionUpwardsAndNotCurrentlyTracing, bool prepareForTrace, XMLparserTag ** currentTag)
@@ -1287,14 +1339,16 @@ Reference * createFunctionReferenceConnection(Reference * currentReferenceInPrin
 	vec currentReferenceInAboveListPrintPos;
 	currentReferenceInAboveListPrintPos.x = currentReferenceInAboveList->printX;
 	currentReferenceInAboveListPrintPos.y = currentReferenceInAboveList->printY;
-	
-	return configureFileOrFunctionReferenceConnection(currentReferenceInPrintList, &referencePrintPos, &currentReferenceInAboveListPrintPos, colour, false, traceAFunctionUpwardsAndNotCurrentlyTracing, currentTag);		
+ 	string startGroupID = createGroupID(reference->name, reference->printX, reference->printY);
+ 	string endGroupID = createGroupID(currentReferenceInAboveList->name, currentReferenceInAboveList->printX, currentReferenceInAboveList->printY);
+
+	return configureFileOrFunctionReferenceConnection(currentReferenceInPrintList, &referencePrintPos, &currentReferenceInAboveListPrintPos, colour, false, traceAFunctionUpwardsAndNotCurrentlyTracing, currentTag, &startGroupID, &endGroupID);		
 }
 
 
 
 
-Reference * configureFileOrFunctionReferenceConnection(Reference * currentReferenceInPrintList, vec * referencePrintPos,  vec * currentReferenceInAboveListPrintPos, int colour, bool fileOrFunction, bool traceAFunctionUpwardsAndNotCurrentlyTracing, XMLparserTag ** currentTag)
+Reference * configureFileOrFunctionReferenceConnection(Reference * currentReferenceInPrintList, vec * referencePrintPos,  vec * currentReferenceInAboveListPrintPos, int colour, bool fileOrFunction, bool traceAFunctionUpwardsAndNotCurrentlyTracing, XMLparserTag ** currentTag, string * startGroupID, string * endGroupID)
 {
 	Reference * newCurrentReferenceInPrintList = currentReferenceInPrintList;
 
@@ -1373,7 +1427,13 @@ Reference * configureFileOrFunctionReferenceConnection(Reference * currentRefere
 		vec pos2;
 		pos2.x = currentReferenceInAboveListPrintPos->x;
 		pos2.y = currentReferenceInAboveListPrintPos->y;
+		
+		#ifdef CS_WRITE_SVG_INKSCAPE_CONNECTORS
+		writeSVGconnector(currentTag, &pos1, &pos2, colour, startGroupID, endGroupID);		
+		#else
 		writeSVGline(currentTag, &pos1, &pos2, colour);
+		#endif
+
 
 	}
 
@@ -1723,7 +1783,19 @@ void writeFileOrFunctionSVGboxTransparent(XMLparserTag ** currentTag, vec * pos,
 	writeSVGboxTransparent(currentTag,  pos, width, height, col, boxOutlineWidth, false, fillOpacity);
 }
 
+string createGroupID(string objectName, int printX, int printY)
+{
+	string groupID = "";
+	//groupID = groupID + objectName + intToString(printX) + intToString(printY);
+	groupID = groupID + intToString(printX) + intToString(printY);
+	return groupID;
+}
 
-
+string intToString(int integer)
+{
+	char stringCharStar[100];
+	sprintf(stringCharStar, "%d", integer);
+	return string(stringCharStar);
+}
 
 

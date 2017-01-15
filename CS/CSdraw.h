@@ -23,7 +23,7 @@
  * File Name: CSdraw.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c4a 30-November-2012
+ * Project Version: 3c4b 01-December-2012
  *
  *******************************************************************************/
 
@@ -160,7 +160,7 @@ Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentRe
 		CSreferenceArray findFunctionReferenceInPrintedFileReference(CSfileReference * fileReferenceToSearchIn, string functionReferenceNameToFind, CSreferenceArray * foundFileAndFunctionReference, bool * referenceFound, bool useSingleFileOnly, string * singleFileName);
 	Reference * createFunctionReferenceConnection(Reference * currentReferenceInPrintList, CSfunctionReference * reference,  CSfunctionReference * currentReferenceInAboveList, int colour, bool traceAFunctionUpwardsAndNotCurrentlyTracing, bool prepareForTrace, XMLparserTag ** currentTag);
 
-	Reference * configureFileOrFunctionReferenceConnection(Reference * currentReferenceInPrintList, vec * referencePrintPos,  vec * currentReferenceInAboveListPrintPos, int colour, bool fileOrFunction, bool traceAFunctionUpwardsAndNotCurrentlyTracing, XMLparserTag ** currentTag);
+	Reference * configureFileOrFunctionReferenceConnection(Reference * currentReferenceInPrintList, vec * referencePrintPos,  vec * currentReferenceInAboveListPrintPos, int colour, bool fileOrFunction, bool traceAFunctionUpwardsAndNotCurrentlyTracing, XMLparserTag ** currentTag, string * startGroupID, string * endGroupID);
 	Reference * createFileOrFunctionReferenceBox(Reference * currentReferenceInPrintList,  vec * referencePrintPos, string * referenceName, double scaleFactor, int colour, double maxTextLength, double zPosition);
 	Reference * createBox(Reference * currentReferenceInPrintList, vec * vect, double width, double height, int colour);
 
@@ -176,6 +176,10 @@ void writeFileOrFunctionSVGboxTransparent(XMLparserTag ** currentTag, vec * pos,
 //void fillInCSrulesExternVariables(RulesClass * firstReferenceInCSrulesDraw);
 void fillInCSrulesExternVariables();
 
+string createGroupID(string objectName, int printX, int printY);
+string intToString(int integer);
+
+	
 
 #endif
 
