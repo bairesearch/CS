@@ -21,7 +21,7 @@
  * File Name: CSgenerateConstFunctionArgumentCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h8b 08-December-2015
+ * Project Version: 3h8c 08-December-2015
  *
  *******************************************************************************/
 
@@ -594,6 +594,8 @@ bool checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 				int indexOfSquareBracketOpen = functionText->rfind(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_ARRAY_INDEX_OPEN, indexOfFunctionArgument);
 				int indexOfSquareBracketClose = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_ARRAY_INDEX_CLOSE, indexOfFunctionArgument);
 				int indexOfCout = functionText->rfind(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_COUT_START, indexOfFunctionArgument);				
+				string currentLine = functionText->substr(indexOfStartOfLine, indexOfEndOfLine-indexOfStartOfLine);
+				
 				//added condition CS3h1d, updated CS3h3b - ensure not a cout start, e.g. 'cout << "indexOfFunctionArgument' in; 'cout << "indexOfFunctionArgument = " << indexOfFunctionArgument << endl;'
 				if((indexOfCout == CPP_STRING_FIND_RESULT_FAIL_VALUE) || (indexOfCout < indexOfStartOfLine))
 				{
@@ -601,9 +603,8 @@ bool checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 					if((indexOfEqualsSetPrevious == CPP_STRING_FIND_RESULT_FAIL_VALUE) || (indexOfEqualsSetPrevious < indexOfStartOfLine))
 					{//ignore all lines with assignments [this indicates that the functionArgument objectFunction is not modifying the functionArgument] e.g. "int indexOfFunctionReferenceStartOfLine = functionContentsString->rfind(stringToFind, indexToFunctionReference)"
 						
-						string currentLine = functionText->substr(indexOfStartOfLine, indexOfEndOfLine-indexOfStartOfLine);
 						CSfunction* currentFunctionReference = currentFunctionObject->firstReferenceInFunctionReferenceListRepeats;
-						bool lineIncludesBAIfunctionReference = false;	//NB non-BAI function references eg put/push_back are intentionally not detected
+						bool lineIncludesCustomNonObjectFunctionReference = false;	//NB object function references eg put/push_back are intentionally not detected
 						while(currentFunctionReference->next != NULL)
 						{
 							string currentReferenceToFind = currentFunctionReference->name + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_OPEN_PARAMETER_SPACE;
@@ -611,11 +612,11 @@ bool checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 							//cout << "currentLine = " << currentLine << endl;
 							if(currentLine.find(currentReferenceToFind) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 							{
-								lineIncludesBAIfunctionReference = true;
+								lineIncludesCustomNonObjectFunctionReference = true;
 							}
 							currentFunctionReference = currentFunctionReference->next;
 						}
-						if(!lineIncludesBAIfunctionReference)
+						if(!lineIncludesCustomNonObjectFunctionReference)
 						{
 							//ignore all lines with function reference on same line, e.g. "sprintf(stringCharStar, format.c_str(), number);"
 							
@@ -648,10 +649,23 @@ bool checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 									}
 								}
 							}
+						}				
+					}
+					#endif
+					#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_CSTDLIB_NON_OBJECT_FUNCTION_EXECUTIONS
+					bool lineIncludesStdLibNonObjectFunctionReference = false;
+					for(int i=0; i<CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_CSTDLIB_NON_OBJECT_FUNCTIONS; i++)
+					{
+						string stdLibNonObjectFunctionExecutionHypothetical = cstdlibNonObjectFunctions[i] + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_OPEN_PARAMETER_SPACE + functionDeclarationArgument + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_CLOSE_PARAMETER_SPACE + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_END_OF_COMMAND;
+						if(currentLine.find(stdLibNonObjectFunctionExecutionHypothetical) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+						{
+							isNotConst = true;
+							//cout << "stdLibNonObjectFunctionExecutionHypothetical = " << stdLibNonObjectFunctionExecutionHypothetical << endl;
+							//exit(0);
 						}
 					}
 					#endif
-					
+	
 					#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_INCREMENT_DECREMENTS
 					//added CS3h7a - detect functionArgument++/++functionArgument/functionArgument--/--functionArgument
 					string twoCharactersBeforeFunctionArgument = ""; 
