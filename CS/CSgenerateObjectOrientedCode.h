@@ -26,7 +26,7 @@
  * File Name: CSgenerateObjectOrientedCode.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e7f 27-January-2015
+ * Project Version: 3f1a 10-May-2015
  *
  *******************************************************************************/
 
@@ -48,10 +48,10 @@ public:
 };
 
 
-bool generateCPPclasses(CSfileReference* firstReferenceInTopLevelBelowList);
-	bool generateCPPclassesRecurse(CSfileReference* firstReferenceInAboveLevelBelowList, CSfileReference* firstReferenceInTopLevelBelowList);
-		bool generateCPPclassesFile(CSfileReference* currentFileReference, CSfileReference* firstReferenceInTopLevelBelowList);
-			void isFunctionBeingReferencedPublicallyRecurse(string functionName, string fileName, CSfileReference* firstReferenceInAboveLevelBelowList, bool* foundPublicReference);
+bool generateCPPclasses(CSfileReferenceContainer* firstReferenceInTopLevelBelowListContainer);
+	bool generateCPPclassesRecurse(CSfileReferenceContainer* firstReferenceInAboveLevelBelowListContainer, CSfileReferenceContainer* firstReferenceInTopLevelBelowListContainer);
+		bool generateCPPclassesFile(CSfileReference* currentFileReference, CSfileReferenceContainer* firstReferenceInTopLevelBelowListContainer);
+			void isFunctionBeingReferencedPublicallyRecurse(string functionName, string fileName, CSfileReferenceContainer* firstReferenceInAboveLevelBelowListContainer, bool* foundPublicReference);
 			string generateClassName(string headerFileName);
 				string generateClassDeclarationName(string className);
 				string generateClassObjectName(string className);
@@ -60,7 +60,7 @@ bool generateCPPclasses(CSfileReference* firstReferenceInTopLevelBelowList);
 			string generateReferencedClassesDeclarations(ReferencedClass* firstReferencedClassInList);
 			bool findReferencedClassInList(ReferencedClass* firstReferencedClassInList, string classNameToFind);
 			bool moveIncludeFileStatementsToHeader(CSfileReference* firstReferenceInAboveLevelBelowList);
-bool findFunctionReferenceWithName(string name, CSfileReference* firstReferenceInAboveLevelBelowList, CSfileReference** fileReferenceHoldingFunction, CSfunctionReference** updatedFunctionReference);
+bool findFunctionReferenceWithName(string name, CSfileReferenceContainer* firstReferenceInAboveLevelBelowListContainer, CSfileReference** fileReferenceHoldingFunction, CSfunctionReference** updatedFunctionReference);
 
 
 #endif

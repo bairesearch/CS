@@ -10,7 +10,7 @@
  * do not constitute derivative works.
  *
  * BAIPROJECT is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * but WITHOUT ANY WARRANTY; without even trhe implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License version 3 for more details
  * (a copy is included in the LICENSE file that accompanied this code).
@@ -23,14 +23,52 @@
 
 /*******************************************************************************
  *
- * File Name: CSdataflow.cpp
+ * File Name: CSreferenceContainerClass.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
  * Project Version: 3f1a 10-May-2015
  *
  *******************************************************************************/
 
-//issues, need to flip vertically
+
+#ifndef HEADER_CS_REFERENCE_CONTAINER_CLASS
+#define HEADER_CS_REFERENCE_CONTAINER_CLASS
+
+#include "CSglobalDefs.h"
+#include "CSreferenceClass.h"
 
 
-#include "CSdataflow.h"
+class functionReference;
+class CSfunctionReferenceContainer{
+private:
+	/*There are currently no private attributes of this class*/
+public:
+
+	CSfunctionReferenceContainer(void); // constructor declaration
+	~CSfunctionReferenceContainer();	//  and destructor.
+
+	CSfunctionReferenceContainer* next;
+	CSfunctionReferenceContainer* previous;
+	
+	CSfunctionReference* functionReference;
+	CSfileReference* fileReferenceHoldingFunction;	//this should really be moved to CSfunctionReference (but is added to CSfunctionReferenceContainer instead to prevent CSfileReference/CSfunctionReference from bidirectionally accessing each other)
+};
+
+class fileReference;
+class CSfileReferenceContainer{
+private:
+	/*There are currently no private attributes of this class*/
+public:
+
+	CSfileReferenceContainer(void); // constructor declaration
+	~CSfileReferenceContainer();	//  and destructor.
+
+	CSfileReferenceContainer* next;
+	CSfileReferenceContainer* previous;
+	
+	CSfileReference* fileReference;
+	CSfileReference* aboveLevelReference;
+};
+
+#endif
+

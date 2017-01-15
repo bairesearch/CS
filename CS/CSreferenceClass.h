@@ -26,7 +26,7 @@
  * File Name: CSreferenceClass.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e7f 27-January-2015
+ * Project Version: 3f1a 10-May-2015
  *
  *******************************************************************************/
 
@@ -49,20 +49,7 @@
 */
 
 
-
-class CSfunctionReferenceContainer{
-private:
-	/*There are currently no private attributes of this class*/
-public:
-
-	CSfunctionReferenceContainer(void); // constructor declaration
-	~CSfunctionReferenceContainer();	//  and destructor.
-
-	CSfunctionReferenceContainer* next;
-	string name;
-
-};
-
+class CSfunctionReferenceContainer;
 class CSfunctionReference{
 private:
 	/*There are currently no private attributes of this class*/
@@ -92,7 +79,7 @@ public:
 	bool HTMLgenerated;	//file/function HTML generated
 
 	CSfunctionReference* next;
-	CSfunctionReference* previous;
+	CSfunctionReference* previous;	
 	CSfunctionReferenceContainer* firstReferenceContainerInAboveReferenceList;
 	bool printedTrace;
 	bool printedTraceReset;		//used for html generation
@@ -121,20 +108,7 @@ public:
 	int maxFunctionPrintXAtAParticularY[MAX_INCLUDE_DEPTH_FUNCTION];
 };
 
-
-class CSfileReferenceContainer{
-private:
-	/*There are currently no private attributes of this class*/
-public:
-
-	CSfileReferenceContainer(void); // constructor declaration
-	~CSfileReferenceContainer();	//  and destructor.
-
-	CSfileReferenceContainer* next;
-	string name;
-
-};
-
+class CSfileReferenceContainer;
 class CSfileReference{
 private:
 	/*There are currently no private attributes of this class*/
@@ -159,19 +133,16 @@ public:
 	int printTextY;		//file/function printYIndex
 	bool HTMLgenerated;	//file/function HTML generated
 
-	CSfileReference* next;
-	CSfileReference* previous;
 	CSfileReferenceContainer* firstReferenceContainerInAboveReferenceList;
 	bool printedTrace;
 	bool printedTraceReset;		//used for html generation
 
 	//file reference only
-	CSfileReference* firstReferenceInAboveList;	//filefirstReferenceInAboveList
-	CSfileReference* firstReferenceInBelowList; 	//filefirstReferenceInBelowList
-	CSfileReference* shortcutToPrintedVersionOfReference;	//used if reference is not printed
+	CSfileReferenceContainer* firstReferenceInBelowListContainer; 	//filefirstReferenceInBelowList
 	CSfunctionReference* firstReferenceInFunctionList;
 
 	#ifdef CS_GENERATE_CPP_CLASSES
+	bool printedOO;			//added @CS3f1a to only print CPP files once (don't overwrite)
 	string sourceFileNameOrig;	//eg "x.c"
 	string sourceFileTextOrig;
 	string headerFileTextOrig;

@@ -26,7 +26,7 @@
  * File Name: CSexecflow.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e7f 27-January-2015
+ * Project Version: 3f1a 10-May-2015
  *
  *******************************************************************************/
 
@@ -38,8 +38,6 @@
 #include "CSreferenceClass.h"
 #include "LDreferenceManipulation.h"
 #include "XMLparserClass.h"
-
-using namespace std;
 
 #ifdef LINUX
 	#define SYSTEM_COPY_COMMAND "cp"

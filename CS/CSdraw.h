@@ -26,7 +26,7 @@
  * File Name: CSdraw.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e7f 27-January-2015
+ * Project Version: 3f1a 10-May-2015
  *
  *******************************************************************************/
 
@@ -37,6 +37,7 @@
 #include "LDreferenceClass.h"
 #include "XMLparserClass.h"
 #include "CSreferenceClass.h"
+#include "CSreferenceContainerClass.h"
 #include "CSglobalDefs.h"
 
 /*
@@ -174,18 +175,15 @@
 
 void initiateMaxXatParticularY();
 
-LDreference* createFileReferenceListBoxes(LDreference* currentReferenceInPrintList, CSfileReference* firstReferenceInAboveLevelBelowList, CSfileReference* firstReferenceInTopLevelBelowList, XMLparserTag** currentTag, bool outputFunctionsConnectivity, bool traceFunctionUpwards, XMLparserTag* firstTagInGridTag, bool usePredefinedGrid);
-	bool previousFileReferenceWithThisNameHasBeenPrinted(string name, CSfileReference* firstReferenceInAboveLevelBelowList, int* maxYPos);
-	void addShortcutsToPrintedVersionOfReference(CSfileReference* reference, string name, CSfileReference* firstReferenceInAboveLevelBelowList);
+LDreference* createFileReferenceListBoxes(LDreference* currentReferenceInPrintList, CSfileReferenceContainer* firstReferenceInAboveLevelBelowListContainer, CSfileReferenceContainer* firstReferenceInTopLevelBelowListContainer, XMLparserTag** currentTag, bool outputFunctionsConnectivity, bool traceFunctionUpwards, XMLparserTag* firstTagInGridTag, bool usePredefinedGrid);
 
-LDreference* createFileReferenceListConnections(LDreference* currentReferenceInPrintList, CSfileReference* firstReferenceInAboveLevelBelowList, CSfileReference* firstReferenceInTopLevelBelowList, XMLparserTag** currentTag, bool traceFunctionUpwards);
-	bool previousFileReferenceWithThisNameHasPrintedFileConnections(string name, CSfileReference* firstReferenceInAboveLevelBelowList);
-	void resetPrintedFileConnection(CSfileReference* firstReferenceInAboveLevelBelowList);
-	LDreference* findAndLinkAllFileReferencesWithSameName(LDreference* currentReferenceInPrintList, CSfileReference* reference, CSfileReference* firstReferenceInAboveLevelBelowList, CSfileReference* firstReferenceInTopLevelBelowList, XMLparserTag** currentTag, bool traceFunctionUpwards);
+LDreference* createFileReferenceListConnections(LDreference* currentReferenceInPrintList, CSfileReferenceContainer* firstReferenceInAboveLevelBelowListContainer, CSfileReferenceContainer* firstReferenceInTopLevelBelowListContainer, XMLparserTag** currentTag, bool traceFunctionUpwards);
+	bool previousFileReferenceWithThisNameHasPrintedFileConnections(string name, CSfileReferenceContainer* firstReferenceInAboveLevelBelowListContainer);
+	void resetPrintedFileConnection(CSfileReferenceContainer* firstReferenceInAboveLevelBelowListContainer);
+	LDreference* findAndLinkAllFileReferencesWithSameName(LDreference* currentReferenceInPrintList, CSfileReference* reference, CSfileReferenceContainer* firstReferenceInAboveLevelBelowListContainer, CSfileReferenceContainer* firstReferenceInTopLevelBelowListContainer, XMLparserTag** currentTag, bool traceFunctionUpwards);
 		LDreference* createFileReferenceConnection(LDreference* currentReferenceInPrintList, CSfileReference* reference,  CSfileReference* currentReferenceInAboveList, int colour, bool traceAFunctionUpwardsAndNotCurrentlyTracing, XMLparserTag** currentTag);
-	CSfileReference* findPrintedFileReferenceWithName(string name, CSfileReference* reference, CSfileReference* firstReferenceInAboveLevelBelowList, bool* foundPrintedReferenceWithName);
 
-LDreference* createFunctionReferenceListBoxesAndConnections(LDreference* currentReferenceInPrintList, CSfileReference* aboveLevelFileReference, CSfunctionReference* aboveLevelFunctionReference, CSfileReference* firstReferenceInTopLevelBelowList, int functionLevel, string functionReferenceNameToFind, XMLparserTag** currentTag, bool traceFunctionUpwards, bool useSingleFileOnly, string* singleFileName, bool usePredefinedGrid);
+LDreference* createFunctionReferenceListBoxesAndConnections(LDreference* currentReferenceInPrintList, CSfileReference* aboveLevelFileReference, CSfunctionReference* aboveLevelFunctionReference, CSfileReferenceContainer* firstReferenceInTopLevelBelowListContainer, int functionLevel, string functionReferenceNameToFind, XMLparserTag** currentTag, bool traceFunctionUpwards, bool useSingleFileOnly, string* singleFileName, bool usePredefinedGrid);
 	LDreference* printFunctionBox(LDreference* currentReferenceInPrintList, XMLparserTag** currentTag, CSfunctionReference* functionReference, int colour);
 	LDreference* printFunctionBoxText(LDreference* currentReferenceInPrintList, XMLparserTag** currentTag, CSfunctionReference* functionReference, int colour, bool useSingleFileOnly);
 	void resetPrintedFunctionConnections(CSfileReference* aboveLevelFileReference, CSfunctionReference* aboveLevelFunctionReference, bool useSingleFileOnly, string* singleFileName);
@@ -200,9 +198,9 @@ LDreference* createFunctionReferenceListBoxesAndConnections(LDreference* current
 int calculateCSBoxAndConnectionColourBasedUponLevel(int yIndex);
 int calculateCSBoxAndConnectionColourBasedUponFileName(CSfileReference* currentFileReference);
 
-bool findPrintedFunctionReferenceWithName(string name, CSfileReference* firstReferenceInAboveLevelBelowList, CSfileReference** fileReferenceHoldingFunction, CSfunctionReference** updatedFunctionReference);
-LDreference* traceFunctionsUpwardsAndDrawOrHighLightThese(LDreference* currentReferenceInPrintList, CSfileReference* firstReferenceInTopLevelBelowList, CSfunctionReference* currentFunctionBeingTraced, XMLparserTag** currentTag, int generateHTMLdocumentationMode, string* HTMLdocumentationFunctionTraceTableRows);
-	void traceFunctionsUpwardsAndDrawOrHighLightTheseReset(CSfileReference* firstReferenceInTopLevelBelowList, CSfunctionReference* currentFunctionBeingTraced);
+bool findPrintedFunctionReferenceWithName(string name, CSfileReferenceContainer* firstReferenceInAboveLevelBelowListContainer, CSfileReference** fileReferenceHoldingFunction, CSfunctionReference** updatedFunctionReference);
+LDreference* traceFunctionsUpwardsAndDrawOrHighLightThese(LDreference* currentReferenceInPrintList, CSfileReferenceContainer* firstReferenceInTopLevelBelowListContainer, CSfunctionReference* currentFunctionBeingTraced, XMLparserTag** currentTag, int generateHTMLdocumentationMode, string* HTMLdocumentationFunctionTraceTableRows);
+	void traceFunctionsUpwardsAndDrawOrHighLightTheseReset(CSfileReferenceContainer* firstReferenceInTopLevelBelowListContainer, CSfunctionReference* currentFunctionBeingTraced);
 
 void writeFileOrFunctionSVGbox(XMLparserTag** currentTag, vec* pos, int textLength, double scaleFactor, double maxTextLength, int col, double boxOutlineWidth);
 void writeFileOrFunctionSVGboxTransparent(XMLparserTag** currentTag, vec* pos, int textLength, double scaleFactor, double maxTextLength, int col, double boxOutlineWidth, double fillOpacity);

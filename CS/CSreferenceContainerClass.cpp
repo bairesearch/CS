@@ -23,14 +23,55 @@
 
 /*******************************************************************************
  *
- * File Name: CSdataflow.cpp
+ * File Name: CSreferenceContainerClass.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
  * Project Version: 3f1a 10-May-2015
  *
  *******************************************************************************/
 
-//issues, need to flip vertically
+#include "CSreferenceContainerClass.h"
 
 
-#include "CSdataflow.h"
+
+
+CSfunctionReferenceContainer::CSfunctionReferenceContainer(void)
+{
+	next = NULL;
+	functionReference = NULL;
+	fileReferenceHoldingFunction = NULL;
+}
+
+CSfunctionReferenceContainer::~CSfunctionReferenceContainer(void)
+{
+	if(next != NULL)
+	{
+		delete next;
+	}
+	if(functionReference != NULL)
+	{
+		delete functionReference;
+	}
+}
+
+CSfileReferenceContainer::CSfileReferenceContainer(void)
+{
+	next = NULL;
+	fileReference = NULL;
+	aboveLevelReference = NULL;
+}
+
+CSfileReferenceContainer::~CSfileReferenceContainer(void)
+{
+	if(next != NULL)
+	{
+		delete next;
+	}
+	if(fileReference != NULL)
+	{
+		delete fileReference;
+	}
+}
+
+
+

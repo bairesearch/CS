@@ -26,7 +26,7 @@
  * File Name: CSoperations.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e7f 27-January-2015
+ * Project Version: 3f1a 10-May-2015
  *
  *******************************************************************************/
 
@@ -38,15 +38,14 @@
 
 
 
-bool getIncludeFileNamesFromCorHfile(CSfileReference* firstReferenceInIncludeFileList, CSfileReference* topLevelReference, string topLevelReferenceName, int level)
+bool getIncludeFileNamesFromCorHfile(CSfileReferenceContainer* firstReferenceInIncludeFileListContainer, CSfileReferenceContainer* topLevelReferenceContainer, CSfileReference* aboveLevelReference, string topLevelReferenceName, int level)
 {
 	bool fileFound = false;
 
 	string parseFileName = topLevelReferenceName;
-	CSfileReference* previousReference = NULL;
 
 	ifstream parseFileObject(parseFileName.c_str());
-	CSfileReference* currentReferenceInIncludeFileList = firstReferenceInIncludeFileList;
+	CSfileReferenceContainer* currentReferenceInIncludeFileListContainer = firstReferenceInIncludeFileListContainer;
 
 	if(!parseFileObject.rdbuf()->is_open())
 	{
@@ -227,109 +226,122 @@ bool getIncludeFileNamesFromCorHfile(CSfileReference* firstReferenceInIncludeFil
 			{
 				if(c == '\"')
 				{
-					if(hashIncludeFileName != topLevelReference->name)	//this is added so that do not parse method.h from within method.cpp!
+					if(hashIncludeFileName != aboveLevelReference->name)	//this is added so that do not parse method.h from within method.cpp!
 					{
-						currentReferenceInIncludeFileList->name = hashIncludeFileName;
-						string hashIncludeFileNameCFile = generateSourceFileNameFromHeaderFileName(hashIncludeFileName, CS_SOURCE_FILE_EXTENSION);
-						#ifdef CS_GENERATE_CPP_CLASSES
-						currentReferenceInIncludeFileList->sourceFileNameOrig = hashIncludeFileNameCFile;
-						currentReferenceInIncludeFileList->headerFileName = generateSourceFileNameFromHeaderFileName(currentReferenceInIncludeFileList->name, CS_GENERATE_CPP_CLASSES_HEADER_FILE_EXTENSION);
-						currentReferenceInIncludeFileList->sourceFileName = generateSourceFileNameFromHeaderFileName(currentReferenceInIncludeFileList->sourceFileNameOrig, CS_GENERATE_CPP_CLASSES_SOURCE_FILE_EXTENSION);
-						#endif
-						currentReferenceInIncludeFileList->id = id;
-						currentReferenceInIncludeFileList->level = level;
-						currentReferenceInIncludeFileList->firstReferenceInAboveList = topLevelReference;
-						currentReferenceInIncludeFileList->previous = previousReference;
-						id++;
-
-						CSfileReference* newCSReference = new CSfileReference();
-						currentReferenceInIncludeFileList->next = newCSReference;
-
-						previousReference = currentReferenceInIncludeFileList;
-
-						CSfileReference* newfirstReferenceInBelowList = new CSfileReference();
-						currentReferenceInIncludeFileList->firstReferenceInBelowList = newfirstReferenceInBelowList;
-
-						#ifdef CS_DISPLAY_INCLUDE_FILE_PARSING
-						//parse into .h file;
-						for(int i= 0; i<level; i++)
+						bool alreadyParsedFile = false;
+						CSfileReference* currentReferenceInIncludeFileList = NULL;
+						if(findFileReferenceInFileReferenceContainerList(topLevelReferenceContainer->fileReference->firstReferenceInBelowListContainer, hashIncludeFileName, &currentReferenceInIncludeFileList))
 						{
-							cout << "\t";
+							currentReferenceInIncludeFileListContainer->fileReference = currentReferenceInIncludeFileList;
+							
+							CSfileReferenceContainer* newCSReferenceContainer = new CSfileReferenceContainer();
+							newCSReferenceContainer->previous = currentReferenceInIncludeFileListContainer;
+							currentReferenceInIncludeFileListContainer->next = newCSReferenceContainer;
 						}
-						cout << hashIncludeFileName << endl;
-						//parse into .cpp file;
-						for(int i= 0; i<level; i++)
+						else
 						{
-							cout << "\t";
-						}
-						cout << hashIncludeFileNameCFile << endl;
-						#endif
+							currentReferenceInIncludeFileList = new CSfileReference();
+							currentReferenceInIncludeFileListContainer->fileReference = currentReferenceInIncludeFileList;
+							currentReferenceInIncludeFileList->name = hashIncludeFileName;
+							string hashIncludeFileNameCFile = generateSourceFileNameFromHeaderFileName(hashIncludeFileName, CS_SOURCE_FILE_EXTENSION);
+							#ifdef CS_GENERATE_CPP_CLASSES
+							currentReferenceInIncludeFileList->sourceFileNameOrig = hashIncludeFileNameCFile;
+							currentReferenceInIncludeFileList->headerFileName = generateSourceFileNameFromHeaderFileName(currentReferenceInIncludeFileList->name, CS_GENERATE_CPP_CLASSES_HEADER_FILE_EXTENSION);
+							currentReferenceInIncludeFileList->sourceFileName = generateSourceFileNameFromHeaderFileName(currentReferenceInIncludeFileList->sourceFileNameOrig, CS_GENERATE_CPP_CLASSES_SOURCE_FILE_EXTENSION);
+							#endif
+							currentReferenceInIncludeFileList->id = id;
+							currentReferenceInIncludeFileList->level = level;
+							currentReferenceInIncludeFileListContainer->aboveLevelReference = aboveLevelReference;
+							id++;
 
-						//parse into .h file;
-						string referenceName = hashIncludeFileName;	//hashIncludeFileName is the current filename being parsed by this instance of getIncludeFileNamesFromCorHfile, ie "x.h" in "#include x.h" [and will recurse]
-						//getIncludeFileNamesFromCorHfile(): this will add the include file references (filenames) within the .h file in "#include x.h" to currentReferenceInIncludeFileList->firstReferenceInBelowList
-						bool hFileFound = getIncludeFileNamesFromCorHfile(currentReferenceInIncludeFileList->firstReferenceInBelowList, currentReferenceInIncludeFileList, referenceName, level+1);
-						
-						
-						if(hFileFound)
-						{
-							//parse into .cpp file;
-							CSfileReference* lastReferenceInBelowList = currentReferenceInIncludeFileList->firstReferenceInBelowList;
-							while(lastReferenceInBelowList->next != NULL)
+							CSfileReferenceContainer* newCSReferenceContainer = new CSfileReferenceContainer();
+							newCSReferenceContainer->previous = currentReferenceInIncludeFileListContainer;
+							currentReferenceInIncludeFileListContainer->next = newCSReferenceContainer;
+
+							CSfileReferenceContainer* newfirstReferenceInBelowListContainer = new CSfileReferenceContainer();
+							currentReferenceInIncludeFileList->firstReferenceInBelowListContainer = newfirstReferenceInBelowListContainer;
+
+							#ifdef CS_DISPLAY_INCLUDE_FILE_PARSING
+							//parse into .h file;
+							for(int i= 0; i<level; i++)
 							{
-								lastReferenceInBelowList = lastReferenceInBelowList->next;
+								cout << "\t";
 							}
-							string referenceNameCFile = hashIncludeFileNameCFile;
-							//getIncludeFileNamesFromCorHfile(): this will add (append) the include file references (filenames) within the .c equivalent (ie x.c) of the .h file in "#include x.h" to currentReferenceInIncludeFileList->firstReferenceInBelowList [and will recurse]
-							bool cFileFound = getIncludeFileNamesFromCorHfile(lastReferenceInBelowList, currentReferenceInIncludeFileList, referenceNameCFile, level+1);
-	
-							if(cFileFound)
+							cout << hashIncludeFileName << endl;
+							//parse into .cpp file;
+							for(int i= 0; i<level; i++)
 							{
-								//parse the new file reference only if both its ".h" and ".c" file are found
-								
-								//fill function and function reference list using .h file;
-								CSfunctionReference* newfirstReferenceInFunctionList = new CSfunctionReference();
-								currentReferenceInIncludeFileList->firstReferenceInFunctionList = newfirstReferenceInFunctionList;
+								cout << "\t";
+							}
+							cout << hashIncludeFileNameCFile << endl;
+							#endif
 
-								//getFunctionNamesFromFunctionDeclarationsInHfile(): this opens the .h file hashIncludeFileName and extracts its function declarations (hashIncludeFileName is the current filename being parsed by this instance of getIncludeFileNamesFromCorHfile, ie "x.h" in "#include x.h")
-								bool hFileFound2 = getFunctionNamesFromFunctionDeclarationsInHfile(currentReferenceInIncludeFileList->firstReferenceInFunctionList, referenceName, level);
-								if(hFileFound2)
+							//parse into .h file;
+							string referenceName = hashIncludeFileName;	//hashIncludeFileName is the current filename being parsed by this instance of getIncludeFileNamesFromCorHfile, ie "x.h" in "#include x.h" [and will recurse]
+							//getIncludeFileNamesFromCorHfile(): this will add the include file references (filenames) within the .h file in "#include x.h" to currentReferenceInIncludeFileList->firstReferenceInBelowListContainer
+							bool hFileFound = getIncludeFileNamesFromCorHfile(currentReferenceInIncludeFileList->firstReferenceInBelowListContainer, topLevelReferenceContainer, currentReferenceInIncludeFileList, referenceName, level+1);
+
+
+							if(hFileFound)
+							{
+								//parse into .cpp file;
+								CSfileReferenceContainer* lastReferenceInBelowListContainer = currentReferenceInIncludeFileList->firstReferenceInBelowListContainer;
+								while(lastReferenceInBelowListContainer->next != NULL)
 								{
-									#ifdef CS_DEBUG
-									//cout << "currentReferenceInIncludeFileList->firstReferenceInFunctionList->name = " << currentReferenceInIncludeFileList->firstReferenceInFunctionList->name << endl;
-									//cout << "topLevelReferenceName = " << topLevelReferenceName << endl;
-									//cout << "getFunctionReferenceNamesFromFunctionsInCfile()" << endl;
-									#endif
-									//getFunctionReferenceNamesFromFunctionsInCfile(): this opens the .c file (hashIncludeFileName equivalent) and locates all the functions corresponding to those declared in its .h file
-									getFunctionReferenceNamesFromFunctionsInCfile(firstReferenceInIncludeFileList, currentReferenceInIncludeFileList->firstReferenceInFunctionList, currentReferenceInIncludeFileList, referenceNameCFile, level);
+									lastReferenceInBelowListContainer = lastReferenceInBelowListContainer->next;
+								}
+								string referenceNameCFile = hashIncludeFileNameCFile;
+								//getIncludeFileNamesFromCorHfile(): this will add (append) the include file references (filenames) within the .c equivalent (ie x.c) of the .h file in "#include x.h" to currentReferenceInIncludeFileList->firstReferenceInBelowListContainer [and will recurse]
+								bool cFileFound = getIncludeFileNamesFromCorHfile(lastReferenceInBelowListContainer, topLevelReferenceContainer, currentReferenceInIncludeFileList, referenceNameCFile, level+1);
 
+								if(cFileFound)
+								{
+									//parse the new file reference only if both its ".h" and ".c" file are found
+
+									//fill function and function reference list using .h file;
+									CSfunctionReference* newfirstReferenceInFunctionList = new CSfunctionReference();
+									currentReferenceInIncludeFileList->firstReferenceInFunctionList = newfirstReferenceInFunctionList;
+
+									//getFunctionNamesFromFunctionDeclarationsInHfile(): this opens the .h file hashIncludeFileName and extracts its function declarations (hashIncludeFileName is the current filename being parsed by this instance of getIncludeFileNamesFromCorHfile, ie "x.h" in "#include x.h")
+									bool hFileFound2 = getFunctionNamesFromFunctionDeclarationsInHfile(currentReferenceInIncludeFileList->firstReferenceInFunctionList, referenceName, level);
+									if(hFileFound2)
+									{
+										#ifdef CS_DEBUG
+										//cout << "currentReferenceInIncludeFileList->firstReferenceInFunctionList->name = " << currentReferenceInIncludeFileList->firstReferenceInFunctionList->name << endl;
+										//cout << "topLevelReferenceName = " << topLevelReferenceName << endl;
+										//cout << "getFunctionReferenceNamesFromFunctionsInCfile()" << endl;
+										#endif
+										//getFunctionReferenceNamesFromFunctionsInCfile(): this opens the .c file (hashIncludeFileName equivalent) and locates all the functions corresponding to those declared in its .h file
+										getFunctionReferenceNamesFromFunctionsInCfile(firstReferenceInIncludeFileListContainer->fileReference, currentReferenceInIncludeFileList->firstReferenceInFunctionList, currentReferenceInIncludeFileList, referenceNameCFile, level);
+
+									}
+									else
+									{
+										#ifdef CS_DEBUG
+										//cout << "!hFileFound2" << endl;
+										#endif
+									}
 								}
 								else
 								{
 									#ifdef CS_DEBUG
-									//cout << "!hFileFound2" << endl;
+									//cout << "!cFileFound" << endl;
 									#endif
+									CSfunctionReference* newfirstReferenceInFunctionList = new CSfunctionReference();
+									currentReferenceInIncludeFileList->firstReferenceInFunctionList = newfirstReferenceInFunctionList;
 								}
 							}
 							else
 							{
 								#ifdef CS_DEBUG
-								//cout << "!cFileFound" << endl;
+								//cout << "!hFileFound" << endl;
 								#endif
 								CSfunctionReference* newfirstReferenceInFunctionList = new CSfunctionReference();
 								currentReferenceInIncludeFileList->firstReferenceInFunctionList = newfirstReferenceInFunctionList;
 							}
 						}
-						else
-						{
-							#ifdef CS_DEBUG
-							//cout << "!hFileFound" << endl;
-							#endif
-							CSfunctionReference* newfirstReferenceInFunctionList = new CSfunctionReference();
-							currentReferenceInIncludeFileList->firstReferenceInFunctionList = newfirstReferenceInFunctionList;
-						}
 
-						currentReferenceInIncludeFileList = currentReferenceInIncludeFileList->next;
+						currentReferenceInIncludeFileListContainer = currentReferenceInIncludeFileListContainer->next;
 
 
 					}
@@ -337,7 +349,7 @@ bool getIncludeFileNamesFromCorHfile(CSfileReference* firstReferenceInIncludeFil
 					{
 						#ifdef CS_DEBUG
 						//cout << "hashIncludeFileName = " << hashIncludeFileName << endl;
-						//cout << "topLevelReference->name = " << topLevelReference->name << endl;
+						//cout << "aboveLevelReference->name = " << aboveLevelReference->name << endl;
 						#endif
 					}
 
@@ -366,17 +378,43 @@ bool getIncludeFileNamesFromCorHfile(CSfileReference* firstReferenceInIncludeFil
 		#ifdef CS_GENERATE_CPP_CLASSES
 		if(isHeader)
 		{
-			topLevelReference->headerFileText = fileContentsString;
+			aboveLevelReference->headerFileText = fileContentsString;
 		}
 		else
 		{
-			topLevelReference->sourceFileText = fileContentsString;
+			aboveLevelReference->sourceFileText = fileContentsString;
 		}
 		#endif
 		*/
 	}
 
 	return fileFound;
+}
+
+bool findFileReferenceInFileReferenceContainerList(CSfileReferenceContainer* firstReferenceContainerInLevel, string fileReferenceName, CSfileReference** fileReferenceFound)
+{
+	bool foundFileReference = false;
+	CSfileReferenceContainer* currentReferenceContainerInLevel = firstReferenceContainerInLevel;
+	while(currentReferenceContainerInLevel->next != NULL)
+	{
+		if(currentReferenceContainerInLevel->fileReference->name == fileReferenceName)
+		{
+			foundFileReference = true;
+			*fileReferenceFound = currentReferenceContainerInLevel->fileReference;
+		}
+		if(!foundFileReference)
+		{
+			if(currentReferenceContainerInLevel->fileReference->firstReferenceInBelowListContainer != NULL)
+			{
+				if(findFileReferenceInFileReferenceContainerList(currentReferenceContainerInLevel->fileReference->firstReferenceInBelowListContainer, fileReferenceName, fileReferenceFound))
+				{
+					foundFileReference = true;
+				}
+			}
+		}
+		currentReferenceContainerInLevel = currentReferenceContainerInLevel->next;
+	}
+	return foundFileReference;
 }
 
 
@@ -711,7 +749,7 @@ bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunctionReference* firstR
 
 #define MAX_CODE_FILE_SIZE (1000000)
 
-void getFunctionReferenceNamesFromFunctionsInCfile(CSfileReference* firstReferenceInIncludeFileList, CSfunctionReference* firstReferenceInFunctionList, CSfileReference* topLevelReference, string topLevelFileName, int level)
+void getFunctionReferenceNamesFromFunctionsInCfile(CSfileReference* firstReferenceInIncludeFileList, CSfunctionReference* firstReferenceInFunctionList, CSfileReference* aboveLevelReference, string topLevelFileName, int level)
 {
 	string codeFileName = topLevelFileName;
 	char* codeFileNamecharstar = const_cast<char*>(codeFileName.c_str());
@@ -941,7 +979,7 @@ void getFunctionReferenceNamesFromFunctionsInCfile(CSfileReference* firstReferen
 					#ifdef CS_DEBUG
 					/*
 					cout << "file topLevelFileName = " << topLevelFileName << endl;
-					cout << "topLevelReference->name = " << topLevelReference->name << endl;
+					cout << "aboveLevelReference->name = " << aboveLevelReference->name << endl;
 					cout << "function currentReference->name = " << currentReference->name << endl;
 					cout << "positionOfFunctionReference = " << positionOfFunctionReference << endl;
 					//cout << "functionContentsString = " << functionContentsString << endl;
@@ -960,7 +998,7 @@ void getFunctionReferenceNamesFromFunctionsInCfile(CSfileReference* firstReferen
 					//cout << "firstReferenceInIncludeFileList->name = " << firstReferenceInIncludeFileList->name << endl;
 					#endif
 					//search current file for function references;
-					if(!searchFunctionStringForFunctionReferences(firstReferenceInIncludeFileList, topLevelReference, &currentReferenceInFunctionReferenceList, &currentReferenceInFunctionReferenceListRepeats, functionContentsString))
+					if(!searchFunctionStringForFunctionReferences(firstReferenceInIncludeFileList, aboveLevelReference, &currentReferenceInFunctionReferenceList, &currentReferenceInFunctionReferenceListRepeats, functionContentsString))
 					{
 					
 					}
@@ -986,7 +1024,7 @@ void getFunctionReferenceNamesFromFunctionsInCfile(CSfileReference* firstReferen
 					//cout << "firstReferenceInIncludeFileList->name = " << firstReferenceInIncludeFileList->name << endl;
 					#endif
 					//search include files for function references;
-					if(!searchFunctionStringForFunctionReferencesRecursive(firstReferenceInIncludeFileList, topLevelReference->firstReferenceInBelowList, &currentReferenceInFunctionReferenceList, &currentReferenceInFunctionReferenceListRepeats, functionContentsString))
+					if(!searchFunctionStringForFunctionReferencesRecursive(firstReferenceInIncludeFileList, aboveLevelReference->firstReferenceInBelowListContainer, &currentReferenceInFunctionReferenceList, &currentReferenceInFunctionReferenceListRepeats, functionContentsString))
 					{
 					
 					}
@@ -1021,30 +1059,32 @@ void getFunctionReferenceNamesFromFunctionsInCfile(CSfileReference* firstReferen
 	
 	/*
 	#ifdef CS_GENERATE_CPP_CLASSES
-	topLevelReference->sourceFileText = fileContentsString;
+	aboveLevelReference->sourceFileText = fileContentsString;
 	#endif
 	*/
 }
 
-bool searchFunctionStringForFunctionReferencesRecursive(CSfileReference* firstReferenceInIncludeFileList, CSfileReference* firstFileNameInLayerContainingFunctionReferencesToSearchFor, CSfunctionReference** currentReferenceInFunctionReferenceList, CSfunctionReference** currentReferenceInFunctionReferenceListRepeats, string functionContentsString)
+bool searchFunctionStringForFunctionReferencesRecursive(CSfileReference* firstReferenceInIncludeFileList, CSfileReferenceContainer* firstFileNameInLayerContainingFunctionReferencesToSearchFor, CSfunctionReference** currentReferenceInFunctionReferenceList, CSfunctionReference** currentReferenceInFunctionReferenceListRepeats, string functionContentsString)
 {
 	bool result = true;
 	
-	CSfileReference* currentReference = firstFileNameInLayerContainingFunctionReferencesToSearchFor;
+	CSfileReferenceContainer* currentReferenceContainer = firstFileNameInLayerContainingFunctionReferencesToSearchFor;
 
-	while(currentReference->next != NULL)
+	while(currentReferenceContainer->next != NULL)
 	{
+		CSfileReference* currentReference = currentReferenceContainer->fileReference;
+		
 		searchFunctionStringForFunctionReferences(firstReferenceInIncludeFileList, currentReference, currentReferenceInFunctionReferenceList, currentReferenceInFunctionReferenceListRepeats, functionContentsString);
 
-		if(currentReference->firstReferenceInBelowList != NULL)
+		if(currentReference->firstReferenceInBelowListContainer != NULL)
 		{
-			if(!searchFunctionStringForFunctionReferencesRecursive(firstReferenceInIncludeFileList, currentReference->firstReferenceInBelowList, currentReferenceInFunctionReferenceList, currentReferenceInFunctionReferenceListRepeats, functionContentsString))
+			if(!searchFunctionStringForFunctionReferencesRecursive(firstReferenceInIncludeFileList, currentReference->firstReferenceInBelowListContainer, currentReferenceInFunctionReferenceList, currentReferenceInFunctionReferenceListRepeats, functionContentsString))
 			{
 				result = false;
 			}		
 		}
 
-		currentReference = currentReference->next;
+		currentReferenceContainer = currentReferenceContainer->next;
 	}
 	
 	return result;
@@ -1055,7 +1095,7 @@ bool searchFunctionStringForFunctionReferences(CSfileReference* firstReferenceIn
 {
 	bool result = true;
 	
-	//only search those file names which include topLevelReference.h
+	//only search those file names which include aboveLevelReference.h
 
 	//find reference to this file
 
@@ -1197,7 +1237,7 @@ bool searchFunctionStringForFunctionReferences(CSfileReference* firstReferenceIn
 
 
 
-
+/*
 CSfileReference* findReferenceInIncludeFileList(CSfileReference* firstReferenceInAboveLevelBelowList, string referenceName, CSfileReference* foundReference, bool* referenceFound)
 {
 	CSfileReference* foundReferenceNew = foundReference;
@@ -1210,9 +1250,9 @@ CSfileReference* findReferenceInIncludeFileList(CSfileReference* firstReferenceI
 			foundReferenceNew = currentReference;
 		}
 
-		if(currentReference->firstReferenceInBelowList != NULL)
+		if(currentReference->firstReferenceInBelowListContainer != NULL)
 		{
-			foundReferenceNew = findReferenceInIncludeFileList(currentReference->firstReferenceInBelowList, referenceName, foundReferenceNew, referenceFound);
+			foundReferenceNew = findReferenceInIncludeFileList(currentReference->firstReferenceInBelowListContainer, referenceName, foundReferenceNew, referenceFound);
 		}
 
 		currentReference = currentReference->next;
@@ -1221,6 +1261,7 @@ CSfileReference* findReferenceInIncludeFileList(CSfileReference* firstReferenceI
 	return foundReferenceNew;
 
 }
+*/
 
 
 string generateSourceFileNameFromHeaderFileName(string headerFileName, string sourceFileNameExtension)

@@ -26,7 +26,7 @@
  * File Name: CSreferenceClass.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e7f 27-January-2015
+ * Project Version: 3f1a 10-May-2015
  *
  *******************************************************************************/
 
@@ -34,20 +34,6 @@
 
 
 
-
-CSfunctionReferenceContainer::CSfunctionReferenceContainer(void)
-{
-	next = NULL;
-	name = "";
-}
-
-CSfunctionReferenceContainer::~CSfunctionReferenceContainer(void)
-{
-	if(next != NULL)
-	{
-		delete next;
-	}
-}
 
 CSfunctionReference::CSfunctionReference(void)
 {
@@ -73,7 +59,7 @@ CSfunctionReference::CSfunctionReference(void)
 
 	next = NULL;
 	previous = NULL;
-	firstReferenceContainerInAboveReferenceList = new CSfunctionReferenceContainer();
+	firstReferenceContainerInAboveReferenceList = NULL;	//new CSfunctionReferenceContainer()  - no longer possible with forward declaration of CSfunctionReferenceContainer
 	hasHadFunctionReferencesParsed = false;
 	printedTrace = false;
 	printedTraceReset = false;
@@ -107,9 +93,9 @@ CSfunctionReference::CSfunctionReference(void)
 CSfunctionReference::~CSfunctionReference(void)
 {
 	/*
-	if(firstReferenceInBelowList != NULL)
+	if(firstReferenceInBelowListContainer != NULL)
 	{
-		delete firstReferenceInBelowList;
+		delete firstReferenceInBelowListContainer;
 	}
 	*/
 	if(next != NULL)
@@ -132,21 +118,6 @@ CSfunctionReference::~CSfunctionReference(void)
 	#endif
 }
 
-
-CSfileReferenceContainer::CSfileReferenceContainer(void)
-{
-	next = NULL;
-	name = "";
-}
-
-CSfileReferenceContainer::~CSfileReferenceContainer(void)
-{
-	if(next != NULL)
-	{
-		delete next;
-	}
-}
-
 CSfileReference::CSfileReference(void)
 {
 	//file/function reference [shared]
@@ -165,16 +136,12 @@ CSfileReference::CSfileReference(void)
 	printTextY = 0;
 	HTMLgenerated = false;
 
-	next = NULL;
-	previous = NULL;
-	firstReferenceContainerInAboveReferenceList = new CSfileReferenceContainer();
+	firstReferenceContainerInAboveReferenceList = NULL;	//new CSfileReferenceContainer()  - no longer possible with forward declaration of CSfileReferenceContainer
 	printedTrace = false;
 	printedTraceReset = false;
 
 	//file reference only
-	firstReferenceInAboveList = NULL;
-	firstReferenceInBelowList = NULL;
-	shortcutToPrintedVersionOfReference = NULL;
+	firstReferenceInBelowListContainer = NULL;
 	firstReferenceInFunctionList = NULL;
 
 	for(int i=0; i<MAX_INCLUDE_DEPTH_FUNCTION; i++)
@@ -183,6 +150,7 @@ CSfileReference::CSfileReference(void)
 	}
 	
 	#ifdef CS_GENERATE_CPP_CLASSES
+	printedOO = false;
 	sourceFileNameOrig = "";
 	sourceFileTextOrig = "";
 	headerFileTextOrig = "";
@@ -195,13 +163,9 @@ CSfileReference::CSfileReference(void)
 
 CSfileReference::~CSfileReference(void)
 {
-	if(firstReferenceInBelowList != NULL)
+	if(firstReferenceInBelowListContainer != NULL)
 	{
-		delete firstReferenceInBelowList;
-	}
-	if(next != NULL)
-	{
-		delete next;
+		delete firstReferenceInBelowListContainer;
 	}
 	if(firstReferenceContainerInAboveReferenceList != NULL)
 	{
@@ -288,9 +252,9 @@ void mergeIncludeFileReferences(CSReference* firstReferenceInIncludeFileList, CS
 	{
 		findAndMergeAllIndenticalFileReferences(currentReferenceInIncludeFileList, firstReferenceInTopLevelBelowList);
 
-		if(currentReferenceInIncludeFileList->firstReferenceInBelowList != NULL)
+		if(currentReferenceInIncludeFileList->firstReferenceInBelowListContainer != NULL)
 		{
-			mergeIncludeFileReferences(currentReferenceInIncludeFileList->firstReferenceInBelowList, firstReferenceInTopLevelBelowList);
+			mergeIncludeFileReferences(currentReferenceInIncludeFileList->firstReferenceInBelowListContainer, firstReferenceInTopLevelBelowList);
 		}
 		currentReferenceInIncludeFileList = currentReferenceInIncludeFileList->next;
 	}
@@ -311,7 +275,7 @@ void findAndMergeAllIndenticalFileReferences(CSReference* reference, CSReference
 				cout << "\t";
 			}
 			cout << "currentReference->name = " << currentReference->name << endl;
-			//cout << "currentReference->firstReferenceInBelowList->name = " << currentReference->firstReferenceInBelowList->name << endl;
+			//cout << "currentReference->firstReferenceInBelowListContainer->name = " << currentReference->firstReferenceInBelowListContainer->name << endl;
 		}
 		#endif
 
@@ -350,10 +314,10 @@ void findAndMergeAllIndenticalFileReferences(CSReference* reference, CSReference
 			}
 		}
 
-		if(currentReference->firstReferenceInBelowList != NULL)
+		if(currentReference->firstReferenceInBelowListContainer != NULL)
 		{
 
-			findAndMergeAllIndenticalFileReferences(reference, currentReference->firstReferenceInBelowList);
+			findAndMergeAllIndenticalFileReferences(reference, currentReference->firstReferenceInBelowListContainer);
 		}
 		currentReference = currentReference->next;
 	}

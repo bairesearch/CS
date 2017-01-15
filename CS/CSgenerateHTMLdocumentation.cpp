@@ -26,7 +26,7 @@
  * File Name: CSgenerateHTMLdocumentation.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e7f 27-January-2015
+ * Project Version: 3f1a 10-May-2015
  *
  *******************************************************************************/
 
@@ -38,7 +38,7 @@
 
 
 //generate documentation for all functions...
-void generateHTMLdocumentationFunctions(XMLparserTag* firstTagInSVGFile, CSfileReference* firstReferenceInTopLevelBelowList, int generateHTMLdocumentationMode, bool useOutputHTMLfile, bool traceFunctionUpwards, bool usePredefinedGrid, string outputHTMLfileName)
+void generateHTMLdocumentationFunctions(XMLparserTag* firstTagInSVGFile, CSfileReferenceContainer* firstReferenceInTopLevelBelowListContainer, int generateHTMLdocumentationMode, bool useOutputHTMLfile, bool traceFunctionUpwards, bool usePredefinedGrid, string outputHTMLfileName)
 {	
 	//find last tag in svg file;
 	XMLparserTag* lastTagInSVGFile = firstTagInSVGFile;
@@ -51,7 +51,7 @@ void generateHTMLdocumentationFunctions(XMLparserTag* firstTagInSVGFile, CSfileR
 
 	string HTMLdocumentationBody = "";
 	LDreference* firstReferenceInPrintListFunction = new LDreference();
-	generateHTMLdocumentationForAllFunctions(firstReferenceInTopLevelBelowList, firstReferenceInPrintListFunction, firstReferenceInTopLevelBelowList, generateHTMLdocumentationMode, useOutputHTMLfile, &HTMLdocumentationBody, firstTagInSVGFile, lastTagInSVGFile, traceFunctionUpwards, usePredefinedGrid);
+	generateHTMLdocumentationForAllFunctions(firstReferenceInTopLevelBelowListContainer, firstReferenceInPrintListFunction, firstReferenceInTopLevelBelowListContainer, generateHTMLdocumentationMode, useOutputHTMLfile, &HTMLdocumentationBody, firstTagInSVGFile, lastTagInSVGFile, traceFunctionUpwards, usePredefinedGrid);
 	delete firstReferenceInPrintListFunction;	//should delete this, as it will contain far too many LD vector graphics references (ie a set of traced references for each function)
 
 	if(useOutputHTMLfile)
@@ -69,7 +69,7 @@ string generateHTMLdocumentationHeader(string name, bool htmlHeader, bool isFile
 	string HTMLdocumentationHeader = "";
 	if(htmlHeader)
 	{
-		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3e7f 27-January-2015<p>\n";
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3f1a 10-May-2015<p>\n";
 	}
 	else
 	{
@@ -107,14 +107,16 @@ void writeStringPointerToFileObject(string* s, ofstream* writeFileObject)
 	}
 }
 
-void generateHTMLdocumentationForAllFunctions(CSfileReference* firstReferenceInAboveLevelBelowList, LDreference* currentReferenceInPrintList, CSfileReference* firstReferenceInTopLevelBelowList, int generateHTMLdocumentationMode, bool useOutputHTMLfile, string* HTMLdocumentationBody, XMLparserTag* firstTagInSVGFile, XMLparserTag* lastTagInSVGFile, bool traceFunctionUpwards, bool usePredefinedGrid)
+void generateHTMLdocumentationForAllFunctions(CSfileReferenceContainer* firstReferenceInAboveLevelBelowListContainer, LDreference* currentReferenceInPrintList, CSfileReferenceContainer* firstReferenceInTopLevelBelowListContainer, int generateHTMLdocumentationMode, bool useOutputHTMLfile, string* HTMLdocumentationBody, XMLparserTag* firstTagInSVGFile, XMLparserTag* lastTagInSVGFile, bool traceFunctionUpwards, bool usePredefinedGrid)
 {
 	bool result = true;
 
-	CSfileReference* currentFileReference = firstReferenceInAboveLevelBelowList;
+	CSfileReferenceContainer* currentFileReferenceContainer = firstReferenceInAboveLevelBelowListContainer;
 
-	while(currentFileReference->next != NULL)
+	while(currentFileReferenceContainer->next != NULL)
 	{
+		CSfileReference* currentFileReference = currentFileReferenceContainer->fileReference;
+
 		string fileNameHoldingFunction = currentFileReference->name;
 		string outputHTMLfileName = currentFileReference->name + HTML_EXTENSION;
 
@@ -171,7 +173,7 @@ void generateHTMLdocumentationForAllFunctions(CSfileReference* firstReferenceInA
 							}
 
 							string HTMLdocumentationFunction = "";
-							generateHTMLdocumentationForFunction(currentReferenceInPrintList, firstReferenceInTopLevelBelowList, currentFunctionReference, fileNameHoldingFunction, &currentTagInSVGFileFunction, generateHTMLdocumentationMode, &HTMLdocumentationFunction, &outputSVGfileNameFunction, false, "", traceFunctionUpwards);
+							generateHTMLdocumentationForFunction(currentReferenceInPrintList, firstReferenceInTopLevelBelowListContainer, currentFunctionReference, fileNameHoldingFunction, &currentTagInSVGFileFunction, generateHTMLdocumentationMode, &HTMLdocumentationFunction, &outputSVGfileNameFunction, false, "", traceFunctionUpwards);
 							HTMLdocumentationFileBody = HTMLdocumentationFileBody + HTMLdocumentationFunction;
 							#ifdef CS_DEBUG_HTML_DOCUMENTATION
 							//cout << "HTMLdocumentationFunction = " << HTMLdocumentationFunction << endl;
@@ -208,7 +210,7 @@ void generateHTMLdocumentationForAllFunctions(CSfileReference* firstReferenceInA
 				#endif
 				#ifdef CS_HTML_DOCUMENTATION_GENERATE_FILE_CODE_STRUCTURE_DIAGRAMS
 				string outputSVGFileNameFile = currentFileReference->name + SVG_EXTENSION;
-				generateFileDiagramFunctionsHeirachy(currentFileReference, outputSVGFileNameFile, firstReferenceInTopLevelBelowList, usePredefinedGrid);
+				generateFileDiagramFunctionsHeirachy(currentFileReference, outputSVGFileNameFile, firstReferenceInTopLevelBelowListContainer, usePredefinedGrid);
 				string HTMLdocumentationFileImagePlaceHolder = generateHTMLdocumentationImagePlaceHolder(&outputSVGFileNameFile, "File Diagram (functions heirachy)");
 				HTMLdocumentationFileIntroduction = HTMLdocumentationFileIntroduction + HTMLdocumentationFileImagePlaceHolder;
 				#endif
@@ -237,18 +239,18 @@ void generateHTMLdocumentationForAllFunctions(CSfileReference* firstReferenceInA
 					}
 				}
 
-				if(currentFileReference->firstReferenceInBelowList != NULL)
+				if(currentFileReference->firstReferenceInBelowListContainer != NULL)
 				{
-					generateHTMLdocumentationForAllFunctions(currentFileReference->firstReferenceInBelowList, currentReferenceInPrintList, firstReferenceInTopLevelBelowList, generateHTMLdocumentationMode, useOutputHTMLfile, HTMLdocumentationBody, firstTagInSVGFile, lastTagInSVGFile, traceFunctionUpwards, usePredefinedGrid);
+					generateHTMLdocumentationForAllFunctions(currentFileReference->firstReferenceInBelowListContainer, currentReferenceInPrintList, firstReferenceInTopLevelBelowListContainer, generateHTMLdocumentationMode, useOutputHTMLfile, HTMLdocumentationBody, firstTagInSVGFile, lastTagInSVGFile, traceFunctionUpwards, usePredefinedGrid);
 				}
 			}
 		}
 
-		currentFileReference = currentFileReference->next;
+		currentFileReferenceContainer = currentFileReferenceContainer->next;
 	}
 }
 
-void generateHTMLdocumentationForFunction(LDreference* currentReferenceInPrintList, CSfileReference* firstReferenceInTopLevelBelowList, CSfunctionReference* bottomLevelFunctionToTraceUpwards, string fileNameHoldingFunction, XMLparserTag** currentTag, int generateHTMLdocumentationMode, string* HTMLdocumentationFunctionBody, string* outputSVGfileNameFunction, bool useOutputHTMLfile, string outputHTMLfileName, bool traceFunctionUpwards)
+void generateHTMLdocumentationForFunction(LDreference* currentReferenceInPrintList, CSfileReferenceContainer* firstReferenceInTopLevelBelowListContainer, CSfunctionReference* bottomLevelFunctionToTraceUpwards, string fileNameHoldingFunction, XMLparserTag** currentTag, int generateHTMLdocumentationMode, string* HTMLdocumentationFunctionBody, string* outputSVGfileNameFunction, bool useOutputHTMLfile, string outputHTMLfileName, bool traceFunctionUpwards)
 {
 	if(generateHTMLdocumentationMode == CS_GENERATE_HTML_DOCUMENTATION_MODE_OFF)
 	{
@@ -261,9 +263,9 @@ void generateHTMLdocumentationForFunction(LDreference* currentReferenceInPrintLi
 	string HTMLdocumentationFunctionTraceTableRows = "";
 	if(traceFunctionUpwards)
 	{
-		currentReferenceInPrintList = traceFunctionsUpwardsAndDrawOrHighLightThese(currentReferenceInPrintList, firstReferenceInTopLevelBelowList, bottomLevelFunctionToTraceUpwards, currentTag, generateHTMLdocumentationMode, &HTMLdocumentationFunctionTraceTableRows);
+		currentReferenceInPrintList = traceFunctionsUpwardsAndDrawOrHighLightThese(currentReferenceInPrintList, firstReferenceInTopLevelBelowListContainer, bottomLevelFunctionToTraceUpwards, currentTag, generateHTMLdocumentationMode, &HTMLdocumentationFunctionTraceTableRows);
 
-		traceFunctionsUpwardsAndDrawOrHighLightTheseReset(firstReferenceInTopLevelBelowList, bottomLevelFunctionToTraceUpwards);	//this is required for multiple traces per CS execution
+		traceFunctionsUpwardsAndDrawOrHighLightTheseReset(firstReferenceInTopLevelBelowListContainer, bottomLevelFunctionToTraceUpwards);	//this is required for multiple traces per CS execution
 	}
 
 	if(generateHTMLdocumentationMode == CS_GENERATE_HTML_DOCUMENTATION_MODE_ON)
@@ -748,7 +750,7 @@ void addToHTMLdocumentationFileFunctionList(CSfunctionReference* currentFunction
 
 
 
-void generateFileDiagramFunctionsHeirachy(CSfileReference* currentFileReference, string outputSVGFileNameFile, CSfileReference* firstReferenceInTopLevelBelowList, bool usePredefinedGrid)
+void generateFileDiagramFunctionsHeirachy(CSfileReference* currentFileReference, string outputSVGFileNameFile, CSfileReferenceContainer* firstReferenceInTopLevelBelowListContainer, bool usePredefinedGrid)
 {
 	bool result = true;
 
@@ -799,7 +801,7 @@ void generateFileDiagramFunctionsHeirachy(CSfileReference* currentFileReference,
 				while(currentReferenceInFunctionReferenceList->next != NULL)
 				{
 					//cout << "currentReferenceInFunctionReferenceList->name = " << currentReferenceInFunctionReferenceList->name << endl;
-					currentReferenceInPrintList = createFunctionReferenceListBoxesAndConnections(currentReferenceInPrintList, currentFileReference, currentTopLevelFunctionReference, firstReferenceInTopLevelBelowList, 0, currentReferenceInFunctionReferenceList->name, &currentTagInSVGFile, false, true, &(currentFileReference->name), usePredefinedGrid);
+					currentReferenceInPrintList = createFunctionReferenceListBoxesAndConnections(currentReferenceInPrintList, currentFileReference, currentTopLevelFunctionReference, firstReferenceInTopLevelBelowListContainer, 0, currentReferenceInFunctionReferenceList->name, &currentTagInSVGFile, false, true, &(currentFileReference->name), usePredefinedGrid);
 
 					currentReferenceInFunctionReferenceList = currentReferenceInFunctionReferenceList->next;
 				}
