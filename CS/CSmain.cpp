@@ -23,7 +23,7 @@
  * File Name: CSmain.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3b1a 27-September-2012
+ * Project Version: 3a12a 31-July-2012
  *
  *******************************************************************************/
 
@@ -48,7 +48,6 @@ static char errmessage[] = "Usage:  OpenCS.exe [options]"
 "\n\t-oldr [string]          : code structure display .ldr output filename (def: codeStructureNet.ldr)"
 "\n\t-osvg [string]          : code structure display .svg output filename (def: codeStructureNet.svg)"
 "\n\t-oppm [string]          : code structure display .ppm output filename (def: codeStructureNet.ppm)"
-"\n\t-ohtml [string]         : code structure display .html output filename (def: codeStructureNet.html) (use single file, else HTML file names are auto generated on a per C file basis)"
 "\n\t-oall [string]          : code structure display .svg/.ldr/.ppm default generic output filename (def: codeStructureNet)"
 "\n\t-file [string]          : top level source file name (eg, main.cpp) [compulsory]"
 "\n\t-function [string]      : top level function name referenced within file {recommended: not defined in file, declared within include h file} (eg, x for int x()) [compulsory]"
@@ -58,8 +57,7 @@ static char errmessage[] = "Usage:  OpenCS.exe [options]"
 "\n\t-enablefunctions        : output function connectivity on top of file connectivity"
 "\n\t-mode [int]             : mode (1: execution flow, 2: data flow, 3: filter code based upon preprocessor definitions) (def: 1)"
 "\n\t-trace                  : trace a function's usage upwards"
-"\n\t-tracefunction [string] : bottom level function name to trace upwards / document (eg, y for int y())"
-"\n\t-html                   : generate html documentation (user must specify tracefunction, else will document all functions)"
+"\n\t-tracefunction [string] : bottom level function name to trace upwards (eg, y for int y())"
 "\n"
 "\n\t-workingfolder [string] : working directory name for input files (def: same as exe)"
 "\n\t-exefolder [string]     : exe directory name for executables OpenCS.exe and (def: same as exe)"
@@ -71,6 +69,9 @@ static char errmessage[] = "Usage:  OpenCS.exe [options]"
 "\n"
 "\n";
 
+#define CS_MODE_OUTPUT_EXECUTION_FLOW (1)
+#define CS_MODE_OUTPUT_DATA_FLOW (2)
+#define CS_MODE_FILTER_CODE_USING_PREPROCESSOR_DEFINITIONS (3)
 
 int main(int argc,char **argv)
 {
@@ -83,9 +84,6 @@ int main(int argc,char **argv)
 	bool useOutputSVGFile = false;
 	string outputSVGFileName = "codeStructureNet.svg";
 
-	bool useOutputHTMLFile = false;
-	string outputHTMLFileName = "codeStructureNet.html";
-	
 	bool useOutputAllFile = false;
 	string outputAllFileName = "codeStructureNet";
 
@@ -103,8 +101,6 @@ int main(int argc,char **argv)
 
 	int mode = CS_MODE_OUTPUT_EXECUTION_FLOW;	//1. output execution flow, 2. output data flow, 3. filter code based upon preprocessor definitions
 
-	int generateHTMLdocumentationMode = CS_GENERATE_HTML_DOCUMENTATION_MODE_OFF;
-	
 	bool passInputReq = true;
 	bool outputFunctionsConnectivity = false;
 	bool traceAFunctionUpwards = false;
@@ -113,10 +109,8 @@ int main(int argc,char **argv)
 	int rasterImageHeight = 1000;
 
 	if (exists_argument(argc,argv,"-mode"))
-	{
-		mode = get_float_argument(argc,argv,"-mode");
-	}
-	
+	mode=get_float_argument(argc,argv,"-mode");
+
 	if(exists_argument(argc,argv,"-oldr"))
 	{
 		outputLDRFileName=get_char_argument(argc,argv,"-oldr");
@@ -137,13 +131,7 @@ int main(int argc,char **argv)
 		useOutputSVGFile = true;
 		printOutput = true;
 	}
-	
-	if(exists_argument(argc,argv,"-ohtml"))
-	{
-		outputHTMLFileName=get_char_argument(argc,argv,"-ohtml");
-		useOutputHTMLFile = true;
-	}
-	
+
 	if(exists_argument(argc,argv,"-oall"))
 	{
 		outputAllFileName=get_char_argument(argc,argv,"-oall");
@@ -151,7 +139,7 @@ int main(int argc,char **argv)
 		printOutput = true;
 	}
 
-	if(exists_argument(argc,argv,"-file"))
+	if (exists_argument(argc,argv,"-file"))
 	{
 		topLevelFileName=get_char_argument(argc,argv,"-file");
 	}
@@ -159,7 +147,7 @@ int main(int argc,char **argv)
 	{
 		passInputReq = false;
 	}
-	if(exists_argument(argc,argv,"-function"))
+	if (exists_argument(argc,argv,"-function"))
 	{
 		topLevelFunctionName=get_char_argument(argc,argv,"-function");
 	}
@@ -171,32 +159,37 @@ int main(int argc,char **argv)
 
 
 
-	if(exists_argument(argc,argv,"-notshow"))
+	if (exists_argument(argc,argv,"-notshow"))
 	{
 		displayInOpenGLAndOutputScreenshot = false;
 	}
 
-	if(exists_argument(argc,argv,"-width"))
-	{
-		rasterImageWidth = get_float_argument(argc,argv,"-width");
-	}
-	
-	if(exists_argument(argc,argv,"-height"))
-	{
-		rasterImageHeight = get_float_argument(argc,argv,"-height");
-	}
-	
-	if(exists_argument(argc,argv,"-enablefunctions"))
+	if (exists_argument(argc,argv,"-width"))
+	rasterImageWidth=get_float_argument(argc,argv,"-width");
+
+	if (exists_argument(argc,argv,"-height"))
+	rasterImageHeight=get_float_argument(argc,argv,"-height");
+
+	if (exists_argument(argc,argv,"-enablefunctions"))
 	{
 		outputFunctionsConnectivity = true;
 	}
 
-	if(exists_argument(argc,argv,"-trace"))
+	if (exists_argument(argc,argv,"-trace"))
 	{
 		if(outputFunctionsConnectivity)
 		{
-			traceAFunctionUpwards = true;
-
+			if (exists_argument(argc,argv,"-tracefunction"))
+			{
+				bottomLevelFunctionNameToTraceUpwards=get_char_argument(argc,argv,"-tracefunction");
+				traceAFunctionUpwards = true;
+				//cout << "here" MM
+			}
+			else
+			{
+				cout << "error: -trace declared without a -tracefunction being provided" << endl;
+				passInputReq = false;
+			}
 		}
 		else
 		{
@@ -204,18 +197,7 @@ int main(int argc,char **argv)
 			passInputReq = false;
 		}
 	}
-	if(exists_argument(argc,argv,"-tracefunction"))
-	{
-		bottomLevelFunctionNameToTraceUpwards=get_char_argument(argc,argv,"-tracefunction");
-	}
-				
 
-	if(exists_argument(argc,argv,"-html"))
-	{
-		generateHTMLdocumentationMode = CS_GENERATE_HTML_DOCUMENTATION_MODE_ON;
-		//get_float_argument(argc,argv,"-html");
-	}
-			
 	char currentFolder[EXE_FOLDER_PATH_MAX_LENGTH];
 	#ifdef LINUX
 	getcwd(currentFolder, EXE_FOLDER_PATH_MAX_LENGTH);
@@ -223,7 +205,7 @@ int main(int argc,char **argv)
 	::GetCurrentDirectory(EXE_FOLDER_PATH_MAX_LENGTH, currentFolder);
 	#endif
 
-	if(exists_argument(argc,argv,"-workingfolder"))
+	if (exists_argument(argc,argv,"-workingfolder"))
 	{
 		workingFolderCharStar=get_char_argument(argc,argv,"-workingfolder");
 	}
@@ -231,7 +213,7 @@ int main(int argc,char **argv)
 	{
 		workingFolderCharStar = currentFolder;
 	}
-	if(exists_argument(argc,argv,"-exefolder"))
+	if (exists_argument(argc,argv,"-exefolder"))
 	{
 		exeFolderCharStar=get_char_argument(argc,argv,"-exefolder");
 	}
@@ -239,7 +221,7 @@ int main(int argc,char **argv)
 	{
 		exeFolderCharStar = currentFolder;
 	}
-	if(exists_argument(argc,argv,"-tempfolder"))
+	if (exists_argument(argc,argv,"-tempfolder"))
 	{
 		tempFolderCharStar=get_char_argument(argc,argv,"-tempfolder");
 	}
@@ -254,9 +236,9 @@ int main(int argc,char **argv)
 	::SetCurrentDirectory(workingFolderCharStar);
 	#endif
 
-	if(exists_argument(argc,argv,"-version"))
+	if (exists_argument(argc,argv,"-version"))
 	{
-		cout << "OpenCS.exe - Project Version: 3b1a 27-September-2012" << endl;
+		cout << "OpenCS.exe version: 2a4a" << endl;
 		exit(1);
 	}
 
@@ -305,20 +287,6 @@ int main(int argc,char **argv)
 			}
 		}
 	}
-	/*
-	if(generateHTMLdocumentationMode != CS_GENERATE_HTML_DOCUMENTATION_MODE_OFF)
-	{//only print html when explicitly set to do so
-		if(!useOutputHTMLFile)
-		{
-			if(useOutputAllFile)
-			{
-				useOutputHTMLFile = true;
-				outputHTMLFileName = outputAllFileName + ".html";
-			}
-		}	
-	}
-	*/
-	
 
 
 	if(!parseCSRulesXMLFile())
@@ -332,7 +300,7 @@ int main(int argc,char **argv)
 
 	if(mode == CS_MODE_OUTPUT_EXECUTION_FLOW)
 	{
-		printCS(topLevelFileName, topLevelFunctionName, rasterImageWidth, rasterImageHeight, outputLDRFileName, outputSVGFileName, outputPPMFileName, outputHTMLFileName, useOutputLDRFile, useOutputPPMFile, useOutputHTMLFile, generateHTMLdocumentationMode, displayInOpenGLAndOutputScreenshot, outputFunctionsConnectivity, traceAFunctionUpwards, bottomLevelFunctionNameToTraceUpwards);
+		printCS(topLevelFileName, topLevelFunctionName, rasterImageWidth, rasterImageHeight, outputLDRFileName, outputSVGFileName, outputPPMFileName, useOutputLDRFile, useOutputPPMFile, displayInOpenGLAndOutputScreenshot, outputFunctionsConnectivity, traceAFunctionUpwards, bottomLevelFunctionNameToTraceUpwards);
 	}
 	else if(mode == CS_MODE_OUTPUT_DATA_FLOW)
 	{
