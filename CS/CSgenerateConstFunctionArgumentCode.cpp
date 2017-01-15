@@ -21,7 +21,7 @@
  * File Name: CSgenerateConstFunctionArgumentCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h11d 10-December-2015
+ * Project Version: 3h11e 10-December-2015
  *
  *******************************************************************************/
 
@@ -686,6 +686,8 @@ bool checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 					if((indexOfEqualsSetPrevious == CPP_STRING_FIND_RESULT_FAIL_VALUE) || (indexOfEqualsSetPrevious < indexOfStartOfLine))
 					{//ignore all lines with assignments [this indicates that the functionArgument objectFunction is not modifying the functionArgument] e.g. "int indexOfFunctionReferenceStartOfLine = functionContentsString->rfind(stringToFind, indexToFunctionReference)"
 						
+						/*
+						//original version; before CS3h11e
 						CSfunction* currentFunctionReference = currentFunctionObject->firstReferenceInFunctionReferenceListRepeats;
 						bool lineIncludesCustomNonObjectFunctionReference = false;	//NB object function references eg put/push_back are intentionally not detected
 						while(currentFunctionReference->next != NULL)
@@ -700,9 +702,49 @@ bool checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 							currentFunctionReference = currentFunctionReference->next;
 						}
 						if(!lineIncludesCustomNonObjectFunctionReference)
+						*/
+						
+						//modified CS3h11e
+						bool lineIncludesNonObjectFunctionReference = false;
+						int indexOfBracketOpenPrevious = functionText->rfind(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_OPEN_PARAMETER_SPACE, indexOfFunctionArgument);
+						if((indexOfBracketOpenPrevious != CPP_STRING_FIND_RESULT_FAIL_VALUE) && (indexOfBracketOpenPrevious > indexOfStartOfLine))
 						{
-							//ignore all lines with function reference on same line, e.g. "sprintf(stringCharStar, format.c_str(), number);"
+							if((indexOfEndOfCommand != CPP_STRING_FIND_RESULT_FAIL_VALUE) && (indexOfEndOfCommand < indexOfEndOfLine))
+							{
+								//ignore all lines with function reference on same line, e.g. "sprintf(stringCharStar, format.c_str(), number); / for(int i=0; i<x.length()..." / etc
+								lineIncludesNonObjectFunctionReference = true;
+							}
+							else
+							{
+								//accept this case; "if(!(parseFileObject->get(currentToken)))"...
+							}
 							
+						}
+						if(!lineIncludesNonObjectFunctionReference)
+						{
+							int indexOfBracketOpen = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_OPEN_PARAMETER_SPACE, indexOfFunctionArgument);
+							if((indexOfBracketOpen != CPP_STRING_FIND_RESULT_FAIL_VALUE) && (indexOfBracketOpen < indexOfEndOfLine))
+							{
+								int indexOfObjectFunctionName = CPP_STRING_FIND_RESULT_FAIL_VALUE;
+								string objectFunctionName = extractFullVariableNameReverse(functionText, indexOfBracketOpen-1, &indexOfObjectFunctionName);
+								if(objectFunctionName != "")
+								{
+									for(int i=0; i<CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_REFERENCE_NUMBER_OF_TYPES; i++)
+									{
+										if(functionText->substr(indexOfObjectFunctionName-codeReference[i].length(), codeReference[i].length()) == codeReference[i])
+										{
+											//detect execution of object functions: e.g. "functionArgument->WHOLEWORDFUNCTIONNAME(" / "functionArgument->someIntermediaryObject[].WHOLEWORDFUNCTIONNAME("
+											//cout << "objectFunctionName = " << objectFunctionName << endl;
+											//cout << "currentLine = " << currentLine << endl;
+											//exit(0);
+											isNotConst = true;				
+										}									
+									}
+								}
+							}
+
+							/*
+							//original version; before CS3h11e
 							for(int i=0; i<CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_REFERENCE_NUMBER_OF_TYPES; i++)
 							{
 								int indexOfObjectFunctionName = indexOfFunctionArgument+functionDeclarationArgument.length()+codeReference[i].length();
@@ -720,18 +762,18 @@ bool checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 											{
 												//detect execution of object functions: e.g. "functionArgument->WHOLEWORDFUNCTIONNAME("
 												isNotConst = true;
-												/*
-												cout << "detect execution of object functions" << endl;
-												cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
-												cout << "objectFunctionName = " << objectFunctionName << endl;
-												exit(0);
-												*/
+												
+												//cout << "detect execution of object functions" << endl;
+												//cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
+												//cout << "objectFunctionName = " << objectFunctionName << endl;
+												//exit(0);
 											}
 										}
 
 									}
 								}
 							}
+							*/
 						}				
 					}
 					#endif
