@@ -26,7 +26,7 @@
  * File Name: CSexecflow.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3d5b 27-July-2014
+ * Project Version: 3d5c 05-August-2014
  *
  *******************************************************************************/
 
@@ -90,8 +90,8 @@ void printCS(string topLevelFileName, int width, int height, string outputLDRfil
 #define NUMBER_OF_CSCLASSES (9)
 static string CSclassesArray[NUMBER_OF_CSCLASSES] = {"NLC.CSclass", "GIA.CSclass", "OR.CSclass", "CS.CSclass", "ANN.CSclass", "RT.CSclass", "LD.CSclass", "SHARED.CSclass", "XML.CSclass"};
 #else
-#define NUMBER_OF_CSCLASSES (26)
-static string CSclassesArray[NUMBER_OF_CSCLASSES] = {"NLCcodeBlockClass.CSclass", "NLCclassDefinitionClass.CSclass", "NLCitemClass.CSclass", "GIAconditionNodeClass.CSclass", "GIAentityConnectionClass.CSclass", "GIAentityNodeClass.CSclass", "GIAlrp.CSclass", "GIAnlg.CSclass", "GIAquery.CSclass", "GIAsentenceClass.CSclass", "ORpolygonList.CSclass", "ORquadraticFit.CSclass", "ORTHimageCategorisationNN.CSclass", "CSreferenceClass.CSclass", "ANNexperienceClass.CSclass", "ANNneuronClass.CSclass", "RToperations.CSclass", "RTparser.CSclass", "RTppm.CSclass", "RTraytracer.CSclass", "RTscene.CSclass", "RTviewinfo.CSclass", "LDreferenceClass.CSclass", "SHAREDvars.CSclass", "XMLparser.CSclass", "XMLrules.CSclass"};
+#define NUMBER_OF_CSCLASSES (29)
+static string CSclassesArray[NUMBER_OF_CSCLASSES] = {"NLCcodeBlockClass.CSclass", "NLCclassDefinitionClass.CSclass", "NLCitemClass.CSclass", "NLCpreprocessorMathLogicalConditions.CSclass", "NLCpreprocessorSentenceClass.CSclass", "GIAconditionNodeClass.CSclass", "GIAentityConnectionClass.CSclass", "GIAentityNodeClass.CSclass", "GIAlrp.CSclass", "GIAnlg.CSclass", "GIAquery.CSclass", "GIAsentenceClass.CSclass", "GIAtranslatorGeneric.CSclass", "ORpolygonList.CSclass", "ORquadraticFit.CSclass", "ORTHimageCategorisationNN.CSclass", "CSreferenceClass.CSclass", "ANNexperienceClass.CSclass", "ANNneuronClass.CSclass", "RToperations.CSclass", "RTparser.CSclass", "RTppm.CSclass", "RTraytracer.CSclass", "RTscene.CSclass", "RTviewinfo.CSclass", "LDreferenceClass.CSclass", "SHAREDvars.CSclass", "XMLparser.CSclass", "XMLrules.CSclass"};
 #endif
 void generateClassHTMLdocumentationFromCustomCSclassFormat();
 string getFunctionNameFromFunctionNameFull(string * functionNameFull);
