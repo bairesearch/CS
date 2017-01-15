@@ -23,7 +23,7 @@
  * File Name: CSexecflow.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c3b 16-November-2012
+ * Project Version: 3c3c 16-November-2012
  *
  *******************************************************************************/
 
@@ -66,6 +66,7 @@ void printCS(string topLevelFileName, string topLevelFunctionName, int width, in
 				string createDescriptionFromCaseSensitiveMultiwordString(string str);
 			string generateHTMLdocumentationFunctionTraceImagePlaceHolder(string * traceImageFileName);
 	void writeStringToFileObject(string * s, ofstream * writeFileObject);
+	void addToHTMLdocumentationFileFunctionList(CSReference * currentFunctionReference, string * HTMLdocumentationFileFunctionList, int * previousIndentation, bool * previousIndentationFirst);
 
 
 #endif

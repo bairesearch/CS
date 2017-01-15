@@ -23,7 +23,7 @@
  * File Name: CSexecflow.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c3b 16-November-2012
+ * Project Version: 3c3c 16-November-2012
  *
  *******************************************************************************/
 
@@ -256,7 +256,7 @@ string generateHTMLdocumentationHeader(string name, bool htmlFileHeader)
 	string HTMLdocumentationHeader = "";
 	if(htmlFileHeader)
 	{
-		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h2>" + name + " Documentation</h2><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3c3b 16-November-2012<p>\n";
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h2>" + name + " Documentation</h2><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3c3c 16-November-2012<p>\n";
 	}
 	else
 	{
@@ -310,6 +310,11 @@ void generateHTMLdocumentationForAllFunctions(CSReference * firstReferenceInAbov
 					*HTMLdocumentationBody = "";
 				}
 				string HTMLdocumentationFileBody = "";
+				#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION
+				string HTMLdocumentationFileFunctionList = "<p>\n<b>Function List</b>\n<ul><li>";
+				int previousIndentation = 0;
+				bool previousIndentationFirst = true;
+				#endif
 				bool HTMLgeneratedSafe = false;
 				
 				CSReference * currentFunctionReference = currentFileReference->firstReferenceInFunctionList;
@@ -348,13 +353,25 @@ void generateHTMLdocumentationForAllFunctions(CSReference * firstReferenceInAbov
 								lastTagInSVGFile->nextTag = NULL;
 								delete firstTagInSVGFileFunction;
 							}
+							
+							#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION
+							addToHTMLdocumentationFileFunctionList(currentFunctionReference, &HTMLdocumentationFileFunctionList, &previousIndentation, &previousIndentationFirst);
+							#endif							
 						}
-
 					}
 
 					currentFunctionReference = currentFunctionReference->next;
 				}
 				
+				#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION
+				for(int i=0; i<previousIndentation; i++)
+				{
+					HTMLdocumentationFileFunctionList = HTMLdocumentationFileFunctionList + "</li></ul>";		
+				}	
+				HTMLdocumentationFileFunctionList = HTMLdocumentationFileFunctionList + "</li></ul>\n</p>";
+				HTMLdocumentationFileBody = HTMLdocumentationFileFunctionList + HTMLdocumentationFileBody;
+				#endif
+								
 				string HTMLdocumentationFileHeader = generateHTMLdocumentationHeader(currentFileReference->name, !useOutputHTMLFile);					
 				string HTMLdocumentationFileFooter = generateHTMLdocumentationFooter(!useOutputHTMLFile);
 				string HTMLdocumentationFile = "";
@@ -458,7 +475,7 @@ void generateHTMLdocumentationFunctionSummary(string * functionName, string * fu
 	*HTMLdocumentationFunctionSummary = "";
 	*HTMLdocumentationFunctionSummary = *HTMLdocumentationFunctionSummary + "\t<p><b>Function Summary</b><br /><table border=\"1\">\n\t\t<tr><th>" + "name" + "</th><th>" + "return type" + "</th><th>" + "description" + "</th></tr>\n";
 	string HTMLdocumentationFunctionDescription = createDescriptionFromCaseSensitiveMultiwordString(*functionName);
-	int endPositionOfReturnType = functionNameFull->find(*functionName) - 1;
+	int endPositionOfReturnType = functionNameFull->find(*functionName);
 	int startPositionOfReturnType = 0;
 	string HTMLdocumentationFunctionReturnType = functionNameFull->substr(startPositionOfReturnType, endPositionOfReturnType-startPositionOfReturnType);
 	*HTMLdocumentationFunctionSummary = *HTMLdocumentationFunctionSummary + "\t\t<tr><td>" + *functionName + "</td><td>" + HTMLdocumentationFunctionReturnType + "</td><td>" + HTMLdocumentationFunctionDescription + "</td></tr>\n";
@@ -719,3 +736,45 @@ string generateHTMLdocumentationFunctionTraceImagePlaceHolder(string * traceImag
 }
 
 
+void addToHTMLdocumentationFileFunctionList(CSReference * currentFunctionReference, string * HTMLdocumentationFileFunctionList, int * previousIndentation, bool * previousIndentationFirst)
+{
+	string functionNameCompact = currentFunctionReference->name;	// + "()";
+	
+	int differenceBetweenPreviousIndentation = currentFunctionReference->functionReferenceIndentationInHfile - *previousIndentation;
+	string rawIndentationText = "\n";
+	for(int i=0; i<currentFunctionReference->functionReferenceIndentationInHfile; i++)
+	{
+		rawIndentationText = rawIndentationText + "\t";	
+	}
+	if(differenceBetweenPreviousIndentation > 0)
+	{	
+		for(int i=0; i<differenceBetweenPreviousIndentation; i++)
+		{
+			*HTMLdocumentationFileFunctionList = *HTMLdocumentationFileFunctionList + rawIndentationText + "<ul><li>";	
+		}	
+		*HTMLdocumentationFileFunctionList = *HTMLdocumentationFileFunctionList + functionNameCompact;							
+	}
+	else if(differenceBetweenPreviousIndentation < 0)
+	{
+		for(int i=0; i<abs(differenceBetweenPreviousIndentation); i++)
+		{
+			*HTMLdocumentationFileFunctionList = *HTMLdocumentationFileFunctionList + "</li></ul>";		
+		}	
+		*HTMLdocumentationFileFunctionList = *HTMLdocumentationFileFunctionList + "</li>" + rawIndentationText + "<li>" + functionNameCompact;
+	}
+	else
+	{
+		if(*previousIndentationFirst)
+		{
+			*HTMLdocumentationFileFunctionList = *HTMLdocumentationFileFunctionList + functionNameCompact;
+
+		}
+		else
+		{
+			*HTMLdocumentationFileFunctionList = *HTMLdocumentationFileFunctionList + "</li>" + rawIndentationText + "<li>" + functionNameCompact;
+		}
+	}
+	*previousIndentationFirst = false;
+	*previousIndentation = currentFunctionReference->functionReferenceIndentationInHfile;
+}
+				

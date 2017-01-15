@@ -23,7 +23,7 @@
  * File Name: CSreferenceClass.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c3b 16-November-2012
+ * Project Version: 3c3c 16-November-2012
  *
  *******************************************************************************/
 
@@ -109,7 +109,10 @@ public:
 	bool isFunctionReference;
 	bool isFunctionReferenceReference;
 	int numTopLevelFunctionsInFileAlreadyPrinted;
-
+	#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION
+	int functionReferenceIndentationInHfile;
+	#endif
+	
 	int maxFunctionPrintXAtAParticularY[MAX_INCLUDE_DEPTH_FUNCTION];
 
 };
