@@ -26,7 +26,7 @@
  * File Name: CSdraw.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2016 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3i17a 20-September-2016
+ * Project Version: 3i18a 21-September-2016
  *
  *******************************************************************************/
 
@@ -1082,7 +1082,7 @@ LDreference* createFunctionObjectListBoxesAndConnections(LDreference* currentRef
 				cout << "functionReferenceNameToFind functionReference->name = " << functionReference->name << endl;
 				cout << "aboveLevelFileObject->name = " << aboveLevelFileObject->name << endl;
 				cout << "aboveLevelFunctionObject->name = " << aboveLevelFunctionObject->name << endl;
-				cout << "countArguments = " << countArguments << endl;				
+				cout << "countArguments = " << countArguments << endl;
 				cout << "fileObject->name = " << fileObject->name << endl;
 				cout << "functionObject->name = " << functionObject->name << endl;
 				exit(0);
@@ -1681,7 +1681,7 @@ LDreference* traceFunctionsUpwardsAndDrawOrHighLightThese(LDreference* currentRe
 			//cout << "currentFunctionBeingTraced->name = " << currentFunctionBeingTraced->name << endl;
 			//cout << "\tcurrentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionObjectList->functionObject->name = " << currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionObjectList->functionObject->name << endl;
 			#endif
-			
+
 			CSfile* fileObjectHoldingFunction = currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionObjectList->fileObjectHoldingFunction;
 			CSfunction* higherLevelFunction = currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionObjectList->functionObject;
 			bool higherLevelFunctionFound = true;

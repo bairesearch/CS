@@ -26,7 +26,7 @@
  * File Name: CSgenerateHTMLdocumentation.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2016 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3i17a 20-September-2016
+ * Project Version: 3i18a 21-September-2016
  *
  *******************************************************************************/
 
@@ -69,7 +69,7 @@ string generateHTMLdocumentationHeader(string name, bool htmlHeader, bool isFile
 	string HTMLdocumentationHeader = "";
 	if(htmlHeader)
 	{
-		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3i17a 20-September-2016<p>\n";
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3i18a 21-September-2016<p>\n";
 	}
 	else
 	{
@@ -541,7 +541,7 @@ void generateHTMLdocumentationFunctionReferenceList(CSfunction* function, string
 		//cout << "foundReferences" << endl;
 		//cout << "currentReferenceInFunctionReferenceListRepeats->functionReferenceCharacterIndex = " << currentReferenceInFunctionReferenceListRepeats->functionReferenceCharacterIndex << endl;
 		#endif
-		
+
 		foundReferences = true;
 
 		CSfunctionReferenceListOrdered.insert(pair<int, CSfunction*>(currentReferenceInFunctionReferenceListRepeats->functionReferenceCharacterIndex, currentReferenceInFunctionReferenceListRepeats));
@@ -818,7 +818,7 @@ string getFunctionNameFromFunctionNameFull(string* functionNameFull)
 	#ifdef CS_DEBUG
 	//cout << "functionNameFull = " <<* functionNameFull << endl;
 	#endif
-	
+
 	int startPositionOfFunctionBrackets = functionNameFull->find(CHAR_OPEN_BRACKET);
 	string functionTypeAndName = functionNameFull->substr(0, startPositionOfFunctionBrackets);
 	//cout << "functionTypeAndName = " << functionTypeAndName << endl;
@@ -832,11 +832,11 @@ string getFunctionNameFromFunctionNameFull(string* functionNameFull)
 		functionName = functionName.substr(1, functionNameLength-1);
 	}
 	#endif
-	
+
 	#ifdef CS_DEBUG
 	//cout << "functionName = " << functionName << endl;
 	#endif
-	
+
 	return functionName;
 }
 

@@ -21,7 +21,7 @@
  * File Name: CSgenerateObjectOrientedCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2016 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3i17a 20-September-2016
+ * Project Version: 3i18a 21-September-2016
  *
  *******************************************************************************/
 
@@ -548,7 +548,7 @@ bool moveIncludeFileStatementsToHeader(CSfile* firstReferenceInAboveLevelBelowLi
 			#ifdef CS_DEBUG
 			//cout << "foundIncludeFileInHeader" << endl;
 			#endif
-			
+
 			foundIncludeFileInHeader = true;
 			posStartOfLineHeader = firstReferenceInAboveLevelBelowList->headerFileText.rfind(CHAR_NEWLINE, positionOfIncludeStatementHeader);
 			posEndOfLineHeader = firstReferenceInAboveLevelBelowList->headerFileText.find(CHAR_NEWLINE, positionOfIncludeStatementHeader);
@@ -576,7 +576,7 @@ bool moveIncludeFileStatementsToHeader(CSfile* firstReferenceInAboveLevelBelowLi
 			#ifdef CS_DEBUG
 			//cout << "foundIncludeFileInSource" << endl;
 			#endif
-			
+
 			foundIncludeFileInSource = true;
 			posStartOfLineSource = firstReferenceInAboveLevelBelowList->sourceFileText.rfind(CHAR_NEWLINE, positionOfIncludeStatementSource);
 			posEndOfLineSource = firstReferenceInAboveLevelBelowList->sourceFileText.find(CHAR_NEWLINE, positionOfIncludeStatementSource);
@@ -628,7 +628,7 @@ bool moveIncludeFileStatementsToHeader(CSfile* firstReferenceInAboveLevelBelowLi
 		#ifdef CS_DEBUG
 		//cout << "includeStatementsHeaderNew = " << endl;
 		#endif
-		
+
 		int positionInHeader = 0;
 		if(positionOfLastIncludeStatementEndInHeader == CPP_STRING_FIND_RESULT_FAIL_VALUE)
 		{

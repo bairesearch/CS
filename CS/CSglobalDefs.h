@@ -26,7 +26,7 @@
  * File Name: CSglobalsDefs.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2016 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3i17a 20-September-2016
+ * Project Version: 3i18a 21-September-2016
  * Description: CS specific global definitions
  *
  *******************************************************************************/
@@ -50,7 +50,7 @@
 	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
 
 		#define CS_IDENTIFY_FUNCTION_DECLARATION_ARGUMENTS	//changed requirements 3i17a
-		
+
 		//#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DISABLE_OUTPUT	//safe for debug (no source/header file overwrites)
 
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_SUPPORT_PSEUDO_CONSTS	//2h13a		//relies on "#define constEffective" being defined in target code	//OLD: user must manually replace all instances of "constEffective " with "" before compiling code

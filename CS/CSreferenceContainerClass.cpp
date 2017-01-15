@@ -26,7 +26,7 @@
  * File Name: CSreferenceContainerClass.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2016 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3i17a 20-September-2016
+ * Project Version: 3i18a 21-September-2016
  *
  *******************************************************************************/
 
@@ -196,7 +196,7 @@ bool findFunctionReferenceTarget(CSfunction* functionReference, CSfile* currentF
 	//cout << "findFunctionReferenceTarget{}:" << endl;
 	//cout << "name = " << name << endl;
 	//cout << "numArguments = " << numArguments << endl;
-	
+
 	bool foundPrintedReferenceWithName = false;
 
 	CSfunction* currentFunctionObject = currentFileObject->firstFunctionInFunctionList;
