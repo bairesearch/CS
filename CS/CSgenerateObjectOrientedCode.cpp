@@ -21,7 +21,7 @@
  * File Name: CSgenerateObjectOrientedCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2016 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3i19c 15-December-2016
+ * Project Version: 3i19d 15-December-2016
  *
  *******************************************************************************/
 
@@ -236,7 +236,11 @@ bool generateCPPclassesFile(CSfile* currentFileObject, CSfileContainer* firstObj
 						else
 						{
 							cout << "generateCPPclassesFile{} error: currentFunctionObject->functionTextRaw not found in currentFileObject->sourceFileText" << endl;
+							cout << "currentFileObject->name = " << currentFileObject->name << endl;
+							cout << "currentFunctionObject->nameFull = " << currentFunctionObject->nameFull << endl;
+							cout << "currentFunctionObject->name = " << currentFunctionObject->name << endl;
 							cout << "currentFunctionObject->functionTextRaw = " <<  currentFunctionObject->functionTextRaw << endl;
+							cout << "currentFileObject->sourceFileText = " <<  currentFileObject->sourceFileText << endl;
 							exit(0);
 						}
 					}
