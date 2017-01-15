@@ -26,7 +26,7 @@
  * File Name: CSoperations.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e2d 29-August-2014
+ * Project Version: 3e3a 01-September-2014
  *
  *******************************************************************************/
 
@@ -62,12 +62,10 @@ bool getIncludeFileNamesFromCorHfile(CSfileReference * firstReferenceInIncludeFi
 	string parseFileName = topLevelReferenceName;
 	CSfileReference * previousReference = NULL;
 
-	char * parseFileNamecharstar = const_cast<char*>(parseFileName.c_str());
-
-	ifstream * parseFileObject = new ifstream(parseFileNamecharstar);
+	ifstream parseFileObject(parseFileName.c_str());
 	CSfileReference * currentReferenceInIncludeFileList = firstReferenceInIncludeFileList;
 
-	if(!parseFileObject->rdbuf( )->is_open( ))
+	if(!parseFileObject.rdbuf()->is_open())
 	{
 		//cout << "CS error - file not found, " << parseFileName << endl;
 	}
@@ -94,7 +92,7 @@ bool getIncludeFileNamesFromCorHfile(CSfileReference * firstReferenceInIncludeFi
 		#endif
 		*/
 		
-		while(parseFileObject->get(c))
+		while(parseFileObject.get(c))
 		{
 			#ifdef CS_DEBUG_VERBOSE
 			//cout << c;
@@ -119,7 +117,7 @@ bool getIncludeFileNamesFromCorHfile(CSfileReference * firstReferenceInIncludeFi
 				{
 					while(c == '*')
 					{
-						parseFileObject->get(c);
+						parseFileObject.get(c);
 						if(c == '/')
 						{
 							readingLargeComment = false;
@@ -136,7 +134,7 @@ bool getIncludeFileNamesFromCorHfile(CSfileReference * firstReferenceInIncludeFi
 			else if(c == '/')
 			{
 				char tempChar;
-				parseFileObject->get(tempChar);
+				parseFileObject.get(tempChar);
 				if(tempChar == '*')
 				{
 					readingLargeComment = true;
@@ -211,7 +209,7 @@ bool getIncludeFileNamesFromCorHfile(CSfileReference * firstReferenceInIncludeFi
 						#endif
 
 						char tempChar;
-						parseFileObject->get(tempChar);
+						parseFileObject.get(tempChar);
 						if(tempChar == '\"')
 						{
 							readingHashInclude = false;
@@ -375,11 +373,11 @@ bool getIncludeFileNamesFromCorHfile(CSfileReference * firstReferenceInIncludeFi
 			{
 				cout << "getIncludeFileNamesFromCorHfile: token error" << endl;
 				cout << "char = " << c << endl;
-				cout << "parseFileNamecharstar = " << parseFileNamecharstar << endl;
+				cout << "parseFileName = " << parseFileName << endl;
 				cout << "lineCount = " << lineCount << endl;
 			}
 		}
-		parseFileObject->close();
+		parseFileObject.close();
 		
 		/*//this implementation will use up too much memory
 		#ifdef CS_GENERATE_CPP_CLASSES
@@ -395,7 +393,6 @@ bool getIncludeFileNamesFromCorHfile(CSfileReference * firstReferenceInIncludeFi
 		*/
 	}
 
-	delete parseFileObject;
 	return fileFound;
 }
 
@@ -406,13 +403,11 @@ bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunctionReference * first
 
 	string parseFileName = topLevelFileName;
 
-	char * parseFileNamecharstar = const_cast<char*>(parseFileName.c_str());
-
-	ifstream * parseFileObject = new ifstream(parseFileNamecharstar);
+	ifstream parseFileObject(parseFileName.c_str());
 	CSfunctionReference * currentReferenceInFunctionList = firstReferenceInFunctionList;
 	CSfunctionReference * currentReferenceInFunctionReferenceList = NULL;
 
-	if(!parseFileObject->rdbuf( )->is_open( ))
+	if(!parseFileObject.rdbuf( )->is_open( ))
 	{
 		//cout << "CS error - file not found, " << parseFileName << endl;
 	}
@@ -437,7 +432,7 @@ bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunctionReference * first
 		string functionName = "";
 		string functionNameFull = "";
 
-		while(parseFileObject->get(c))
+		while(parseFileObject.get(c))
 		{
 			charCount++;
 
@@ -452,7 +447,7 @@ bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunctionReference * first
 				{
 					while(c == '*')
 					{
-						parseFileObject->get(c);
+						parseFileObject.get(c);
 						if(c == '/')
 						{
 							readingLargeComment = false;
@@ -469,7 +464,7 @@ bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunctionReference * first
 			else if(c == '/')
 			{
 				char tempChar;
-				parseFileObject->get(tempChar);
+				parseFileObject.get(tempChar);
 				if(tempChar == '*')
 				{
 					readingLargeComment = true;
@@ -631,7 +626,7 @@ bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunctionReference * first
 					functionNameFull = functionNameFull + c;
 
 					char newC;
-					parseFileObject->get(newC);
+					parseFileObject.get(newC);
 					if(newC == ';')
 					{//function reference found
 
@@ -717,14 +712,13 @@ bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunctionReference * first
 			{
 				cout << "getFunctionNamesFromFunctionDeclarationsInHfile: token error" << endl;
 				cout << "char = " << c << endl;
-				cout << "parseFileNamecharstar = " << parseFileNamecharstar << endl;
+				cout << "parseFileName = " << parseFileName << endl;
 				cout << "lineCount = " << lineCount << endl;
 			}
 		}
-		parseFileObject->close();
+		parseFileObject.close();
 	}
 
-	delete parseFileObject;
 	return fileFound;
 }
 
