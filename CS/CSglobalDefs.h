@@ -26,7 +26,7 @@
  * File Name: CSglobalsDefs.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h3a 30-November-2015
+ * Project Version: 3h3b 30-November-2015
  * Description: CS specific global definitions
  *
  *******************************************************************************/
@@ -49,10 +49,7 @@
 		#define CS_GENERATE_CODE_GENERIC_HEADER_FILE_EXTENSION "h"
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_END_OF_COMMAND ";"
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET " = "
-		/*
-		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_TEST "=="	//no longer required as searching for " = "
-		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_NOT_EQUALS_TEST "!="	//no longer required as searching for " = "
-		*/
+
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_CONST "const "
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_OBJECT_REFERENCE_DELIMITER "->"
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_FEED_OUT " << "

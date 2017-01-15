@@ -21,7 +21,7 @@
  * File Name: CSgenerateConstFunctionArgumentCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h3a 30-November-2015
+ * Project Version: 3h3b 30-November-2015
  *
  *******************************************************************************/
 
@@ -168,7 +168,6 @@ bool generateConstFunctionArgumentsFunction(CSfunction* currentFunctionObject)
 		#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
 		cout << "functionNameFull = " << functionNameFull << endl;
 		#endif
-		//cout << "functionNameFull = " << functionNameFull << endl;
 		string functionNameFullUpdated = "";
 
 		CSfunctionArgument* currentFunctionArgumentInFunction = currentFunctionObject->firstFunctionArgumentInFunction;
@@ -186,13 +185,7 @@ bool generateConstFunctionArgumentsFunction(CSfunction* currentFunctionObject)
 			currentFunctionArgumentInFunction = currentFunctionArgumentInFunction->next;
 		}
 	}
-	
-	/*
-	if(currentFunctionObject->name == "addToHTMLdocumentationIndentedList")
-	{
-		exit(0);
-	}	
-	*/					
+				
 	return result;
 }
 
@@ -218,7 +211,6 @@ bool generateConstFunctionArgumentAndSearchForSecondaryReferences(CSfunction* cu
 		if(functionArgumentReferenceWholeWordCheck(functionText, functionDeclarationArgument, indexOfFunctionArgument))
 		{		
 			//find next occurance of ';' on same line
-			//cout << "indexOfFunctionArgument = " << indexOfFunctionArgument << endl;
 			int indexOfEndOfCommand = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_END_OF_COMMAND, indexOfFunctionArgument);
 			int indexOfEndOfLine = functionText->find(STRING_NEW_LINE, indexOfFunctionArgument);
 			int indexOfStartOfLine = functionText->rfind(STRING_NEW_LINE, indexOfFunctionArgument);
@@ -231,7 +223,7 @@ bool generateConstFunctionArgumentAndSearchForSecondaryReferences(CSfunction* cu
 					{
 						if(indexOfEqualsSetPrevious == (indexOfFunctionArgument-string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET).length()))
 						{//added condition 3h3a; e.g. " = functionArgument"
-						
+							
 							#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_PARSE_LISTS
 							string listCurrentPointerName = "";
 
@@ -240,20 +232,14 @@ bool generateConstFunctionArgumentAndSearchForSecondaryReferences(CSfunction* cu
 							if(functionDeclarationArgument.substr(0, string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_LIST_VARIABLE_PREFIX_START).length()) == CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_LIST_VARIABLE_PREFIX_START)
 							{
 								functionDeclarationArgumentIsListStartPointer = true;
-								//cout << "functionDeclarationArgumentIsListStartPointer" << endl;
+								#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+								cout << "functionDeclarationArgumentIsListStartPointer" << endl;
+								#endif
 								listCurrentPointerName = string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_LIST_VARIABLE_PREFIX_CURRENT) + functionDeclarationArgument.substr(string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_LIST_VARIABLE_PREFIX_START).length(), functionDeclarationArgument.length()-string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_LIST_VARIABLE_PREFIX_START).length());
-								//cout << "listCurrentPointerName = " << listCurrentPointerName << endl;
 							}
 
 							//added condition CS3h2a - detect list; eg "CSfunctionArgument* currentFunctionArgumentInFunction = currentFunctionObject->firstFunctionArgumentInFunction;"
 							bool functionDeclarationArgumentHasStartPointerBeingReferenced = false;
-							
-							//OLD: before CS3h3a
-							//int indexOfStartPointerBeingReferenced = CPP_STRING_FIND_RESULT_FAIL_VALUE;
-							//if((indexOfStartPointerBeingReferenced = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_LIST_VARIABLE_PREFIX_START, indexOfFunctionArgument)) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
-							//{
-							//	if((indexOfStartPointerBeingReferenced > functionDeclarationArgument.length()) && (indexOfStartPointerBeingReferenced < indexOfEndOfCommand))
-							//	{
 							bool foundSubStartPointer = false;
 							for(int j=0; j<CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_REFERENCE; j++)
 							{
@@ -271,13 +257,12 @@ bool generateConstFunctionArgumentAndSearchForSecondaryReferences(CSfunction* cu
 							} 
 							if(foundSubStartPointer)
 							{
+								#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+								cout << "functionDeclarationArgumentHasStartPointerBeingReferenced" << endl;
+								#endif
 								functionDeclarationArgumentHasStartPointerBeingReferenced = true;	
-								//cout << "currentFunctionObject->nameFull = " << currentFunctionObject->nameFull << endl;
-								//cout << "functionDeclarationArgumentHasStartPointerBeingReferenced" << endl;
 								listCurrentPointerName = CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_LIST_VARIABLE_PREFIX_CURRENT;
 							}
-							//	}
-							//}
 
 							if(functionDeclarationArgumentIsListStartPointer || functionDeclarationArgumentHasStartPointerBeingReferenced)
 							{
@@ -292,8 +277,6 @@ bool generateConstFunctionArgumentAndSearchForSecondaryReferences(CSfunction* cu
 
 									if((indexOfCurrentPointer < indexOfEqualsSetPrevious))
 									{
-										//cout << "listCurrentPointerName = " << listCurrentPointerName << endl;
-
 										//eg "CSfileContainer* currentFileObjectContainer = firstObjectInAboveLevelBelowListContainer;"
 										#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
 										cout << "generateConstFunctionArgumentAndSearchForSecondaryReferences{}: found list current pointer initialisation" << endl;
@@ -344,8 +327,6 @@ bool generateConstFunctionArgumentAndSearchForSecondaryReferences(CSfunction* cu
 							{
 								if(indexOfIteratorType > indexOfStartOfLine)
 								{
-									//cout << "(indexOfIteratorType > indexOfStartOfLine)" << endl;
-
 									//added condition CS3h2a - detect list; eg "for(vector<GIAentityConnection*>::iterator connectionIter = entityNode->entityVectorConnectionsArray[i].begin(); ..."
 										//can't handle cases where iterator is defined on separate line to for loop (or where multiple iterators are used to refer to the same list), eg; NLCtranslatorCodeBlocksLogicalConditions.cpp: generateCodeBlocksFromMathText: map<int, vector<GIAentityNode*>*>::iterator sentenceIter = sentenceIterFirstInFullSentence;
 										//can't handle cases where vector/map functions are executed to modify the vector/map (or where multiple iterators are used to refer to the same list), eg; GIAtranslatorOperations.cpp: eraseSubstanceFromSubstanceList: entityNodesActiveListSubstances->erase(substanceEntityNodesListIteratorFound);
@@ -355,8 +336,10 @@ bool generateConstFunctionArgumentAndSearchForSecondaryReferences(CSfunction* cu
 									{
 										if((indexOfBeginPointerBeingReferenced > functionDeclarationArgument.length()) && (indexOfBeginPointerBeingReferenced < indexOfEndOfCommand))
 										{
-											functionDeclarationArgumentHasBeginPointerBeingReferenced = true;	
-											//cout << "functionDeclarationArgumentHasBeginPointerBeingReferenced" << endl;
+											functionDeclarationArgumentHasBeginPointerBeingReferenced = true;
+											#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS	
+											cout << "functionDeclarationArgumentHasBeginPointerBeingReferenced" << endl;
+											#endif
 										}
 									}
 
@@ -367,14 +350,15 @@ bool generateConstFunctionArgumentAndSearchForSecondaryReferences(CSfunction* cu
 									{
 										if((indexOfFindPointerBeingReferenced > functionDeclarationArgument.length()) && (indexOfFindPointerBeingReferenced < indexOfEndOfCommand))
 										{
-											functionDeclarationArgumentHasFindPointerBeingReferenced = true;	
-											//cout << "functionDeclarationArgumentHasFindPointerBeingReferenced" << endl;
+											functionDeclarationArgumentHasFindPointerBeingReferenced = true;
+											#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS	
+											cout << "functionDeclarationArgumentHasFindPointerBeingReferenced" << endl;
+											#endif
 										}
 									}
 
 									if(indexOfIteratorType < indexOfEqualsSetPrevious)
 									{
-										//cout << "(indexOfIteratorType < indexOfEqualsSetPrevious)" << endl;
 										string iteratorName = extractFullVariableName(functionText, indexOfIteratorType+string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_VECTOR_OR_MAP_ITERATOR).length());
 
 										#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
@@ -392,16 +376,11 @@ bool generateConstFunctionArgumentAndSearchForSecondaryReferences(CSfunction* cu
 										int indexOfEqualsSetFollowingLine = CPP_STRING_FIND_RESULT_FAIL_VALUE;
 										if((indexOfEqualsSetFollowingLine = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET, indexOfEndOfLine)) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 										{
-											//cout << "(indexOfEqualsSetFollowingLine > indexOfEndOfLine)" << endl;
-
 											int indexOfIteratorFollowingLine = CPP_STRING_FIND_RESULT_FAIL_VALUE;
 											if((indexOfIteratorFollowingLine = functionText->find(iteratorName, indexOfEndOfLine)) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 											{
-												//cout << "((indexOfIteratorFollowingLine = functionText->find(iteratorName, indexOfEndOfLine)) != CPP_STRING_FIND_RESULT_FAIL_VALUE)" << endl;
-
 												int indexOfStartOfSecondaryAssignmentOfIterator;	//not used
 												string secondaryAssignmentOfIterator = extractFullVariableNameReverse(functionText, indexOfEqualsSetFollowingLine-1, &indexOfStartOfSecondaryAssignmentOfIterator);
-												//cout << "secondaryAssignmentOfIterator = " << secondaryAssignmentOfIterator << endl;
 												string followingLineHypothetical[4];
 												followingLineHypothetical[0] = secondaryAssignmentOfIterator + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_OPEN_PARAMETER_SPACE + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_POINTER + iteratorName + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_CLOSE_PARAMETER_SPACE + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_END_OF_COMMAND;	//currentQueryEntityNode = (*connectionIterQuery); 
 												followingLineHypothetical[1] = secondaryAssignmentOfIterator + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_POINTER + iteratorName + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_END_OF_COMMAND;	//currentQueryEntityNode = *connectionIterQuery; 
@@ -415,7 +394,6 @@ bool generateConstFunctionArgumentAndSearchForSecondaryReferences(CSfunction* cu
 													if(indexOfFollowingLineHypotheticalMatch != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 													{
 														foundSecondaryIteratorAssignmentExact = true;
-														//cout << "followingLineHypothetical[i] = " << followingLineHypothetical[i] << endl;
 													}
 												}
 
@@ -424,8 +402,6 @@ bool generateConstFunctionArgumentAndSearchForSecondaryReferences(CSfunction* cu
 													#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
 													cout << "found iterator secondary assignment" << endl;
 													#endif
-													//cout << "foundSecondaryIteratorAssignmentExact = " << foundSecondaryIteratorAssignmentExact << endl;
-													//cout << "secondaryAssignmentOfIterator = " << secondaryAssignmentOfIterator << endl;
 													if(generateConstFunctionArgumentAndSearchForSecondaryReferences(currentFunctionObject, currentFunctionArgumentInFunction, iteratorName, false))
 													{
 
@@ -444,9 +420,7 @@ bool generateConstFunctionArgumentAndSearchForSecondaryReferences(CSfunction* cu
 			}
 		}
 	}
-	
-	//cout << "exit generateConstFunctionArgumentAndSearchForSecondaryReferences{}" << endl;
-				
+					
 	return result;
 }
 
@@ -459,7 +433,6 @@ bool generateConstFunctionArgument(CSfunction* currentFunctionObject, CSfunction
 	cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
 	cout << "currentFunctionArgumentInFunction->argumentType/Name = " << currentFunctionArgumentInFunction->argumentType << " " << currentFunctionArgumentInFunction->argumentName << endl;
 	#endif
-	//cout << "\t currentFunctionArgumentInFunction->argumentName = " << currentFunctionArgumentInFunction->argumentName << endl;
 
 	//step 2: check function references to see if function argument has been passed to a child function (and if so whether it has been modified by the child function)
 	//condition 2: the same requirement must be met by all functions called by functionX with the argument varnameX
@@ -467,15 +440,10 @@ bool generateConstFunctionArgument(CSfunction* currentFunctionObject, CSfunction
 	int currentFunctionReferenceIndex = 0;
 	while(currentFunctionReference->next != NULL)
 	{
-		//cout << "\t\t currentFunctionReference->name = " << currentFunctionReference->name << endl;
-		//cout << "\t\t currentFunctionReferenceIndex = " << currentFunctionReferenceIndex << endl;
-		
 		CSfile* fileObjectHoldingFunction = currentFunctionReference->functionReferenceTargetFileOwner;
 		CSfunction* functionReferenceTarget = currentFunctionReference->functionReferenceTarget;
 		if(functionReferenceTarget != NULL)
 		{
-			//cout << "\t\t\t functionReferenceTarget->name = " << functionReferenceTarget->name << endl;
-
 			CSfunctionArgument* currentFunctionArgumentInFunctionReference = currentFunctionReference->firstFunctionArgumentInFunction;
 
 			//debug only;
@@ -490,13 +458,8 @@ bool generateConstFunctionArgument(CSfunction* currentFunctionObject, CSfunction
 			int functionReferenceArgumentIndex = 0;
 			while(currentFunctionArgumentInFunctionReference->next != NULL)
 			{	
-				//cout << "\t\t\t\t currentFunctionArgumentInFunctionReference->argument = " << currentFunctionArgumentInFunctionReference->argument << endl;
-
 				if((currentFunctionArgumentInFunctionReference->argument).find(functionDeclarationArgument) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 				{
-					//cout << "\t\t\t\t currentFunctionArgumentInFunctionReference->argument = " << currentFunctionArgumentInFunctionReference->argument << endl;
-					//cout << "\t\t\t\t\t match found" << endl;
-
 					//now recurse and see if this function argument is considered const 
 					generateConstFunctionArgumentsFunction(functionReferenceTarget);
 
@@ -512,10 +475,6 @@ bool generateConstFunctionArgument(CSfunction* currentFunctionObject, CSfunction
 					if(i != functionReferenceArgumentCount)
 					{
 						cout << "generateConstFunctionArgumentsFunction{} error: (i != functionReferenceArgumentCount)" << endl;
-						cout << "currentFunctionObject->nameFull = " << currentFunctionObject->nameFull << endl;	//CHECKTHIS
-						cout << "functionReferenceTarget->name = " << functionReferenceTarget->name << endl;
-						cout << "functionReferenceArgumentCount = " << functionReferenceArgumentCount << endl;
-						cout << "i = " << i << endl;
 						exit(0);
 					}
 
@@ -524,31 +483,11 @@ bool generateConstFunctionArgument(CSfunction* currentFunctionObject, CSfunction
 					{
 						currentFunctionArgumentInFunctionReferenceTarget = currentFunctionArgumentInFunctionReferenceTarget->next;
 					}
-					//cout << "\t\t\t\t\t functionReferenceArgumentIndex = " << functionReferenceArgumentIndex << endl;
 
 					if(currentFunctionArgumentInFunctionReferenceTarget->isNotConst)
 					{
 						currentFunctionArgumentInFunction->isNotConst = true;
-						
-						/*OK:
-						if(currentFunctionReference->name == "setLumOrContrastOrDepthMapValue")
-						{
-							cout << "\t\t currentFunctionReference->name = " << currentFunctionReference->name << endl;
-							cout << "\t\t currentFunctionReferenceIndex = " << currentFunctionReferenceIndex << endl;
-							cout << "\t\t currentFunctionArgumentInFunction->argumentName = " << currentFunctionArgumentInFunction->argumentName << endl;
-						}
-						*/
 					}
-
-					/*
-					if(currentFunctionObject->name == "configureFileOrFunctionObjectConnection" && functionReferenceTarget->name == "writeSVGconnector" && currentFunctionArgumentInFunctionReferenceTarget->argumentName == "currentTag")
-					{
-						cout << "at" << endl;
-						exit(0);
-					}
-					*/
-
-					//cout << "\t\t\t\t\t fin" << endl;
 				}
 				currentFunctionArgumentInFunctionReference = currentFunctionArgumentInFunctionReference->next;
 				functionReferenceArgumentIndex++;
@@ -593,73 +532,70 @@ bool checkIfVariableIsBeingModifiedInFunction(string* functionText, string funct
 				int indexOfEndOfCommand = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_END_OF_COMMAND, indexOfFunctionArgument);
 				int indexOfEndOfLine = functionText->find(STRING_NEW_LINE, indexOfFunctionArgument);
 				int indexOfStartOfLine = functionText->rfind(STRING_NEW_LINE, indexOfFunctionArgument);
-				int indexOfEndOfEqualsSet = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET, indexOfFunctionArgument);
-				/*
-				int indexOfEndOfEqualsTest = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_TEST, indexOfFunctionArgument);
-				int indexOfEndOfNotEqualsTest = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_NOT_EQUALS_TEST, indexOfFunctionArgument);					
-				*/
+				int indexOfEqualsSet = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET, indexOfFunctionArgument);
 				int indexOfSquareBracketOpen = functionText->rfind(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_ARRAY_INDEX_OPEN, indexOfFunctionArgument);
 				int indexOfSquareBracketClose = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_ARRAY_INDEX_CLOSE, indexOfFunctionArgument);
-
+				int indexOfCout = functionText->rfind(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_COUT_START, indexOfFunctionArgument);
+				
 				if(indexOfEndOfCommand < indexOfEndOfLine)
-				{
+				{			
 					//now see if the function argument has been reassigned in this command
-					if((indexOfEndOfEqualsSet < indexOfEndOfCommand) && (indexOfEndOfEqualsSet < indexOfEndOfLine))
+					if((indexOfEqualsSet < indexOfEndOfCommand) && (indexOfEqualsSet < indexOfEndOfLine))
 					{
-						/*
-						if((indexOfEndOfEqualsSet != indexOfEndOfEqualsTest) && (indexOfEndOfEqualsSet != indexOfEndOfNotEqualsTest))	//not required for multiline logical conditions because checking for (indexOfEndOfEqualsSet < indexOfEndOfCommand), e.g. if(chicken == 5). Only required for single line logical conditions, eg. if(chicken == 5) bat = 2;
-						{
-						*/
-						if(indexOfFunctionArgument < indexOfEndOfEqualsSet)
+						if(indexOfFunctionArgument < indexOfEqualsSet)
 						{//restored 3h2c
-
-							//added condition CS3h1d - ensure not a cout start, e.g. 'cout << "indexOfFunctionArgument' in; 'cout << "indexOfFunctionArgument = " << indexOfFunctionArgument << endl;'
-							if((indexOfFunctionArgument < string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_COUT_START).length()) || (functionText->substr(indexOfFunctionArgument-string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_COUT_START).length(), string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_COUT_START).length()) != CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_COUT_START))
-							{
-								bool passMiscellaneousConditions = true;
-								if(ignoreListIterationNextAssignments)
+							
+							string textBeforeFunctionArgument = functionText->substr(indexOfStartOfLine, indexOfFunctionArgument-indexOfStartOfLine);
+							if(!charInString(textBeforeFunctionArgument, functionOrVariableNameCharacters, CS_FUNCTION_OR_VARIABLE_NAME_CHARACTERS_NUMBER_OF_TYPES))
+							{//added condition CS3h3b - ignore new type initialisations e.g. "currentReferenceInFunctionReferenceListRepeats" in "CSfunction* currentReferenceInFunctionReferenceListRepeats = function->firstReferenceInFunctionReferenceListRepeats;"
+							
+								//added condition CS3h1d, updated CS3h3b - ensure not a cout start, e.g. 'cout << "indexOfFunctionArgument' in; 'cout << "indexOfFunctionArgument = " << indexOfFunctionArgument << endl;'
+								if((indexOfCout == CPP_STRING_FIND_RESULT_FAIL_VALUE) || (indexOfCout < indexOfStartOfLine))
 								{
-									int indexOfNextFunctionArgument = -1;
-									int indexOfNextFunctionArgumentNextPointer = -1;
-									if((indexOfNextFunctionArgument = functionText->find(functionDeclarationArgument, indexOfFunctionArgument+1)) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+									bool passMiscellaneousConditions = true;
+									if(ignoreListIterationNextAssignments)
 									{
-										if((indexOfNextFunctionArgumentNextPointer = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_LIST_VARIABLE_POINTER_NEXT, indexOfNextFunctionArgument)) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+										int indexOfNextFunctionArgument = -1;
+										int indexOfNextFunctionArgumentNextPointer = -1;
+										if((indexOfNextFunctionArgument = functionText->find(functionDeclarationArgument, indexOfFunctionArgument+1)) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 										{
-											if((indexOfNextFunctionArgumentNextPointer > indexOfNextFunctionArgument) && (indexOfNextFunctionArgumentNextPointer < indexOfEndOfCommand))
+											if((indexOfNextFunctionArgumentNextPointer = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_LIST_VARIABLE_POINTER_NEXT, indexOfNextFunctionArgument)) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 											{
-												//e.g. "currentFileObjectContainer = currentFileObjectContainer->next;"
-												passMiscellaneousConditions = false;
+												if((indexOfNextFunctionArgumentNextPointer > indexOfNextFunctionArgument) && (indexOfNextFunctionArgumentNextPointer < indexOfEndOfCommand))
+												{
+													//e.g. "currentFileObjectContainer = currentFileObjectContainer->next;"
+													passMiscellaneousConditions = false;
 
-												string currentLine = functionText->substr(indexOfStartOfLine, indexOfEndOfLine-indexOfStartOfLine);	
-												//cout << "!passMiscellaneousConditions, currentLine = " << currentLine << endl;
+													string currentLine = functionText->substr(indexOfStartOfLine, indexOfEndOfLine-indexOfStartOfLine);	
+												}
 											}
 										}
 									}
-								}
-								if((indexOfSquareBracketOpen != CPP_STRING_FIND_RESULT_FAIL_VALUE) && (indexOfSquareBracketClose != CPP_STRING_FIND_RESULT_FAIL_VALUE))
-								{
-									if((indexOfSquareBracketOpen > indexOfStartOfLine) && (indexOfSquareBracketClose < indexOfEndOfEqualsSet))
+									if((indexOfSquareBracketOpen != CPP_STRING_FIND_RESULT_FAIL_VALUE) && (indexOfSquareBracketClose != CPP_STRING_FIND_RESULT_FAIL_VALUE))
 									{
-										//e.g. imageWidth in "contrastMap[y*imageWidth + x] = contrastVal;"
-										passMiscellaneousConditions = false;
+										if((indexOfSquareBracketOpen > indexOfStartOfLine) && (indexOfSquareBracketClose < indexOfEqualsSet))
+										{
+											//e.g. imageWidth in "contrastMap[y*imageWidth + x] = contrastVal;"
+											passMiscellaneousConditions = false;
+										}
 									}
-								}
 
-								if(passMiscellaneousConditions)
-								{
-									isNotConst = true;
-									if(functionDeclarationArgument == "contrastVal")
-									{								
-										string lineText = functionText->substr(indexOfStartOfLine, indexOfEndOfCommand-indexOfStartOfLine);
+									if(passMiscellaneousConditions)
+									{
+										isNotConst = true;
+										if(functionDeclarationArgument == "contrastVal")
+										{								
+											string lineText = functionText->substr(indexOfStartOfLine, indexOfEndOfCommand-indexOfStartOfLine);
+										}
 									}
-								}
 
-								/*
-								e.g.
-								functionArgument = 5;
-								*functionArgument = 5;
-								functionArgument->parameter = 5;
-								*/
+									/*
+									e.g.
+									functionArgument = 5;
+									*functionArgument = 5;
+									functionArgument->parameter = 5;
+									*/
+								}
 							}
 						}
 					}
@@ -688,7 +624,6 @@ bool functionArgumentReferenceWholeWordCheck(string* functionText, string functi
 	}
 	return functionArgumentReferenceWholeWord;
 }
-
 
 string extractFullVariableName(string* functionText, int indexOfStartOfVariableName)
 {
@@ -756,5 +691,25 @@ string extractFullVariableNameReverse(string* functionText, int indexOfEndOfVari
 	return fullVariableName;
 }
 
+bool charInString(string text, char* charArray, int arraySize)
+{
+	bool result = false;
+	for(int i=0; i<text.length(); i++)
+	{
+		bool foundMatchedChar = false;
+		for(int j=0; j<arraySize; j++)
+		{
+			if(text[i] == charArray[j])
+			{
+				foundMatchedChar = true;
+			}
+		}		
+		if(foundMatchedChar)
+		{
+			result = true;
+		}
+	}
+	return result;
+}
 				
 #endif
