@@ -21,7 +21,7 @@
  * File Name: CSgenerateConstFunctionArgumentCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h11c 10-December-2015
+ * Project Version: 3h11d 10-December-2015
  *
  *******************************************************************************/
 
@@ -629,7 +629,32 @@ bool checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 	
 	bool isNotConst = false;
 	string* functionText = &(currentFunctionObject->functionText);
-				
+
+
+	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_RETURN_OBJECTS
+	//NB this implementation is non-standard because it has to support return of both typeX* and standard types (eg string/double); and string/double secondary assignments are not currently recorded by
+	int indexOfReturn = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_RETURN);
+	string returnVar = "";
+	if(indexOfReturn != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+	{
+		int indexOfStartOfLine = functionText->rfind(STRING_NEW_LINE, indexOfReturn);
+		int indexOfEndOfLine = functionText->find(STRING_NEW_LINE, indexOfReturn);
+		int indexOfEndOfCommand = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_END_OF_COMMAND, indexOfReturn);
+		if(indexOfEndOfCommand < indexOfEndOfLine)
+		{
+			int indexOfReturnVar = indexOfReturn + string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_RETURN).length(); 
+			returnVar = functionText->substr(indexOfReturnVar, indexOfEndOfCommand-indexOfReturnVar);
+			//cout << "returnVar = " << returnVar << endl;
+			
+			//now see if the returnVar is functionDeclarationArgument
+			if(returnVar == functionDeclarationArgument)
+			{
+				isNotConst = true;
+			}
+		}
+	}
+	#endif
+					
 	//step 1: check function text to see if it contains a modification of the function argument
 	//condition 1: text after varnameX, and before ';' on same line must not contain an equals signs [meaning; the variable is not being set by anothing]
 	int indexOfFunctionArgument = -1;
@@ -878,20 +903,24 @@ bool checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 				}
 				#endif
 				
-				/*
-				#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_RETURN_OBJECTS_ALTERNATE
-				//NB this alternate implementation requires standard string/double secondary assignments to be recorded by CS (not just typeX*)
-				//see generateConstFunctionArgumentAndSearchForSecondaryReferences{} code (identification of CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_POINTER_TYPE)
-			
-				//see if can locate the string "return functionDeclarationArgument;" in the function
-				string returnTextHypothetical = string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_RETURN) + functionDeclarationArgument + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_END_OF_COMMAND;
-				if(functionText->find(returnTextHypothetical) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+				
+				#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_RETURN_OBJECTS
+				//now see if can locate the string "returnVar = functionDeclarationArgument;" / "newConnection->entity = functionDeclarationArgument;" in the function
+				string returnVarSetTextHypothetical = string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET) + functionDeclarationArgument + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_END_OF_COMMAND;
+				int indexOfReturnVarSetTextHypothetical = indexOfFunctionArgument-string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET).length();
+				if(functionText->substr(indexOfReturnVarSetTextHypothetical, returnVarSetTextHypothetical.length()) == returnVarSetTextHypothetical)
 				{
-					isNotConst = true;
-					//cout << "returnTextHypothetical = " << returnTextHypothetical << endl;
+					int indexOfReturnVar = functionText->rfind(returnVar, indexOfReturnVarSetTextHypothetical); 
+					if((indexOfReturnVar != CPP_STRING_FIND_RESULT_FAIL_VALUE) && (indexOfReturnVar > indexOfStartOfLine))
+					{
+						if(functionArgumentReferenceWholeWordCheck(functionText, returnVar, indexOfReturnVar))
+						{
+							isNotConst = true;
+							//cout << "returnVarSetTextHypothetical = " << returnVarSetTextHypothetical << endl;
+						}
+					}
 				}
 				#endif
-				*/
 				
 				#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_NON_CONST_GLOBAL_ASSIGNMENTS
 				for(int i=0; i<CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_NON_CONST_GLOBAL_ASSIGNMENTS_NUMBER_OF_TYPES; i++)
@@ -907,37 +936,6 @@ bool checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 			}
 		}
 	}
-	
-	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_RETURN_OBJECTS
-	//NB this implementation is non-standard because it has to support return of both typeX* and standard types (eg string/double); and string/double secondary assignments are not currently recorded by
-	int indexOfReturn = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_RETURN);
-	if(indexOfReturn != CPP_STRING_FIND_RESULT_FAIL_VALUE)
-	{
-		int indexOfStartOfLine = functionText->rfind(STRING_NEW_LINE, indexOfReturn);
-		int indexOfEndOfLine = functionText->find(STRING_NEW_LINE, indexOfReturn);
-		int indexOfEndOfCommand = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_END_OF_COMMAND, indexOfReturn);
-		if(indexOfEndOfCommand < indexOfEndOfLine)
-		{
-			int indexOfReturnVar = indexOfReturn + string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_RETURN).length(); 
-			string returnVar = functionText->substr(indexOfReturnVar, indexOfEndOfCommand-indexOfReturnVar);
-			//cout << "returnVar = " << returnVar << endl;
-			
-			//now see if the returnVar is functionDeclarationArgument
-			if(returnVar == functionDeclarationArgument)
-			{
-				isNotConst = true;
-			}
-			
-			//now see if can locate the string "returnVar = functionDeclarationArgument;" in the function
-			string returnVarSetTextHypothetical = returnVar + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET + functionDeclarationArgument + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_END_OF_COMMAND;
-			if(functionText->find(returnVarSetTextHypothetical) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
-			{
-				isNotConst = true;
-				//cout << "returnVarSetTextHypothetical = " << returnVarSetTextHypothetical << endl;
-			} 
-		}
-	}
-	#endif
 	
 	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_MAKE_ALL_POINTER_ARRAY_TYPES_NON_CONST
 	if(detectPointerArray(currentFunctionArgumentInFunction->argument))
