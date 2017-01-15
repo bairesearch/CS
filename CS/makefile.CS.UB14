@@ -4,7 +4,7 @@ CC=g++
 #CFLAGS=-c -Wall
 CFLAGS=-c -W --no-warn
 LDFLAGS=-lglut -lGL -lGLU
-SOURCES= CSmain.cpp CSexecflow.cpp CSdataflow.cpp CSpreprocessorFilter.cpp CSreferenceContainerClass.cpp CSfileClass.cpp CSfunctionClass.cpp CSoperations.cpp CSdraw.cpp CSgenerateHTMLdocumentation.cpp CSgenerateConstFunctionArgumentCode.cpp CSgenerateObjectOrientedCode.cpp RTscene.cpp RToperations.cpp RTparser.cpp RTppm.cpp RTraytracer.cpp RTreferenceManipulation.cpp RTpixelMaps.cpp RTviewinfo.cpp LDsprite.cpp LDopengl.cpp LDparser.cpp LDreferenceManipulation.cpp LDreferenceClass.cpp LDsvg.cpp SHAREDglobalDefs.cpp SHAREDvector.cpp SHAREDvars.cpp XMLparserClass.cpp XMLrulesClass.cpp 
+SOURCES= CSmain.cpp CSexecflow.cpp CSdataflow.cpp CSpreprocessorFilter.cpp CSreferenceContainerClass.cpp CSfileClass.cpp CSfunctionClass.cpp CSoperations.cpp CSdraw.cpp CSgenerateHTMLdocumentation.cpp CSgenerateConstFunctionArgumentCode.cpp CSgenerateObjectOrientedCode.cpp RTpixelMaps.cpp RTppm.cpp RTviewinfo.cpp LDsprite.cpp LDopengl.cpp LDparser.cpp LDreferenceManipulation.cpp LDreferenceClass.cpp LDsvg.cpp SHAREDglobalDefs.cpp SHAREDvector.cpp SHAREDvars.cpp XMLparserClass.cpp XMLrulesClass.cpp 
 
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=CS.exe
