@@ -21,7 +21,7 @@
  * File Name: CSgenerateConstFunctionArgumentCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h1d 14-November-2015
+ * Project Version: 3h1e 14-November-2015
  *
  *******************************************************************************/
 
@@ -181,11 +181,11 @@ bool generateConstFunctionArgumentsFunction(CSfunction* currentFunctionObject)
 			//step 2: check function references to see if function argument has been passed to a child function (and if so whether it has been modified by the child function)
 			//condition 2: the same requirement must be met by all functions called by functionX with the argument varnameX
 			CSfunction* currentFunctionReference = currentFunctionObject->firstReferenceInFunctionReferenceListRepeats;
-			int tempq = 0;
+			int currentFunctionReferenceIndex = 0;
 			while(currentFunctionReference->next != NULL)
 			{
 				//cout << "\t\t currentFunctionReference->name = " << currentFunctionReference->name << endl;
-				//cout << "\t\t tempq = " << tempq << endl;
+				//cout << "\t\t currentFunctionReferenceIndex = " << currentFunctionReferenceIndex << endl;
 				
 				CSfile* fileObjectHoldingFunction = currentFunctionReference->functionReferenceTargetFileOwner;
 				CSfunction* functionReferenceTarget = currentFunctionReference->functionReferenceTarget;
@@ -216,7 +216,7 @@ bool generateConstFunctionArgumentsFunction(CSfunction* currentFunctionObject)
 
 							//now recurse and see if this function argument is considered const 
 							generateConstFunctionArgumentsFunction(functionReferenceTarget);
-
+	
 							CSfunctionArgument* currentFunctionArgumentInFunctionReferenceTarget = functionReferenceTarget->firstFunctionArgumentInFunction;
 
 							//debug only;
@@ -250,16 +250,35 @@ bool generateConstFunctionArgumentsFunction(CSfunction* currentFunctionObject)
 								//cout << "\t\t\t\t\t\t detect currentFunctionArgumentInFunctionReferenceTarget->isConst" << endl;
 								//cout << "\t\t\t\t\t\t set currentFunctionArgumentInFunction->isConst" << endl;
 							}
+							else
+							{
+								currentFunctionArgumentInFunction->isConst = false;	//redundant
+								currentFunctionArgumentInFunction->constIdentified = true;
+							}
+							
+							/*
+							if(currentFunctionObject->name == "configureFileOrFunctionObjectConnection" && functionReferenceTarget->name == "writeSVGconnector" && currentFunctionArgumentInFunctionReferenceTarget->argumentName == "currentTag")
+							{
+								cout << "at" << endl;
+								exit(0);
+							}
+							*/
+							
+							//cout << "\t\t\t\t\t fin" << endl;
 						}
 						currentFunctionArgumentInFunctionReference = currentFunctionArgumentInFunctionReference->next;
 						functionReferenceArgumentIndex++;
 					}
 				}
-				tempq++;
+				currentFunctionReferenceIndex++;
 				currentFunctionReference = currentFunctionReference->next;
 			}
 			
-			if(!(currentFunctionArgumentInFunction->isConst))
+			if((currentFunctionArgumentInFunction->constIdentified) && !(currentFunctionArgumentInFunction->isConst))
+			{
+			
+			}
+			else
 			{
 				bool isConst = true;
 				//step 1: check function text to see if it contains a modification of the function argument
@@ -272,16 +291,14 @@ bool generateConstFunctionArgumentsFunction(CSfunction* currentFunctionObject)
 					{
 						//added condition CS3h1c - ensure next character is not a letter (this ensures that argumentNameABC is not found when searching for argumentName)
 						if(((currentFunctionObject->functionText).length() == indexOfFunctionArgument) || !charInCharArray((currentFunctionObject->functionText)[indexOfFunctionArgument+(currentFunctionArgumentInFunction->argumentName).length()], functionOrVariableNameCharacters, CS_FUNCTION_OR_VARIABLE_NAME_CHARACTERS_NUMBER_OF_TYPES))
-						{
+						{	
 							/*
-							if(currentFunctionArgumentInFunction->argumentName == "currentFunctionObjectIndentation" && currentFunctionObject->name == "addToHTMLdocumentationIndentedList")
+							if(currentFunctionArgumentInFunction->argumentName == "currentTag" && currentFunctionObject->name == "writeSVGconnector")
 							{
 								cout << "currentFunctionArgumentInFunction->argumentName = " << currentFunctionArgumentInFunction->argumentName << endl;
-								cout << "(currentFunctionObject->functionText)[indexOfFunctionArgument-1] = " << (currentFunctionObject->functionText)[indexOfFunctionArgument-1] << endl;
 							}
 							*/
 							
-
 							//find next occurance of ';' on same line
 							//cout << "indexOfFunctionArgument = " << indexOfFunctionArgument << endl;
 							int indexOfEndOfCommand = (currentFunctionObject->functionText).find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_END_OF_COMMAND, indexOfFunctionArgument);
@@ -293,7 +310,7 @@ bool generateConstFunctionArgumentsFunction(CSfunction* currentFunctionObject)
 								int indexOfEndOfEqualsSet = (currentFunctionObject->functionText).find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET, indexOfFunctionArgument);
 								int indexOfEndOfEqualsTest = (currentFunctionObject->functionText).find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_TEST, indexOfFunctionArgument);
 								int indexOfEndOfNotEqualsTest = (currentFunctionObject->functionText).find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_NOT_EQUALS_TEST, indexOfFunctionArgument);					
-								if(indexOfEndOfEqualsSet < indexOfEndOfCommand)
+								if((indexOfEndOfEqualsSet < indexOfEndOfCommand) && (indexOfEndOfEqualsSet < indexOfEndOfNewline))
 								{
 									if((indexOfEndOfEqualsSet != indexOfEndOfEqualsTest) && (indexOfEndOfEqualsSet != indexOfEndOfNotEqualsTest))	//not required for multiline logical conditions because checking for (indexOfEndOfEqualsSet < indexOfEndOfCommand), e.g. if(chicken == 5). Only required for single line logical conditions, eg. if(chicken == 5) bat = 2;
 									{
@@ -301,6 +318,21 @@ bool generateConstFunctionArgumentsFunction(CSfunction* currentFunctionObject)
 										if((indexOfFunctionArgument < string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_COUT_START).length()) || ((currentFunctionObject->functionText).substr(indexOfFunctionArgument-string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_COUT_START).length(), string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_COUT_START).length()) != CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_COUT_START))
 										{
 											isConst = false;
+											
+											/*
+											if(currentFunctionArgumentInFunction->argumentName == "currentTag" && currentFunctionObject->name == "writeSVGconnector")
+											{
+												cout << "isConst = false" << endl;
+												exit(0);
+											}
+											*/
+											/*
+											if(currentFunctionObject->name == "configureFileOrFunctionObjectConnection" && functionReferenceTarget->name == "writeSVGconnector" && currentFunctionArgumentInFunctionReferenceTarget->argumentName == "currentTag")
+											{
+												
+											}
+											*/
+											
 											/*
 											e.g.
 											functionArgument = 5;
@@ -323,9 +355,14 @@ bool generateConstFunctionArgumentsFunction(CSfunction* currentFunctionObject)
 				{
 					currentFunctionArgumentInFunction->isConst = true;
 				}
+				else
+				{
+					currentFunctionArgumentInFunction->isConst = false;	//redundant
+					currentFunctionArgumentInFunction->constIdentified = true;
+				}
 			}
-			
 			currentFunctionArgumentInFunction->constIdentified = true;
+			
 			currentFunctionArgumentInFunction = currentFunctionArgumentInFunction->next;
 		}
 	}

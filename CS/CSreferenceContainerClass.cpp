@@ -26,7 +26,7 @@
  * File Name: CSreferenceContainerClass.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h1d 14-November-2015
+ * Project Version: 3h1e 14-November-2015
  *
  *******************************************************************************/
 
@@ -186,17 +186,35 @@ int findEndPositionOfArgument(string* functionArgumentsRaw, int startPositionOfA
 }
 */
 
-
-bool findFunctionObjectWithName(string name, CSfile* currentFileObject, CSfile** fileObjectHoldingFunction, CSfunction** updatedFunctionObject)
+//limitation; can't match argument types (only number of arguments)
+bool findFunctionReferenceTarget(CSfunction* functionReference, CSfile* currentFileObject, CSfile** fileObjectHoldingFunction, CSfunction** functionReferenceTarget, bool countArguments)
 {
+	string name = functionReference->name;
+	int numArguments = countArgumentList(functionReference->firstFunctionArgumentInFunction);
+	
 	bool foundPrintedReferenceWithName = false;
 	
 	CSfunction* currentFunctionObject = currentFileObject->firstFunctionInFunctionList;
 	while(currentFunctionObject->next != NULL)
 	{
+		bool conditions = false;
 		if(currentFunctionObject->name == name)
 		{
-			*updatedFunctionObject = currentFunctionObject;
+			if(countArguments)
+			{
+				if(countArgumentList(currentFunctionObject->firstFunctionArgumentInFunction) == numArguments)
+				{
+					conditions = true;
+				} 
+			}
+			else
+			{
+				conditions = true;
+			}
+		}
+		if(conditions)
+		{
+			*functionReferenceTarget = currentFunctionObject;
 			foundPrintedReferenceWithName = true;
 			*fileObjectHoldingFunction = currentFileObject;
 		}
@@ -205,7 +223,7 @@ bool findFunctionObjectWithName(string name, CSfile* currentFileObject, CSfile**
 
 	if(currentFileObject->firstFileInBelowListContainer != NULL)
 	{
-		if(findFunctionObjectWithNameRecurse(name, currentFileObject->firstFileInBelowListContainer, fileObjectHoldingFunction, updatedFunctionObject))
+		if(findFunctionReferenceTargetRecurse(functionReference, currentFileObject->firstFileInBelowListContainer, fileObjectHoldingFunction, functionReferenceTarget, countArguments))
 		{
 			foundPrintedReferenceWithName = true;
 		}
@@ -214,10 +232,13 @@ bool findFunctionObjectWithName(string name, CSfile* currentFileObject, CSfile**
 	return foundPrintedReferenceWithName;
 }
 
-bool findFunctionObjectWithNameRecurse(string name, CSfileContainer* firstObjectInAboveLevelBelowListContainer, CSfile** fileObjectHoldingFunction, CSfunction** updatedFunctionObject)
+bool findFunctionReferenceTargetRecurse(CSfunction* functionReference, CSfileContainer* firstObjectInAboveLevelBelowListContainer, CSfile** fileObjectHoldingFunction, CSfunction** functionReferenceTarget, bool countArguments)
 {
 	bool foundPrintedReferenceWithName = false;
-	
+
+	string name = functionReference->name;
+	int numArguments = countArgumentList(functionReference->firstFunctionArgumentInFunction);
+		
 	CSfileContainer* currentFileObjectContainer = firstObjectInAboveLevelBelowListContainer;
 
 	while(currentFileObjectContainer->next != NULL)
@@ -227,9 +248,24 @@ bool findFunctionObjectWithNameRecurse(string name, CSfileContainer* firstObject
 		CSfunction* currentFunctionObject = currentFileObject->firstFunctionInFunctionList;
 		while(currentFunctionObject->next != NULL)
 		{
+			bool conditions = false;
 			if(currentFunctionObject->name == name)
 			{
-				*updatedFunctionObject = currentFunctionObject;
+				if(countArguments)
+				{
+					if(countArgumentList(currentFunctionObject->firstFunctionArgumentInFunction) == numArguments)
+					{
+						conditions = true;
+					} 
+				}
+				else
+				{
+					conditions = true;
+				}
+			}
+			if(conditions)
+			{
+				*functionReferenceTarget = currentFunctionObject;
 				foundPrintedReferenceWithName = true;
 				*fileObjectHoldingFunction = currentFileObject;
 			}
@@ -238,7 +274,7 @@ bool findFunctionObjectWithNameRecurse(string name, CSfileContainer* firstObject
 
 		if(currentFileObject->firstFileInBelowListContainer != NULL)
 		{
-			if(findFunctionObjectWithNameRecurse(name, currentFileObject->firstFileInBelowListContainer, fileObjectHoldingFunction, updatedFunctionObject))
+			if(findFunctionReferenceTargetRecurse(functionReference, currentFileObject->firstFileInBelowListContainer, fileObjectHoldingFunction, functionReferenceTarget, countArguments))
 			{
 				foundPrintedReferenceWithName = true;
 			}
@@ -250,4 +286,15 @@ bool findFunctionObjectWithNameRecurse(string name, CSfileContainer* firstObject
 	return foundPrintedReferenceWithName;
 }
 
+int countArgumentList(CSfunctionArgument* firstFunctionArgumentInFunction)
+{
+	int count = 0;
+	CSfunctionArgument* currentFunctionArgumentInFunction = firstFunctionArgumentInFunction;
+	while(currentFunctionArgumentInFunction->next != NULL)
+	{
+		count++;
+		currentFunctionArgumentInFunction = currentFunctionArgumentInFunction->next;
+	}
+	return count;
+}
 

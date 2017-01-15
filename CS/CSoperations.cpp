@@ -26,7 +26,7 @@
  * File Name: CSoperations.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h1d 14-November-2015
+ * Project Version: 3h1e 14-November-2015
  *
  *******************************************************************************/
 
@@ -1143,7 +1143,10 @@ bool searchFunctionStringForFunctionReferences(CSfile* firstFileInIncludeFileLis
 				{
 					(*currentReferenceInFunctionReferenceList)->name = currentFunction->name;
 					(*currentReferenceInFunctionReferenceList)->isFunctionReference = true;
-
+					#ifdef CS_MATCH_FUNCTION_REFERENCES_WITH_CORRECT_NUMBER_OF_ARGUMENTS
+					identifyFunctionReferenceArguments((*currentReferenceInFunctionReferenceList), functionContentsString, startPosOfFunctionReferenceInFunction);
+					#endif
+					
 					CSfunction* newfirstReferenceInFunctionReferenceList = new CSfunction();
 					(*currentReferenceInFunctionReferenceList)->next = newfirstReferenceInFunctionReferenceList;
 					(*currentReferenceInFunctionReferenceList) = (*currentReferenceInFunctionReferenceList)->next;
@@ -1170,7 +1173,7 @@ bool searchFunctionStringForFunctionReferences(CSfile* firstFileInIncludeFileLis
 				(*currentReferenceInFunctionReferenceListRepeats)->functionReferenceCharacterIndex = indexToFunctionReference;
 
 				#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
-				identifyFunctionReferenceArguments((*currentReferenceInFunctionReferenceListRepeats), functionContentsString, indexToFunctionReference);
+				identifyFunctionReferenceArguments((*currentReferenceInFunctionReferenceListRepeats), functionContentsString, startPosOfFunctionReferenceInFunction);
 				#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
 				cout << "(*currentReferenceInFunctionReferenceListRepeats)->nameFull = " << (*currentReferenceInFunctionReferenceListRepeats)->nameFull << endl;
 				#endif
@@ -1196,7 +1199,6 @@ bool searchFunctionStringForFunctionReferences(CSfile* firstFileInIncludeFileLis
 }
 
 
-#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
 //limitations; doesn't support couts containing function references, e.g. "cout << "Error: getFloatArgument(" << keystr << ")" << endl;" (NB '<' is interpreted as CLASS_TYPE_OPEN_TAG)
 void identifyFunctionReferenceArguments(CSfunction* currentReferenceInFunctionReferenceListRepeats, string* functionContentsString, int indexToFunctionObject)
 {
@@ -1282,6 +1284,7 @@ void identifyFunctionReferenceArguments(CSfunction* currentReferenceInFunctionRe
 	#endif
 }
 
+#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
 //NB this function is not necessary for the current implementation, but is used for neatness 
 string removePrependedWhiteSpace(string argument)
 {
@@ -1507,7 +1510,7 @@ void attachFunctionReferenceTargets(CSfileContainer* firstObjectInAboveLevelBelo
 			{
 				CSfile* fileObjectHoldingFunction = NULL;
 				CSfunction* functionReferenceTarget = NULL;		//function pertaining to currentFunctionReference
-				if(findFunctionObjectWithName(currentFunctionReference->name, currentFileObject, &fileObjectHoldingFunction, &functionReferenceTarget))
+				if(findFunctionReferenceTarget(currentFunctionReference, currentFileObject, &fileObjectHoldingFunction, &functionReferenceTarget, true))
 				{
 					currentFunctionReference->functionReferenceTarget = functionReferenceTarget;
 					currentFunctionReference->functionReferenceTargetFileOwner = fileObjectHoldingFunction;
@@ -1521,7 +1524,7 @@ void attachFunctionReferenceTargets(CSfileContainer* firstObjectInAboveLevelBelo
 			{
 				CSfile* fileObjectHoldingFunction = NULL;
 				CSfunction* functionReferenceTarget = NULL;		//function pertaining to currentFunctionReference
-				if(findFunctionObjectWithName(currentFunctionReference->name, currentFileObject, &fileObjectHoldingFunction, &functionReferenceTarget))
+				if(findFunctionReferenceTarget(currentFunctionReference, currentFileObject, &fileObjectHoldingFunction, &functionReferenceTarget, true))
 				{
 					currentFunctionReference->functionReferenceTarget = functionReferenceTarget;
 					currentFunctionReference->functionReferenceTargetFileOwner = fileObjectHoldingFunction;

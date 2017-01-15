@@ -26,7 +26,7 @@
  * File Name: CSreferenceContainerClass.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h1d 14-November-2015
+ * Project Version: 3h1e 14-November-2015
  *
  *******************************************************************************/
 
@@ -70,9 +70,9 @@ public:
 
 int findEndPositionOfArgument(string* functionArgumentsRaw, int startPositionOfArgument, bool* lastArgument);
 	
-bool findFunctionObjectWithName(string name, CSfile* currentFileObject, CSfile** fileObjectHoldingFunction, CSfunction** updatedFunctionObject);
-	bool findFunctionObjectWithNameRecurse(string name, CSfileContainer* firstObjectInAboveLevelBelowListContainer, CSfile** fileObjectHoldingFunction, CSfunction** updatedFunctionObject);
-
+bool findFunctionReferenceTarget(CSfunction* functionReference, CSfile* currentFileObject, CSfile** fileObjectHoldingFunction, CSfunction** functionReferenceTarget, bool countArguments);
+	bool findFunctionReferenceTargetRecurse(CSfunction* functionReference, CSfileContainer* firstObjectInAboveLevelBelowListContainer, CSfile** fileObjectHoldingFunction, CSfunction** functionReferenceTarget, bool countArguments);
+		int countArgumentList(CSfunctionArgument* firstFunctionArgumentInFunction);
 
 #endif
 

@@ -26,7 +26,7 @@
  * File Name: CSglobalsDefs.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h1d 14-November-2015
+ * Project Version: 3h1e 14-November-2015
  * Description: CS specific global definitions
  *
  *******************************************************************************/
@@ -37,14 +37,16 @@
 
 #include "SHAREDglobalDefs.h"
 
+#define CS_MATCH_FUNCTION_REFERENCES_WITH_CORRECT_NUMBER_OF_ARGUMENTS		//added 3h1e
+
 #define CS_GENERATE_CODE_GENERIC
 #ifdef CS_GENERATE_CODE_GENERIC
-
+	
 	#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS	//added 3h1a/14-November-2014	//requires CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST
 	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
+		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DISABLE_OUTPUT	//safe for debug (no source/header file overwrites)
 		#define CS_GENERATE_CODE_GENERIC_SOURCE_FILE_EXTENSION "cpp"
 		#define CS_GENERATE_CODE_GENERIC_HEADER_FILE_EXTENSION "h"
-		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DISABLE_OUTPUT	//safe for debug (no source/header file overwrites)
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_END_OF_COMMAND ";"
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET "="
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_TEST "=="
@@ -60,9 +62,9 @@
 
 	//#define CS_GENERATE_CPP_CLASSES	//added 3e1a/27-August-2014
 	#ifdef CS_GENERATE_CPP_CLASSES
+		#define CS_GENERATE_CPP_CLASSES_DISABLE_OUTPUT	//safe for debug (no source/header file overwrites)
 		#define CS_GENERATE_CODE_GENERIC_SOURCE_FILE_EXTENSION "cpp"
 		#define CS_GENERATE_CODE_GENERIC_HEADER_FILE_EXTENSION "hpp"
-		#define CS_GENERATE_CPP_CLASSES_DISABLE_OUTPUT	//safe for debug (no source/header file overwrites)
 		#define CS_GENERATE_CPP_CLASSES_TEXT_FUNCTION_PRIVATE "private: "
 		#define CS_GENERATE_CPP_CLASSES_TEXT_FUNCTION_PUBLIC "public: "
 		#define CS_GENERATE_CPP_CLASSES_TEXT_CLASS_PERMISSIONS_IDENTIFIER "::"	//class membership

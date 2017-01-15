@@ -26,7 +26,7 @@
  * File Name: CSexecflow.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h1d 14-November-2015
+ * Project Version: 3h1e 14-November-2015
  *
  *******************************************************************************/
 
@@ -146,18 +146,17 @@ void generateCodeStructure(string topLevelFileName, int width, int height, strin
 	}
 	if(outputFunctionsConnectivity)
 	{
-		CSfunction* currentReferenceInTopLevelBelowList = firstReferenceInTopLevelBelowList->firstFunctionInFunctionList;
+		CSfunction* currentObjectInTopLevelBelowList = firstReferenceInTopLevelBelowList->firstFunctionInFunctionList;
 		bool topLevelFunctionNameFound = false;
 		CSfunction* topLevelFunctionObject = NULL;
-		while(currentReferenceInTopLevelBelowList->next != NULL)
+		while(currentObjectInTopLevelBelowList->next != NULL)
 		{
-			//cout << "currentReferenceInTopLevelBelowList->name = " << currentReferenceInTopLevelBelowList->name << endl;
-			if(currentReferenceInTopLevelBelowList->name == topLevelFunctionName)
+			if(currentObjectInTopLevelBelowList->name == topLevelFunctionName)
 			{
-				topLevelFunctionObject = currentReferenceInTopLevelBelowList;
+				topLevelFunctionObject = currentObjectInTopLevelBelowList;
 				topLevelFunctionNameFound = true;
 			}
-			currentReferenceInTopLevelBelowList = currentReferenceInTopLevelBelowList->next;
+			currentObjectInTopLevelBelowList = currentObjectInTopLevelBelowList->next;
 		}
 		if(topLevelFunctionNameFound)
 		{
@@ -177,7 +176,7 @@ void generateCodeStructure(string topLevelFileName, int width, int height, strin
 			CSfunction* currentReferenceInFunctionReferenceList = topLevelFunctionObject->firstReferenceInFunctionReferenceList;
 			while(currentReferenceInFunctionReferenceList->next != NULL)
 			{
-				currentReferenceInPrintList = createFunctionObjectListBoxesAndConnections(currentReferenceInPrintList, firstReferenceInTopLevelBelowList, topLevelFunctionObject, firstObjectInTopLevelBelowListContainer, 0, currentReferenceInFunctionReferenceList->name, &currentTagInSVGFile, traceFunctionUpwards, false, NULL, usePredefinedGrid);
+				currentReferenceInPrintList = createFunctionObjectListBoxesAndConnections(currentReferenceInPrintList, firstReferenceInTopLevelBelowList, topLevelFunctionObject, firstObjectInTopLevelBelowListContainer, 0, currentReferenceInFunctionReferenceList, &currentTagInSVGFile, traceFunctionUpwards, false, NULL, usePredefinedGrid);
 				currentReferenceInFunctionReferenceList = currentReferenceInFunctionReferenceList->next;
 			}
 			resetPrintedFunctionConnections(firstReferenceInTopLevelBelowList, topLevelFunctionObject, false, NULL);

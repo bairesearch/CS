@@ -26,7 +26,7 @@
  * File Name: CSdraw.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h1d 14-November-2015
+ * Project Version: 3h1e 14-November-2015
  *
  *******************************************************************************/
 
@@ -709,8 +709,15 @@ LDreference* createFileObjectListConnections(LDreference* currentReferenceInPrin
 
 
 
-LDreference* createFunctionObjectListBoxesAndConnections(LDreference* currentReferenceInPrintList, CSfile* aboveLevelFileObject, CSfunction* aboveLevelFunctionObject, CSfileContainer* firstObjectInTopLevelBelowListContainer, int functionLevel, string functionReferenceNameToFind, XMLparserTag** currentTag, bool traceFunctionUpwards, bool useSingleFileOnly, string* singleFileName, bool usePredefinedGrid)
+LDreference* createFunctionObjectListBoxesAndConnections(LDreference* currentReferenceInPrintList, CSfile* aboveLevelFileObject, CSfunction* aboveLevelFunctionObject, CSfileContainer* firstObjectInTopLevelBelowListContainer, int functionLevel, CSfunction* functionReference, XMLparserTag** currentTag, bool traceFunctionUpwards, bool useSingleFileOnly, string* singleFileName, bool usePredefinedGrid)
 {
+	string functionReferenceNameToFind = functionReference->name;
+	#ifdef CS_MATCH_FUNCTION_REFERENCES_WITH_CORRECT_NUMBER_OF_ARGUMENTS
+	bool countArguments = true;
+	#else
+	bool countArguments = false;
+	#endif
+	
 	LDreference* newCurrentReferenceInPrintList = currentReferenceInPrintList;
 
 	if(!(aboveLevelFunctionObject->printedFunctionConnections))	//added CS 3d2g
@@ -719,7 +726,7 @@ LDreference* createFunctionObjectListBoxesAndConnections(LDreference* currentRef
 
 		CSfunction* functionObject = NULL;
 		CSfile* fileObject = NULL;
-		if(findFunctionObjectWithName(functionReferenceNameToFind, aboveLevelFileObject, &fileObject, &functionObject))
+		if(findFunctionReferenceTarget(functionReference, aboveLevelFileObject, &fileObject, &functionObject, countArguments))
 		{
 			/*
 			cout << "functionReferenceNameToFind = " << functionReferenceNameToFind << endl;
@@ -1030,7 +1037,7 @@ LDreference* createFunctionObjectListBoxesAndConnections(LDreference* currentRef
 						*/
 
 						//recurse
-						newCurrentReferenceInPrintList = createFunctionObjectListBoxesAndConnections(newCurrentReferenceInPrintList, fileObject, functionObject, firstObjectInTopLevelBelowListContainer, (newFunctionLevel+1), currentFunctionReference->name, currentTag, traceFunctionUpwards, useSingleFileOnly, singleFileName, usePredefinedGrid);
+						newCurrentReferenceInPrintList = createFunctionObjectListBoxesAndConnections(newCurrentReferenceInPrintList, fileObject, functionObject, firstObjectInTopLevelBelowListContainer, (newFunctionLevel+1), currentFunctionReference, currentTag, traceFunctionUpwards, useSingleFileOnly, singleFileName, usePredefinedGrid);
 
 						currentFunctionReference = currentFunctionReference->next;
 					}
@@ -1116,7 +1123,12 @@ void resetPrintedFunctionConnections(CSfile* aboveLevelFileObject, CSfunction* a
 		bool referenceFound = false;
 		CSfunction* functionObject = NULL;
 		CSfile* fileObject = NULL;
-		if(findFunctionObjectWithName(currentFunctionReference->name, aboveLevelFileObject, &fileObject, &functionObject))
+		#ifdef CS_MATCH_FUNCTION_REFERENCES_WITH_CORRECT_NUMBER_OF_ARGUMENTS
+		bool countArguments = true;
+		#else
+		bool countArguments = false;
+		#endif
+		if(findFunctionReferenceTarget(currentFunctionReference, aboveLevelFileObject, &fileObject, &functionObject, countArguments))
 		{
 			if(currentFunctionReference->printedFunctionConnections)
 			{
@@ -1284,7 +1296,7 @@ LDreference* createFunctionObjectConnection(LDreference* currentReferenceInPrint
 
 
 
-LDreference* configureFileOrFunctionObjectConnection(LDreference* currentReferenceInPrintList, vec* referencePrintPos,  vec* currentReferenceInAboveListPrintPos, int colour, bool fileOrFunction, bool traceAFunctionUpwardsAndNotCurrentlyTracing, XMLparserTag** currentTag, string* startGroupID, string* endGroupID)
+LDreference* configureFileOrFunctionObjectConnection(LDreference* currentReferenceInPrintList, vec* referencePrintPos, vec* currentReferenceInAboveListPrintPos, int colour, bool fileOrFunction, bool traceAFunctionUpwardsAndNotCurrentlyTracing, XMLparserTag** currentTag, string* startGroupID, string* endGroupID)
 {
 	LDreference* newCurrentReferenceInPrintList = currentReferenceInPrintList;
 
