@@ -1,9 +1,9 @@
 /*******************************************************************************
  *
  * File Name: CSdraw.h
- * Author: Richard Bruce Baxter - Copyright (c) 2005-2010 Baxter AI (baxterai.com)
+ * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3a6c 07-May-2012
+ * Project Version: 3a7a 06-June-2012
  *
  *******************************************************************************/
 
@@ -12,7 +12,7 @@
 
 #include "LDreferenceClass.h"
 #include "CSreferenceClass.h"
-#include "SHAREDglobalDefs.h"
+#include "CSglobalDefs.h"
 
 /*
 #define CS_OUTPUT_Z_POSITION_FILE_CONNECTIONS (0.6)
