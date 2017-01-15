@@ -3,7 +3,7 @@
  * File Name: CSoperations.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2010 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3a6a 20-Mar-2012
+ * Project Version: 3a6b 30-Apr-2012
  *
  *******************************************************************************/
 
@@ -32,8 +32,10 @@ using namespace std;
 
 
 
-void getIncludeFileNamesFromCorHFile(CSReference * firstReferenceInIncludeFileList, CSReference * topLevelReference, string topLevelReferenceName, int level)
+bool getIncludeFileNamesFromCorHFile(CSReference * firstReferenceInIncludeFileList, CSReference * topLevelReference, string topLevelReferenceName, int level)
 {
+	bool fileFound = false;
+	
 	string parseFileName = topLevelReferenceName;
 	CSReference * previousReference = NULL;
 
@@ -48,6 +50,8 @@ void getIncludeFileNamesFromCorHFile(CSReference * firstReferenceInIncludeFileLi
 	}
 	else
 	{
+		fileFound = true;
+		
 		char c;
 		int id = 0;
 		int charCount = 0;
@@ -261,33 +265,56 @@ void getIncludeFileNamesFromCorHFile(CSReference * firstReferenceInIncludeFileLi
 
 						//parse into .h file;
 						string referenceName = hashIncludeFileName;
-						getIncludeFileNamesFromCorHFile(currentReferenceInIncludeFileList->firstReferenceInBelowList, currentReferenceInIncludeFileList, referenceName, level+1);
-
-
-
-
-						//parse into .cpp file;
-						CSReference * lastReferenceInBelowList = currentReferenceInIncludeFileList->firstReferenceInBelowList;
-						while(lastReferenceInBelowList->next != NULL)
+						bool hFileFound = getIncludeFileNamesFromCorHFile(currentReferenceInIncludeFileList->firstReferenceInBelowList, currentReferenceInIncludeFileList, referenceName, level+1);
+						
+						if(hFileFound)
 						{
-							lastReferenceInBelowList = lastReferenceInBelowList->next;
+							//parse into .cpp file;
+							CSReference * lastReferenceInBelowList = currentReferenceInIncludeFileList->firstReferenceInBelowList;
+							while(lastReferenceInBelowList->next != NULL)
+							{
+								lastReferenceInBelowList = lastReferenceInBelowList->next;
+							}
+							string referenceNameCFile = hashIncludeFileNameCFile;
+							bool cFileFound = getIncludeFileNamesFromCorHFile(lastReferenceInBelowList, currentReferenceInIncludeFileList, referenceNameCFile, level+1);
+
+							if(cFileFound)
+							{
+								//fill function and function reference list using .h file;
+								CSReference * newfirstReferenceInFunctionList = new CSReference();
+								currentReferenceInIncludeFileList->firstReferenceInFunctionList = newfirstReferenceInFunctionList;
+								
+								bool hFileFound2 = getFunctionNamesFromFunctionDeclarationsInHFile(currentReferenceInIncludeFileList->firstReferenceInFunctionList, referenceName, level);
+								if(hFileFound2)
+								{								
+									//cout << "currentReferenceInIncludeFileList->firstReferenceInFunctionList->name = " << currentReferenceInIncludeFileList->firstReferenceInFunctionList->name << endl;
+
+									//cout << "topLevelReferenceName = " << topLevelReferenceName << endl;
+									//cout << "getFunctionReferenceNamesFromFunctionsInCFile()" << endl;
+									getFunctionReferenceNamesFromFunctionsInCFile(firstReferenceInIncludeFileList, currentReferenceInIncludeFileList->firstReferenceInFunctionList, currentReferenceInIncludeFileList, referenceNameCFile, level);
+
+								}
+								else
+								{
+									//cout << "!hFileFound2" << endl;
+								}
+							}
+							else
+							{
+								//cout << "!cFileFound" << endl;
+								CSReference * newfirstReferenceInFunctionList = new CSReference();
+								currentReferenceInIncludeFileList->firstReferenceInFunctionList = newfirstReferenceInFunctionList;							
+							}
 						}
-						string referenceNameCFile = hashIncludeFileNameCFile;
-						getIncludeFileNamesFromCorHFile(lastReferenceInBelowList, currentReferenceInIncludeFileList, referenceNameCFile, level+1);
-
-						//fill function and function reference list using .h file;
-						CSReference * newfirstReferenceInFunctionList = new CSReference();
-						currentReferenceInIncludeFileList->firstReferenceInFunctionList = newfirstReferenceInFunctionList;
-						getFunctionNamesFromFunctionDeclarationsInHFile(currentReferenceInIncludeFileList->firstReferenceInFunctionList, referenceName, level);
-
-						//cout << "currentReferenceInIncludeFileList->firstReferenceInFunctionList->name = " << currentReferenceInIncludeFileList->firstReferenceInFunctionList->name << endl;
-
-						//cout << "topLevelReferenceName = " << topLevelReferenceName << endl;
-						//cout << "getFunctionReferenceNamesFromFunctionsInCFile()" << endl;
-						getFunctionReferenceNamesFromFunctionsInCFile(firstReferenceInIncludeFileList, currentReferenceInIncludeFileList->firstReferenceInFunctionList, currentReferenceInIncludeFileList, referenceNameCFile, level);
+						else
+						{
+							//cout << "!hFileFound" << endl;
+							CSReference * newfirstReferenceInFunctionList = new CSReference();
+							currentReferenceInIncludeFileList->firstReferenceInFunctionList = newfirstReferenceInFunctionList;						
+						}
 
 						//cout << "h3" << endl;
-
+						
 						currentReferenceInIncludeFileList = currentReferenceInIncludeFileList->next;
 
 
@@ -322,15 +349,18 @@ void getIncludeFileNamesFromCorHFile(CSReference * firstReferenceInIncludeFileLi
 				cout << "lineCount = " << lineCount << endl;
 			}
 		}
-
+		parseFileObject->close();
 	}
-	parseFileObject->close();
+	
 	delete parseFileObject;
+	return fileFound;
 }
 
 
-void getFunctionNamesFromFunctionDeclarationsInHFile(CSReference * firstReferenceInFunctionList, string topLevelFileName, int level)
-{
+bool getFunctionNamesFromFunctionDeclarationsInHFile(CSReference * firstReferenceInFunctionList, string topLevelFileName, int level)
+{	
+	bool fileFound = false;
+	
 	string parseFileName = topLevelFileName;
 
 	char * parseFileNamecharstar = const_cast<char*>(parseFileName.c_str());
@@ -345,7 +375,7 @@ void getFunctionNamesFromFunctionDeclarationsInHFile(CSReference * firstReferenc
 	}
 	else
 	{
-
+		fileFound = true;
 
 		char c;
 		int id = 0;
@@ -633,10 +663,11 @@ void getFunctionNamesFromFunctionDeclarationsInHFile(CSReference * firstReferenc
 				cout << "lineCount = " << lineCount << endl;
 			}
 		}
-
+		parseFileObject->close();
 	}
-	parseFileObject->close();
+	
 	delete parseFileObject;
+	return fileFound;
 }
 
 
@@ -793,23 +824,39 @@ void getFunctionReferenceNamesFromFunctionsInCFile(CSReference * firstReferenceI
 
 				//OLD method - comments are not ignored;
 				bool stillFindingEndOfFunction = true;
-
+				bool newLineFound = false;
+				
+				#define CS_MAX_NUM_CHARACTERS_PER_FUNCTION (1000000)
 				int currentIndexInFunction = positionOfFunctionReference;
 				while(stillFindingEndOfFunction)
 				{
 					char c = fileContentsString[currentIndexInFunction];
-					if(c == '\n')
+					
+					if(newLineFound)
 					{
-						currentIndexInFunction++;
-						c = fileContentsString[currentIndexInFunction];
 						if(c == '}')
 						{
 							stillFindingEndOfFunction = false;
 						}
+						else
+						{
+							newLineFound = false;
+						}
 					}
-					else if(c == '}')
+					else
 					{
-						//stillFindingEndOfFunction = false;
+						newLineFound = false;
+					}
+					
+					if(c == '\n')
+					{
+						newLineFound = true;
+					}
+					
+					if(currentIndexInFunction > CS_MAX_NUM_CHARACTERS_PER_FUNCTION)
+					{
+						cout << "getFunctionReferenceNamesFromFunctionsInCFile() error: function definitions in .cpp files must end with a } without any leading white space" << endl;
+						exit(0);
 					}
 
 					currentIndexInFunction++;

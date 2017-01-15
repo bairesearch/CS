@@ -3,7 +3,7 @@
  * File Name: CSdraw.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2010 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3a6a 20-Mar-2012
+ * Project Version: 3a6b 30-Apr-2012
  *
  *******************************************************************************/
 
@@ -34,7 +34,9 @@ using namespace std;
 static double CS_OUTPUT_Z_POSITION_FILE_CONNECTIONS;
 static double CS_OUTPUT_Z_POSITION_FILE_CONTAINER_BIG_BOX;
 static double CS_OUTPUT_Z_POSITION_FUNCTION_CONNECTIONS;
-static double CS_OUTPUT_Z_POSITION_FILE_AND_FUNCTION_BOX;
+static double CS_OUTPUT_Z_POSITION_FILE_BOX;
+static double CS_OUTPUT_Z_POSITION_FUNCTION_BOX;
+static double CS_OUTPUT_Z_POSITION_FUNCTION_TRACE_BOX;
 static double CS_OUTPUT_Z_POSITION_FILE_AND_FUNCTION_TEXT;
 
 static double CS_FILE_OR_FUNCTION_TEXT_BOX_SCALE_FACTOR_X;
@@ -104,10 +106,18 @@ void fillInCSRulesExternVariables()
 		{
 			CS_OUTPUT_Z_POSITION_FUNCTION_CONNECTIONS = currentReferenceRulesClass->fractionalValue;
 		}
-		else if(currentReferenceRulesClass->name == CS_OUTPUT_Z_POSITION_FILE_AND_FUNCTION_BOX_NAME)
+		else if(currentReferenceRulesClass->name == CS_OUTPUT_Z_POSITION_FILE_BOX_NAME)
 		{
-			CS_OUTPUT_Z_POSITION_FILE_AND_FUNCTION_BOX = currentReferenceRulesClass->fractionalValue;
+			CS_OUTPUT_Z_POSITION_FILE_BOX = currentReferenceRulesClass->fractionalValue;
 		}
+		else if(currentReferenceRulesClass->name == CS_OUTPUT_Z_POSITION_FUNCTION_BOX_NAME)
+		{
+			CS_OUTPUT_Z_POSITION_FUNCTION_BOX = currentReferenceRulesClass->fractionalValue;
+		}
+		else if(currentReferenceRulesClass->name == CS_OUTPUT_Z_POSITION_FUNCTION_TRACE_BOX_NAME)
+		{
+			CS_OUTPUT_Z_POSITION_FUNCTION_TRACE_BOX = currentReferenceRulesClass->fractionalValue;
+		}				
 		else if(currentReferenceRulesClass->name == CS_OUTPUT_Z_POSITION_FILE_AND_FUNCTION_TEXT_NAME)
 		{
 			CS_OUTPUT_Z_POSITION_FILE_AND_FUNCTION_TEXT = currentReferenceRulesClass->fractionalValue;
@@ -381,7 +391,7 @@ Reference * createFileReferenceListBoxes(Reference * currentReferenceInPrintList
 			if(!traceAFunctionUpwards)
 			{//only print connections when not tracing a bottom level function upwards - saves space
 			#endif
-				newCurrentReferenceInPrintList = createFileOrFunctionReferenceBox(newCurrentReferenceInPrintList, currentFileReference, vectorObjectsScaleFactor, colour, CS_FILE_MAX_TEXT_LENGTH);	//add box
+				newCurrentReferenceInPrintList = createFileOrFunctionReferenceBox(newCurrentReferenceInPrintList, currentFileReference, vectorObjectsScaleFactor, colour, CS_FILE_MAX_TEXT_LENGTH, CS_OUTPUT_Z_POSITION_FILE_BOX);	//add box
 					vec pos;
 					pos.x = currentFileReference->printX;
 					pos.y = currentFileReference->printY;
@@ -744,7 +754,7 @@ Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentRe
 		{//only print connections when not tracing a bottom level function upwards - saves space
 		#endif
 			//print function box
-			newCurrentReferenceInPrintList = createFileOrFunctionReferenceBox(newCurrentReferenceInPrintList, functionReference, CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR, colour, CS_FUNCTION_MAX_TEXT_LENGTH);	//add box
+			newCurrentReferenceInPrintList = createFileOrFunctionReferenceBox(newCurrentReferenceInPrintList, functionReference, CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR, colour, CS_FUNCTION_MAX_TEXT_LENGTH, CS_OUTPUT_Z_POSITION_FUNCTION_BOX);	//add box
 				vec pos;
 				pos.x = functionReference->printX;
 				pos.y = functionReference->printY;
@@ -932,8 +942,10 @@ CSReferenceArray findFunctionReferenceInPrintedFileReference(CSReference * fileR
 
 
 
-Reference * createFileOrFunctionReferenceBox(Reference * currentReferenceInPrintList, CSReference * reference, double scaleFactor, int colour, double maxTextLength)
+Reference * createFileOrFunctionReferenceBox(Reference * currentReferenceInPrintList, CSReference * reference, double scaleFactor, int colour, double maxTextLength, double zPosition)
 {
+	//cout << "zPosition = " << zPosition << endl;
+	
 	Reference * newCurrentReferenceInPrintList = currentReferenceInPrintList;
 
 	newCurrentReferenceInPrintList->type = REFERENCE_TYPE_QUAD;
@@ -945,7 +957,7 @@ Reference * createFileOrFunctionReferenceBox(Reference * currentReferenceInPrint
 	newCurrentReferenceInPrintList->vertex1relativePosition.x = reference->printX - CS_FILE_OR_FUNCTION_TEXT_BOX_SCALE_FACTOR_X*scaleFactor;
 #endif
 	newCurrentReferenceInPrintList->vertex1relativePosition.y = reference->printY + CS_FILE_OR_FUNCTION_TEXT_BOX_BOX_SCALE_FACTOR_Y_LDR*scaleFactor;
-	newCurrentReferenceInPrintList->vertex1relativePosition.z = CS_OUTPUT_Z_POSITION_FILE_AND_FUNCTION_BOX;
+	newCurrentReferenceInPrintList->vertex1relativePosition.z = zPosition;
 
 #ifdef CS_CENTRE_BOXES
 	newCurrentReferenceInPrintList->vertex2relativePosition.x = reference->printX + CS_FILE_OR_FUNCTION_TEXT_BOX_SCALE_FACTOR_X*scaleFactor*reference->name.length()/maxTextLength;
@@ -953,7 +965,7 @@ Reference * createFileOrFunctionReferenceBox(Reference * currentReferenceInPrint
 	newCurrentReferenceInPrintList->vertex2relativePosition.x = reference->printX + CS_FILE_OR_FUNCTION_TEXT_BOX_SCALE_FACTOR_X*scaleFactor;
 #endif
 	newCurrentReferenceInPrintList->vertex2relativePosition.y = reference->printY + CS_FILE_OR_FUNCTION_TEXT_BOX_BOX_SCALE_FACTOR_Y_LDR*scaleFactor;
-	newCurrentReferenceInPrintList->vertex2relativePosition.z = CS_OUTPUT_Z_POSITION_FILE_AND_FUNCTION_BOX;
+	newCurrentReferenceInPrintList->vertex2relativePosition.z = zPosition;
 
 #ifdef CS_CENTRE_BOXES
 	newCurrentReferenceInPrintList->vertex3relativePosition.x = reference->printX + CS_FILE_OR_FUNCTION_TEXT_BOX_SCALE_FACTOR_X*scaleFactor*reference->name.length()/maxTextLength;
@@ -961,7 +973,7 @@ Reference * createFileOrFunctionReferenceBox(Reference * currentReferenceInPrint
 	newCurrentReferenceInPrintList->vertex3relativePosition.x = reference->printX + CS_FILE_OR_FUNCTION_TEXT_BOX_SCALE_FACTOR_X*scaleFactor;
 #endif
 	newCurrentReferenceInPrintList->vertex3relativePosition.y = reference->printY - CS_FILE_OR_FUNCTION_TEXT_BOX_BOX_SCALE_FACTOR_Y_LDR*scaleFactor;
-	newCurrentReferenceInPrintList->vertex3relativePosition.z = CS_OUTPUT_Z_POSITION_FILE_AND_FUNCTION_BOX;
+	newCurrentReferenceInPrintList->vertex3relativePosition.z = zPosition;
 
 #ifdef CS_CENTRE_BOXES
 	newCurrentReferenceInPrintList->vertex4relativePosition.x = reference->printX - CS_FILE_OR_FUNCTION_TEXT_BOX_SCALE_FACTOR_X*scaleFactor*reference->name.length()/maxTextLength;
@@ -969,7 +981,7 @@ Reference * createFileOrFunctionReferenceBox(Reference * currentReferenceInPrint
 	newCurrentReferenceInPrintList->vertex4relativePosition.x = reference->printX - CS_FILE_OR_FUNCTION_TEXT_BOX_SCALE_FACTOR_X*scaleFactor;
 #endif
 	newCurrentReferenceInPrintList->vertex4relativePosition.y = reference->printY - CS_FILE_OR_FUNCTION_TEXT_BOX_BOX_SCALE_FACTOR_Y_LDR*scaleFactor;
-	newCurrentReferenceInPrintList->vertex4relativePosition.z = CS_OUTPUT_Z_POSITION_FILE_AND_FUNCTION_BOX;
+	newCurrentReferenceInPrintList->vertex4relativePosition.z = zPosition;
 
 	/*
 	cout << "createFileOrFunctionReferenceBox():" << endl;
@@ -1296,11 +1308,11 @@ Reference * traceFunctionsUpwardsAndDrawOrHighLightThese(Reference * currentRefe
 		functionBoxColour = CS_FUNCTION_BOX_HIGHLIGHT_COLOUR;
 		//just highlight the box (already drawn)
 	#endif
-	newCurrentReferenceInPrintList = createFileOrFunctionReferenceBox(newCurrentReferenceInPrintList, currentFunctionBeingTraced, CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR, functionBoxColour, CS_FUNCTION_MAX_TEXT_LENGTH);	//add box
+	newCurrentReferenceInPrintList = createFileOrFunctionReferenceBox(newCurrentReferenceInPrintList, currentFunctionBeingTraced, CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR, functionBoxColour, CS_FUNCTION_MAX_TEXT_LENGTH, CS_OUTPUT_Z_POSITION_FUNCTION_TRACE_BOX);	//add box
 		vec pos;
 		pos.x = currentFunctionBeingTraced->printX;
 		pos.y = currentFunctionBeingTraced->printY;
-		writeFileOrFunctionSVGBox(writeFileObject, &pos, currentFunctionBeingTraced->name.length(), CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR, CS_FUNCTION_MAX_TEXT_LENGTH, functionBoxColour, CS_FUNCTION_TEXT_BOX_OUTLINE_WIDTH_SVG);
+		writeFileOrFunctionSVGBoxTransparent(writeFileObject, &pos, currentFunctionBeingTraced->name.length(), CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR, CS_FUNCTION_MAX_TEXT_LENGTH, functionBoxColour, CS_FUNCTION_TEXT_BOX_OUTLINE_WIDTH_SVG, 0.5);
 
 	//print function text;
 	#ifdef CS_DO_NOT_DRAW_ALL_FUNCTION_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
@@ -1380,6 +1392,19 @@ void writeFileOrFunctionSVGBox(ofstream * writeFileObject, vec * pos, int textLe
 
 	writeSVGBox(writeFileObject,  pos, width, height, col, boxOutlineWidth, false);
 }
+
+void writeFileOrFunctionSVGBoxTransparent(ofstream * writeFileObject, vec * pos, int textLength, double scaleFactor, double maxTextLength, int col, double boxOutlineWidth, double fillOpacity)
+{
+#ifdef CS_CENTRE_BOXES
+	double width = CS_FILE_OR_FUNCTION_TEXT_BOX_BOX_SCALE_FACTOR_X_SPACING_FRACTION_SVG*scaleFactor*(double)textLength/maxTextLength;
+#else
+	double width = CS_FILE_OR_FUNCTION_TEXT_BOX_BOX_SCALE_FACTOR_X_SPACING_FRACTION_SVG*scaleFactor;
+#endif
+	double height = CS_FILE_OR_FUNCTION_TEXT_BOX_BOX_SCALE_FACTOR_Y_SPACING_FRACTION_SVG*scaleFactor;
+
+	writeSVGBoxTransparent(writeFileObject,  pos, width, height, col, boxOutlineWidth, false, fillOpacity);
+}
+
 
 
 

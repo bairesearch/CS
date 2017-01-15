@@ -3,7 +3,7 @@
  * File Name: CSmain.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2010 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3a6a 20-Mar-2012
+ * Project Version: 3a6b 30-Apr-2012
  *
  *******************************************************************************/
 
@@ -223,7 +223,7 @@ int main(int argc,char **argv)
 		cout << "**** Known Limitations: *****" << endl;
 		cout << "all c/cpp and h/hpp files that wish to be parsed/added to tree must be contained in the same directory" << endl;
 		cout << "if the CS program does not stop, there might be loops in the include file structure (eg a.cpp includes b.cpp, b.cpp includes a.cpp)" << endl;
-		cout << "CS has been upgraded to support commenting (previously illegal functions and include files had to be be removed completely)" << endl;
+		cout << "CS does not support commenting (illegal functions and include files have to be be removed completely)" << endl;	//CS has been upgraded to support commenting (previously illegal functions and include files had to be be removed completely)
 		cout << "function definitions in .cpp files must not have leading white space, and should be contained on a single line" << endl;
 		cout << "function definitions in .cpp files must end with a } without any leading white space" << endl;
 		cout << "function declarations for functions that wish to be parsed/added to tree must be contained in .h files, can have preceeding white space, but must be contained on a single line" << endl;
@@ -232,6 +232,7 @@ int main(int argc,char **argv)
 		cout << "CS requires a single space between #include and \"this.h\"" << endl;
 		cout << "CS may produce large SVG files (Eg when functions are enabled via enablefunctions) which must be viewed with a viewer capable of dynamic zoom, eg, Konqueror" << endl;
 		cout << "CS is not designed to operate with function pointers - it is argued that code is easier to read without function pointers and should only be used where heavy optimisation is required" << endl;
+		cout << "the first include file in the top level source file (eg PROJECTmain.cpp must declare the top level function name (eg main)" << endl;
 		cout << "****************************" << endl;
 		exit(0);
 	}

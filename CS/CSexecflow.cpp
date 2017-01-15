@@ -3,7 +3,7 @@
  * File Name: CSexecflow.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2010 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3a6a 20-Mar-2012
+ * Project Version: 3a6b 30-Apr-2012
  *
  *******************************************************************************/
 
@@ -55,11 +55,14 @@ void printCS(string topLevelFileName, string topLevelFunctionName, int width, in
 	CSReference * firstReferenceInTopLevelBelowList = new CSReference();
 	topLevelReferenceInList->firstReferenceInBelowList = firstReferenceInTopLevelBelowList;
 
-	getIncludeFileNamesFromCorHFile(firstReferenceInTopLevelBelowList, topLevelReferenceInList, topLevelFileName, 0);
+	bool hFileFound = getIncludeFileNamesFromCorHFile(firstReferenceInTopLevelBelowList, topLevelReferenceInList, topLevelFileName, 0);
+	if(!hFileFound)
+	{
+		cout << "printCS() error: !hFileFound: " << topLevelFileName << endl;
+	}
 
-	//cout << "h1" << endl;
-
-
+	//cout << "q4" << endl;
+	//exit(0);
 
 	initiateMaxXAtAParticularY();
 	Reference * firstReferenceInPrintList = new Reference();
@@ -104,28 +107,32 @@ void printCS(string topLevelFileName, string topLevelFunctionName, int width, in
 			cout << "error" << endl;
 			exit(0);
 		}
-		//cout << "h1b" << endl;
-		//cout << "topLevelFunctionReference->firstReferenceInFunctionReferenceList->name = " << topLevelFunctionReference->firstReferenceInFunctionReferenceList->name << endl;
-
 		/*
+		cout << "h1b" << endl;
+		
 		cout << "firstReferenceInTopLevelBelowList->col = " << firstReferenceInTopLevelBelowList->col << endl;
 		cout << "currentReferenceInPrintList->name = " << currentReferenceInPrintList->name << endl;
 		cout << "firstReferenceInTopLevelBelowList->name = " << firstReferenceInTopLevelBelowList->name << endl;
 		cout << "topLevelFunctionReference->name = " << topLevelFunctionReference->name << endl;
-		cout << "firstReferenceInTopLevelBelowList->name = " << firstReferenceInTopLevelBelowList->name << endl;
-		cout << "topLevelFunctionReference->name = " << topLevelFunctionReference->name << endl;
-		*/
-
-		/*
+				
 		cout << "aboveLevelFileReference->name = " << firstReferenceInTopLevelBelowList->name << endl;
 		cout << "aboveLevelFunctionReference->name = " << topLevelFunctionReference->name << endl;
 		cout << "firstReferenceInTopLevelBelowList->name = " << firstReferenceInTopLevelBelowList->name << endl;
 		cout << "functionLevel = " << 0 << endl;
 		cout << "functionReferenceNameToFind = " << topLevelFunctionReference->firstReferenceInFunctionReferenceList->name << endl;
+		
+		cout << "topLevelFunctionReference->firstReferenceInFunctionReferenceList->name = " << topLevelFunctionReference->firstReferenceInFunctionReferenceList->name << endl;
 		*/
-
-		currentReferenceInPrintList = createFunctionReferenceListBoxesAndConnections(currentReferenceInPrintList, firstReferenceInTopLevelBelowList, topLevelFunctionReference, firstReferenceInTopLevelBelowList, 0, topLevelFunctionReference->firstReferenceInFunctionReferenceList->name, &writeFileObject, traceAFunctionUpwards);
-
+		
+		//cout << "g1" << endl;
+		CSReference * currentReferenceInFunctionReferenceList = topLevelFunctionReference->firstReferenceInFunctionReferenceList;
+		while(currentReferenceInFunctionReferenceList->next != NULL)
+		{
+			//cout << "g1b" << endl;
+			currentReferenceInPrintList = createFunctionReferenceListBoxesAndConnections(currentReferenceInPrintList, firstReferenceInTopLevelBelowList, topLevelFunctionReference, firstReferenceInTopLevelBelowList, 0, currentReferenceInFunctionReferenceList->name, &writeFileObject, traceAFunctionUpwards);
+			currentReferenceInFunctionReferenceList = currentReferenceInFunctionReferenceList->next;
+		}
+		//cout << "g2" << endl;	
 
 		if(traceAFunctionUpwards)
 		{

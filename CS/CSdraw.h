@@ -3,7 +3,7 @@
  * File Name: CSdraw.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2010 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3a6a 20-Mar-2012
+ * Project Version: 3a6b 30-Apr-2012
  *
  *******************************************************************************/
 
@@ -18,7 +18,9 @@
 #define CS_OUTPUT_Z_POSITION_FILE_CONNECTIONS (0.6)
 #define CS_OUTPUT_Z_POSITION_FILE_CONTAINER_BIG_BOX (0.5)
 #define CS_OUTPUT_Z_POSITION_FUNCTION_CONNECTIONS (0.4)
-#define CS_OUTPUT_Z_POSITION_FILE_AND_FUNCTION_BOX (0.3)
+#define CS_OUTPUT_Z_POSITION_FILE_BOX (0.35)
+#define CS_OUTPUT_Z_POSITION_FUNCTION_BOX (0.3)
+#define CS_OUTPUT_Z_POSITION_FUNCTION_TRACE_BOX (0.25)
 #define CS_OUTPUT_Z_POSITION_FILE_AND_FUNCTION_TEXT (0.2)
 
 #define CS_FILE_OR_FUNCTION_TEXT_BOX_SCALE_FACTOR_X (0.4)
@@ -69,7 +71,9 @@
 #define CS_OUTPUT_Z_POSITION_FILE_CONNECTIONS_NAME "CS_OUTPUT_Z_POSITION_FILE_CONNECTIONS"
 #define CS_OUTPUT_Z_POSITION_FILE_CONTAINER_BIG_BOX_NAME "CS_OUTPUT_Z_POSITION_FILE_CONTAINER_BIG_BOX"
 #define CS_OUTPUT_Z_POSITION_FUNCTION_CONNECTIONS_NAME "CS_OUTPUT_Z_POSITION_FUNCTION_CONNECTIONS"
-#define CS_OUTPUT_Z_POSITION_FILE_AND_FUNCTION_BOX_NAME "CS_OUTPUT_Z_POSITION_FILE_AND_FUNCTION_BOX"
+#define CS_OUTPUT_Z_POSITION_FILE_BOX_NAME "CS_OUTPUT_Z_POSITION_FILE_BOX"
+#define CS_OUTPUT_Z_POSITION_FUNCTION_BOX_NAME "CS_OUTPUT_Z_POSITION_FUNCTION_BOX"
+#define CS_OUTPUT_Z_POSITION_FUNCTION_TRACE_BOX_NAME "CS_OUTPUT_Z_POSITION_FUNCTION_TRACE_BOX"
 #define CS_OUTPUT_Z_POSITION_FILE_AND_FUNCTION_TEXT_NAME "CS_OUTPUT_Z_POSITION_FILE_AND_FUNCTION_TEXT"
 
 #define CS_FILE_OR_FUNCTION_TEXT_BOX_SCALE_FACTOR_X_NAME "CS_FILE_OR_FUNCTION_TEXT_BOX_SCALE_FACTOR_X"
@@ -133,7 +137,7 @@ Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentRe
 	CSReferenceArray findFunctionReferenceInAPrintedFileReferenceRecursive(CSReference * fileReferenceToSearchIn, string functionReferenceNameToFind, CSReferenceArray * foundFileAndFunctionReference, bool * referenceFound);
 		CSReferenceArray findFunctionReferenceInPrintedFileReference(CSReference * fileReferenceToSearchIn, string functionReferenceNameToFind, CSReferenceArray * foundFileAndFunctionReference, bool * referenceFound);
 
-	Reference * createFileOrFunctionReferenceBox(Reference * currentReferenceInPrintList, CSReference * reference, double scaleFactor, int colour, double maxTextLength);
+	Reference * createFileOrFunctionReferenceBox(Reference * currentReferenceInPrintList, CSReference * reference, double scaleFactor, int colour, double maxTextLength, double zPosition);
 	Reference * createFileOrFunctionReferenceConnection(Reference * currentReferenceInPrintList, CSReference * reference,  CSReference * currentReferenceInAboveList, int colour, bool fileOrFunction, bool traceAFunctionUpwardsAndNotCurrentlyTracing, ofstream * writeFileObject);
 	Reference * createBox(Reference * currentReferenceInPrintList, vec * vect, double width, double height, int colour);
 
@@ -143,6 +147,7 @@ CSReference * findPrintedFunctionReferenceWithName(string name, CSReference * re
 Reference * traceFunctionsUpwardsAndDrawOrHighLightThese(Reference * currentReferenceInPrintList, CSReference * firstReferenceInTopLevelBelowList, CSReference * currentFunctionBeingTraced, ofstream * writeFileObject, string topLevelFunctionName);
 
 void writeFileOrFunctionSVGBox(ofstream * writeFileObject, vec * pos, int textLength, double scaleFactor, double maxTextLength, int col, double boxOutlineWidth);
+void writeFileOrFunctionSVGBoxTransparent(ofstream * writeFileObject, vec * pos, int textLength, double scaleFactor, double maxTextLength, int col, double boxOutlineWidth, double fillOpacity);
 
 //void fillInCSRulesExternVariables(RulesClass * firstReferenceInCSrulesDraw);
 void fillInCSRulesExternVariables();

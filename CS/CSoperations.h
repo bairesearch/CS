@@ -3,7 +3,7 @@
  * File Name: CSoperations.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2010 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3a6a 20-Mar-2012
+ * Project Version: 3a6b 30-Apr-2012
  *
  *******************************************************************************/
 
@@ -17,8 +17,8 @@
 
 
 
-void getIncludeFileNamesFromCorHFile(CSReference * firstReferenceInIncludeFileList, CSReference * topLevelReference, string topLevelReferenceName, int level);
-	void getFunctionNamesFromFunctionDeclarationsInHFile(CSReference * firstReferenceInFunctionList, string topLevelFileName, int level);
+bool getIncludeFileNamesFromCorHFile(CSReference * firstReferenceInIncludeFileList, CSReference * topLevelReference, string topLevelReferenceName, int level);
+	bool getFunctionNamesFromFunctionDeclarationsInHFile(CSReference * firstReferenceInFunctionList, string topLevelFileName, int level);
 	void getFunctionReferenceNamesFromFunctionsInCFile(CSReference * firstReferenceInIncludeFileList, CSReference * firstReferenceInFunctionList, CSReference * topLevelReference, string topLevelFileName, int level);
 		CSReference * searchFunctionStringForFunctionReferencesRecursive(CSReference * firstReferenceInIncludeFileList, CSReference * firstFileNameInLayerContainingFunctionReferencesToSearchFor, CSReference * firstReferenceInFunctionReferenceList, string functionContentsString);
 			CSReference * searchFunctionStringForFunctionReferences(CSReference * firstReferenceInIncludeFileList, CSReference * fileNameContainingFunctionReferencesToSearchFor, CSReference * firstReferenceInFunctionReferenceList, string functionContentsString);
