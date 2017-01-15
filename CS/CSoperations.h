@@ -26,7 +26,7 @@
  * File Name: CSoperations.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h9a 09-December-2015
+ * Project Version: 3h9b 09-December-2015
  *
  *******************************************************************************/
 
@@ -57,6 +57,8 @@ CSfile* findReferenceInIncludeFileList(CSfile* firstReferenceInAboveLevelBelowLi
 string generateSourceFileNameFromHeaderFileName(string headerFileName, string sourceFileNameExtension);
 
 void attachFunctionReferenceTargets(CSfileContainer* firstObjectInAboveLevelBelowListContainer);
+
+string extractFunctionArgumentName(string* argumentText, int indexOfStartOfVariableName);
 
 #endif
 

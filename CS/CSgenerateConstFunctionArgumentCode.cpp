@@ -21,7 +21,7 @@
  * File Name: CSgenerateConstFunctionArgumentCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h9a 09-December-2015
+ * Project Version: 3h9b 09-December-2015
  *
  *******************************************************************************/
 
@@ -49,7 +49,11 @@ bool generateConstFunctionArguments(CSfileContainer* firstObjectInTopLevelBelowL
 bool generateConstFunctionArgumentsRecurse(CSfileContainer* firstObjectInAboveLevelBelowListContainer, CSfileContainer* firstObjectInTopLevelBelowListContainer)	
 {
 	bool result = true;
-	
+
+	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+	cout << "generateConstFunctionArgumentsRecurse{}" << endl;	
+	#endif
+		
 	CSfileContainer* currentFileObjectContainer = firstObjectInAboveLevelBelowListContainer;
 	while(currentFileObjectContainer->next != NULL)
 	{
@@ -99,6 +103,11 @@ bool generateConstFunctionArgumentsRecurse(CSfileContainer* firstObjectInAboveLe
 
 		currentFileObjectContainer = currentFileObjectContainer->next;
 	}
+	
+	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+	cout << "end generateConstFunctionArgumentsRecurse{}" << endl;	
+	#endif
+	
 	return result;
 }
 	
@@ -208,6 +217,10 @@ bool generateConstFunctionArgumentsFile(CSfile* currentFileObject)
 	cout << "currentFileObject->sourceFileText = \n" << currentFileObject->sourceFileText << endl;	
 	#endif
 	
+	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+	cout << "end generateConstFunctionArgumentsFile{}: currentFileObject->name = " << currentFileObject->name << endl;	
+	#endif
+	
 	return result;
 }
 
@@ -307,6 +320,10 @@ bool generateConstFunctionArgumentsFunction(CSfunction* currentFunctionObject)
 			currentFunctionArgumentInFunction = currentFunctionArgumentInFunction->next;
 		}
 	}
+	
+	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+	cout << "end generateConstFunctionArgumentsFunction{}: currentFunctionObject->name = " << currentFunctionObject->name << endl;	
+	#endif
 				
 	return result;
 }
@@ -314,6 +331,12 @@ bool generateConstFunctionArgumentsFunction(CSfunction* currentFunctionObject)
 //CS_GENERATE_CONST_FUNCTION_ARGUMENTS_PARSE_LISTS: limitation: trace secondary assignments of iterator (limitation: can only trace immediate secondary assignments of iterator variables)
 bool generateConstFunctionArgumentAndSearchForSecondaryReferences(CSfunction* currentFunctionObject, CSfunctionArgument* currentFunctionArgumentInFunction, string functionDeclarationArgument, bool ignoreListIterationNextAssignments)
 {
+	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+	cout << "generateConstFunctionArgumentAndSearchForSecondaryReferences{}: currentFunctionObject->name = " << currentFunctionObject->name << endl;
+	cout << "generateConstFunctionArgumentAndSearchForSecondaryReferences{}: currentFunctionArgumentInFunction->argumentName = " << currentFunctionArgumentInFunction->argumentName << endl;
+	cout << "generateConstFunctionArgumentAndSearchForSecondaryReferences{}: functionDeclarationArgument = " << functionDeclarationArgument << endl;
+	#endif
+	
 	string* functionText = &(currentFunctionObject->functionText);
 	
 	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_ASSIGNMENT_OF_ALIASES
@@ -326,11 +349,6 @@ bool generateConstFunctionArgumentAndSearchForSecondaryReferences(CSfunction* cu
 	#endif	
 												
 	bool result = true;
-	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
-	cout << "generateConstFunctionArgumentAndSearchForSecondaryReferences{}: currentFunctionObject->name = " << currentFunctionObject->name << endl;
-	cout << "generateConstFunctionArgumentAndSearchForSecondaryReferences{}: currentFunctionArgumentInFunction->argumentName = " << currentFunctionArgumentInFunction->argumentName << endl;
-	cout << "generateConstFunctionArgumentAndSearchForSecondaryReferences{}: functionDeclarationArgument = " << functionDeclarationArgument << endl;
-	#endif
 
 	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_ASSIGNMENT_OF_ALIASES
 	if(!(currentFunctionObject->parseSecondaryReferencesOnly))
@@ -495,6 +513,10 @@ bool generateConstFunctionArgumentAndSearchForSecondaryReferences(CSfunction* cu
 			}
 		}
 	}
+	
+	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+	cout << "end generateConstFunctionArgumentAndSearchForSecondaryReferences{}: functionDeclarationArgument = " << functionDeclarationArgument << endl;
+	#endif
 					
 	return result;
 }
@@ -579,13 +601,17 @@ bool generateConstFunctionArgument(CSfunction* currentFunctionObject, CSfunction
 			currentFunctionReference = currentFunctionReference->next;
 		}
 	}
+
+	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+	cout << "end generateConstFunctionArgument{}: functionDeclarationArgument = " << functionDeclarationArgument << endl;
+	#endif
 }
 			
 			
 bool checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject, CSfunctionArgument* currentFunctionArgumentInFunction, string functionDeclarationArgument, bool ignoreListIterationNextAssignments)
 { 
 	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
-	cout << "checkIfVariableIsBeingModifiedInFunction: functionDeclarationArgument = " << functionDeclarationArgument << endl;
+	cout << "checkIfVariableIsBeingModifiedInFunction{}: functionDeclarationArgument = " << functionDeclarationArgument << endl;
 	#endif
 	
 	bool isNotConst = false;
@@ -736,8 +762,12 @@ bool checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 								{
 									if((indexOfSquareBracketOpen > indexOfStartOfLine) && (indexOfSquareBracketClose < indexOfEqualsSet))
 									{
-										//e.g. imageWidth in "contrastMap[y*imageWidth + x] = contrastVal;"
-										passMiscellaneousConditions = false;
+										if((indexOfSquareBracketOpen < indexOfFunctionArgument) && (indexOfSquareBracketClose > indexOfFunctionArgument))
+										{
+											//e.g. "contrastMap[y*imageWidth + x] = contrastVal;", where functionArgument is imageWidth
+											//not "GIAentityNodeArrayFilled[relationIndex[i]] = true;", where functionArgument is GIAentityNodeArrayFilled
+											passMiscellaneousConditions = false;
+										}
 									}
 								}
 
@@ -856,7 +886,11 @@ bool checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 		}
 	}
 	#endif
-								
+
+	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
+	cout << "end checkIfVariableIsBeingModifiedInFunction{}: functionDeclarationArgument = " << functionDeclarationArgument << endl;
+	#endif
+									
 	return isNotConst;
 }
 

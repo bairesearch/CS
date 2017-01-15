@@ -26,7 +26,7 @@
  * File Name: CSoperations.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h9a 09-December-2015
+ * Project Version: 3h9b 09-December-2015
  *
  *******************************************************************************/
 
@@ -1358,7 +1358,8 @@ void identifyFunctionDeclarationArguments(CSfunction* currentReferenceInFunction
 				cout << "generateHTMLdocumentationFunctionInputArguments{} error: (startPositionOfArgumentName == CPP_STRING_FIND_RESULT_FAIL_VALUE)" << endl;
 				exit(0);
 			}
-			string currentArgumentName = currentArgument.substr(startPositionOfArgumentName, endPositionOfArgument-startPositionOfArgumentName);
+			//string currentArgumentName = currentArgument.substr(startPositionOfArgumentName, endPositionOfArgument-startPositionOfArgumentName);
+			string currentArgumentName = extractFunctionArgumentName(&currentArgument, startPositionOfArgumentName);	//updated CS3h9b - this is required to support array arguments eg "typeX* arrayName[]"
 			string currentArgumentType = currentArgument.substr(0, startPositionOfArgumentName);
 
 			#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
@@ -1545,3 +1546,46 @@ void attachFunctionReferenceTargets(CSfileContainer* firstObjectInAboveLevelBelo
 	}
 }
 
+
+string extractFunctionArgumentName(string* argumentText, int indexOfStartOfVariableName)
+{
+	string fullVariableName = "";
+	int i = indexOfStartOfVariableName;
+	bool stillFindingVariableNameCharacters = true;
+	while(stillFindingVariableNameCharacters)
+	{
+		bool foundValidChar = false;
+		for(int j=0; j<CS_FUNCTION_OR_VARIABLE_NAME_CHARACTERS_NUMBER_OF_TYPES; j++)
+		{
+			if((*argumentText)[i] == functionOrVariableNameCharacters[j])
+			{
+				foundValidChar = true;
+			}
+		}
+		
+		if((*argumentText)[i] == '*')
+		{
+			#ifdef CS_SUPPORT_POINTER_TYPE_DECLARATIONS_WITH_SPACE_BEFORE_RATHER_THAN_AFTER_ASTERIX
+			foundValidChar = true;
+			#else
+			cout << "!CS_SUPPORT_POINTER_TYPE_DECLARATIONS_WITH_SPACE_BEFORE_RATHER_THAN_AFTER_ASTERIX: extractFunctionArgumentName{} error: * character found; pointer has been defined next to variable name instead of variable type" << endl;
+			exit(0);
+			#endif
+		}
+		
+		if(foundValidChar)
+		{
+			fullVariableName = fullVariableName + (*argumentText)[i];
+		}
+		else
+		{
+			stillFindingVariableNameCharacters = false;
+		}
+		if(i >= argumentText->length())
+		{
+			stillFindingVariableNameCharacters = false;
+		}
+		i++;
+	}
+	return fullVariableName;
+}
