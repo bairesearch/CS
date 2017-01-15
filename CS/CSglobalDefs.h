@@ -26,7 +26,7 @@
  * File Name: CSglobalsDefs.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h2a 23-November-2015
+ * Project Version: 3h2b 23-November-2015
  * Description: CS specific global definitions
  *
  *******************************************************************************/
@@ -61,6 +61,9 @@
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_FUNCTION_CLOSE ")"
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_LIST_VARIABLE_POINTER_NEXT "next"		//BAI standard name for object list next pointers
 
+		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_ARRAY_INDEX_OPEN "["
+		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_ARRAY_INDEX_CLOSE "]"
+		
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_PARSE_LISTS	//3h2a
 		#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_PARSE_LISTS
 			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_LIST_VARIABLE_PREFIX_START "first"		//BAI standard prefix for object list start pointers

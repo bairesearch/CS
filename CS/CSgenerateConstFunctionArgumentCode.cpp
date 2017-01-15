@@ -21,7 +21,7 @@
  * File Name: CSgenerateConstFunctionArgumentCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h2a 23-November-2015
+ * Project Version: 3h2b 23-November-2015
  *
  *******************************************************************************/
 
@@ -191,14 +191,14 @@ bool generateConstFunctionArgumentsFunction(CSfunction* currentFunctionObject)
 					//find next occurance of ';' on same line
 					//cout << "indexOfFunctionArgument = " << indexOfFunctionArgument << endl;
 					int indexOfEndOfCommand = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_END_OF_COMMAND, indexOfFunctionArgument);
-					int indexOfEndOfNewline = functionText->find(STRING_NEW_LINE, indexOfFunctionArgument);
-					int indexOfStartOfNewline = functionText->rfind(STRING_NEW_LINE, indexOfFunctionArgument);
-					if(indexOfEndOfCommand < indexOfEndOfNewline)
+					int indexOfEndOfLine = functionText->find(STRING_NEW_LINE, indexOfFunctionArgument);
+					int indexOfStartOfLine = functionText->rfind(STRING_NEW_LINE, indexOfFunctionArgument);
+					if(indexOfEndOfCommand < indexOfEndOfLine)
 					{
 						int indexOfEndOfEqualsSetPrevious = CPP_STRING_FIND_RESULT_FAIL_VALUE;
 						if((indexOfEndOfEqualsSetPrevious = functionText->rfind(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET, indexOfFunctionArgument)) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 						{
-							if(indexOfEndOfEqualsSetPrevious > indexOfStartOfNewline)
+							if(indexOfEndOfEqualsSetPrevious > indexOfStartOfLine)
 							{
 								string listCurrentPointerName = "";
 
@@ -229,7 +229,7 @@ bool generateConstFunctionArgumentsFunction(CSfunction* currentFunctionObject)
 								if(functionDeclarationArgumentIsListStartPointer || functionDeclarationArgumentHasStartPointerBeingReferenced)
 								{
 									int indexOfCurrentPointer = CPP_STRING_FIND_RESULT_FAIL_VALUE;
-									if((indexOfCurrentPointer = functionText->find(listCurrentPointerName, indexOfStartOfNewline)) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+									if((indexOfCurrentPointer = functionText->find(listCurrentPointerName, indexOfStartOfLine)) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 									{
 										if(!functionDeclarationArgumentIsListStartPointer)
 										{//ie functionDeclarationArgumentHasStartPointerBeingReferenced
@@ -256,9 +256,9 @@ bool generateConstFunctionArgumentsFunction(CSfunction* currentFunctionObject)
 								int indexOfIteratorType = CPP_STRING_FIND_RESULT_FAIL_VALUE;
 								if((indexOfIteratorType = functionText->rfind(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_VECTOR_OR_MAP_ITERATOR, indexOfFunctionArgument)) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 								{
-									if(indexOfIteratorType > indexOfStartOfNewline)
+									if(indexOfIteratorType > indexOfStartOfLine)
 									{
-										//cout << "(indexOfIteratorType > indexOfStartOfNewline)" << endl;
+										//cout << "(indexOfIteratorType > indexOfStartOfLine)" << endl;
 										
 										//added condition CS3h2a - detect list; eg "for(vector<GIAentityConnection*>::iterator connectionIter = entityNode->entityVectorConnectionsArray[i].begin(); ..."
 											//can't handle cases where iterator is defined on separate line to for loop (or where multiple iterators are used to refer to the same list), eg; NLCtranslatorCodeBlocksLogicalConditions.cpp: generateCodeBlocksFromMathText: map<int, vector<GIAentityNode*>*>::iterator sentenceIter = sentenceIterFirstInFullSentence;
@@ -302,14 +302,14 @@ bool generateConstFunctionArgumentsFunction(CSfunction* currentFunctionObject)
 											//trace secondary assignments of iterator (FUTURE CHECKTHIS: NB really need to trace secondary/tertiary/etc assignments of all variables including all lists; not just vector/map lists):
 											//e.g. GIAentityNode* currentQueryEntityNode = connectionIterQuery->second;
 											int indexOfEqualsSetFollowingLine = CPP_STRING_FIND_RESULT_FAIL_VALUE;
-											if((indexOfEqualsSetFollowingLine = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET, indexOfEndOfNewline)) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+											if((indexOfEqualsSetFollowingLine = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET, indexOfEndOfLine)) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 											{
-												//cout << "(indexOfEqualsSetFollowingLine > indexOfEndOfNewline)" << endl;
+												//cout << "(indexOfEqualsSetFollowingLine > indexOfEndOfLine)" << endl;
 
 												int indexOfIteratorFollowingLine = CPP_STRING_FIND_RESULT_FAIL_VALUE;
-												if((indexOfIteratorFollowingLine = functionText->find(iteratorName, indexOfEndOfNewline)) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+												if((indexOfIteratorFollowingLine = functionText->find(iteratorName, indexOfEndOfLine)) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 												{
-													//cout << "((indexOfIteratorFollowingLine = functionText->find(iteratorName, indexOfEndOfNewline)) != CPP_STRING_FIND_RESULT_FAIL_VALUE)" << endl;
+													//cout << "((indexOfIteratorFollowingLine = functionText->find(iteratorName, indexOfEndOfLine)) != CPP_STRING_FIND_RESULT_FAIL_VALUE)" << endl;
 
 													string secondaryAssignmentOfIterator = extractFullVariableNameReverse(functionText, indexOfEqualsSetFollowingLine-1);
 													//cout << "secondaryAssignmentOfIterator = " << secondaryAssignmentOfIterator << endl;
@@ -496,17 +496,20 @@ bool checkIfVariableIsBeingModifiedInFunction(string* functionText, string funct
 			//find next occurance of ';' on same line
 			//cout << "indexOfFunctionArgument = " << indexOfFunctionArgument << endl;
 			int indexOfEndOfCommand = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_END_OF_COMMAND, indexOfFunctionArgument);
-			int indexOfEndOfNewline = functionText->find(STRING_NEW_LINE, indexOfFunctionArgument);
-			int indexOfStartOfNewline = functionText->rfind(STRING_NEW_LINE, indexOfFunctionArgument);
-			if(indexOfEndOfCommand < indexOfEndOfNewline)
+			int indexOfEndOfLine = functionText->find(STRING_NEW_LINE, indexOfFunctionArgument);
+			int indexOfStartOfLine = functionText->rfind(STRING_NEW_LINE, indexOfFunctionArgument);
+			int indexOfEndOfEqualsSet = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET, indexOfFunctionArgument);
+			/*
+			int indexOfEndOfEqualsTest = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_TEST, indexOfFunctionArgument);
+			int indexOfEndOfNotEqualsTest = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_NOT_EQUALS_TEST, indexOfFunctionArgument);					
+			*/
+			int indexOfSquareBracketOpen = functionText->rfind(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_ARRAY_INDEX_OPEN, indexOfFunctionArgument);
+			int indexOfSquareBracketClose = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_ARRAY_INDEX_CLOSE, indexOfFunctionArgument);
+			
+			if(indexOfEndOfCommand < indexOfEndOfLine)
 			{
 				//now see if the function argument has been reassigned in this command
-				int indexOfEndOfEqualsSet = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET, indexOfFunctionArgument);
-				/*
-				int indexOfEndOfEqualsTest = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_TEST, indexOfFunctionArgument);
-				int indexOfEndOfNotEqualsTest = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_NOT_EQUALS_TEST, indexOfFunctionArgument);					
-				*/
-				if((indexOfEndOfEqualsSet < indexOfEndOfCommand) && (indexOfEndOfEqualsSet < indexOfEndOfNewline))
+				if((indexOfEndOfEqualsSet < indexOfEndOfCommand) && (indexOfEndOfEqualsSet < indexOfEndOfLine))
 				{
 					/*
 					if((indexOfEndOfEqualsSet != indexOfEndOfEqualsTest) && (indexOfEndOfEqualsSet != indexOfEndOfNotEqualsTest))	//not required for multiline logical conditions because checking for (indexOfEndOfEqualsSet < indexOfEndOfCommand), e.g. if(chicken == 5). Only required for single line logical conditions, eg. if(chicken == 5) bat = 2;
@@ -529,12 +532,21 @@ bool checkIfVariableIsBeingModifiedInFunction(string* functionText, string funct
 											//e.g. "currentFileObjectContainer = currentFileObjectContainer->next;"
 											passMiscellaneousConditions = false;
 											
-											string currentLine = functionText->substr(indexOfStartOfNewline, indexOfEndOfNewline-indexOfStartOfNewline);	
+											string currentLine = functionText->substr(indexOfStartOfLine, indexOfEndOfLine-indexOfStartOfLine);	
 											//cout << "!passMiscellaneousConditions, currentLine = " << currentLine << endl;
 										}
 									}
 								}
 							}
+							if((indexOfSquareBracketOpen != CPP_STRING_FIND_RESULT_FAIL_VALUE) && (indexOfSquareBracketClose != CPP_STRING_FIND_RESULT_FAIL_VALUE))
+							{
+								if((indexOfSquareBracketOpen > indexOfStartOfLine) && (indexOfSquareBracketClose < indexOfEndOfEqualsSet))
+								{
+									//e.g. imageWidth in "contrastMap[y*imageWidth + x] = contrastVal;"
+									passMiscellaneousConditions = false;
+								}
+							}
+							
 							if(passMiscellaneousConditions)
 							{
 								isNotConst = true;
