@@ -26,7 +26,7 @@
  * File Name: CSdraw.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3f7e 16-August-2015
+ * Project Version: 3g1a 14-October-2015
  *
  *******************************************************************************/
 
@@ -437,7 +437,7 @@ LDreference* createFileReferenceListBoxes(LDreference* currentReferenceInPrintLi
 						if(currentFileTag->firstAttribute->value == currentFileReference->name)
 						{
 							//cout << "currentFileReference->name = " << currentFileReference->name << endl;
-							XMLParserAttribute* currentAttributeTag = currentFileTag->firstAttribute;
+							XMLparserAttribute* currentAttributeTag = currentFileTag->firstAttribute;
 							foundGridCoords = true;
 							while(currentAttributeTag->nextAttribute != NULL)
 							{
