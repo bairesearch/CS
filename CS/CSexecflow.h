@@ -4,7 +4,9 @@
  *
  * BAIPROJECT is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License version 3
- * only, as published by the Free Software Foundation.
+ * only, as published by the Free Software Foundation. The use of
+ * intermediary programs or interfaces including file i/o is considered
+ * remote network interaction.
  *
  * BAIPROJECT is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -23,7 +25,7 @@
  * File Name: CSexecflow.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3d2c 14-April-2014
+ * Project Version: 3d2d 14-April-2014
  *
  *******************************************************************************/
 
@@ -51,7 +53,7 @@ using namespace std;
 #define CS_CODE_STRUCTURE_FUNCTION_DIAGRAM_MINX -400
 #define CS_CODE_STRUCTURE_FUNCTION_DIAGRAM_MINY -100
 #define CS_CODE_STRUCTURE_FUNCTION_DIAGRAM_MAXX 10000
-#define CS_CODE_STRUCTURE_FUNCTION_DIAGRAM_MAXY 2000
+#define CS_CODE_STRUCTURE_FUNCTION_DIAGRAM_MAXY 3500	//CS <=3d2c: 2000
 #define CS_CODE_STRUCTURE_SINGLE_FILE_DIAGRAM_MINX -300
 #define CS_CODE_STRUCTURE_SINGLE_FILE_DIAGRAM_MINY 0
 #define CS_CODE_STRUCTURE_SINGLE_FILE_DIAGRAM_MAXX 1000

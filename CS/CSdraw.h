@@ -4,7 +4,9 @@
  *
  * BAIPROJECT is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License version 3
- * only, as published by the Free Software Foundation.
+ * only, as published by the Free Software Foundation. The use of
+ * intermediary programs or interfaces including file i/o is considered
+ * remote network interaction.
  *
  * BAIPROJECT is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -23,7 +25,7 @@
  * File Name: CSdraw.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3d2c 14-April-2014
+ * Project Version: 3d2d 14-April-2014
  *
  *******************************************************************************/
 
@@ -143,7 +145,20 @@
 #define CS_LAYER_10_COLOUR_NAME "CS_LAYER_10_COLOUR"
 #define CS_LAYER_11_COLOUR_NAME "CS_LAYER_11_COLOUR"
 #define CS_LAYER_12_COLOUR_NAME "CS_LAYER_12_COLOUR"
-#define CS_LAYER_NUMBER_OF_LAYERS (13)
+#define CS_LAYER_13_COLOUR_NAME "CS_LAYER_0_COLOUR"
+#define CS_LAYER_14_COLOUR_NAME "CS_LAYER_1_COLOUR"
+#define CS_LAYER_15_COLOUR_NAME "CS_LAYER_2_COLOUR"
+#define CS_LAYER_16_COLOUR_NAME "CS_LAYER_3_COLOUR"
+#define CS_LAYER_17_COLOUR_NAME "CS_LAYER_4_COLOUR"
+#define CS_LAYER_18_COLOUR_NAME "CS_LAYER_5_COLOUR"
+#define CS_LAYER_19_COLOUR_NAME "CS_LAYER_6_COLOUR"
+#define CS_LAYER_20_COLOUR_NAME "CS_LAYER_7_COLOUR"
+#define CS_LAYER_21_COLOUR_NAME "CS_LAYER_8_COLOUR"
+#define CS_LAYER_22_COLOUR_NAME "CS_LAYER_9_COLOUR"
+#define CS_LAYER_23_COLOUR_NAME "CS_LAYER_10_COLOUR"
+#define CS_LAYER_24_COLOUR_NAME "CS_LAYER_11_COLOUR"
+#define CS_LAYER_25_COLOUR_NAME "CS_LAYER_12_COLOUR"
+#define CS_LAYER_NUMBER_OF_LAYERS (26)
 
 #define CS_FUNCTION_CONNECTION_HIGHLIGHT_COLOUR_NAME "CS_FUNCTION_CONNECTION_HIGHLIGHT_COLOUR"
 #define CS_FUNCTION_BOX_HIGHLIGHT_COLOUR_NAME "CS_FUNCTION_BOX_HIGHLIGHT_COLOUR"

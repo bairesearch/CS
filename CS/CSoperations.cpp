@@ -4,7 +4,9 @@
  *
  * BAIPROJECT is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License version 3
- * only, as published by the Free Software Foundation.
+ * only, as published by the Free Software Foundation. The use of
+ * intermediary programs or interfaces including file i/o is considered
+ * remote network interaction.
  *
  * BAIPROJECT is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -23,7 +25,7 @@
  * File Name: CSoperations.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3d2c 14-April-2014
+ * Project Version: 3d2d 14-April-2014
  *
  *******************************************************************************/
 
@@ -80,13 +82,16 @@ bool getIncludeFileNamesFromCorHfile(CSfileReference * firstReferenceInIncludeFi
 		bool readingHashInclude = false;
 		bool readingHashIncludeFileName = false;
 		bool waitingForNewLine = false;
-		char hashInclude[1000] = "";
-		char hashIncludeFileName[1000] = "";
+		char hashInclude[CS_MAX_NUM_CHARACTERS_PER_LINE] = "";
+		char hashIncludeFileName[CS_MAX_NUM_CHARACTERS_PER_LINE] = "";
 		//bool readingLineComment = false;	//same as waitingForNewLine
 		bool readingLargeComment = false;
 
 		while(parseFileObject->get(c))
 		{
+			#ifdef CS_DEBUG_VERBOSE
+			//cout << c;
+			#endif
 			charCount++;
 
 			if(readingLargeComment)
@@ -417,8 +422,8 @@ bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunctionReference * first
 		bool waitingForNewLine = false;
 		bool readingLargeComment = false;
 
-		char functionName[1000] = "";
-		char functionNameFull[1000] = "";
+		char functionName[CS_MAX_NUM_CHARACTERS_PER_LINE] = "";
+		char functionNameFull[CS_MAX_NUM_CHARACTERS_PER_LINE] = "";
 
 		while(parseFileObject->get(c))
 		{

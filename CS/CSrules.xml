@@ -66,7 +66,7 @@
 		<miscellaneousItem name="CS_LAYER_8_COLOUR" stringValue="LRRC" fractionalValue="5" />
 		<miscellaneousItem name="CS_LAYER_9_COLOUR" stringValue="OLC" fractionalValue="7" />
 		<miscellaneousItem name="CS_LAYER_10_COLOUR" stringValue="PRD" fractionalValue="8" />
-		<miscellaneousItem name="CS_LAYER_11_COLOUR" stringValue="" fractionalValue="0" />
+		<miscellaneousItem name="CS_LAYER_11_COLOUR" stringValue="NLC" fractionalValue="11" />
 		<miscellaneousItem name="CS_LAYER_12_COLOUR" stringValue="" fractionalValue="15" />
 		
 		<miscellaneousItem name="CS_FUNCTION_CONNECTION_HIGHLIGHT_COLOUR" stringValue="" fractionalValue="5" />
@@ -74,32 +74,46 @@
 		
 	</draw>
 	<grid>
-		<file name="GIAbot.h" x="5" y="4" />
-		<file name="GIAconditionNodeClass.h" x="3" y="9" />
-		<file name="GIAcxlConversion.h" x="13" y="2" />
-		<file name="GIAdatabase.h" x="6" y="7" />
-		<file name="GIAdraw.h" x="11" y="2" />
-		<file name="GIAentityConnectionClass.h" x="4" y="8" />
-		<file name="GIAentityNodeClass.h" x="3" y="8" />
-		<file name="GIAglobalDefs.h" x="3" y="10" />
-		<file name="GIAlrp.h" x="1" y="2" />
-		<file name="GIAmain.h" x="4" y="1" />
-		<file name="GIAnlg.h" x="10" y="2" />
-		<file name="GIAnlp.h" x="2" y="2" />
-		<file name="GIAparser.h" x="2" y="3" />
-		<file name="GIAquery.h" x="9" y="2" />
-		<file name="GIAsentenceClass.h" x="3" y="7" />
-		<file name="GIAtranslatorApplyAdvancedFeatures.h" x="8" y="3" />
-		<file name="GIAtranslatorDefineGrammar.h" x="3" y="3" />
-		<file name="GIAtranslatorDefineReferencing.h" x="5" y="3" />
-		<file name="GIAtranslatorDefineSubstances.h" x="6" y="3" />
-		<file name="GIAtranslator.h" x="5" y="2" />
-		<file name="GIAtranslatorLinkEntities.h" x="7" y="3" />
-		<file name="GIAtranslatorOperations.h" x="3" y="6" />
-		<file name="GIAtranslatorRedistributeRelexRelations.h" x="4" y="3" />
-		<file name="GIAtranslatorRedistributeStanfordRelations.h" x="4" y="4" />
-		<file name="GIAwordnet.h" x="9" y="3" />
-		<file name="GIAxmlConversion.h" x="12" y="2" />
+		<file name="NLCmain.h" x="4" y="1" />
+		<file name="NLCtranslator.h" x="2" y="2" />
+		<file name="NLCprint.h" x="6" y="2" />
+		<file name="NLCtranslatorCodeBlocks.h" x="2" y="3" />
+		<file name="NLCtranslatorClassDefinitions.h" x="3" y="3" />
+		<file name="NLCprintCodeBlocks.h" x="6" y="3" />
+		<file name="NLCprintClassDefinitions.h" x="7" y="3" />
+		<file name="NLCcodeBlockClass.h" x="4" y="4" />
+		<file name="NLCclassDefinitionClass.h" x="5" y="4" />
+		<file name="NLCitemClass.h" x="5" y="5" />
+		<file name="NLCglobalDefs.h" x="5" y="6" />
+		<file name="NLCprintDefs.h" x="6" y="5" />
+
+		<file name="GIAbot.h" x="5" y="10" />
+		<file name="GIAconditionNodeClass.h" x="3" y="15" />
+		<file name="GIAcxlConversion.h" x="13" y="8" />
+		<file name="GIAdatabase.h" x="6" y="13" />
+		<file name="GIAdraw.h" x="11" y="8" />
+		<file name="GIAentityConnectionClass.h" x="4" y="14" />
+		<file name="GIAentityNodeClass.h" x="3" y="14" />
+		<file name="GIAglobalDefs.h" x="3" y="16" />
+		<file name="GIAlrp.h" x="1" y="8" />
+		<file name="GIAmain.h" x="4" y="7" />
+		<file name="GIAnlg.h" x="10" y="8" />
+		<file name="GIAnlp.h" x="2" y="8" />
+		<file name="GIAnlpParser.h" x="2" y="9" />
+		<file name="GIAquery.h" x="9" y="8" />
+		<file name="GIAsentenceClass.h" x="3" y="13" />
+		<file name="GIAtranslatorApplyAdvancedFeatures.h" x="8" y="9" />
+		<file name="GIAtranslatorDefineGrammar.h" x="3" y="9" />
+		<file name="GIAtranslatorDefineReferencing.h" x="5" y="9" />
+		<file name="GIAtranslatorDefineSubstances.h" x="6" y="9" />
+		<file name="GIAtranslator.h" x="5" y="8" />
+		<file name="GIAtranslatorLinkEntities.h" x="7" y="9" />
+		<file name="GIAtranslatorOperations.h" x="3" y="13" />
+		<file name="GIAtranslatorDefs.h" x="4" y="14" />
+		<file name="GIAtranslatorRedistributeRelexRelations.h" x="4" y="9" />
+		<file name="GIAtranslatorRedistributeStanfordRelations.h" x="4" y="10" />
+		<file name="GIAwordnet.h" x="9" y="9" />
+		<file name="GIAxmlConversion.h" x="12" y="8" />
 
 		<file name="RTglobalDefs.h" x="14" y="8" />
 		<file name="RTmain.h" x="" y="" />

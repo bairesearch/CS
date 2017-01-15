@@ -4,7 +4,9 @@
  *
  * BAIPROJECT is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License version 3
- * only, as published by the Free Software Foundation.
+ * only, as published by the Free Software Foundation. The use of
+ * intermediary programs or interfaces including file i/o is considered
+ * remote network interaction.
  *
  * BAIPROJECT is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -23,7 +25,7 @@
  * File Name: CSoperations.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3d2c 14-April-2014
+ * Project Version: 3d2d 14-April-2014
  *
  *******************************************************************************/
 
@@ -38,6 +40,8 @@
 #define CS_SOURCE_FILE_EXTENSION_CHARACTER_2 'p'
 #define CS_SOURCE_FILE_EXTENSION_CHARACTER_3 'p'
 #define CS_SOURCE_FILE_INDENTATION_CHARACTER '\t'
+
+#define CS_MAX_NUM_CHARACTERS_PER_LINE (3000)
 
 bool getIncludeFileNamesFromCorHfile(CSfileReference * firstReferenceInIncludeFileList, CSfileReference * topLevelReference, string topLevelReferenceName, int level);
 	bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunctionReference * firstReferenceInFunctionList, string topLevelFileName, int level);

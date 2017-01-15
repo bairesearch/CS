@@ -4,7 +4,9 @@
  *
  * BAIPROJECT is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License version 3
- * only, as published by the Free Software Foundation.
+ * only, as published by the Free Software Foundation. The use of
+ * intermediary programs or interfaces including file i/o is considered
+ * remote network interaction.
  *
  * BAIPROJECT is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -23,7 +25,7 @@
  * File Name: CSexecflow.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3d2c 14-April-2014
+ * Project Version: 3d2d 14-April-2014
  *
  *******************************************************************************/
 
@@ -91,7 +93,9 @@ void printCS(string topLevelFileName, int width, int height, string outputLDRfil
 	CSfileReference * firstReferenceInTopLevelBelowList = new CSfileReference();
 	topLevelReferenceInList->firstReferenceInBelowList = firstReferenceInTopLevelBelowList;
 
+	//cout << "start getIncludeFileNamesFromCorHfile()" << endl;
 	bool hFileFound = getIncludeFileNamesFromCorHfile(firstReferenceInTopLevelBelowList, topLevelReferenceInList, topLevelFileName, 0);
+	//cout << "finish getIncludeFileNamesFromCorHfile()" << endl;
 	if(!hFileFound)
 	{
 		cout << "printCS() error: !hFileFound: " << topLevelFileName << endl;
@@ -306,7 +310,7 @@ string generateHTMLdocumentationHeader(string name, bool htmlHeader, bool isFile
 	string HTMLdocumentationHeader = "";
 	if(htmlHeader)
 	{
-		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3d2c 14-April-2014<p>\n";
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3d2d 14-April-2014<p>\n";
 	}
 	else
 	{
