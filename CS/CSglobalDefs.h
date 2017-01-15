@@ -26,7 +26,7 @@
  * File Name: CSglobalsDefs.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h13g 11-December-2015
+ * Project Version: 3h15a 29-February-2016
  * Description: CS specific global definitions
  *
  *******************************************************************************/
@@ -57,8 +57,8 @@
 	
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_NON_CONST_GLOBAL_ASSIGNMENTS	//3h11c
 		#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_NON_CONST_GLOBAL_ASSIGNMENTS
-			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_NON_CONST_GLOBAL_ASSIGNMENTS_NUMBER_OF_TYPES (11)
-			static string specialCaseTextForAssignmentOfNonConstGlobal[CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_NON_CONST_GLOBAL_ASSIGNMENTS_NUMBER_OF_TYPES] = {"entityNodesActiveListComplete", "entityNodesActiveListConcepts", "entityNodesActiveListSubstances", "entityNodesActiveListActions", "entityNodesActiveListConditions", "entityNodesActiveListCompleteFastIndex", "comparisonVariableNode", "DBconceptEntityNodesLoadedList", "DBconceptEntityNodesLoadedList", "entityNodesActiveListCompleteFastIndexDBcache", "entityNodesActiveListCompleteFastIndexDBactive"};					
+			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_NON_CONST_GLOBAL_ASSIGNMENTS_NUMBER_OF_TYPES (12)
+			static string specialCaseTextForAssignmentOfNonConstGlobal[CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_NON_CONST_GLOBAL_ASSIGNMENTS_NUMBER_OF_TYPES] = {"entityNodesActiveListComplete", "entityNodesActiveListConcepts", "entityNodesActiveListSubstances", "entityNodesActiveListActions", "entityNodesActiveListConditions", "entityNodesActiveListCompleteFastIndex", "comparisonVariableNode", "DBconceptEntityNodesLoadedList", "DBconceptEntityNodesLoadedList", "entityNodesActiveListCompleteFastIndexDBcache", "entityNodesActiveListCompleteFastIndexDBactive", "firstNLCsentenceInListLocal"};					
 		#endif
 		
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_TEMPLATE_USE_OPEN '<'
