@@ -26,7 +26,7 @@
  * File Name: CSglobalsDefs.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h5a 03-December-2015
+ * Project Version: 3h5b 03-December-2015
  * Description: CS specific global definitions
  *
  *******************************************************************************/
@@ -46,7 +46,7 @@
 	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DISABLE_OUTPUT	//safe for debug (no source/header file overwrites)
 		
-		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_ASSIGNMENT_OF_DOUBLE_POINTERS_TO_CONST_POINTERS	//3h4a
+		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_ASSIGNMENT_OF_DOUBLE_POINTERS_TO_CONST_POINTERS	//3h4a, changed implementation 3h5b
 		#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_ASSIGNMENT_OF_DOUBLE_POINTERS_TO_CONST_POINTERS
 			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_DOUBLE_POINTER_TYPE "** "
 		#endif

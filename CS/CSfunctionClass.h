@@ -26,7 +26,7 @@
  * File Name: CSfunctionClass.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h5a 03-December-2015
+ * Project Version: 3h5b 03-December-2015
  *
  *******************************************************************************/
 
@@ -49,9 +49,7 @@ public:
 	bool isNotConst;
 	bool constIdentified;
 	CSfunctionArgument* next;
-	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_ASSIGNMENT_OF_DOUBLE_POINTERS_TO_CONST_POINTERS
 	vector<string> argumentNameAliasList;
-	#endif
 };
 #endif
 
