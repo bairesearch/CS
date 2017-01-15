@@ -26,7 +26,7 @@
  * File Name: CSfunctionClass.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h5b 03-December-2015
+ * Project Version: 3h6a 06-December-2015
  *
  *******************************************************************************/
 
@@ -94,8 +94,8 @@ public:
 	string nameFull;
 	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
 	CSfunctionArgument* firstFunctionArgumentInFunction;
-	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_ASSIGNMENT_OF_DOUBLE_POINTERS_TO_CONST_POINTERS
-	bool parseDoublePointers;	//added 3h4a
+	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_ASSIGNMENT_OF_ALIASES
+	bool parseSecondaryReferencesOnly;	//added 3h6a
 	#endif
 	#endif
 

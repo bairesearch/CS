@@ -21,7 +21,7 @@
  * File Name: CSgenerateConstFunctionArgumentCode.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h5b 03-December-2015
+ * Project Version: 3h6a 06-December-2015
  *
  *******************************************************************************/
 
@@ -44,7 +44,7 @@ bool generateConstFunctionArguments(CSfileContainer* firstObjectInTopLevelBelowL
 							bool charInString(string text, char* charArray, int arraySize);
 						string extractFullVariableName(string* functionText, int indexOfStartOfVariableName);
 						string extractFullVariableNameReverse(string* functionText, int indexOfEndOfVariableName, int* indexOfStartOfVariableName);
-				#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_ASSIGNMENT_OF_DOUBLE_POINTERS_TO_CONST_POINTERS
+				#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_ASSIGNMENT_OF_DOUBLE_POINTERS
 				bool detectDoublePointer(string functionArgument);
 				#endif
 			string replaceAllOccurancesOfFunctionObjectFunctionArgumentSecondaryAssignmentDeclarationInFunction(string* functionTextOrig, string functionArgumentSecondaryAssignmentName, bool* foundAtLeastOneInstance);
