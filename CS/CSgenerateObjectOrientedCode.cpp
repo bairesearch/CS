@@ -26,7 +26,7 @@
  * File Name: CSgenerateObjectOrientedCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e1d 27-August-2014
+ * Project Version: 3e1e 27-August-2014
  *
  *******************************************************************************/
 
@@ -437,7 +437,7 @@ string convertFunctionNameToClassFunctionNameSource(string fullFunctionName, str
 		#endif
 	}
 		
-	classFullFunctionName = fullFunctionNamePart1 + className + string(CS_GENERATE_CPP_CLASSES_CLASS_PERMISSIONS_IDENTIFIER) + fullFunctionNamePart2;
+	classFullFunctionName = fullFunctionNamePart1 + generateClassDeclarationName(className) + string(CS_GENERATE_CPP_CLASSES_CLASS_PERMISSIONS_IDENTIFIER) + fullFunctionNamePart2;
 	#ifdef CS_DEBUG_GENERATE_OBJECT_ORIENTED_CODE
 	//cout << "classFullFunctionName = " << classFullFunctionName << endl;
 	#endif
