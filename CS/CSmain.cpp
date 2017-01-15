@@ -26,7 +26,7 @@
  * File Name: CSmain.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2016 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3i18b 21-September-2016
+ * Project Version: 3i18c 21-September-2016
  *
  *******************************************************************************/
 
@@ -87,7 +87,7 @@ static char errmessage[] = "Usage:  OpenCS.exe [options]"
 
 
 
-int main(int argc,char* *argv)
+int main(int argc, char** argv)
 {
 #ifdef CS_CONVERT_INDENTED_LIST_TO_HTML_LIST
 	convertIndentedListToHTMLlist();
@@ -142,7 +142,7 @@ int main(int argc,char* *argv)
 
 	bool outputFileConnections = true;
 
-	if (argumentExists(argc, argv, "-mode"))
+	if(argumentExists(argc, argv, "-mode"))
 	{
 		mode = getFloatArgument(argc, argv, "-mode");
 	}
@@ -294,7 +294,7 @@ int main(int argc,char* *argv)
 
 	if(argumentExists(argc, argv, "-version"))
 	{
-		cout << "OpenCS.exe - Project Version: 3i18b 21-September-2016" << endl;
+		cout << "OpenCS.exe - Project Version: 3i18c 21-September-2016" << endl;
 		exit(1);
 	}
 

@@ -26,7 +26,7 @@
  * File Name: CSglobalsDefs.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2016 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3i18b 21-September-2016
+ * Project Version: 3i18c 21-September-2016
  * Description: CS specific global definitions
  *
  *******************************************************************************/
@@ -46,12 +46,12 @@
 #define CS_GENERATE_CODE_GENERIC
 #ifdef CS_GENERATE_CODE_GENERIC
 
-	//#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS	//added 3h1a/14-November-2014	//requires CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST
+	#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS	//added 3h1a/14-November-2014	//requires CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST
 	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
 
 		#define CS_IDENTIFY_FUNCTION_DECLARATION_ARGUMENTS	//changed requirements 3i17a
 
-		//#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DISABLE_OUTPUT	//safe for debug (no source/header file overwrites)
+		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DISABLE_OUTPUT	//safe for debug (no source/header file overwrites)
 
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_SUPPORT_PSEUDO_CONSTS	//2h13a		//relies on "#define constEffective" being defined in target code	//OLD: user must manually replace all instances of "constEffective " with "" before compiling code
 		//#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_SUPPORT_PSEUDO_CONSTS
@@ -110,8 +110,6 @@
 			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_ASSIGNMENT_OF_DOUBLE_POINTERS_STRICT	//2h13a
 		#endif
 
-		#define CS_GENERATE_CODE_GENERIC_SOURCE_FILE_EXTENSION "cpp"
-		#define CS_GENERATE_CODE_GENERIC_HEADER_FILE_EXTENSION "h"
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_END_OF_COMMAND ";"
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET " = "
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_INCREMENT "++"
@@ -174,7 +172,7 @@
 		#define CS_GENERATE_CPP_CLASSES_TEXT_NEW "new"
 	#endif
 	#define CS_GENERATE_CODE_GENERIC_SOURCE_FILE_EXTENSION "cpp"
-	#define CS_GENERATE_CODE_GENERIC_HEADER_FILE_EXTENSION "hpp"
+	#define CS_GENERATE_CODE_GENERIC_HEADER_FILE_EXTENSION "h"
 #endif
 
 #define CS_ASSUME_TOP_LEVEL_FILE_IS_SOURCE_FILE	//will not write connections between top level source file and its child (top level source header)
