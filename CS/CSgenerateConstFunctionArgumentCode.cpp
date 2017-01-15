@@ -21,7 +21,7 @@
  * File Name: CSgenerateConstFunctionArgumentCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h13b 11-December-2015
+ * Project Version: 3h13c 11-December-2015
  *
  *******************************************************************************/
 
@@ -140,7 +140,7 @@ bool generateConstFunctionArgumentsFile(CSfile* currentFileObject)
 					bool isConstEffective = false;
 					string constString = CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_CONST;
 					#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_SUPPORT_PSEUDO_CONSTS
-					if((currentFunctionArgumentInFunction->isNotConst) && (currentFunctionArgumentInFunction->isConstEffective))
+					if(!(currentFunctionArgumentInFunction->isNotConst) && (currentFunctionArgumentInFunction->isConstEffective))
 					{//NB !isNotConst overrides isConstEffective value
 						isConstEffective = true;
 						constString = CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_CONST_EFFECTIVE;
@@ -585,27 +585,7 @@ bool generateConstFunctionArgument(CSfunction* currentFunctionObject, CSfunction
 			
 			if(currentFunctionObject->name == "findFunctionReferenceTargetRecurse")
 			{
-				if(currentFunctionArgumentInFunction->argumentName == "functionReference")
-				{
-					//cout << "currentLine = " << currentLine << endl;
-					cout << "zt1" << endl;
-					cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
-					exit(0);	
-				}
-			}
-			if(currentFunctionObject->name == "findFunctionReferenceTargetRecurse")
-			{
-				if(currentFunctionArgumentInFunction->argumentName == "functionReference")
-				{
-					//cout << "currentLine = " << currentLine << endl;
-					cout << "zt2" << endl;
-					cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
-					exit(0);	
-				}
-			}
-			if(currentFunctionObject->name == "countArgumentList")
-			{
-				if(currentFunctionArgumentInFunction->argumentName == "firstFunctionArgumentInFunction")
+				if(currentFunctionArgumentInFunction->argumentName == "fileObjectHoldingFunction")
 				{
 					//cout << "currentLine = " << currentLine << endl;
 					cout << "zt3" << endl;
@@ -730,6 +710,16 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 			{
 				//e.g. "return functionDeclarationArgument;"
 				*isNotConst = true;
+			if(currentFunctionObject->name == "findFunctionReferenceTargetRecurse")
+			{
+				if(currentFunctionArgumentInFunction->argumentName == "fileObjectHoldingFunction")
+				{
+					//cout << "currentLine = " << currentLine << endl;
+					cout << "2" << endl;
+					cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
+					exit(0);	
+				}
+			}
 			}
 		}
 	}
@@ -796,7 +786,17 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 										if(functionText->substr(indexOfObjectFunctionName-codeReference[i].length(), codeReference[i].length()) == codeReference[i])
 										{
 											//detect execution of object functions: e.g. "functionArgument->WHOLEWORDFUNCTIONNAME(" / "functionArgument->someIntermediaryObject[].WHOLEWORDFUNCTIONNAME("
-											*isNotConst = true;												
+											*isNotConst = true;	
+			if(currentFunctionObject->name == "findFunctionReferenceTargetRecurse")
+			{
+				if(currentFunctionArgumentInFunction->argumentName == "fileObjectHoldingFunction")
+				{
+					cout << "currentLine = " << currentLine << endl;
+					cout << "3" << endl;
+					cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
+					exit(0);	
+				}
+			}											
 											
 											#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_OBJECT_FUNCTION_EXECUTIONS_DETECT_PARAMETERS_FUNCTION_ARGUMENTS_OR_SECONDARY_ASSIGNMENTS
 											CSfunctionArgument* currentFunctionArgumentInFunctionTemp = currentFunctionObject->firstFunctionArgumentInFunction;
@@ -812,6 +812,16 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 														{
 															//e.g. "entityNodesActiveListCompleteFastIndex->insert(pair<string, GIAentityNode*>(entityNodesTempActiveListCompleteIndex, entityNode));"
 															currentFunctionArgumentInFunctionTemp->isNotConst = true;
+			if(currentFunctionObject->name == "findFunctionReferenceTargetRecurse")
+			{
+				if(currentFunctionArgumentInFunction->argumentName == "fileObjectHoldingFunction")
+				{
+					cout << "currentLine = " << currentLine << endl;
+					cout << "4" << endl;
+					cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
+					exit(0);	
+				}
+			}
 														}
 													}
 												}
@@ -829,7 +839,17 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 														{
 															if(functionArgumentReferenceWholeWordCheck(functionText, functionArgumentSecondaryAssignmentName, indexOfFunctionArgumentSecondaryAssignment))
 															{
-																currentFunctionArgumentInFunctionTemp->isNotConst = true;	
+																currentFunctionArgumentInFunctionTemp->isNotConst = true;
+			if(currentFunctionObject->name == "findFunctionReferenceTargetRecurse")
+			{
+				if(currentFunctionArgumentInFunction->argumentName == "fileObjectHoldingFunction")
+				{
+					cout << "currentLine = " << currentLine << endl;
+					cout << "5" << endl;
+					cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
+					exit(0);	
+				}
+			}	
 															}
 														}
 													}
@@ -854,7 +874,16 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 						if(currentLine.find(stdLibNonObjectFunctionExecutionHypothetical) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 						{
 							*isNotConst = true;
-							
+			if(currentFunctionObject->name == "findFunctionReferenceTargetRecurse")
+			{
+				if(currentFunctionArgumentInFunction->argumentName == "fileObjectHoldingFunction")
+				{
+					cout << "currentLine = " << currentLine << endl;
+					cout << "6" << endl;
+					cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
+					exit(0);	
+				}
+			}
 							//e.g. free(functionDeclarationArgument);
 							//cout << "stdLibNonObjectFunctionExecutionHypothetical = " << stdLibNonObjectFunctionExecutionHypothetical << endl;
 						}
@@ -877,6 +906,16 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 					|| (twoCharactersAfterFunctionArgument == CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_INCREMENT) || (twoCharactersAfterFunctionArgument == CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_DECREMENT))
 					{
 						*isNotConst = true;
+			if(currentFunctionObject->name == "findFunctionReferenceTargetRecurse")
+			{
+				if(currentFunctionArgumentInFunction->argumentName == "fileObjectHoldingFunction")
+				{
+					cout << "currentLine = " << currentLine << endl;
+					cout << "6" << endl;
+					cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
+					exit(0);	
+				}
+			}
 					}
 					#endif
 										
@@ -889,38 +928,77 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 							if(verifyThatVariableIsNotDeclarationOrNextIteratorAssignmentOrArrayIndex(currentFunctionObject, functionText, textBeforeFunctionArgument, functionDeclarationArgument, indexOfFunctionArgument, indexOfSquareBracketOpen, indexOfSquareBracketClose, indexOfEndOfCommand, indexOfStartOfLine, indexOfEqualsSet))
 							{
 								bool doublePointerAssignmentDetected = false;
-								CSfunctionArgument* currentFunctionArgumentInFunctionTemp = currentFunctionObject->firstFunctionArgumentInFunction;
-								while(currentFunctionArgumentInFunctionTemp->next != NULL)
+								if(detectDoublePointer(currentFunctionArgumentInFunction->argument))
 								{
-									if(detectDoublePointer(currentFunctionArgumentInFunctionTemp->argument))
+									CSfunctionArgument* currentFunctionArgumentInFunctionTemp = currentFunctionObject->firstFunctionArgumentInFunction;
+									while(currentFunctionArgumentInFunctionTemp->next != NULL)
 									{
 										//modified CS3h13a
-										string doublePointerAssignmentTextHypothetical = string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_POINTER) + functionDeclarationArgument + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET + currentFunctionArgumentInFunctionTemp->argumentName;	//*doublePointerfunctionArgument = secondaryAssignment
+										
+										//NB this code is redundant if CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_ASSIGNMENT_OF_ALIASES is enabled, since argumentNameAliasList includes the original (primary) functionArgument;
+										string doublePointerAssignmentTextHypothetical = string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_POINTER) + functionDeclarationArgument + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET + currentFunctionArgumentInFunctionTemp->argumentName;	//*doublePointerfunctionArgument = functionArgument
 										int doublePointerAssignmentTextHypotheticalIndex = functionText->find(doublePointerAssignmentTextHypothetical, indexOfStartOfLine);
 										if((doublePointerAssignmentTextHypotheticalIndex != CPP_STRING_FIND_RESULT_FAIL_VALUE) && (doublePointerAssignmentTextHypotheticalIndex < indexOfEndOfLine))
 										{
-											//e.g. "*doublepointerfunctionArgument = secondaryAssignment" / "*doublepointerfunctionArgument = secondaryAssignment->q"
+											//e.g. "*doublepointerfunctionArgument = functionArgument2" / "*doublepointerfunctionArgument = functionArgument2->q"
 											doublePointerAssignmentDetected = true;
-											cout << "doublePointerAssignmentDetected" << endl;
-											exit(0);
+											//cout << "doublePointerAssignmentDetected" << endl;
 										}
+										
+										#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_ASSIGNMENT_OF_ALIASES
+										//preconditions: argumentNameAliasList has already been filled for all function arguments
+										for(vector<string>::iterator argumentNameAliasListIter = currentFunctionArgumentInFunctionTemp->argumentNameAliasList.begin(); argumentNameAliasListIter < currentFunctionArgumentInFunctionTemp->argumentNameAliasList.end(); argumentNameAliasListIter++)
+										{
+											//cout << "argumentNameAliasListIter = " << *argumentNameAliasListIter << endl;
+											string functionArgumentSecondaryAssignmentName = *argumentNameAliasListIter;
+											string doublePointerAssignmentTextHypothetical = string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_POINTER) + functionDeclarationArgument + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET + functionArgumentSecondaryAssignmentName;	//*doublePointerfunctionArgument = secondaryAssignment
+											int doublePointerAssignmentTextHypotheticalIndex = functionText->find(doublePointerAssignmentTextHypothetical, indexOfStartOfLine);
+											if((doublePointerAssignmentTextHypotheticalIndex != CPP_STRING_FIND_RESULT_FAIL_VALUE) && (doublePointerAssignmentTextHypotheticalIndex < indexOfEndOfLine))
+											{
+												//e.g. "*doublepointerfunctionArgument = functionArgument2secondaryAssignment" / "*doublepointerfunctionArgument = functionArgument2secondaryAssignment->q"
+												doublePointerAssignmentDetected = true;
+												//cout << "doublePointerAssignmentDetected" << endl;
+											}
+										}
+										#endif
+												
+										currentFunctionArgumentInFunctionTemp = currentFunctionArgumentInFunctionTemp->next;
 									}
-									currentFunctionArgumentInFunctionTemp = currentFunctionArgumentInFunctionTemp->next;
 								}
 								
 								#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_SUPPORT_PSEUDO_CONSTS
 								if(doublePointerAssignmentDetected)
 								{
 									*isConstEffective = true;
+			if(currentFunctionObject->name == "findFunctionReferenceTargetRecurse")
+			{
+				if(currentFunctionArgumentInFunction->argumentName == "fileObjectHoldingFunction")
+				{
+					cout << "currentLine = " << currentLine << endl;
+					cout << "7a" << endl;
+					cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
+					//exit(0);	
+				}
+			}
 								}
 								else
 								{
 									*isNotConst = true;
+			if(currentFunctionObject->name == "findFunctionReferenceTargetRecurse")
+			{
+				if(currentFunctionArgumentInFunction->argumentName == "fileObjectHoldingFunction")
+				{
+					cout << "currentLine = " << currentLine << endl;
+					cout << "7b" << endl;
+					cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
+					exit(0);	
+				}
+			}
 								}
 								#else
 								*isNotConst = true;
 								#endif
-								
+
 								/*
 								e.g.
 								functionArgument = 5;
@@ -1010,6 +1088,16 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 								#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
 								cout << "checkIfVariableIsBeingModifiedInFunction{}: inverseNonConstAssignmentDetected: isNotConst = true" << endl;
 								#endif
+			if(currentFunctionObject->name == "findFunctionReferenceTargetRecurse")
+			{
+				if(currentFunctionArgumentInFunction->argumentName == "fileObjectHoldingFunction")
+				{
+					cout << "currentLine = " << currentLine << endl;
+					cout << "8" << endl;
+					cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
+					exit(0);	
+				}
+			}
 							}
 							if(inverseNonConstAssignmentDetectedAlias)
 							{
@@ -1017,6 +1105,16 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 								#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
 								cout << "checkIfVariableIsBeingModifiedInFunction{}: inverseNonConstAssignmentDetected: isNotConst = true" << endl;
 								#endif
+			if(currentFunctionObject->name == "findFunctionReferenceTargetRecurse")
+			{
+				if(currentFunctionArgumentInFunction->argumentName == "fileObjectHoldingFunction")
+				{
+					cout << "currentLine = " << currentLine << endl;
+					cout << "9" << endl;
+					cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
+					exit(0);	
+				}
+			}
 							}
 						}
 					}
@@ -1029,6 +1127,16 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 					if(indexOfSpecialCaseTextForAssignmentOfNonConst != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 					{
 						*isNotConst = true;
+			if(currentFunctionObject->name == "findFunctionReferenceTargetRecurse")
+			{
+				if(currentFunctionArgumentInFunction->argumentName == "fileObjectHoldingFunction")
+				{
+					cout << "currentLine = " << currentLine << endl;
+					cout << "10" << endl;
+					cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
+					exit(0);	
+				}
+			}
 					}
 				}
 				#endif
@@ -1046,6 +1154,16 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 						if(functionArgumentReferenceWholeWordCheck(functionText, returnVar, indexOfReturnVar))
 						{
 							*isNotConst = true;
+			if(currentFunctionObject->name == "findFunctionReferenceTargetRecurse")
+			{
+				if(currentFunctionArgumentInFunction->argumentName == "fileObjectHoldingFunction")
+				{
+					cout << "currentLine = " << currentLine << endl;
+					cout << "11" << endl;
+					cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
+					exit(0);	
+				}
+			}
 							//cout << "returnVarSetTextHypothetical = " << returnVarSetTextHypothetical << endl;
 						}
 					}
@@ -1058,7 +1176,17 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 					string nonConstGlobalAssignmentHypothetical = specialCaseTextForAssignmentOfNonConstGlobal[i] + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET + functionDeclarationArgument + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_END_OF_COMMAND;	//e.g. entityNodesActiveListComplete = newEntityNodesCompleteList;
 					if(functionText->find(nonConstGlobalAssignmentHypothetical) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 					{
-						*isNotConst = true;						
+						*isNotConst = true;
+			if(currentFunctionObject->name == "findFunctionReferenceTargetRecurse")
+			{
+				if(currentFunctionArgumentInFunction->argumentName == "fileObjectHoldingFunction")
+				{
+					cout << "currentLine = " << currentLine << endl;
+					cout << "12" << endl;
+					cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
+					exit(0);	
+				}
+			}						
 						//cout << "nonConstGlobalAssignmentHypothetical = " << nonConstGlobalAssignmentHypothetical << endl;
 					}
 				}	
@@ -1075,6 +1203,16 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 		#else
 		*isNotConst = true;
 		#endif
+			if(currentFunctionObject->name == "findFunctionReferenceTargetRecurse")
+			{
+				if(currentFunctionArgumentInFunction->argumentName == "fileObjectHoldingFunction")
+				{
+					//cout << "currentLine = " << currentLine << endl;
+					cout << "13" << endl;
+					cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
+					exit(0);	
+				}
+			}
 	}	
 	#endif
 	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_MAKE_ALL_DOUBLE_POINTER_TYPES_NON_CONST
@@ -1085,6 +1223,16 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 		#else
 		*isNotConst = true;
 		#endif
+			if(currentFunctionObject->name == "findFunctionReferenceTargetRecurse")
+			{
+				if(currentFunctionArgumentInFunction->argumentName == "fileObjectHoldingFunction")
+				{
+					//cout << "currentLine = " << currentLine << endl;
+					cout << "14" << endl;
+					cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
+					exit(0);	
+				}
+			}
 	}
 	#endif
 					
