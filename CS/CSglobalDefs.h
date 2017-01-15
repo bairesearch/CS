@@ -26,7 +26,7 @@
  * File Name: CSglobalsDefs.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3f5d 21-July-2015
+ * Project Version: 3f6a 27-July-2015
  * Description: CS specific global definitions
  *
  *******************************************************************************/
@@ -59,6 +59,8 @@
 	#define CS_GENERATE_CPP_CLASSES_STATIC "static"
 	#define CS_GENERATE_CPP_CLASSES_NEW "new"
 #endif
+
+#define CS_ASSUME_TOP_LEVEL_FILE_IS_SOURCE_FILE	//will not write connections between top level source file and its child (top level source header)
 
 #define CS_SUPPORT_PREDEFINED_GRID
 

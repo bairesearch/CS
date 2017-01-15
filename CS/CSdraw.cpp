@@ -26,7 +26,7 @@
  * File Name: CSdraw.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3f5d 21-July-2015
+ * Project Version: 3f6a 27-July-2015
  *
  *******************************************************************************/
 
@@ -642,18 +642,25 @@ LDreference* createFileReferenceListConnections(LDreference* currentReferenceInP
 		CSfileReference* currentReference = currentReferenceContainer->fileReference;
 
 		//print connections
-		if(currentReference->printed)
-		{//only create connections to printed boxes
+		#ifdef CS_ASSUME_TOP_LEVEL_FILE_IS_SOURCE_FILE
+		if(aboveLevelReference != NULL)
+		{
+		#endif
+			if(currentReference->printed)
+			{//only create connections to printed boxes
 
-			//cout << "aboveLevelReference->name = " << aboveLevelReference->name << endl;
-			#ifdef CS_USE_RAINBOW_COLOURS_FOR_FILE_BOXES
-			int colour = calculateCSBoxAndConnectionColourBasedUponLevel(aboveLevelReference->printYIndex);
-			#else
-			int colour = calculateCSBoxAndConnectionColourBasedUponFileName(aboveLevelReference);
-			#endif
+				//cout << "aboveLevelReference->name = " << aboveLevelReference->name << endl;
+				#ifdef CS_USE_RAINBOW_COLOURS_FOR_FILE_BOXES
+				int colour = calculateCSBoxAndConnectionColourBasedUponLevel(aboveLevelReference->printYIndex);
+				#else
+				int colour = calculateCSBoxAndConnectionColourBasedUponFileName(aboveLevelReference);
+				#endif
 
-			newCurrentReferenceInPrintList = createFileReferenceConnection(newCurrentReferenceInPrintList, currentReference, aboveLevelReference, colour, traceFunctionUpwards, currentTag);	//add line
+				newCurrentReferenceInPrintList = createFileReferenceConnection(newCurrentReferenceInPrintList, currentReference, aboveLevelReference, colour, traceFunctionUpwards, currentTag);	//add line
+			}
+		#ifdef CS_ASSUME_TOP_LEVEL_FILE_IS_SOURCE_FILE	
 		}
+		#endif
 
 		if(currentReference->firstReferenceInBelowListContainer != NULL)
 		{
@@ -666,7 +673,12 @@ LDreference* createFileReferenceListConnections(LDreference* currentReferenceInP
 		currentReferenceContainer = currentReferenceContainer->next;
 	}
 	
-	aboveLevelReference->printedFileConnections = true;
+	#ifdef CS_ASSUME_TOP_LEVEL_FILE_IS_SOURCE_FILE
+	if(aboveLevelReference != NULL)
+	{
+		aboveLevelReference->printedFileConnections = true;
+	}
+	#endif
 	
 	return newCurrentReferenceInPrintList;
 }
