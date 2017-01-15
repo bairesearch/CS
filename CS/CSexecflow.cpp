@@ -25,7 +25,7 @@
  * File Name: CSexecflow.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3d3a 24-May-2014
+ * Project Version: 3d3b 24-May-2014
  *
  *******************************************************************************/
 
@@ -311,7 +311,7 @@ string generateHTMLdocumentationHeader(string name, bool htmlHeader, bool isFile
 	string HTMLdocumentationHeader = "";
 	if(htmlHeader)
 	{
-		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3d3a 24-May-2014<p>\n";
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3d3b 24-May-2014<p>\n";
 	}
 	else
 	{
@@ -1025,8 +1025,25 @@ void generateFileDiagramFunctionsHeirachy(CSfileReference * currentFileReference
 		{
 			if(currentTopLevelFunctionReference->printed)
 			{
-				//cout << currentTopLevelFunctionReference->name << endl;
+				cout << currentTopLevelFunctionReference->name << endl;
 				//cout << "currentTopLevelFunctionReference->name = " << currentTopLevelFunctionReference->name << endl;
+					
+				//print function box for top level functions (added 3d3b);
+				//cout << "currentTopLevelFunctionReference->level = " << currentTopLevelFunctionReference->level << endl;
+				if(currentTopLevelFunctionReference->printYIndex == 0)
+				{
+					//correction applied with useSingleFileOnly
+					currentTopLevelFunctionReference->printX = currentTopLevelFunctionReference->printX - currentFileReference->printX;
+					currentTopLevelFunctionReference->printY = currentTopLevelFunctionReference->printY - currentFileReference->printY;
+
+					//cout << "currentTopLevelFunctionReference->printYIndex = " << currentTopLevelFunctionReference->printYIndex << endl;
+					currentReferenceInPrintList = printFunctionBox(currentReferenceInPrintList, &currentTagInSVGFile, currentTopLevelFunctionReference, currentTopLevelFunctionReference->col);
+					currentReferenceInPrintList = printFunctionBoxText(currentReferenceInPrintList, &currentTagInSVGFile, currentTopLevelFunctionReference, currentTopLevelFunctionReference->col, true);
+
+					currentTopLevelFunctionReference->printX = currentTopLevelFunctionReference->printX + currentFileReference->printX;
+					currentTopLevelFunctionReference->printY = currentTopLevelFunctionReference->printY + currentFileReference->printY;
+				}
+
 				CSfunctionReference * currentReferenceInFunctionReferenceList = currentTopLevelFunctionReference->firstReferenceInFunctionReferenceList;
 				currentTopLevelFunctionReference->printedFunctionConnections = false;
 				while(currentReferenceInFunctionReferenceList->next != NULL)

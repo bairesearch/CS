@@ -101,7 +101,7 @@
 		<file name="GIAnlp.h" x="2" y="8" />
 		<file name="GIAnlpParser.h" x="2" y="9" />
 		<file name="GIAquery.h" x="9" y="8" />
-		<file name="GIAsentenceClass.h" x="3" y="13" />
+		<file name="GIAsentenceClass.h" x="3" y="14" />
 		<file name="GIAtranslatorApplyAdvancedFeatures.h" x="8" y="9" />
 		<file name="GIAtranslatorDefineGrammar.h" x="3" y="9" />
 		<file name="GIAtranslatorDefineReferencing.h" x="5" y="9" />

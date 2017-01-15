@@ -25,7 +25,7 @@
  * File Name: CSdraw.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3d3a 24-May-2014
+ * Project Version: 3d3b 24-May-2014
  *
  *******************************************************************************/
 
@@ -184,6 +184,8 @@ Reference * createFileReferenceListConnections(Reference * currentReferenceInPri
 	CSfileReference * findPrintedFileReferenceWithName(string name, CSfileReference * reference, CSfileReference * firstReferenceInAboveLevelBelowList, bool * foundPrintedReferenceWithName);
 
 Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentReferenceInPrintList, CSfileReference * aboveLevelFileReference, CSfunctionReference * aboveLevelFunctionReference, CSfileReference * firstReferenceInTopLevelBelowList, int functionLevel, string functionReferenceNameToFind, XMLparserTag ** currentTag, bool traceFunctionUpwards, bool useSingleFileOnly, string * singleFileName, bool usePredefinedGrid);
+	Reference * printFunctionBox(Reference * currentReferenceInPrintList, XMLparserTag ** currentTag, CSfunctionReference * functionReference, int colour);
+	Reference * printFunctionBoxText(Reference * currentReferenceInPrintList, XMLparserTag ** currentTag, CSfunctionReference * functionReference, int colour, bool useSingleFileOnly);
 	void resetPrintedFunctionConnections(CSfileReference * aboveLevelFileReference, CSfunctionReference * aboveLevelFunctionReference, bool useSingleFileOnly, string * singleFileName);
 	CSreferenceArray findFunctionReferenceInAPrintedFileReferenceRecursive(CSfileReference * fileReferenceToSearchIn, string functionReferenceNameToFind, CSreferenceArray * foundFileAndFunctionReference, bool * referenceFound, bool useSingleFileOnly, string * singleFileName);
 		CSreferenceArray findFunctionReferenceInPrintedFileReference(CSfileReference * fileReferenceToSearchIn, string functionReferenceNameToFind, CSreferenceArray * foundFileAndFunctionReference, bool * referenceFound, bool useSingleFileOnly, string * singleFileName);

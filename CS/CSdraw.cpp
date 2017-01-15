@@ -25,7 +25,7 @@
  * File Name: CSdraw.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3d3a 24-May-2014
+ * Project Version: 3d3b 24-May-2014
  *
  *******************************************************************************/
 
@@ -1128,42 +1128,17 @@ Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentRe
 					{//only print connections when not tracing a bottom level function upwards - saves space
 					#endif
 						//print function box
-						vec pos;
-						pos.x = functionReference->printX;
-						pos.y = functionReference->printY;
-						newCurrentReferenceInPrintList = createFileOrFunctionReferenceBox(newCurrentReferenceInPrintList, &pos, &(functionReference->name), CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR, colour, CS_FUNCTION_MAX_TEXT_LENGTH, CS_OUTPUT_Z_POSITION_FUNCTION_BOX);	//add box
-
-						writeFileOrFunctionSVGbox(currentTag, &pos, functionReference->name.length(), CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR, CS_FUNCTION_MAX_TEXT_LENGTH, colour, CS_FUNCTION_TEXT_BOX_OUTLINE_WIDTH_SVG);
+						newCurrentReferenceInPrintList = printFunctionBox(newCurrentReferenceInPrintList, currentTag, functionReference, colour);
 					#ifdef CS_DO_NOT_DRAW_ALL_FUNCTION_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
 					}
 					#endif
 
-					//print box text
-					int numSpritesAdded;
-					vec positionText;
-
-					#ifdef CS_CENTRE_BOXES
-					positionText.x = functionReference->printX - CS_FILE_OR_FUNCTION_TEXT_BOX_SCALE_FACTOR_X*CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR*(functionReference->name.length()/(CS_FUNCTION_MAX_TEXT_LENGTH*CS_FUNCTION_TEXT_BOX_PADDING_FRACTION_OF_TEXT_LENGTH));
-					#else
-					positionText.x = functionReference->printX;
-					#endif
-					positionText.y = functionReference->printY;
-					positionText.z = CS_OUTPUT_Z_POSITION_FILE_AND_FUNCTION_TEXT;
-					if(!useSingleFileOnly)
-					{
-						functionReference->printTextX = positionText.x;
-						functionReference->printTextY = positionText.y;
-					}
 
 					#ifdef CS_DO_NOT_DRAW_ALL_FUNCTION_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
 					if(!traceFunctionUpwards)
 					{//only print connections when not tracing a bottom level function upwards - saves space
 					#endif
-						newCurrentReferenceInPrintList = LDaddBasicTextualSpriteStringToReferenceList(&(functionReference->name), newCurrentReferenceInPrintList, &positionText, &numSpritesAdded, false, DAT_FILE_COLOUR_WHITE, CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR/CS_FILE_FUNCTIONS_ENABLED_VECTOROBJECTS_SCALE_FACTOR);	//add sprite text within box
-
-							positionText.y = positionText.y + CS_FILE_OR_FUNCTION_TEXT_BOX_TEXT_SCALE_FACTOR_Y_SVG*CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR;
-							writeSVGtext(currentTag, (functionReference->name), &positionText, CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR*CS_FILE_OR_FUNCTION_TEXT_BOX_TEXT_SCALE_FACTOR_Y_SVG_B, DAT_FILE_COLOUR_BLACK);
-
+						newCurrentReferenceInPrintList = printFunctionBoxText(newCurrentReferenceInPrintList, currentTag, functionReference, colour, useSingleFileOnly);
 					#ifdef CS_DO_NOT_DRAW_ALL_FUNCTION_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
 					}
 					#endif
@@ -1281,6 +1256,42 @@ Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentRe
 	}
 
 	return newCurrentReferenceInPrintList;
+}
+
+Reference * printFunctionBox(Reference * currentReferenceInPrintList, XMLparserTag ** currentTag, CSfunctionReference * functionReference, int colour)
+{
+	vec pos;
+	pos.x = functionReference->printX;
+	pos.y = functionReference->printY;
+	currentReferenceInPrintList = createFileOrFunctionReferenceBox(currentReferenceInPrintList, &pos, &(functionReference->name), CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR, colour, CS_FUNCTION_MAX_TEXT_LENGTH, CS_OUTPUT_Z_POSITION_FUNCTION_BOX);	//add box
+	writeFileOrFunctionSVGbox(currentTag, &pos, functionReference->name.length(), CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR, CS_FUNCTION_MAX_TEXT_LENGTH, colour, CS_FUNCTION_TEXT_BOX_OUTLINE_WIDTH_SVG);
+	return currentReferenceInPrintList;
+}
+
+Reference * printFunctionBoxText(Reference * currentReferenceInPrintList, XMLparserTag ** currentTag, CSfunctionReference * functionReference, int colour, bool useSingleFileOnly)
+{
+	//print box text
+	int numSpritesAdded;
+	vec positionText;
+
+	#ifdef CS_CENTRE_BOXES
+	positionText.x = functionReference->printX - CS_FILE_OR_FUNCTION_TEXT_BOX_SCALE_FACTOR_X*CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR*(functionReference->name.length()/(CS_FUNCTION_MAX_TEXT_LENGTH*CS_FUNCTION_TEXT_BOX_PADDING_FRACTION_OF_TEXT_LENGTH));
+	#else
+	positionText.x = functionReference->printX;
+	#endif
+	positionText.y = functionReference->printY;
+	positionText.z = CS_OUTPUT_Z_POSITION_FILE_AND_FUNCTION_TEXT;
+	if(!useSingleFileOnly)
+	{
+		functionReference->printTextX = positionText.x;
+		functionReference->printTextY = positionText.y;
+	}
+
+	currentReferenceInPrintList = LDaddBasicTextualSpriteStringToReferenceList(&(functionReference->name), currentReferenceInPrintList, &positionText, &numSpritesAdded, false, DAT_FILE_COLOUR_WHITE, CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR/CS_FILE_FUNCTIONS_ENABLED_VECTOROBJECTS_SCALE_FACTOR);	//add sprite text within box
+
+	positionText.y = positionText.y + CS_FILE_OR_FUNCTION_TEXT_BOX_TEXT_SCALE_FACTOR_Y_SVG*CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR;
+	writeSVGtext(currentTag, (functionReference->name), &positionText, CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR*CS_FILE_OR_FUNCTION_TEXT_BOX_TEXT_SCALE_FACTOR_Y_SVG_B, DAT_FILE_COLOUR_BLACK);
+	return currentReferenceInPrintList;
 }
 
 
@@ -2057,5 +2068,4 @@ string intToString(int integer)
 	sprintf(stringCharStar, "%d", integer);
 	return string(stringCharStar);
 }
-
 
