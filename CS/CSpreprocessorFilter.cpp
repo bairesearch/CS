@@ -26,7 +26,7 @@
  * File Name: CSpreprocessorFilter.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h6a 06-December-2015
+ * Project Version: 3h7a 06-December-2015
  *
  *******************************************************************************/
 
