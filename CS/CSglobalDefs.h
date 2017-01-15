@@ -26,7 +26,7 @@
  * File Name: CSglobalsDefs.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h1f 14-November-2015
+ * Project Version: 3h2a 23-November-2015
  * Description: CS specific global definitions
  *
  *******************************************************************************/
@@ -48,15 +48,34 @@
 		#define CS_GENERATE_CODE_GENERIC_SOURCE_FILE_EXTENSION "cpp"
 		#define CS_GENERATE_CODE_GENERIC_HEADER_FILE_EXTENSION "h"
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_END_OF_COMMAND ";"
-		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET "="
-		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_TEST "=="
-		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_NOT_EQUALS_TEST "!="
+		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET " = "
+		/*
+		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_TEST "=="	//no longer required as searching for " = "
+		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_NOT_EQUALS_TEST "!="	//no longer required as searching for " = "
+		*/
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_CONST "const "
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_OBJECT_REFERENCE_DELIMITER "->"
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_FEED_OUT " << "
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_FEED_IN " >> "
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_COUT_START "cout << \""
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_FUNCTION_CLOSE ")"
+		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_LIST_VARIABLE_POINTER_NEXT "next"		//BAI standard name for object list next pointers
+
+		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_PARSE_LISTS	//3h2a
+		#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_PARSE_LISTS
+			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_LIST_VARIABLE_PREFIX_START "first"		//BAI standard prefix for object list start pointers
+			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_LIST_VARIABLE_PREFIX_CURRENT "current"  	//BAI standard prefix for object list iterator pointers
+			
+			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_VECTOR_OR_MAP_ITERATOR "::iterator "	
+			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_VECTOR_OR_MAP_START "begin()"	
+			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_VECTOR_OR_MAP_FIND "find("	
+			
+			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_POINTER '*'			//for vector iterator referencing
+			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_OPEN_PARAMETER_SPACE '('	//for vector iterator referencing
+			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_CLOSE_PARAMETER_SPACE ')'	//for vector iterator referencing
+			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_MAP_ITERATOR_FIRST "->first"
+			#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_MAP_ITERATOR_SECOND "->second"
+		#endif
 	#endif
 	#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_FUNCTION_ARGUMENT_DELIMITER ','
 

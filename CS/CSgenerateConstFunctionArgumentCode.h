@@ -21,7 +21,7 @@
  * File Name: CSgenerateConstFunctionArgumentCode.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h1f 14-November-2015
+ * Project Version: 3h2a 23-November-2015
  *
  *******************************************************************************/
 
@@ -37,7 +37,13 @@ bool generateConstFunctionArguments(CSfileContainer* firstObjectInTopLevelBelowL
 	bool generateConstFunctionArgumentsRecurse(CSfileContainer* firstObjectInAboveLevelBelowListContainer, CSfileContainer* firstObjectInTopLevelBelowListContainer);
 		bool generateConstFunctionArgumentsFile(CSfile* currentFileObject);
 			bool generateConstFunctionArgumentsFunction(CSfunction* currentFunctionObject);
+				bool generateConstFunctionArgumentFunction(CSfunction* currentFunctionObject, CSfunctionArgument* currentFunctionArgumentInFunction, string functionDeclarationArgument, bool ignoreListIterationNextAssignments);
+					bool checkIfVariableIsBeingModifiedInFunction(string* functionText, string functionDeclarationArgument, bool ignoreListIterationNextAssignments);
+					bool functionArgumentReferenceWholeWordCheck(string* functionText, string functionDeclarationArgument, int indexOfFunctionArgument);
+					string extractFullVariableName(string* functionText, int indexOfStartOfVariableName);
+					string extractFullVariableNameReverse(string* functionText, int indexOfEndOfVariableName);
 
+					
 #endif
 
 #endif
