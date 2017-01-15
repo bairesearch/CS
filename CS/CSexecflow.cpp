@@ -26,27 +26,16 @@
  * File Name: CSexecflow.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3j1a 14-January-2017
+ * Project Version: 3j1b 14-January-2017
  *
  *******************************************************************************/
 
 //issues, need to flip vertically
 
 #include "CSexecflow.h"
-#include "CSoperations.h"
-#include "CSdraw.h"
-#include "LDsvg.h"
-#include "LDopengl.h"
-#include "XMLrulesClass.h"
-#include "LDparser.h"
-#include "LDsprite.h"
-#include "RTpixelMaps.h"
-#include "CSgenerateHTMLdocumentation.h"
 #ifdef CS_GENERATE_CPP_CLASSES
-#include "CSgenerateObjectOrientedCode.h"
 #endif
 #ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
-#include "CSgenerateConstFunctionArgumentCode.h"
 #endif
 
 #ifndef LINUX
@@ -56,7 +45,7 @@
 
 
 
-void generateCodeStructure(const string topLevelFileName, int width, const int height, const string outputLDRfileName, const string outputSVGfileName, const string outputPPMfileName, string outputHTMLfileName, const bool useOutputLDRfile, const bool useOutputPPMfile, bool useOutputHTMLfile, int generateHTMLdocumentationMode, const bool display, bool outputFunctionsConnectivity, bool traceFunctionUpwards, string bottomLevelFunctionNameToTraceUpwards, const bool outputFileConnections, const string topLevelFunctionName, const bool generateOOcode, const bool generateConstFunctionArgumentsCode)
+void CSexecflowClass::generateCodeStructure(const string topLevelFileName, int width, const int height, const string outputLDRfileName, const string outputSVGfileName, const string outputPPMfileName, string outputHTMLfileName, const bool useOutputLDRfile, const bool useOutputPPMfile, bool useOutputHTMLfile, int generateHTMLdocumentationMode, const bool display, bool outputFunctionsConnectivity, bool traceFunctionUpwards, string bottomLevelFunctionNameToTraceUpwards, const bool outputFileConnections, const string topLevelFunctionName, const bool generateOOcode, const bool generateConstFunctionArgumentsCode)
 {
 	bool result = true;
 
@@ -71,7 +60,7 @@ void generateCodeStructure(const string topLevelFileName, int width, const int h
 
 	if(display)
 	{
-		initiateOpenGL(width, height, 0, 0, false);
+		LDopengl.initiateOpenGL(width, height, 0, 0, false);
 	}
 
 	char* outputFileNameLDRcharstar = const_cast<char*>(outputLDRfileName.c_str());
@@ -91,7 +80,7 @@ void generateCodeStructure(const string topLevelFileName, int width, const int h
 	CSfileContainer* firstObjectInTopLevelBelowListContainer = new CSfileContainer();
 	topLevelReferenceInList->firstFileInBelowListContainer = firstObjectInTopLevelBelowListContainer;
 
-	bool hFileFound = getIncludeFileNamesFromCorHfile(firstObjectInTopLevelBelowListContainer, topLevelReferenceInListContainer, topLevelReferenceInList, topLevelFileName, 0);
+	bool hFileFound = CSoperations.getIncludeFileNamesFromCorHfile(firstObjectInTopLevelBelowListContainer, topLevelReferenceInListContainer, topLevelReferenceInList, topLevelFileName, 0);
 	if(!hFileFound)
 	{
 		cout << "generateCodeStructure{} error: !hFileFound: " << topLevelFileName << endl;
@@ -100,12 +89,12 @@ void generateCodeStructure(const string topLevelFileName, int width, const int h
 
 	CSfile* firstReferenceInTopLevelBelowList = firstObjectInTopLevelBelowListContainer->fileObject;
 
-	attachFunctionReferenceTargets(firstObjectInTopLevelBelowListContainer);	//added 3h1a
+	CSoperations.attachFunctionReferenceTargets(firstObjectInTopLevelBelowListContainer);	//added 3h1a
 
-	initiateMaxXatParticularY();
+	CSdraw.initiateMaxXatParticularY();
 	LDreference* firstReferenceInPrintList = new LDreference();
 
-	setCurrentDirectory(tempFolder);
+	SHAREDvars.setCurrentDirectory(tempFolder);
 
 	XMLparserTag* firstTagInSVGFile = new XMLparserTag();
 	XMLparserTag* currentTagInSVGFile = firstTagInSVGFile;
@@ -115,7 +104,7 @@ void generateCodeStructure(const string topLevelFileName, int width, const int h
 	#ifdef CS_SUPPORT_PREDEFINED_GRID
 	bool usePredefinedGrid = false;
 	bool tempResult = true;
-	XMLparserTag* firstTagInRulesTag = parseTagDownALevel(CSfirstTagInXMLfile, RULES_XML_TAG_rules, &tempResult);
+	XMLparserTag* firstTagInRulesTag = XMLparserClass.parseTagDownALevel(CSfirstTagInXMLfile, RULES_XML_TAG_rules, &tempResult);
 	XMLparserTag* firstTagInGridTag = NULL;
 	if(tempResult)
 	{
@@ -124,7 +113,7 @@ void generateCodeStructure(const string topLevelFileName, int width, const int h
 		{
 			if(currentTag->name == RULES_XML_TAG_grid)
 			{
-				firstTagInGridTag = parseTagDownALevel(currentTag, RULES_XML_TAG_grid, &tempResult);
+				firstTagInGridTag = XMLparserClass.parseTagDownALevel(currentTag, RULES_XML_TAG_grid, &tempResult);
 				if(tempResult)
 				{
 					usePredefinedGrid = true;
@@ -141,10 +130,10 @@ void generateCodeStructure(const string topLevelFileName, int width, const int h
 
 	//cout << "qt1" << endl;
 
-	LDreference* currentReferenceInPrintList = createFileObjectListBoxes(firstReferenceInPrintList, firstObjectInTopLevelBelowListContainer, firstObjectInTopLevelBelowListContainer, &currentTagInSVGFile, outputFunctionsConnectivity, traceFunctionUpwards, firstTagInGridTag, usePredefinedGrid);
+	LDreference* currentReferenceInPrintList = CSdraw.createFileObjectListBoxes(firstReferenceInPrintList, firstObjectInTopLevelBelowListContainer, firstObjectInTopLevelBelowListContainer, &currentTagInSVGFile, outputFunctionsConnectivity, traceFunctionUpwards, firstTagInGridTag, usePredefinedGrid);
 	if(outputFileConnections)
 	{
-		currentReferenceInPrintList = createFileObjectListConnections(currentReferenceInPrintList, firstObjectInTopLevelBelowListContainer, NULL, &currentTagInSVGFile, traceFunctionUpwards);
+		currentReferenceInPrintList = CSdraw.createFileObjectListConnections(currentReferenceInPrintList, firstObjectInTopLevelBelowListContainer, NULL, &currentTagInSVGFile, traceFunctionUpwards);
 	}
 	//cout << "qt2" << endl;
 	if(outputFunctionsConnectivity)
@@ -179,16 +168,16 @@ void generateCodeStructure(const string topLevelFileName, int width, const int h
 			CSfunction* currentReferenceInFunctionReferenceList = topLevelFunctionObject->firstReferenceInFunctionReferenceList;
 			while(currentReferenceInFunctionReferenceList->next != NULL)
 			{
-				currentReferenceInPrintList = createFunctionObjectListBoxesAndConnections(currentReferenceInPrintList, firstReferenceInTopLevelBelowList, topLevelFunctionObject, firstObjectInTopLevelBelowListContainer, 0, currentReferenceInFunctionReferenceList, &currentTagInSVGFile, traceFunctionUpwards, false, NULL, usePredefinedGrid);
+				currentReferenceInPrintList = CSdraw.createFunctionObjectListBoxesAndConnections(currentReferenceInPrintList, firstReferenceInTopLevelBelowList, topLevelFunctionObject, firstObjectInTopLevelBelowListContainer, 0, currentReferenceInFunctionReferenceList, &currentTagInSVGFile, traceFunctionUpwards, false, NULL, usePredefinedGrid);
 				currentReferenceInFunctionReferenceList = currentReferenceInFunctionReferenceList->next;
 			}
-			resetPrintedFunctionConnections(firstReferenceInTopLevelBelowList, topLevelFunctionObject, false, NULL);
+			CSdraw.resetPrintedFunctionConnections(firstReferenceInTopLevelBelowList, topLevelFunctionObject, false, NULL);
 
 			if(traceFunctionUpwards && (bottomLevelFunctionNameToTraceUpwards != ""))
 			{
 				CSfile* fileObjectHoldingFunction = NULL;
 				CSfunction* bottomLevelFunctionToTraceUpwards = NULL;
-				bool foundBottomLevelFunctionRef = findPrintedFunctionObjectWithName(bottomLevelFunctionNameToTraceUpwards, firstObjectInTopLevelBelowListContainer, &fileObjectHoldingFunction, &bottomLevelFunctionToTraceUpwards);
+				bool foundBottomLevelFunctionRef = CSdraw.findPrintedFunctionObjectWithName(bottomLevelFunctionNameToTraceUpwards, firstObjectInTopLevelBelowListContainer, &fileObjectHoldingFunction, &bottomLevelFunctionToTraceUpwards);
 
 				if(foundBottomLevelFunctionRef)
 				{
@@ -203,7 +192,7 @@ void generateCodeStructure(const string topLevelFileName, int width, const int h
 						}
 					}
 					string HTMLdocumentationFunctionNOTUSED = "";
-					generateHTMLdocumentationForFunction(currentReferenceInPrintList, firstObjectInTopLevelBelowListContainer, bottomLevelFunctionToTraceUpwards, fileNameHoldingFunction, &currentTagInSVGFile, generateHTMLdocumentationMode, &HTMLdocumentationFunctionNOTUSED, &outputSVGfileName, useOutputHTMLfile, outputHTMLfileName, traceFunctionUpwards);
+					CSgenerateHTMLdocumentation.generateHTMLdocumentationForFunction(currentReferenceInPrintList, firstObjectInTopLevelBelowListContainer, bottomLevelFunctionToTraceUpwards, fileNameHoldingFunction, &currentTagInSVGFile, generateHTMLdocumentationMode, &HTMLdocumentationFunctionNOTUSED, &outputSVGfileName, useOutputHTMLfile, outputHTMLfileName, traceFunctionUpwards);
 				}
 				else
 				{
@@ -215,7 +204,7 @@ void generateCodeStructure(const string topLevelFileName, int width, const int h
 			{
 				if(generateHTMLdocumentationMode == CS_GENERATE_HTML_DOCUMENTATION_MODE_ON)
 				{//generate documentation for all functions...
-					generateHTMLdocumentationFunctions(firstTagInSVGFile, firstObjectInTopLevelBelowListContainer, generateHTMLdocumentationMode, useOutputHTMLfile, traceFunctionUpwards, usePredefinedGrid, outputHTMLfileName);
+					CSgenerateHTMLdocumentation.generateHTMLdocumentationFunctions(firstTagInSVGFile, firstObjectInTopLevelBelowListContainer, generateHTMLdocumentationMode, useOutputHTMLfile, traceFunctionUpwards, usePredefinedGrid, outputHTMLfileName);
 					htmlDocumentationGenerationPreventsDisplay = true;	//cannot display in OpenGL/save to file, as LD vector graphics references have been deleted
 				}
 			}
@@ -232,7 +221,7 @@ void generateCodeStructure(const string topLevelFileName, int width, const int h
 	#ifdef CS_GENERATE_CPP_CLASSES
 	if(generateOOcode)
 	{
-		if(!generateCPPclasses(firstObjectInTopLevelBelowListContainer))
+		if(!CSgenerateObjectOrientedCode.generateCPPclasses(firstObjectInTopLevelBelowListContainer))
 		{
 			result = false;
 		}
@@ -241,7 +230,7 @@ void generateCodeStructure(const string topLevelFileName, int width, const int h
 	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
 	if(generateConstFunctionArgumentsCode)
 	{
-		if(!generateConstFunctionArguments(firstObjectInTopLevelBelowListContainer))
+		if(!CSgenerateConstFunctionArgumentCode.generateConstFunctionArguments(firstObjectInTopLevelBelowListContainer))
 		{
 			result = false;
 		}
@@ -252,7 +241,7 @@ void generateCodeStructure(const string topLevelFileName, int width, const int h
 	if(!htmlDocumentationGenerationPreventsDisplay)
 	{//do not display if generating html (unless tracing single file)
 
-		if(!writeSVGfile(outputFileNameSVGcharstar, firstTagInSVGFile, CS_CODE_STRUCTURE_FUNCTION_DIAGRAM_MINX, CS_CODE_STRUCTURE_FUNCTION_DIAGRAM_MAXX, CS_CODE_STRUCTURE_FUNCTION_DIAGRAM_MINY, CS_CODE_STRUCTURE_FUNCTION_DIAGRAM_MAXY))
+		if(!LDsvg.writeSVGfile(outputFileNameSVGcharstar, firstTagInSVGFile, CS_CODE_STRUCTURE_FUNCTION_DIAGRAM_MINX, CS_CODE_STRUCTURE_FUNCTION_DIAGRAM_MAXX, CS_CODE_STRUCTURE_FUNCTION_DIAGRAM_MINY, CS_CODE_STRUCTURE_FUNCTION_DIAGRAM_MAXY))
 		{
 			result = false;
 		}
@@ -260,7 +249,7 @@ void generateCodeStructure(const string topLevelFileName, int width, const int h
 
 		if(useOutputLDRfile || display)
 		{
-			writeReferencesToFile(outputFileNameLDRcharstar, firstReferenceInPrintList);
+			LDreferenceManipulation.writeReferencesToFile(outputFileNameLDRcharstar, firstReferenceInPrintList);
 		}
 
 		if(display)
@@ -271,35 +260,35 @@ void generateCodeStructure(const string topLevelFileName, int width, const int h
 			char* topLevelSceneFileNameCollapsed = "sceneCollapsedForRaytracing.ldr";
 			LDreference* initialReferenceInSceneFile = new LDreference();
 			LDreference* topLevelReferenceInSceneFile = new LDreference(topLevelSceneFileName, 1, true);	//The information in this object is not required or meaningful, but needs to be passed into the parseFile/parseReferenceList recursive function
-			if(!parseFile(topLevelSceneFileName, initialReferenceInSceneFile, topLevelReferenceInSceneFile, true))
+			if(!LDparser.parseFile(topLevelSceneFileName, initialReferenceInSceneFile, topLevelReferenceInSceneFile, true))
 			{//file does not exist
 				cout << "The file: " << topLevelSceneFileName << " does not exist in the directory" << endl;
 				exit(0);
 			}
-			write2DreferenceListCollapsedTo1DtoFile(topLevelSceneFileNameCollapsed, initialReferenceInSceneFile);
+			LDreferenceManipulation.write2DreferenceListCollapsedTo1DtoFile(topLevelSceneFileNameCollapsed, initialReferenceInSceneFile);
 
 
 			unsigned char* rgbMap = new unsigned char[width*height*RGB_NUM];
 
 			//setViewPort2Dortho(-100.0, 2000.0, -100.0, 2000.0);
-			setViewPort3Dortho(-100.0, 2000, 2000.0, -100.0, 1.0, -1.0);
+			LDopengl.setViewPort3Dortho(-100.0, 2000, 2000.0, -100.0, 1.0, -1.0);
 
 			//now reparse file
 			LDreference* initialReferenceInCollapsedSceneFile = new LDreference();
 			LDreference* topLevelReferenceInCollapsedSceneFile = new LDreference(topLevelSceneFileNameCollapsed, 1, true);	//The information in this object is not required or meaningful, but needs to be passed into the parseFile/parseReferenceList recursive function
-			if(!parseFile(topLevelSceneFileNameCollapsed, initialReferenceInCollapsedSceneFile, topLevelReferenceInCollapsedSceneFile, true))
+			if(!LDparser.parseFile(topLevelSceneFileNameCollapsed, initialReferenceInCollapsedSceneFile, topLevelReferenceInCollapsedSceneFile, true))
 			{//file does not exist
 				cout << "The file: " << topLevelSceneFileNameCollapsed << " does not exist in the directory" << endl;
 				exit(0);
 			}
 
-			drawPrimitivesReferenceListToOpenGLandCreateRGBmapBasic(initialReferenceInCollapsedSceneFile, width, height, rgbMap);
-			drawPrimitivesReferenceListToOpenGLandCreateRGBmapBasic(initialReferenceInCollapsedSceneFile, width, height, rgbMap);
+			LDopengl.drawPrimitivesReferenceListToOpenGLandCreateRGBmapBasic(initialReferenceInCollapsedSceneFile, width, height, rgbMap);
+			LDopengl.drawPrimitivesReferenceListToOpenGLandCreateRGBmapBasic(initialReferenceInCollapsedSceneFile, width, height, rgbMap);
 				//due to opengl code bug, need to execute this function twice.
 
 			if(useOutputPPMfile)
 			{
-				generatePixmapFromRGBmap(displayFileNamePPMcharstar, width, height, rgbMap);
+				RTpixelMaps.generatePixmapFromRGBmap(displayFileNamePPMcharstar, width, height, rgbMap);
 			}
 
 			delete rgbMap;
@@ -314,7 +303,7 @@ void generateCodeStructure(const string topLevelFileName, int width, const int h
 
 	if(display)
 	{
-		exitOpenGL();
+		LDopengl.exitOpenGL();
 	}
 
 }

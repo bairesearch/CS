@@ -26,7 +26,7 @@
  * File Name: CSoperations.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3j1a 14-January-2017
+ * Project Version: 3j1b 14-January-2017
  *
  *******************************************************************************/
 
@@ -37,31 +37,39 @@
 #include "LDreferenceClass.h"
 #include "CSglobalDefs.h"
 #include "CSreferenceContainerClass.h"
+#include "LDsprite.h"
+#include "LDreferenceManipulation.h"
 
-bool getIncludeFileNamesFromCorHfile(CSfileContainer* firstReferenceInIncludeFileListContainer, constEffective CSfileContainer* topLevelReferenceContainer, CSfile* aboveLevelObject, const string topLevelReferenceName, const int level);
+class CSoperationsClass
+{
+	private: SHAREDvarsClass SHAREDvars;
+	private: LDreferenceManipulationClass LDreferenceManipulation;
+	private: CSreferenceContainerClassClass CSreferenceContainerClass;
+	public: bool getIncludeFileNamesFromCorHfile(CSfileContainer* firstReferenceInIncludeFileListContainer, constEffective CSfileContainer* topLevelReferenceContainer, CSfile* aboveLevelObject, const string topLevelReferenceName, const int level);
 	#ifdef CS_GENERATE_CODE_GENERIC
-	bool fileIsHeader(string parseFileName);
+		private: bool fileIsHeader(string parseFileName);
 	#endif
-	bool findFileObjectInFileObjectContainerList(constEffective CSfileContainer* firstReferenceContainerInLevel, const string fileReferenceName, constEffective CSfile** fileReferenceFound);
-	bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunction* firstFunctionInFunctionList, const string topLevelFileName, const int level);
-	void getFunctionObjectNamesFromFunctionsInCfile(const CSfile* firstFileInIncludeFileList, CSfunction* firstFunctionInFunctionList, const CSfile* aboveLevelObject, const string topLevelFileName, const int level);
-		bool searchFunctionStringForFunctionReferencesRecursive(const CSfile* firstFileInIncludeFileList, const CSfileContainer* firstFileNameInLayerContainingFunctionReferencesToSearchFor, CSfunction** currentReferenceInFunctionReferenceList, CSfunction** currentReferenceInFunctionReferenceListRepeats, string* functionContentsString);
-			bool searchFunctionStringForFunctionReferences(const CSfile* firstFileInIncludeFileList, const CSfile* fileNameContainingFunctionReferencesToSearchFor, CSfunction** currentReferenceInFunctionReferenceList, CSfunction** currentReferenceInFunctionReferenceListRepeats, string* functionContentsString);
-				void identifyFunctionReferenceArguments(CSfunction* currentReferenceInFunctionReferenceList, string* functionContentsString, int indexToFunctionObject);
-					string removePrependedWhiteSpace(const string argument);
+		private: bool findFileObjectInFileObjectContainerList(constEffective CSfileContainer* firstReferenceContainerInLevel, const string fileReferenceName, constEffective CSfile** fileReferenceFound);
+		private: bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunction* firstFunctionInFunctionList, const string topLevelFileName, const int level);
+		private: void getFunctionObjectNamesFromFunctionsInCfile(const CSfile* firstFileInIncludeFileList, CSfunction* firstFunctionInFunctionList, const CSfile* aboveLevelObject, const string topLevelFileName, const int level);
+			private: bool searchFunctionStringForFunctionReferencesRecursive(const CSfile* firstFileInIncludeFileList, const CSfileContainer* firstFileNameInLayerContainingFunctionReferencesToSearchFor, CSfunction** currentReferenceInFunctionReferenceList, CSfunction** currentReferenceInFunctionReferenceListRepeats, string* functionContentsString);
+				private: bool searchFunctionStringForFunctionReferences(const CSfile* firstFileInIncludeFileList, const CSfile* fileNameContainingFunctionReferencesToSearchFor, CSfunction** currentReferenceInFunctionReferenceList, CSfunction** currentReferenceInFunctionReferenceListRepeats, string* functionContentsString);
+					private: void identifyFunctionReferenceArguments(CSfunction* currentReferenceInFunctionReferenceList, string* functionContentsString, int indexToFunctionObject);
+						private: string removePrependedWhiteSpace(const string argument);
 				#ifdef CS_IDENTIFY_FUNCTION_DECLARATION_ARGUMENTS
-				void identifyFunctionDeclarationArguments(CSfunction* currentReferenceInFunctionReferenceList, const string* functionNameFull);
+					private: void identifyFunctionDeclarationArguments(CSfunction* currentReferenceInFunctionReferenceList, const string* functionNameFull);
 				#endif
 
 /*
 CSfile* findReferenceInIncludeFileList(CSfile* firstReferenceInAboveLevelBelowList, string referenceName, CSfile* foundReference, bool* referenceFound);
 */
 
-string generateSourceFileNameFromHeaderFileName(const string headerFileName, const string sourceFileNameExtension);
+	private: string generateSourceFileNameFromHeaderFileName(const string headerFileName, const string sourceFileNameExtension);
 
-void attachFunctionReferenceTargets(CSfileContainer* firstObjectInAboveLevelBelowListContainer);
+	public: void attachFunctionReferenceTargets(CSfileContainer* firstObjectInAboveLevelBelowListContainer);
 
-string extractFunctionArgumentName(string* argumentText, const int indexOfStartOfVariableName);
+	private: string extractFunctionArgumentName(string* argumentText, const int indexOfStartOfVariableName);
+};
 
 #endif
 

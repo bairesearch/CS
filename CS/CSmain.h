@@ -26,7 +26,7 @@
  * File Name: CSmain.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3j1a 14-January-2017
+ * Project Version: 3j1b 14-January-2017
  *
  *******************************************************************************/
 
@@ -35,10 +35,21 @@
 #define HEADER_CS_MAIN
 
 
+#include "CSexecflow.h"
+#include "CSdataflow.h"
+#include "CSpreprocessorFilter.h"
+#include "CSdraw.h"
+#include "CSgenerateHTMLdocumentation.h"
+#include "XMLrulesClass.h"
+#include "LDsprite.h"
 #define CS_MODE_OUTPUT_EXECUTION_FLOW (1)
 #define CS_MODE_OUTPUT_DATA_FLOW (2)
 #define CS_MODE_FILTER_CODE_USING_PREPROCESSOR_DEFINITIONS (3)
 
 int main(const int argc, const char** argv);
+
+class CSmainClass
+{
+};
 
 #endif

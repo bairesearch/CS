@@ -26,7 +26,7 @@
  * File Name: CSdraw.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3j1a 14-January-2017
+ * Project Version: 3j1b 14-January-2017
  *
  *******************************************************************************/
 
@@ -38,6 +38,11 @@
 #include "XMLparserClass.h"
 #include "CSreferenceContainerClass.h"
 #include "CSglobalDefs.h"
+#include "LDsvg.h"
+#include "LDsprite.h"
+#include "LDreferenceManipulation.h"
+#include "LDreferenceManipulation.h"
+#include "XMLrulesClass.h"
 
 /*
 #define CS_OUTPUT_Z_POSITION_FILE_CONNECTIONS (0.6)
@@ -172,37 +177,44 @@
 #endif
 
 
-void initiateMaxXatParticularY();
+class CSdrawClass
+{
+	private: SHAREDvarsClass SHAREDvars;
+	private: LDsvgClass LDsvg;
+	private: LDspriteClass LDsprite;
+	private: CSreferenceContainerClassClass CSreferenceContainerClass;
+	public: void initiateMaxXatParticularY();
 
-LDreference* createFileObjectListBoxes(LDreference* currentReferenceInPrintList, CSfileContainer* firstObjectInAboveLevelBelowListContainer, CSfileContainer* firstObjectInTopLevelBelowListContainer, XMLparserTag** currentTag, bool outputFunctionsConnectivity, bool traceFunctionUpwards, XMLparserTag* firstTagInGridTag, bool usePredefinedGrid);
+	public: LDreference* createFileObjectListBoxes(LDreference* currentReferenceInPrintList, CSfileContainer* firstObjectInAboveLevelBelowListContainer, CSfileContainer* firstObjectInTopLevelBelowListContainer, XMLparserTag** currentTag, bool outputFunctionsConnectivity, bool traceFunctionUpwards, XMLparserTag* firstTagInGridTag, bool usePredefinedGrid);
 
-LDreference* createFileObjectListConnections(LDreference* currentReferenceInPrintList, CSfileContainer* firstObjectInAboveLevelBelowListContainer, CSfile* aboveLevelObject, XMLparserTag** currentTag, bool traceFunctionUpwards);
-	LDreference* createFileObjectConnection(LDreference* currentReferenceInPrintList, CSfile* reference, CSfile* currentReferenceInAboveList, int colour, const bool traceAFunctionUpwardsAndNotCurrentlyTracing, XMLparserTag** currentTag);
+	public: LDreference* createFileObjectListConnections(LDreference* currentReferenceInPrintList, CSfileContainer* firstObjectInAboveLevelBelowListContainer, CSfile* aboveLevelObject, XMLparserTag** currentTag, bool traceFunctionUpwards);
+		private: LDreference* createFileObjectConnection(LDreference* currentReferenceInPrintList, CSfile* reference, CSfile* currentReferenceInAboveList, int colour, const bool traceAFunctionUpwardsAndNotCurrentlyTracing, XMLparserTag** currentTag);
 
-LDreference* createFunctionObjectListBoxesAndConnections(LDreference* currentReferenceInPrintList, CSfile* aboveLevelFileObject, CSfunction* aboveLevelFunctionObject, CSfileContainer* firstObjectInTopLevelBelowListContainer, const int functionLevel, const CSfunction* functionReference, XMLparserTag** currentTag, bool traceFunctionUpwards, bool useSingleFileOnly, string* singleFileName, bool usePredefinedGrid);
-	LDreference* printFunctionBox(LDreference* currentReferenceInPrintList, XMLparserTag** currentTag, CSfunction* functionObject, int colour);
-	LDreference* printFunctionBoxText(LDreference* currentReferenceInPrintList, XMLparserTag** currentTag, CSfunction* functionObject, const int colour, const bool useSingleFileOnly);
-	void resetPrintedFunctionConnections(constEffective CSfile* aboveLevelFileObject, CSfunction* aboveLevelFunctionObject, const bool useSingleFileOnly, const string* singleFileName);
-	LDreference* createFunctionObjectConnection(LDreference* currentReferenceInPrintList, CSfunction* reference,  CSfunction* currentReferenceInAboveList, int colour, const bool traceAFunctionUpwardsAndNotCurrentlyTracing, const bool prepareForTrace, XMLparserTag** currentTag, const CSfile* fileObject,  CSfile* currentFileObjectInAboveList);
+	public: LDreference* createFunctionObjectListBoxesAndConnections(LDreference* currentReferenceInPrintList, CSfile* aboveLevelFileObject, CSfunction* aboveLevelFunctionObject, CSfileContainer* firstObjectInTopLevelBelowListContainer, const int functionLevel, const CSfunction* functionReference, XMLparserTag** currentTag, bool traceFunctionUpwards, bool useSingleFileOnly, string* singleFileName, bool usePredefinedGrid);
+		public: LDreference* printFunctionBox(LDreference* currentReferenceInPrintList, XMLparserTag** currentTag, CSfunction* functionObject, int colour);
+		public: LDreference* printFunctionBoxText(LDreference* currentReferenceInPrintList, XMLparserTag** currentTag, CSfunction* functionObject, const int colour, const bool useSingleFileOnly);
+		public: void resetPrintedFunctionConnections(constEffective CSfile* aboveLevelFileObject, CSfunction* aboveLevelFunctionObject, const bool useSingleFileOnly, const string* singleFileName);
+		private: LDreference* createFunctionObjectConnection(LDreference* currentReferenceInPrintList, CSfunction* reference,  CSfunction* currentReferenceInAboveList, int colour, const bool traceAFunctionUpwardsAndNotCurrentlyTracing, const bool prepareForTrace, XMLparserTag** currentTag, const CSfile* fileObject,  CSfile* currentFileObjectInAboveList);
 
-	LDreference* configureFileOrFunctionObjectConnection(LDreference* currentReferenceInPrintList, vec* referencePrintPos, vec* currentReferenceInAboveListPrintPos, int colour, const bool fileOrFunction, const bool traceAFunctionUpwardsAndNotCurrentlyTracing, XMLparserTag** currentTag, const string* startGroupID, const string* endGroupID);
-	LDreference* createFileOrFunctionObjectBox(LDreference* currentReferenceInPrintList,  vec* referencePrintPos, string* referenceName, double scaleFactor, int colour, double maxTextLength, double zPosition);
-	LDreference* createBox(LDreference* currentReferenceInPrintList, vec* vect, const double width, const double height, int colour);
+		private: LDreference* configureFileOrFunctionObjectConnection(LDreference* currentReferenceInPrintList, vec* referencePrintPos, vec* currentReferenceInAboveListPrintPos, int colour, const bool fileOrFunction, const bool traceAFunctionUpwardsAndNotCurrentlyTracing, XMLparserTag** currentTag, const string* startGroupID, const string* endGroupID);
+		private: LDreference* createFileOrFunctionObjectBox(LDreference* currentReferenceInPrintList,  vec* referencePrintPos, string* referenceName, double scaleFactor, int colour, double maxTextLength, double zPosition);
+		private: LDreference* createBox(LDreference* currentReferenceInPrintList, vec* vect, const double width, const double height, int colour);
 
-int calculateCSBoxAndConnectionColourBasedUponLevel(const int yIndex);
-int calculateCSBoxAndConnectionColourBasedUponFileName(const CSfile* currentFileObject);
+	private: int calculateCSBoxAndConnectionColourBasedUponLevel(const int yIndex);
+	private: int calculateCSBoxAndConnectionColourBasedUponFileName(const CSfile* currentFileObject);
 
-bool findPrintedFunctionObjectWithName(const string name, constEffective CSfileContainer* firstObjectInAboveLevelBelowListContainer, constEffective CSfile** fileObjectHoldingFunction, constEffective CSfunction** updatedFunctionObject);
-LDreference* traceFunctionsUpwardsAndDrawOrHighLightThese(LDreference* currentReferenceInPrintList, CSfileContainer* firstObjectInTopLevelBelowListContainer, CSfunction* currentFunctionBeingTraced, XMLparserTag** currentTag, int generateHTMLdocumentationMode, string* HTMLdocumentationFunctionTraceTableRows);
-	void traceFunctionsUpwardsAndDrawOrHighLightTheseReset(const CSfileContainer* firstObjectInTopLevelBelowListContainer, CSfunction* currentFunctionBeingTraced);
+	public: bool findPrintedFunctionObjectWithName(const string name, constEffective CSfileContainer* firstObjectInAboveLevelBelowListContainer, constEffective CSfile** fileObjectHoldingFunction, constEffective CSfunction** updatedFunctionObject);
+	public: LDreference* traceFunctionsUpwardsAndDrawOrHighLightThese(LDreference* currentReferenceInPrintList, CSfileContainer* firstObjectInTopLevelBelowListContainer, CSfunction* currentFunctionBeingTraced, XMLparserTag** currentTag, int generateHTMLdocumentationMode, string* HTMLdocumentationFunctionTraceTableRows);
+		public: void traceFunctionsUpwardsAndDrawOrHighLightTheseReset(const CSfileContainer* firstObjectInTopLevelBelowListContainer, CSfunction* currentFunctionBeingTraced);
 
-void writeFileOrFunctionSVGbox(XMLparserTag** currentTag, const vec* pos, const int textLength, const double scaleFactor, const double maxTextLength, const int col, const double boxOutlineWidth);
-void writeFileOrFunctionSVGboxTransparent(XMLparserTag** currentTag, const vec* pos, const int textLength, const double scaleFactor, const double maxTextLength, const int col, const double boxOutlineWidth, const double fillOpacity);
+	private: void writeFileOrFunctionSVGbox(XMLparserTag** currentTag, const vec* pos, const int textLength, const double scaleFactor, const double maxTextLength, const int col, const double boxOutlineWidth);
+	private: void writeFileOrFunctionSVGboxTransparent(XMLparserTag** currentTag, const vec* pos, const int textLength, const double scaleFactor, const double maxTextLength, const int col, const double boxOutlineWidth, const double fillOpacity);
 
 //void fillInCSrulesExternVariables(XMLrulesClass* firstReferenceInCSrulesDraw);
-void fillInCSrulesExternVariables();
+	public: void fillInCSrulesExternVariables();
 
-string createGroupID(const string objectName, const int printX, const int printY);
+	private: string createGroupID(const string objectName, const int printX, const int printY);
+};
 
 
 

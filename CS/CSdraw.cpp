@@ -26,7 +26,7 @@
  * File Name: CSdraw.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3j1a 14-January-2017
+ * Project Version: 3j1b 14-January-2017
  *
  *******************************************************************************/
 
@@ -34,11 +34,6 @@
 
 
 #include "CSdraw.h"
-#include "LDsvg.h"
-#include "LDsprite.h"
-#include "LDreferenceManipulation.h"
-#include "LDreferenceManipulation.h"
-#include "XMLrulesClass.h"
 
 
 
@@ -116,7 +111,7 @@ static int CS_FUNCTION_BOX_HIGHLIGHT_COLOUR;
 
 
 
-void fillInCSrulesExternVariables()
+void CSdrawClass::fillInCSrulesExternVariables()
 {
 	//extract common sprite variables from either xml file (LRRC or ANN)
 
@@ -382,7 +377,7 @@ void fillInCSrulesExternVariables()
 
 int maxXAtAParticularY[MAX_INCLUDE_DEPTH_FILE];
 
-void initiateMaxXatParticularY()
+void CSdrawClass::initiateMaxXatParticularY()
 {
 	//now print based upon above lists;
 	for(int i=0; i<MAX_INCLUDE_DEPTH_FILE; i++)
@@ -396,7 +391,7 @@ void initiateMaxXatParticularY()
 
 
 
-LDreference* createFileObjectListBoxes(LDreference* currentReferenceInPrintList, CSfileContainer* firstObjectInAboveLevelBelowListContainer, CSfileContainer* firstObjectInTopLevelBelowListContainer, XMLparserTag** currentTag, bool outputFunctionsConnectivity, bool traceFunctionUpwards, XMLparserTag* firstTagInGridTag, bool usePredefinedGrid)
+LDreference* CSdrawClass::createFileObjectListBoxes(LDreference* currentReferenceInPrintList, CSfileContainer* firstObjectInAboveLevelBelowListContainer, CSfileContainer* firstObjectInTopLevelBelowListContainer, XMLparserTag** currentTag, bool outputFunctionsConnectivity, bool traceFunctionUpwards, XMLparserTag* firstTagInGridTag, bool usePredefinedGrid)
 {
 	LDreference* newCurrentReferenceInPrintList = currentReferenceInPrintList;
 
@@ -447,14 +442,14 @@ LDreference* createFileObjectListBoxes(LDreference* currentReferenceInPrintList,
 							{
 								if(currentAttributeTag->name == RULES_XML_ATTRIBUTE_x)
 								{
-									xPos = convertStringToInt(currentAttributeTag->value);
+									xPos = SHAREDvars.convertStringToInt(currentAttributeTag->value);
 									#ifdef CS_DEBUG
 									//cout << "xPos = " << xPos << endl;
 									#endif
 								}
 								if(currentAttributeTag->name == RULES_XML_ATTRIBUTE_y)
 								{
-									maxYPos = convertStringToInt(currentAttributeTag->value);
+									maxYPos = SHAREDvars.convertStringToInt(currentAttributeTag->value);
 									#ifdef CS_DEBUG
 									//cout << "maxYPos = " << maxYPos << endl;
 									#endif
@@ -524,16 +519,16 @@ LDreference* createFileObjectListBoxes(LDreference* currentReferenceInPrintList,
 				bigFileBoxPosition.x = currentFileObject->printX;
 				bigFileBoxPosition.z = CS_OUTPUT_Z_POSITION_FILE_CONTAINER_BIG_BOX;
 				bigFileBoxPosition.y = currentFileObject->printY + ((vectorObjectsScaleFactor*CS_FILE_FUNCTIONS_ENABLED_LARGE_BOX_SCALE_FACTOR_Y_SPACING_FRACTION_B)* CS_FILE_FUNCTIONS_ENABLED_LARGE_BOX_SCALE_FACTOR_Y_SPACING_FRACTION_C);
-				newCurrentReferenceInPrintList = createBox(newCurrentReferenceInPrintList, &bigFileBoxPosition, vectorObjectsScaleFactor*CS_FILE_FUNCTIONS_ENABLED_LARGE_BOX_SCALE_FACTOR_X_SPACING_FRACTION_B* CS_FILE_FUNCTIONS_ENABLED_LARGE_BOX_SCALE_FACTOR_X, vectorObjectsScaleFactor*CS_FILE_FUNCTIONS_ENABLED_LARGE_BOX_SCALE_FACTOR_Y_SPACING_FRACTION_B, DAT_FILE_COLOUR_LIGHTGREY);	//add box
+				newCurrentReferenceInPrintList = this->createBox(newCurrentReferenceInPrintList, &bigFileBoxPosition, vectorObjectsScaleFactor*CS_FILE_FUNCTIONS_ENABLED_LARGE_BOX_SCALE_FACTOR_X_SPACING_FRACTION_B* CS_FILE_FUNCTIONS_ENABLED_LARGE_BOX_SCALE_FACTOR_X, vectorObjectsScaleFactor*CS_FILE_FUNCTIONS_ENABLED_LARGE_BOX_SCALE_FACTOR_Y_SPACING_FRACTION_B, DAT_FILE_COLOUR_LIGHTGREY);	//add box
 
-				writeSVGbox(currentTag, &bigFileBoxPosition, vectorObjectsScaleFactor*CS_FILE_FUNCTIONS_ENABLED_LARGE_BOX_SCALE_FACTOR_X_SPACING_FRACTION_B* CS_FILE_FUNCTIONS_ENABLED_LARGE_BOX_SCALE_FACTOR_X, vectorObjectsScaleFactor*CS_FILE_FUNCTIONS_ENABLED_LARGE_BOX_SCALE_FACTOR_Y_SPACING_FRACTION_B, DAT_FILE_COLOUR_LIGHTGREY, CS_FILE_TEXT_BOX_OUTLINE_WIDTH_SVG, false);
+				LDsvg.writeSVGbox(currentTag, &bigFileBoxPosition, vectorObjectsScaleFactor*CS_FILE_FUNCTIONS_ENABLED_LARGE_BOX_SCALE_FACTOR_X_SPACING_FRACTION_B* CS_FILE_FUNCTIONS_ENABLED_LARGE_BOX_SCALE_FACTOR_X, vectorObjectsScaleFactor*CS_FILE_FUNCTIONS_ENABLED_LARGE_BOX_SCALE_FACTOR_Y_SPACING_FRACTION_B, DAT_FILE_COLOUR_LIGHTGREY, CS_FILE_TEXT_BOX_OUTLINE_WIDTH_SVG, false);
 			}
 
 
 			#ifdef CS_USE_RAINBOW_COLOURS_FOR_FILE_BOXES
-			int colour = calculateCSBoxAndConnectionColourBasedUponLevel(maxYPos);
+			int colour = this->calculateCSBoxAndConnectionColourBasedUponLevel(maxYPos);
 			#else
-			int colour = calculateCSBoxAndConnectionColourBasedUponFileName(currentFileObject);
+			int colour = this->calculateCSBoxAndConnectionColourBasedUponFileName(currentFileObject);
 			#endif
 			currentFileObject->col = colour;
 
@@ -546,8 +541,8 @@ LDreference* createFileObjectListBoxes(LDreference* currentReferenceInPrintList,
 			{//only print connections when not tracing a bottom level function upwards - saves space
 			#endif
 
-				string groupID = createGroupID(currentFileObject->name, currentFileObject->printX, currentFileObject->printY);
-				nextTagOnOriginalLayer = writeSVGgroup(currentTag, &groupID);
+				string groupID = this->createGroupID(currentFileObject->name, currentFileObject->printX, currentFileObject->printY);
+				nextTagOnOriginalLayer = LDsvg.writeSVGgroup(currentTag, &groupID);
 			#ifdef CS_DO_NOT_DRAW_ALL_FUNCTION_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
 			}
 			#endif
@@ -561,9 +556,9 @@ LDreference* createFileObjectListBoxes(LDreference* currentReferenceInPrintList,
 				pos.x = currentFileObject->printX;
 				pos.y = currentFileObject->printY;
 				pos.z = currentFileObject->printY;
-				newCurrentReferenceInPrintList = createFileOrFunctionObjectBox(newCurrentReferenceInPrintList, &pos, &(currentFileObject->name), vectorObjectsScaleFactor, colour, CS_FILE_MAX_TEXT_LENGTH, CS_OUTPUT_Z_POSITION_FILE_BOX);	//add box
+				newCurrentReferenceInPrintList = this->createFileOrFunctionObjectBox(newCurrentReferenceInPrintList, &pos, &(currentFileObject->name), vectorObjectsScaleFactor, colour, CS_FILE_MAX_TEXT_LENGTH, CS_OUTPUT_Z_POSITION_FILE_BOX);	//add box
 
-				writeFileOrFunctionSVGbox(currentTag, &pos, currentFileObject->name.length(), vectorObjectsScaleFactor, CS_FILE_MAX_TEXT_LENGTH, colour, CS_FILE_TEXT_BOX_OUTLINE_WIDTH_SVG);
+				this->writeFileOrFunctionSVGbox(currentTag, &pos, currentFileObject->name.length(), vectorObjectsScaleFactor, CS_FILE_MAX_TEXT_LENGTH, colour, CS_FILE_TEXT_BOX_OUTLINE_WIDTH_SVG);
 			#ifdef CS_DO_NOT_DRAW_ALL_FILE_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
 			}
 			#endif
@@ -590,10 +585,10 @@ LDreference* createFileObjectListBoxes(LDreference* currentReferenceInPrintList,
 			{//only print connections when not tracing a bottom level function upwards - saves space
 			#endif
 
-				newCurrentReferenceInPrintList = LDaddBasicTextualSpriteStringToReferenceList(currentFileObject->name, newCurrentReferenceInPrintList, &position, &numSpritesAdded, false, DAT_FILE_COLOUR_WHITE, vectorObjectsScaleFactor/CS_FILE_FUNCTIONS_ENABLED_VECTOROBJECTS_SCALE_FACTOR);	//add sprite text within box	//
+				newCurrentReferenceInPrintList = LDsprite.LDaddBasicTextualSpriteStringToReferenceList(currentFileObject->name, newCurrentReferenceInPrintList, &position, &numSpritesAdded, false, DAT_FILE_COLOUR_WHITE, vectorObjectsScaleFactor/CS_FILE_FUNCTIONS_ENABLED_VECTOROBJECTS_SCALE_FACTOR);	//add sprite text within box	//
 
 				position.y = position.y + CS_FILE_OR_FUNCTION_TEXT_BOX_TEXT_SCALE_FACTOR_Y_SVG*vectorObjectsScaleFactor;
-				writeSVGtext(currentTag, (currentFileObject->name), &position, vectorObjectsScaleFactor/15, DAT_FILE_COLOUR_BLACK);
+				LDsvg.writeSVGtext(currentTag, (currentFileObject->name), &position, vectorObjectsScaleFactor/15, DAT_FILE_COLOUR_BLACK);
 			#ifdef CS_DO_NOT_DRAW_ALL_FILE_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
 			}
 			#endif
@@ -617,7 +612,7 @@ LDreference* createFileObjectListBoxes(LDreference* currentReferenceInPrintList,
 
 		if(currentFileObject->firstFileInBelowListContainer != NULL)
 		{
-			newCurrentReferenceInPrintList = createFileObjectListBoxes(newCurrentReferenceInPrintList, currentFileObject->firstFileInBelowListContainer, firstObjectInTopLevelBelowListContainer, currentTag, outputFunctionsConnectivity, traceFunctionUpwards, firstTagInGridTag, usePredefinedGrid);
+			newCurrentReferenceInPrintList = this->createFileObjectListBoxes(newCurrentReferenceInPrintList, currentFileObject->firstFileInBelowListContainer, firstObjectInTopLevelBelowListContainer, currentTag, outputFunctionsConnectivity, traceFunctionUpwards, firstTagInGridTag, usePredefinedGrid);
 		}
 
 		currentFileObjectContainer = currentFileObjectContainer->next;
@@ -640,7 +635,7 @@ LDreference* createFileObjectListBoxes(LDreference* currentReferenceInPrintList,
 
 
 
-LDreference* createFileObjectListConnections(LDreference* currentReferenceInPrintList, CSfileContainer* firstObjectInAboveLevelBelowListContainer, CSfile* aboveLevelObject, XMLparserTag** currentTag, bool traceFunctionUpwards)
+LDreference* CSdrawClass::createFileObjectListConnections(LDreference* currentReferenceInPrintList, CSfileContainer* firstObjectInAboveLevelBelowListContainer, CSfile* aboveLevelObject, XMLparserTag** currentTag, bool traceFunctionUpwards)
 {
 	LDreference* newCurrentReferenceInPrintList = currentReferenceInPrintList;
 	CSfileContainer* currentReferenceContainer = firstObjectInAboveLevelBelowListContainer;
@@ -660,12 +655,12 @@ LDreference* createFileObjectListConnections(LDreference* currentReferenceInPrin
 				//cout << "aboveLevelObject->name = " << aboveLevelObject->name << endl;
 				#endif
 				#ifdef CS_USE_RAINBOW_COLOURS_FOR_FILE_BOXES
-				int colour = calculateCSBoxAndConnectionColourBasedUponLevel(aboveLevelObject->printYIndex);
+				int colour = this->calculateCSBoxAndConnectionColourBasedUponLevel(aboveLevelObject->printYIndex);
 				#else
-				int colour = calculateCSBoxAndConnectionColourBasedUponFileName(aboveLevelObject);
+				int colour = this->calculateCSBoxAndConnectionColourBasedUponFileName(aboveLevelObject);
 				#endif
 
-				newCurrentReferenceInPrintList = createFileObjectConnection(newCurrentReferenceInPrintList, currentReference, aboveLevelObject, colour, traceFunctionUpwards, currentTag);	//add line
+				newCurrentReferenceInPrintList = this->createFileObjectConnection(newCurrentReferenceInPrintList, currentReference, aboveLevelObject, colour, traceFunctionUpwards, currentTag);	//add line
 			}
 		#ifdef CS_ASSUME_TOP_LEVEL_FILE_IS_SOURCE_FILE
 		}
@@ -675,7 +670,7 @@ LDreference* createFileObjectListConnections(LDreference* currentReferenceInPrin
 		{
 			if(!(currentReference->printedFileConnections))
 			{
-				newCurrentReferenceInPrintList = createFileObjectListConnections(newCurrentReferenceInPrintList, currentReference->firstFileInBelowListContainer, currentReference, currentTag, traceFunctionUpwards);
+				newCurrentReferenceInPrintList = this->createFileObjectListConnections(newCurrentReferenceInPrintList, currentReference->firstFileInBelowListContainer, currentReference, currentTag, traceFunctionUpwards);
 			}
 		}
 
@@ -718,7 +713,7 @@ LDreference* createFileObjectListConnections(LDreference* currentReferenceInPrin
 
 
 
-LDreference* createFunctionObjectListBoxesAndConnections(LDreference* currentReferenceInPrintList, CSfile* aboveLevelFileObject, CSfunction* aboveLevelFunctionObject, CSfileContainer* firstObjectInTopLevelBelowListContainer, const int functionLevel, const CSfunction* functionReference, XMLparserTag** currentTag, bool traceFunctionUpwards, bool useSingleFileOnly, string* singleFileName, bool usePredefinedGrid)
+LDreference* CSdrawClass::createFunctionObjectListBoxesAndConnections(LDreference* currentReferenceInPrintList, CSfile* aboveLevelFileObject, CSfunction* aboveLevelFunctionObject, CSfileContainer* firstObjectInTopLevelBelowListContainer, const int functionLevel, const CSfunction* functionReference, XMLparserTag** currentTag, bool traceFunctionUpwards, bool useSingleFileOnly, string* singleFileName, bool usePredefinedGrid)
 {
 	string functionReferenceNameToFind = functionReference->name;
 	#ifdef CS_MATCH_FUNCTION_REFERENCES_WITH_CORRECT_NUMBER_OF_ARGUMENTS
@@ -736,7 +731,7 @@ LDreference* createFunctionObjectListBoxesAndConnections(LDreference* currentRef
 		CSfunction* functionObject = NULL;
 		CSfile* fileObject = NULL;
 
-		if(findFunctionReferenceTarget(functionReference, aboveLevelFileObject, &fileObject, &functionObject, countArguments))
+		if(CSreferenceContainerClass.findFunctionReferenceTarget(functionReference, aboveLevelFileObject, &fileObject, &functionObject, countArguments))
 		{
 			#ifdef CS_DEBUG
 			//cout << "functionObject->name = " << functionObject->name << endl;
@@ -885,8 +880,8 @@ LDreference* createFunctionObjectListBoxesAndConnections(LDreference* currentRef
 
 
 						#ifdef CS_USE_RAINBOW_COLOURS_FOR_FUNCTION_BOXES
-						aboveConnectionColour = aboveLevelFunctionObject->col;	//or =calculateCSBoxAndConnectionColourBasedUponLevel(aboveLevelFunctionObject->printYIndex);	[same thing]
-						colour = calculateCSBoxAndConnectionColourBasedUponLevel(functionObject->printYIndex);
+						aboveConnectionColour = aboveLevelFunctionObject->col;	//or =this->calculateCSBoxAndConnectionColourBasedUponLevel(aboveLevelFunctionObject->printYIndex);	[same thing]
+						colour = this->calculateCSBoxAndConnectionColourBasedUponLevel(functionObject->printYIndex);
 						#else
 							//new: use same colour as file box
 							aboveConnectionColour = aboveLevelFunctionObject->col;		//OLDWRONG; int aboveConnectionColour = aboveLevelFunctionObject->col;	//OLDWRONG2; same as aboveLevelFileObject->colour;
@@ -929,7 +924,7 @@ LDreference* createFunctionObjectListBoxesAndConnections(LDreference* currentRef
 					*/
 
 					//print function connections;
-					newCurrentReferenceInPrintList = createFunctionObjectConnection(newCurrentReferenceInPrintList, functionObject, aboveLevelFunctionObject, aboveConnectionColour, traceFunctionUpwards, prepareForTrace, currentTag, fileObject, aboveLevelFileObject);
+					newCurrentReferenceInPrintList = this->createFunctionObjectConnection(newCurrentReferenceInPrintList, functionObject, aboveLevelFunctionObject, aboveConnectionColour, traceFunctionUpwards, prepareForTrace, currentTag, fileObject, aboveLevelFileObject);
 
 
 					//apply hack
@@ -948,8 +943,8 @@ LDreference* createFunctionObjectListBoxesAndConnections(LDreference* currentRef
 					if(!traceFunctionUpwards)
 					{//only print connections when not tracing a bottom level function upwards - saves space
 					#endif
-						string groupID = createGroupID(fileObject->name, functionObject->printX, functionObject->printY);	//OLD: functionObject->name
-						nextTagOnOriginalLayer = writeSVGgroup(currentTag, &groupID);
+						string groupID = this->createGroupID(fileObject->name, functionObject->printX, functionObject->printY);	//OLD: functionObject->name
+						nextTagOnOriginalLayer = LDsvg.writeSVGgroup(currentTag, &groupID);
 					#ifdef CS_DO_NOT_DRAW_ALL_FUNCTION_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
 					}
 					#endif
@@ -960,7 +955,7 @@ LDreference* createFunctionObjectListBoxesAndConnections(LDreference* currentRef
 					{//only print connections when not tracing a bottom level function upwards - saves space
 					#endif
 						//print function box
-						newCurrentReferenceInPrintList = printFunctionBox(newCurrentReferenceInPrintList, currentTag, functionObject, colour);
+						newCurrentReferenceInPrintList = this->printFunctionBox(newCurrentReferenceInPrintList, currentTag, functionObject, colour);
 					#ifdef CS_DO_NOT_DRAW_ALL_FUNCTION_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
 					}
 					#endif
@@ -970,7 +965,7 @@ LDreference* createFunctionObjectListBoxesAndConnections(LDreference* currentRef
 					if(!traceFunctionUpwards)
 					{//only print connections when not tracing a bottom level function upwards - saves space
 					#endif
-						newCurrentReferenceInPrintList = printFunctionBoxText(newCurrentReferenceInPrintList, currentTag, functionObject, colour, useSingleFileOnly);
+						newCurrentReferenceInPrintList = this->printFunctionBoxText(newCurrentReferenceInPrintList, currentTag, functionObject, colour, useSingleFileOnly);
 					#ifdef CS_DO_NOT_DRAW_ALL_FUNCTION_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
 					}
 					#endif
@@ -1050,7 +1045,7 @@ LDreference* createFunctionObjectListBoxesAndConnections(LDreference* currentRef
 						*/
 
 						//recurse
-						newCurrentReferenceInPrintList = createFunctionObjectListBoxesAndConnections(newCurrentReferenceInPrintList, fileObject, functionObject, firstObjectInTopLevelBelowListContainer, (newFunctionLevel+1), currentFunctionReference, currentTag, traceFunctionUpwards, useSingleFileOnly, singleFileName, usePredefinedGrid);
+						newCurrentReferenceInPrintList = this->createFunctionObjectListBoxesAndConnections(newCurrentReferenceInPrintList, fileObject, functionObject, firstObjectInTopLevelBelowListContainer, (newFunctionLevel+1), currentFunctionReference, currentTag, traceFunctionUpwards, useSingleFileOnly, singleFileName, usePredefinedGrid);
 
 						currentFunctionReference = currentFunctionReference->next;
 					}
@@ -1059,7 +1054,7 @@ LDreference* createFunctionObjectListBoxesAndConnections(LDreference* currentRef
 				else
 				{
 					//print function connections;
-					newCurrentReferenceInPrintList = createFunctionObjectConnection(newCurrentReferenceInPrintList, functionObject, aboveLevelFunctionObject, aboveLevelFunctionObject->col, traceFunctionUpwards, prepareForTrace, currentTag, fileObject, aboveLevelFileObject);
+					newCurrentReferenceInPrintList = this->createFunctionObjectConnection(newCurrentReferenceInPrintList, functionObject, aboveLevelFunctionObject, aboveLevelFunctionObject->col, traceFunctionUpwards, prepareForTrace, currentTag, fileObject, aboveLevelFileObject);
 
 					if(useSingleFileOnly)
 					{
@@ -1095,17 +1090,17 @@ LDreference* createFunctionObjectListBoxesAndConnections(LDreference* currentRef
 	return newCurrentReferenceInPrintList;
 }
 
-LDreference* printFunctionBox(LDreference* currentReferenceInPrintList, XMLparserTag** currentTag, CSfunction* functionObject, int colour)
+LDreference* CSdrawClass::printFunctionBox(LDreference* currentReferenceInPrintList, XMLparserTag** currentTag, CSfunction* functionObject, int colour)
 {
 	vec pos;
 	pos.x = functionObject->printX;
 	pos.y = functionObject->printY;
-	currentReferenceInPrintList = createFileOrFunctionObjectBox(currentReferenceInPrintList, &pos, &(functionObject->name), CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR, colour, CS_FUNCTION_MAX_TEXT_LENGTH, CS_OUTPUT_Z_POSITION_FUNCTION_BOX);	//add box
-	writeFileOrFunctionSVGbox(currentTag, &pos, functionObject->name.length(), CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR, CS_FUNCTION_MAX_TEXT_LENGTH, colour, CS_FUNCTION_TEXT_BOX_OUTLINE_WIDTH_SVG);
+	currentReferenceInPrintList = this->createFileOrFunctionObjectBox(currentReferenceInPrintList, &pos, &(functionObject->name), CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR, colour, CS_FUNCTION_MAX_TEXT_LENGTH, CS_OUTPUT_Z_POSITION_FUNCTION_BOX);	//add box
+	this->writeFileOrFunctionSVGbox(currentTag, &pos, functionObject->name.length(), CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR, CS_FUNCTION_MAX_TEXT_LENGTH, colour, CS_FUNCTION_TEXT_BOX_OUTLINE_WIDTH_SVG);
 	return currentReferenceInPrintList;
 }
 
-LDreference* printFunctionBoxText(LDreference* currentReferenceInPrintList, XMLparserTag** currentTag, CSfunction* functionObject, const int colour, const bool useSingleFileOnly)
+LDreference* CSdrawClass::printFunctionBoxText(LDreference* currentReferenceInPrintList, XMLparserTag** currentTag, CSfunction* functionObject, const int colour, const bool useSingleFileOnly)
 {
 	//print box text
 	int numSpritesAdded;
@@ -1124,15 +1119,15 @@ LDreference* printFunctionBoxText(LDreference* currentReferenceInPrintList, XMLp
 		functionObject->printTextY = positionText.y;
 	}
 
-	currentReferenceInPrintList = LDaddBasicTextualSpriteStringToReferenceList(functionObject->name, currentReferenceInPrintList, &positionText, &numSpritesAdded, false, DAT_FILE_COLOUR_WHITE, CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR/CS_FILE_FUNCTIONS_ENABLED_VECTOROBJECTS_SCALE_FACTOR);	//add sprite text within box
+	currentReferenceInPrintList = LDsprite.LDaddBasicTextualSpriteStringToReferenceList(functionObject->name, currentReferenceInPrintList, &positionText, &numSpritesAdded, false, DAT_FILE_COLOUR_WHITE, CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR/CS_FILE_FUNCTIONS_ENABLED_VECTOROBJECTS_SCALE_FACTOR);	//add sprite text within box
 
 	positionText.y = positionText.y + CS_FILE_OR_FUNCTION_TEXT_BOX_TEXT_SCALE_FACTOR_Y_SVG*CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR;
-	writeSVGtext(currentTag, (functionObject->name), &positionText, CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR*CS_FILE_OR_FUNCTION_TEXT_BOX_TEXT_SCALE_FACTOR_Y_SVG_B, DAT_FILE_COLOUR_BLACK);
+	LDsvg.writeSVGtext(currentTag, (functionObject->name), &positionText, CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR*CS_FILE_OR_FUNCTION_TEXT_BOX_TEXT_SCALE_FACTOR_Y_SVG_B, DAT_FILE_COLOUR_BLACK);
 	return currentReferenceInPrintList;
 }
 
 
-void resetPrintedFunctionConnections(constEffective CSfile* aboveLevelFileObject, CSfunction* aboveLevelFunctionObject, const bool useSingleFileOnly, const string* singleFileName)
+void CSdrawClass::resetPrintedFunctionConnections(constEffective CSfile* aboveLevelFileObject, CSfunction* aboveLevelFunctionObject, const bool useSingleFileOnly, const string* singleFileName)
 {
 	CSfunction* currentFunctionReference = aboveLevelFunctionObject->firstReferenceInFunctionReferenceList;
 	while(currentFunctionReference->next != NULL)
@@ -1148,13 +1143,13 @@ void resetPrintedFunctionConnections(constEffective CSfile* aboveLevelFileObject
 		#else
 		bool countArguments = false;
 		#endif
-		if(findFunctionReferenceTarget(currentFunctionReference, aboveLevelFileObject, &fileObject, &functionObject, countArguments))
+		if(CSreferenceContainerClass.findFunctionReferenceTarget(currentFunctionReference, aboveLevelFileObject, &fileObject, &functionObject, countArguments))
 		{
 			if(currentFunctionReference->printedFunctionConnections)
 			{
 				currentFunctionReference->printedFunctionConnections = false;
 
-				resetPrintedFunctionConnections(fileObject, functionObject, useSingleFileOnly, singleFileName);
+				this->resetPrintedFunctionConnections(fileObject, functionObject, useSingleFileOnly, singleFileName);
 			}
 		}
 		currentFunctionReference = currentFunctionReference->next;
@@ -1181,7 +1176,7 @@ void resetPrintedFunctionConnections(constEffective CSfile* aboveLevelFileObject
 
 
 
-LDreference* createFileOrFunctionObjectBox(LDreference* currentReferenceInPrintList,  vec* referencePrintPos, string* referenceName, double scaleFactor, int colour, double maxTextLength, double zPosition)
+LDreference* CSdrawClass::createFileOrFunctionObjectBox(LDreference* currentReferenceInPrintList,  vec* referencePrintPos, string* referenceName, double scaleFactor, int colour, double maxTextLength, double zPosition)
 {
 	LDreference* newCurrentReferenceInPrintList = currentReferenceInPrintList;
 
@@ -1247,7 +1242,7 @@ LDreference* createFileOrFunctionObjectBox(LDreference* currentReferenceInPrintL
 }
 
 
-LDreference* createFileObjectConnection(LDreference* currentReferenceInPrintList, CSfile* reference, CSfile* currentReferenceInAboveList, int colour, const bool traceAFunctionUpwardsAndNotCurrentlyTracing, XMLparserTag** currentTag)
+LDreference* CSdrawClass::createFileObjectConnection(LDreference* currentReferenceInPrintList, CSfile* reference, CSfile* currentReferenceInAboveList, int colour, const bool traceAFunctionUpwardsAndNotCurrentlyTracing, XMLparserTag** currentTag)
 {
 	//add currentReferenceInAboveList to reference's above list for reverse lookup / function upwards trace
 	if(reference->firstReferenceContainerInAboveReferenceList == NULL)
@@ -1269,13 +1264,13 @@ LDreference* createFileObjectConnection(LDreference* currentReferenceInPrintList
 	vec currentReferenceInAboveListPrintPos;
 	currentReferenceInAboveListPrintPos.x = currentReferenceInAboveList->printX;
 	currentReferenceInAboveListPrintPos.y = currentReferenceInAboveList->printY;
- 	string startGroupID = createGroupID(reference->name, reference->printX, reference->printY);
- 	string endGroupID = createGroupID(currentReferenceInAboveList->name, currentReferenceInAboveList->printX, currentReferenceInAboveList->printY);
+ 	string startGroupID = this->createGroupID(reference->name, reference->printX, reference->printY);
+ 	string endGroupID = this->createGroupID(currentReferenceInAboveList->name, currentReferenceInAboveList->printX, currentReferenceInAboveList->printY);
 
-	return configureFileOrFunctionObjectConnection(currentReferenceInPrintList, &referencePrintPos, &currentReferenceInAboveListPrintPos, colour, true, traceAFunctionUpwardsAndNotCurrentlyTracing, currentTag, &startGroupID, &endGroupID);
+	return this->configureFileOrFunctionObjectConnection(currentReferenceInPrintList, &referencePrintPos, &currentReferenceInAboveListPrintPos, colour, true, traceAFunctionUpwardsAndNotCurrentlyTracing, currentTag, &startGroupID, &endGroupID);
 }
 
-LDreference* createFunctionObjectConnection(LDreference* currentReferenceInPrintList, CSfunction* reference,  CSfunction* currentReferenceInAboveList, int colour, const bool traceAFunctionUpwardsAndNotCurrentlyTracing, const bool prepareForTrace, XMLparserTag** currentTag, const CSfile* fileObject,  CSfile* currentFileObjectInAboveList)
+LDreference* CSdrawClass::createFunctionObjectConnection(LDreference* currentReferenceInPrintList, CSfunction* reference,  CSfunction* currentReferenceInAboveList, int colour, const bool traceAFunctionUpwardsAndNotCurrentlyTracing, const bool prepareForTrace, XMLparserTag** currentTag, const CSfile* fileObject,  CSfile* currentFileObjectInAboveList)
 {
 	if(prepareForTrace)
 	{
@@ -1301,16 +1296,16 @@ LDreference* createFunctionObjectConnection(LDreference* currentReferenceInPrint
 	vec currentReferenceInAboveListPrintPos;
 	currentReferenceInAboveListPrintPos.x = currentReferenceInAboveList->printX;
 	currentReferenceInAboveListPrintPos.y = currentReferenceInAboveList->printY;
- 	string startGroupID = createGroupID(fileObject->name, reference->printX, reference->printY);	//OLD: reference->name
- 	string endGroupID = createGroupID(currentFileObjectInAboveList->name, currentReferenceInAboveList->printX, currentReferenceInAboveList->printY);	//OLD: currentReferenceInAboveList->name
+ 	string startGroupID = this->createGroupID(fileObject->name, reference->printX, reference->printY);	//OLD: reference->name
+ 	string endGroupID = this->createGroupID(currentFileObjectInAboveList->name, currentReferenceInAboveList->printX, currentReferenceInAboveList->printY);	//OLD: currentReferenceInAboveList->name
 
-	return configureFileOrFunctionObjectConnection(currentReferenceInPrintList, &referencePrintPos, &currentReferenceInAboveListPrintPos, colour, false, traceAFunctionUpwardsAndNotCurrentlyTracing, currentTag, &startGroupID, &endGroupID);
+	return this->configureFileOrFunctionObjectConnection(currentReferenceInPrintList, &referencePrintPos, &currentReferenceInAboveListPrintPos, colour, false, traceAFunctionUpwardsAndNotCurrentlyTracing, currentTag, &startGroupID, &endGroupID);
 }
 
 
 
 
-LDreference* configureFileOrFunctionObjectConnection(LDreference* currentReferenceInPrintList, vec* referencePrintPos, vec* currentReferenceInAboveListPrintPos, int colour, const bool fileOrFunction, const bool traceAFunctionUpwardsAndNotCurrentlyTracing, XMLparserTag** currentTag, const string* startGroupID, const string* endGroupID)
+LDreference* CSdrawClass::configureFileOrFunctionObjectConnection(LDreference* currentReferenceInPrintList, vec* referencePrintPos, vec* currentReferenceInAboveListPrintPos, int colour, const bool fileOrFunction, const bool traceAFunctionUpwardsAndNotCurrentlyTracing, XMLparserTag** currentTag, const string* startGroupID, const string* endGroupID)
 {
 	LDreference* newCurrentReferenceInPrintList = currentReferenceInPrintList;
 
@@ -1403,9 +1398,9 @@ LDreference* configureFileOrFunctionObjectConnection(LDreference* currentReferen
 			strokeWidth = CS_FUNCTION_CONNECTOR_STROKE_WIDTH_SVG;
 		}
 
-		writeSVGconnector(currentTag, &pos1, &pos2, colour, startGroupID, endGroupID, strokeWidth);
+		LDsvg.writeSVGconnector(currentTag, &pos1, &pos2, colour, startGroupID, endGroupID, strokeWidth);
 		#else
-		writeSVGline(currentTag, &pos1, &pos2, colour);
+		LDsvg.writeSVGline(currentTag, &pos1, &pos2, colour);
 		#endif
 
 
@@ -1414,7 +1409,7 @@ LDreference* configureFileOrFunctionObjectConnection(LDreference* currentReferen
 	return newCurrentReferenceInPrintList;
 }
 
-LDreference* createBox(LDreference* currentReferenceInPrintList, vec* vect, const double width, const double height, int colour)
+LDreference* CSdrawClass::createBox(LDreference* currentReferenceInPrintList, vec* vect, const double width, const double height, int colour)
 {
 	LDreference* newCurrentReferenceInPrintList = currentReferenceInPrintList;
 
@@ -1476,7 +1471,7 @@ LDreference* createBox(LDreference* currentReferenceInPrintList, vec* vect, cons
 
 
 
-int calculateCSBoxAndConnectionColourBasedUponLevel(const int yIndex)
+int CSdrawClass::calculateCSBoxAndConnectionColourBasedUponLevel(const int yIndex)
 {
 	int colour;
 
@@ -1548,7 +1543,7 @@ int calculateCSBoxAndConnectionColourBasedUponLevel(const int yIndex)
 
 }
 
-int calculateCSBoxAndConnectionColourBasedUponFileName(const CSfile* currentFileObject)
+int CSdrawClass::calculateCSBoxAndConnectionColourBasedUponFileName(const CSfile* currentFileObject)
 {
 	string fileName = currentFileObject->name;
 	int colour;
@@ -1593,7 +1588,7 @@ int calculateCSBoxAndConnectionColourBasedUponFileName(const CSfile* currentFile
 
 
 
-bool findPrintedFunctionObjectWithName(const string name, constEffective CSfileContainer* firstObjectInAboveLevelBelowListContainer, constEffective CSfile** fileObjectHoldingFunction, constEffective CSfunction** updatedFunctionObject)
+bool CSdrawClass::findPrintedFunctionObjectWithName(const string name, constEffective CSfileContainer* firstObjectInAboveLevelBelowListContainer, constEffective CSfile** fileObjectHoldingFunction, constEffective CSfunction** updatedFunctionObject)
 {
 	bool foundPrintedReferenceWithName = false;
 
@@ -1621,7 +1616,7 @@ bool findPrintedFunctionObjectWithName(const string name, constEffective CSfileC
 
 		if(currentFileObject->firstFileInBelowListContainer != NULL)
 		{
-			if(findPrintedFunctionObjectWithName(name, currentFileObject->firstFileInBelowListContainer, fileObjectHoldingFunction, updatedFunctionObject))
+			if(this->findPrintedFunctionObjectWithName(name, currentFileObject->firstFileInBelowListContainer, fileObjectHoldingFunction, updatedFunctionObject))
 			{
 				foundPrintedReferenceWithName = true;
 			}
@@ -1633,7 +1628,7 @@ bool findPrintedFunctionObjectWithName(const string name, constEffective CSfileC
 	return foundPrintedReferenceWithName;
 }
 
-LDreference* traceFunctionsUpwardsAndDrawOrHighLightThese(LDreference* currentReferenceInPrintList, CSfileContainer* firstObjectInTopLevelBelowListContainer, CSfunction* currentFunctionBeingTraced, XMLparserTag** currentTag, int generateHTMLdocumentationMode, string* HTMLdocumentationFunctionTraceTableRows)
+LDreference* CSdrawClass::traceFunctionsUpwardsAndDrawOrHighLightThese(LDreference* currentReferenceInPrintList, CSfileContainer* firstObjectInTopLevelBelowListContainer, CSfunction* currentFunctionBeingTraced, XMLparserTag** currentTag, int generateHTMLdocumentationMode, string* HTMLdocumentationFunctionTraceTableRows)
 {
 	LDreference* newCurrentReferenceInPrintList = currentReferenceInPrintList;
 
@@ -1648,9 +1643,9 @@ LDreference* traceFunctionsUpwardsAndDrawOrHighLightThese(LDreference* currentRe
 	vec pos;
 	pos.x = currentFunctionBeingTraced->printX;
 	pos.y = currentFunctionBeingTraced->printY;
-	newCurrentReferenceInPrintList = createFileOrFunctionObjectBox(newCurrentReferenceInPrintList, &pos, &(currentFunctionBeingTraced->name), CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR, functionBoxColour, CS_FUNCTION_MAX_TEXT_LENGTH, CS_OUTPUT_Z_POSITION_FUNCTION_TRACE_BOX);	//add box
+	newCurrentReferenceInPrintList = this->createFileOrFunctionObjectBox(newCurrentReferenceInPrintList, &pos, &(currentFunctionBeingTraced->name), CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR, functionBoxColour, CS_FUNCTION_MAX_TEXT_LENGTH, CS_OUTPUT_Z_POSITION_FUNCTION_TRACE_BOX);	//add box
 
-	writeFileOrFunctionSVGboxTransparent(currentTag, &pos, currentFunctionBeingTraced->name.length(), CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR, CS_FUNCTION_MAX_TEXT_LENGTH, functionBoxColour, CS_FUNCTION_TEXT_BOX_OUTLINE_WIDTH_SVG, 0.5);
+	this->writeFileOrFunctionSVGboxTransparent(currentTag, &pos, currentFunctionBeingTraced->name.length(), CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR, CS_FUNCTION_MAX_TEXT_LENGTH, functionBoxColour, CS_FUNCTION_TEXT_BOX_OUTLINE_WIDTH_SVG, 0.5);
 
 	//print function text;
 	#ifdef CS_DO_NOT_DRAW_ALL_FUNCTION_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
@@ -1660,10 +1655,10 @@ LDreference* traceFunctionsUpwardsAndDrawOrHighLightThese(LDreference* currentRe
 		textPosition.y = currentFunctionBeingTraced->printTextY;
 		textPosition.z = CS_OUTPUT_Z_POSITION_FILE_AND_FUNCTION_TEXT;
 
-		newCurrentReferenceInPrintList = LDaddBasicTextualSpriteStringToReferenceList(currentFunctionBeingTraced->name, newCurrentReferenceInPrintList, &textPosition, &numSpritesAdded, false, DAT_FILE_COLOUR_WHITE, CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR/(200.0));	//add sprite text within box
+		newCurrentReferenceInPrintList = LDsprite.LDaddBasicTextualSpriteStringToReferenceList(currentFunctionBeingTraced->name, newCurrentReferenceInPrintList, &textPosition, &numSpritesAdded, false, DAT_FILE_COLOUR_WHITE, CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR/(200.0));	//add sprite text within box
 
 		textPosition.y = textPosition.y + CS_FILE_OR_FUNCTION_TEXT_BOX_TEXT_SCALE_FACTOR_Y_SVG*CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR;
-		writeSVGtext(currentTag, (currentFunctionBeingTraced->name), &textPosition, CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR*CS_FILE_OR_FUNCTION_TEXT_BOX_TEXT_SCALE_FACTOR_Y_SVG_B, DAT_FILE_COLOUR_BLACK);
+		LDsvg.writeSVGtext(currentTag, (currentFunctionBeingTraced->name), &textPosition, CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR*CS_FILE_OR_FUNCTION_TEXT_BOX_TEXT_SCALE_FACTOR_Y_SVG_B, DAT_FILE_COLOUR_BLACK);
 
 	#endif
 
@@ -1709,7 +1704,7 @@ LDreference* traceFunctionsUpwardsAndDrawOrHighLightThese(LDreference* currentRe
 					fileReferenceUnkown.name = "";
 					CSfile fileReferenceInAboveLevelListUnkown;
 					fileReferenceInAboveLevelListUnkown.name = "";
-					newCurrentReferenceInPrintList = createFunctionObjectConnection(newCurrentReferenceInPrintList, currentFunctionBeingTraced, higherLevelFunction, functionConnectionColour, false, false, currentTag, &fileReferenceUnkown, &fileReferenceInAboveLevelListUnkown);
+					newCurrentReferenceInPrintList = this->createFunctionObjectConnection(newCurrentReferenceInPrintList, currentFunctionBeingTraced, higherLevelFunction, functionConnectionColour, false, false, currentTag, &fileReferenceUnkown, &fileReferenceInAboveLevelListUnkown);
 
 					#ifdef CS_DEBUG
 					//cout << "higherLevelFunctionFound, " << higherLevelFunction->name << endl;
@@ -1726,7 +1721,7 @@ LDreference* traceFunctionsUpwardsAndDrawOrHighLightThese(LDreference* currentRe
 						*HTMLdocumentationFunctionTraceTableRows = *HTMLdocumentationFunctionTraceTableRows + HTMLdocumentationFunctionTraceTableRow;
 					}
 
-					newCurrentReferenceInPrintList = traceFunctionsUpwardsAndDrawOrHighLightThese(newCurrentReferenceInPrintList, firstObjectInTopLevelBelowListContainer, higherLevelFunction, currentTag, generateHTMLdocumentationMode, HTMLdocumentationFunctionTraceTableRows);
+					newCurrentReferenceInPrintList = this->traceFunctionsUpwardsAndDrawOrHighLightThese(newCurrentReferenceInPrintList, firstObjectInTopLevelBelowListContainer, higherLevelFunction, currentTag, generateHTMLdocumentationMode, HTMLdocumentationFunctionTraceTableRows);
 				}
 			}
 			else
@@ -1744,7 +1739,7 @@ LDreference* traceFunctionsUpwardsAndDrawOrHighLightThese(LDreference* currentRe
 
 
 
-void traceFunctionsUpwardsAndDrawOrHighLightTheseReset(const CSfileContainer* firstObjectInTopLevelBelowListContainer, CSfunction* currentFunctionBeingTraced)
+void CSdrawClass::traceFunctionsUpwardsAndDrawOrHighLightTheseReset(const CSfileContainer* firstObjectInTopLevelBelowListContainer, CSfunction* currentFunctionBeingTraced)
 {
 	currentFunctionBeingTraced->printedTrace = false;
 	currentFunctionBeingTraced->printedTraceReset = true;
@@ -1769,7 +1764,7 @@ void traceFunctionsUpwardsAndDrawOrHighLightTheseReset(const CSfileContainer* fi
 
 				if(higherLevelFunction->printedTraceReset == false)
 				{
-					traceFunctionsUpwardsAndDrawOrHighLightTheseReset(firstObjectInTopLevelBelowListContainer, higherLevelFunction);
+					this->traceFunctionsUpwardsAndDrawOrHighLightTheseReset(firstObjectInTopLevelBelowListContainer, higherLevelFunction);
 				}
 			}
 			else
@@ -1786,7 +1781,7 @@ void traceFunctionsUpwardsAndDrawOrHighLightTheseReset(const CSfileContainer* fi
 
 
 
-void writeFileOrFunctionSVGbox(XMLparserTag** currentTag, const vec* pos, const int textLength, const double scaleFactor, const double maxTextLength, const int col, const double boxOutlineWidth)
+void CSdrawClass::writeFileOrFunctionSVGbox(XMLparserTag** currentTag, const vec* pos, const int textLength, const double scaleFactor, const double maxTextLength, const int col, const double boxOutlineWidth)
 {
 #ifdef CS_CENTRE_BOXES
 	double width = CS_FILE_OR_FUNCTION_TEXT_BOX_BOX_SCALE_FACTOR_X_SPACING_FRACTION_SVG*scaleFactor*(double)textLength/maxTextLength;
@@ -1795,10 +1790,10 @@ void writeFileOrFunctionSVGbox(XMLparserTag** currentTag, const vec* pos, const 
 #endif
 	double height = CS_FILE_OR_FUNCTION_TEXT_BOX_BOX_SCALE_FACTOR_Y_SPACING_FRACTION_SVG*scaleFactor;
 
-	writeSVGbox(currentTag,  pos, width, height, col, boxOutlineWidth, false);
+	LDsvg.writeSVGbox(currentTag,  pos, width, height, col, boxOutlineWidth, false);
 }
 
-void writeFileOrFunctionSVGboxTransparent(XMLparserTag** currentTag, const vec* pos, const int textLength, const double scaleFactor, const double maxTextLength, const int col, const double boxOutlineWidth, const double fillOpacity)
+void CSdrawClass::writeFileOrFunctionSVGboxTransparent(XMLparserTag** currentTag, const vec* pos, const int textLength, const double scaleFactor, const double maxTextLength, const int col, const double boxOutlineWidth, const double fillOpacity)
 {
 #ifdef CS_CENTRE_BOXES
 	double width = CS_FILE_OR_FUNCTION_TEXT_BOX_BOX_SCALE_FACTOR_X_SPACING_FRACTION_SVG*scaleFactor*(double)textLength/maxTextLength;
@@ -1807,14 +1802,14 @@ void writeFileOrFunctionSVGboxTransparent(XMLparserTag** currentTag, const vec* 
 #endif
 	double height = CS_FILE_OR_FUNCTION_TEXT_BOX_BOX_SCALE_FACTOR_Y_SPACING_FRACTION_SVG*scaleFactor;
 
-	writeSVGboxTransparent(currentTag,  pos, width, height, col, boxOutlineWidth, false, fillOpacity);
+	LDsvg.writeSVGboxTransparent(currentTag,  pos, width, height, col, boxOutlineWidth, false, fillOpacity);
 }
 
-string createGroupID(const string objectName, const int printX, const int printY)
+string CSdrawClass::createGroupID(const string objectName, const int printX, const int printY)
 {
 	string groupID = "";
-	groupID = groupID + objectName + convertIntToString(printX) + convertIntToString(printY);
-	//groupID = groupID + convertIntToString(printX) + convertIntToString(printY);
+	groupID = groupID + objectName + SHAREDvars.convertIntToString(printX) + SHAREDvars.convertIntToString(printY);
+	//groupID = groupID + SHAREDvars.convertIntToString(printX) + SHAREDvars.convertIntToString(printY);
 	return groupID;
 }
 

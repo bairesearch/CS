@@ -26,7 +26,7 @@
  * File Name: CSmain.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3j1a 14-January-2017
+ * Project Version: 3j1b 14-January-2017
  *
  *******************************************************************************/
 
@@ -34,13 +34,6 @@
 
 
 #include "CSmain.h"
-#include "CSexecflow.h"
-#include "CSdataflow.h"
-#include "CSpreprocessorFilter.h"
-#include "CSdraw.h"
-#include "CSgenerateHTMLdocumentation.h"
-#include "XMLrulesClass.h"
-#include "LDsprite.h"
 
 #ifndef LINUX
 	#include <windows.h>
@@ -90,9 +83,9 @@ static char errmessage[] = "Usage:  OpenCS.exe [options]"
 int main(const int argc, const char** argv)
 {
 #ifdef CS_CONVERT_INDENTED_LIST_TO_HTML_LIST
-	convertIndentedListToHTMLlist();
+	CSgenerateHTMLdocumentationClass().convertIndentedListToHTMLlist();
 #elif defined CS_GENERATE_CLASS_HTML_DOCUMENTATION_FROM_CUSTOM_CSCLASS_FORMAT
-	generateClassHTMLdocumentationFromCustomCSclassFormat();
+	CSgenerateHTMLdocumentationClass().generateClassHTMLdocumentationFromCustomCSclassFormat();
 #else
 
 	bool useOutputLDRfile = false;
@@ -142,56 +135,56 @@ int main(const int argc, const char** argv)
 
 	bool outputFileConnections = true;
 
-	if(argumentExists(argc, argv, "-mode"))
+	if(SHAREDvarsClass().argumentExists(argc, argv, "-mode"))
 	{
-		mode = getFloatArgument(argc, argv, "-mode");
+		mode = SHAREDvarsClass().getFloatArgument(argc, argv, "-mode");
 	}
 
-	if(argumentExists(argc, argv, "-oldr"))
+	if(SHAREDvarsClass().argumentExists(argc, argv, "-oldr"))
 	{
-		outputLDRfileName = getStringArgument(argc, argv, "-oldr");
+		outputLDRfileName = SHAREDvarsClass().getStringArgument(argc, argv, "-oldr");
 		useOutputLDRfile = true;
 		printOutput = true;
 	}
 
-	if(argumentExists(argc, argv, "-oppm"))
+	if(SHAREDvarsClass().argumentExists(argc, argv, "-oppm"))
 	{
-		outputPPMfileName = getStringArgument(argc, argv, "-oppm");
+		outputPPMfileName = SHAREDvarsClass().getStringArgument(argc, argv, "-oppm");
 		useOutputPPMfile = true;
 		printOutput = true;
 	}
 
-	if(argumentExists(argc, argv, "-osvg"))
+	if(SHAREDvarsClass().argumentExists(argc, argv, "-osvg"))
 	{
-		outputSVGfileName = getStringArgument(argc, argv, "-osvg");
+		outputSVGfileName = SHAREDvarsClass().getStringArgument(argc, argv, "-osvg");
 		useOutputSVGFile = true;
 		printOutput = true;
 	}
 
-	if(argumentExists(argc, argv, "-ohtml"))
+	if(SHAREDvarsClass().argumentExists(argc, argv, "-ohtml"))
 	{
-		outputHTMLfileName = getStringArgument(argc, argv, "-ohtml");
+		outputHTMLfileName = SHAREDvarsClass().getStringArgument(argc, argv, "-ohtml");
 		useOutputHTMLfile = true;
 	}
 
-	if(argumentExists(argc, argv, "-oall"))
+	if(SHAREDvarsClass().argumentExists(argc, argv, "-oall"))
 	{
-		outputAllFileName = getStringArgument(argc, argv, "-oall");
+		outputAllFileName = SHAREDvarsClass().getStringArgument(argc, argv, "-oall");
 		useOutputAllFile = true;
 		printOutput = true;
 	}
 
-	if(argumentExists(argc, argv, "-file"))
+	if(SHAREDvarsClass().argumentExists(argc, argv, "-file"))
 	{
-		topLevelFileName = getStringArgument(argc, argv, "-file");
+		topLevelFileName = SHAREDvarsClass().getStringArgument(argc, argv, "-file");
 	}
 	else
 	{
 		passInputReq = false;
 	}
-	if(argumentExists(argc, argv, "-function"))
+	if(SHAREDvarsClass().argumentExists(argc, argv, "-function"))
 	{
-		topLevelFunctionName = getStringArgument(argc, argv, "-function");
+		topLevelFunctionName = SHAREDvarsClass().getStringArgument(argc, argv, "-function");
 	}
 	else
 	{
@@ -201,31 +194,31 @@ int main(const int argc, const char** argv)
 
 
 
-	if(argumentExists(argc, argv, "-notshow"))
+	if(SHAREDvarsClass().argumentExists(argc, argv, "-notshow"))
 	{
 		displayInOpenGLAndOutputScreenshot = false;
 	}
 
-	if(argumentExists(argc, argv, "-width"))
+	if(SHAREDvarsClass().argumentExists(argc, argv, "-width"))
 	{
-		rasterImageWidth = getFloatArgument(argc, argv, "-width");
+		rasterImageWidth = SHAREDvarsClass().getFloatArgument(argc, argv, "-width");
 	}
 
-	if(argumentExists(argc, argv, "-height"))
+	if(SHAREDvarsClass().argumentExists(argc, argv, "-height"))
 	{
-		rasterImageHeight = getFloatArgument(argc, argv, "-height");
+		rasterImageHeight = SHAREDvarsClass().getFloatArgument(argc, argv, "-height");
 	}
 
-	if(argumentExists(argc, argv, "-enablefunctions"))
+	if(SHAREDvarsClass().argumentExists(argc, argv, "-enablefunctions"))
 	{
 		outputFunctionsConnectivity = true;
 	}
-	if(argumentExists(argc, argv, "-disablefileconnections"))
+	if(SHAREDvarsClass().argumentExists(argc, argv, "-disablefileconnections"))
 	{
 		outputFileConnections = false;
 	}
 
-	if(argumentExists(argc, argv, "-trace"))
+	if(SHAREDvarsClass().argumentExists(argc, argv, "-trace"))
 	{
 		if(outputFunctionsConnectivity)
 		{
@@ -238,63 +231,63 @@ int main(const int argc, const char** argv)
 			passInputReq = false;
 		}
 	}
-	if(argumentExists(argc, argv, "-tracefunction"))
+	if(SHAREDvarsClass().argumentExists(argc, argv, "-tracefunction"))
 	{
-		bottomLevelFunctionNameToTraceUpwards = getStringArgument(argc, argv, "-tracefunction");
+		bottomLevelFunctionNameToTraceUpwards = SHAREDvarsClass().getStringArgument(argc, argv, "-tracefunction");
 	}
 
 
-	if(argumentExists(argc, argv, "-html"))
+	if(SHAREDvarsClass().argumentExists(argc, argv, "-html"))
 	{
 		generateHTMLdocumentationMode = CS_GENERATE_HTML_DOCUMENTATION_MODE_ON;
-		//getFloatArgument(argc, argv, "-html");
+		//SHAREDvarsClass().getFloatArgument(argc, argv, "-html");
 	}
 
 	#ifdef CS_GENERATE_CPP_CLASSES
-	if(argumentExists(argc, argv, "-generateoo"))
+	if(SHAREDvarsClass().argumentExists(argc, argv, "-generateoo"))
 	{
 		generateOOcode = true;
 	}
 	#endif
 	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
-	if(argumentExists(argc, argv, "-generateconst"))
+	if(SHAREDvarsClass().argumentExists(argc, argv, "-generateconst"))
 	{
 		generateConstFunctionArgumentsCode = true;
 	}
 	#endif
 
-	string currentFolder = getCurrentDirectory();
+	string currentFolder = SHAREDvarsClass().getCurrentDirectory();
 
-	if(argumentExists(argc, argv, "-workingfolder"))
+	if(SHAREDvarsClass().argumentExists(argc, argv, "-workingfolder"))
 	{
-		workingFolder = getStringArgument(argc, argv, "-workingfolder");
+		workingFolder = SHAREDvarsClass().getStringArgument(argc, argv, "-workingfolder");
 	}
 	else
 	{
 		workingFolder = currentFolder;
 	}
-	if(argumentExists(argc, argv, "-exefolder"))
+	if(SHAREDvarsClass().argumentExists(argc, argv, "-exefolder"))
 	{
-		exeFolder = getStringArgument(argc, argv, "-exefolder");
+		exeFolder = SHAREDvarsClass().getStringArgument(argc, argv, "-exefolder");
 	}
 	else
 	{
 		exeFolder = currentFolder;
 	}
-	if(argumentExists(argc, argv, "-tempfolder"))
+	if(SHAREDvarsClass().argumentExists(argc, argv, "-tempfolder"))
 	{
-		tempFolder = getStringArgument(argc, argv, "-tempfolder");
+		tempFolder = SHAREDvarsClass().getStringArgument(argc, argv, "-tempfolder");
 	}
 	else
 	{
 		tempFolder = currentFolder;
 	}
 
-	setCurrentDirectory(workingFolder);
+	SHAREDvarsClass().setCurrentDirectory(workingFolder);
 
-	if(argumentExists(argc, argv, "-version"))
+	if(SHAREDvarsClass().argumentExists(argc, argv, "-version"))
 	{
-		cout << "OpenCS.exe - Project Version: 3j1a 14-January-2017" << endl;
+		cout << "OpenCS.exe - Project Version: 3j1b 14-January-2017" << endl;
 		exit(1);
 	}
 
@@ -366,17 +359,17 @@ int main(const int argc, const char** argv)
 
 
 
-	if(!parseCSrulesXMLfile())
+	if(!XMLrulesClassClass().parseCSrulesXMLfile())
 	{
 		cout << "error: no rules file detected" << endl;
 		exit(0);
 	}
-	fillInLDspriteExternVariables();
-	fillInCSrulesExternVariables();
+	LDspriteClass().fillInLDspriteExternVariables();
+	CSdrawClass().fillInCSrulesExternVariables();
 
 	if(mode == CS_MODE_OUTPUT_EXECUTION_FLOW)
 	{
-		generateCodeStructure(topLevelFileName, rasterImageWidth, rasterImageHeight, outputLDRfileName, outputSVGfileName, outputPPMfileName, outputHTMLfileName, useOutputLDRfile, useOutputPPMfile, useOutputHTMLfile, generateHTMLdocumentationMode, displayInOpenGLAndOutputScreenshot, outputFunctionsConnectivity, traceFunctionUpwards, bottomLevelFunctionNameToTraceUpwards, outputFileConnections, topLevelFunctionName, generateOOcode, generateConstFunctionArgumentsCode);
+		CSexecflowClass().generateCodeStructure(topLevelFileName, rasterImageWidth, rasterImageHeight, outputLDRfileName, outputSVGfileName, outputPPMfileName, outputHTMLfileName, useOutputLDRfile, useOutputPPMfile, useOutputHTMLfile, generateHTMLdocumentationMode, displayInOpenGLAndOutputScreenshot, outputFunctionsConnectivity, traceFunctionUpwards, bottomLevelFunctionNameToTraceUpwards, outputFileConnections, topLevelFunctionName, generateOOcode, generateConstFunctionArgumentsCode);
 	}
 	else if(mode == CS_MODE_OUTPUT_DATA_FLOW)
 	{

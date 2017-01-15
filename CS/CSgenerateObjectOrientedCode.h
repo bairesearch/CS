@@ -21,7 +21,7 @@
  * File Name: CSgenerateObjectOrientedCode.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3j1a 14-January-2017
+ * Project Version: 3j1b 14-January-2017
  *
  *******************************************************************************/
 
@@ -31,6 +31,8 @@
 
 #include "CSreferenceContainerClass.h"
 #include "CSglobalDefs.h"
+#include "CSdraw.h"
+#include "SHAREDvars.h"
 
 #ifdef CS_GENERATE_CPP_CLASSES
 
@@ -43,19 +45,23 @@ public:
 };
 
 
-bool generateCPPclasses(CSfileContainer* firstObjectInTopLevelBelowListContainer);
-	bool generateCPPclassesRecurse(CSfileContainer* firstObjectInAboveLevelBelowListContainer, const CSfileContainer* firstObjectInTopLevelBelowListContainer);
-		bool generateCPPclassesFile(CSfile* currentFileObject, const CSfileContainer* firstObjectInTopLevelBelowListContainer);
-			string replaceAllOccurancesOfFunctionObjectReferenceNameInFunction(const string* functionTextOrig, string functionReferenceName, string functionReferenceNameUpdated, bool* foundAtLeastOneInstance);
-			void isFunctionBeingReferencedPublicallyRecurse(const string functionName, const string fileName, const CSfileContainer* firstObjectInAboveLevelBelowListContainer, bool* foundPublicReference);
-			string generateClassName(const string headerFileName);
-				string generateClassDeclarationName(const string className);
-				string generateClassObjectName(const string className);
-			string convertFunctionNameToClassFunctionNameSource(string fullFunctionName, const string functionName, const string className, const bool foundPublicReference, bool* foundStaticReference);
-			string convertFunctionNameToClassFunctionNameHeader(const string fullFunctionName, const string functionName, const string className, const bool foundPublicReference, const bool foundStaticReference);
-			string generateReferencedClassesDeclarations(const ReferencedClass* firstReferencedClassInList);
-			bool findReferencedClassInList(const ReferencedClass* firstReferencedClassInList, const string classNameToFind);
-			bool moveIncludeFileStatementsToHeader(CSfile* firstReferenceInAboveLevelBelowList);
+class CSgenerateObjectOrientedCodeClass
+{
+	private: SHAREDvarsClass SHAREDvars;
+	public: bool generateCPPclasses(CSfileContainer* firstObjectInTopLevelBelowListContainer);
+		private: bool generateCPPclassesRecurse(CSfileContainer* firstObjectInAboveLevelBelowListContainer, const CSfileContainer* firstObjectInTopLevelBelowListContainer);
+			private: bool generateCPPclassesFile(CSfile* currentFileObject, const CSfileContainer* firstObjectInTopLevelBelowListContainer);
+				private: string replaceAllOccurancesOfFunctionObjectReferenceNameInFunction(const string* functionTextOrig, string functionReferenceName, string functionReferenceNameUpdated, bool* foundAtLeastOneInstance);
+				private: void isFunctionBeingReferencedPublicallyRecurse(const string functionName, const string fileName, const CSfileContainer* firstObjectInAboveLevelBelowListContainer, bool* foundPublicReference);
+				private: string generateClassName(const string headerFileName);
+					private: string generateClassDeclarationName(const string className);
+					private: string generateClassObjectName(const string className);
+				private: string convertFunctionNameToClassFunctionNameSource(string fullFunctionName, const string functionName, const string className, const bool foundPublicReference, bool* foundStaticReference);
+				private: string convertFunctionNameToClassFunctionNameHeader(const string fullFunctionName, const string functionName, const string className, const bool foundPublicReference, const bool foundStaticReference);
+				private: string generateReferencedClassesDeclarations(const ReferencedClass* firstReferencedClassInList);
+				private: bool findReferencedClassInList(const ReferencedClass* firstReferencedClassInList, const string classNameToFind);
+				private: bool moveIncludeFileStatementsToHeader(CSfile* firstReferenceInAboveLevelBelowList);
+};
 
 
 #endif

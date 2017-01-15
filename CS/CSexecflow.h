@@ -26,7 +26,7 @@
  * File Name: CSexecflow.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3j1a 14-January-2017
+ * Project Version: 3j1b 14-January-2017
  *
  *******************************************************************************/
 
@@ -38,6 +38,17 @@
 #include "CSreferenceContainerClass.h"
 #include "LDreferenceManipulation.h"
 #include "XMLparserClass.h"
+#include "CSoperations.h"
+#include "CSdraw.h"
+#include "LDsvg.h"
+#include "LDopengl.h"
+#include "XMLrulesClass.h"
+#include "LDparser.h"
+#include "LDsprite.h"
+#include "RTpixelMaps.h"
+#include "CSgenerateHTMLdocumentation.h"
+#include "CSgenerateObjectOrientedCode.h"
+#include "CSgenerateConstFunctionArgumentCode.h"
 
 #ifdef LINUX
 	#define SYSTEM_COPY_COMMAND "cp"
@@ -45,7 +56,22 @@
 	#define SYSTEM_COPY_COMMAND "copy"
 #endif
 
-void generateCodeStructure(const string topLevelFileName, int width, const int height, const string outputLDRfileName, const string outputSVGfileName, const string outputPPMfileName, string outputHTMLfileName, const bool useOutputLDRfile, const bool useOutputPPMfile, bool useOutputHTMLfile, int generateHTMLdocumentationMode, const bool display, bool outputFunctionsConnectivity, bool traceFunctionUpwards, string bottomLevelFunctionNameToTraceUpwards, const bool outputFileConnections, const string topLevelFunctionName, const bool generateOOcode, const bool generateConstFunctionArgumentsCode);
+class CSexecflowClass
+{
+	private: LDreferenceManipulationClass LDreferenceManipulation;
+	private: SHAREDvarsClass SHAREDvars;
+	private: XMLparserClassClass XMLparserClass;
+	private: CSoperationsClass CSoperations;
+	private: CSdrawClass CSdraw;
+	private: LDsvgClass LDsvg;
+	private: LDopenglClass LDopengl;
+	private: LDparserClass LDparser;
+	private: RTpixelMapsClass RTpixelMaps;
+	private: CSgenerateHTMLdocumentationClass CSgenerateHTMLdocumentation;
+	private: CSgenerateObjectOrientedCodeClass CSgenerateObjectOrientedCode;
+	private: CSgenerateConstFunctionArgumentCodeClass CSgenerateConstFunctionArgumentCode;
+	public: void generateCodeStructure(const string topLevelFileName, int width, const int height, const string outputLDRfileName, const string outputSVGfileName, const string outputPPMfileName, string outputHTMLfileName, const bool useOutputLDRfile, const bool useOutputPPMfile, bool useOutputHTMLfile, int generateHTMLdocumentationMode, const bool display, bool outputFunctionsConnectivity, bool traceFunctionUpwards, string bottomLevelFunctionNameToTraceUpwards, const bool outputFileConnections, const string topLevelFunctionName, const bool generateOOcode, const bool generateConstFunctionArgumentsCode);
+};
 
 
 #endif

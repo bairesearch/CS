@@ -26,7 +26,7 @@
  * File Name: CSreferenceContainerClass.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3j1a 14-January-2017
+ * Project Version: 3j1b 14-January-2017
  *
  *******************************************************************************/
 
@@ -78,7 +78,7 @@ CSfileContainer::~CSfileContainer(void)
 
 
 //CHECKTHIS;
-int findEndPositionOfArgument(const string* functionArgumentsRaw, const int startPositionOfArgument, bool* lastArgument)
+int CSreferenceContainerClassClass::findEndPositionOfArgument(const string* functionArgumentsRaw, const int startPositionOfArgument, bool* lastArgument)
 {
 	#ifdef CS_DEBUG
 	//cout << "functionArgumentsRaw = " << *functionArgumentsRaw << endl;
@@ -189,10 +189,10 @@ int findEndPositionOfArgument(string* functionArgumentsRaw, int startPositionOfA
 */
 
 //limitation; can't match argument types (only number of arguments)
-bool findFunctionReferenceTarget(const CSfunction* functionReference, constEffective CSfile* currentFileObject, constEffective CSfile** fileObjectHoldingFunction, constEffective CSfunction** functionReferenceTarget, const bool countArguments)
+bool CSreferenceContainerClassClass::findFunctionReferenceTarget(const CSfunction* functionReference, constEffective CSfile* currentFileObject, constEffective CSfile** fileObjectHoldingFunction, constEffective CSfunction** functionReferenceTarget, const bool countArguments)
 {
 	string name = functionReference->name;
-	int numArguments = countArgumentList(functionReference->firstFunctionArgumentInFunction);
+	int numArguments = this->countArgumentList(functionReference->firstFunctionArgumentInFunction);
 	//cout << "findFunctionReferenceTarget{}:" << endl;
 	//cout << "name = " << name << endl;
 	//cout << "numArguments = " << numArguments << endl;
@@ -207,7 +207,7 @@ bool findFunctionReferenceTarget(const CSfunction* functionReference, constEffec
 		{
 			if(countArguments)
 			{
-				if(countArgumentList(currentFunctionObject->firstFunctionArgumentInFunction) == numArguments)
+				if(this->countArgumentList(currentFunctionObject->firstFunctionArgumentInFunction) == numArguments)
 				{
 					conditions = true;
 				}
@@ -228,7 +228,7 @@ bool findFunctionReferenceTarget(const CSfunction* functionReference, constEffec
 
 	if(currentFileObject->firstFileInBelowListContainer != NULL)
 	{
-		if(findFunctionReferenceTargetRecurse(functionReference, currentFileObject->firstFileInBelowListContainer, fileObjectHoldingFunction, functionReferenceTarget, countArguments))
+		if(this->findFunctionReferenceTargetRecurse(functionReference, currentFileObject->firstFileInBelowListContainer, fileObjectHoldingFunction, functionReferenceTarget, countArguments))
 		{
 			foundPrintedReferenceWithName = true;
 		}
@@ -239,12 +239,12 @@ bool findFunctionReferenceTarget(const CSfunction* functionReference, constEffec
 	return foundPrintedReferenceWithName;
 }
 
-bool findFunctionReferenceTargetRecurse(const CSfunction* functionReference, constEffective CSfileContainer* firstObjectInAboveLevelBelowListContainer, constEffective CSfile** fileObjectHoldingFunction, constEffective CSfunction** functionReferenceTarget, const bool countArguments)
+bool CSreferenceContainerClassClass::findFunctionReferenceTargetRecurse(const CSfunction* functionReference, constEffective CSfileContainer* firstObjectInAboveLevelBelowListContainer, constEffective CSfile** fileObjectHoldingFunction, constEffective CSfunction** functionReferenceTarget, const bool countArguments)
 {
 	bool foundPrintedReferenceWithName = false;
 
 	string name = functionReference->name;
-	int numArguments = countArgumentList(functionReference->firstFunctionArgumentInFunction);
+	int numArguments = this->countArgumentList(functionReference->firstFunctionArgumentInFunction);
 
 	constEffective CSfileContainer* currentFileObjectContainer = firstObjectInAboveLevelBelowListContainer;
 
@@ -260,7 +260,7 @@ bool findFunctionReferenceTargetRecurse(const CSfunction* functionReference, con
 			{
 				if(countArguments)
 				{
-					if(countArgumentList(currentFunctionObject->firstFunctionArgumentInFunction) == numArguments)
+					if(this->countArgumentList(currentFunctionObject->firstFunctionArgumentInFunction) == numArguments)
 					{
 						conditions = true;
 					}
@@ -281,7 +281,7 @@ bool findFunctionReferenceTargetRecurse(const CSfunction* functionReference, con
 
 		if(currentFileObject->firstFileInBelowListContainer != NULL)
 		{
-			if(findFunctionReferenceTargetRecurse(functionReference, currentFileObject->firstFileInBelowListContainer, fileObjectHoldingFunction, functionReferenceTarget, countArguments))
+			if(this->findFunctionReferenceTargetRecurse(functionReference, currentFileObject->firstFileInBelowListContainer, fileObjectHoldingFunction, functionReferenceTarget, countArguments))
 			{
 				foundPrintedReferenceWithName = true;
 			}
@@ -293,7 +293,7 @@ bool findFunctionReferenceTargetRecurse(const CSfunction* functionReference, con
 	return foundPrintedReferenceWithName;
 }
 
-int countArgumentList(const CSfunctionArgument* firstFunctionArgumentInFunction)
+int CSreferenceContainerClassClass::countArgumentList(const CSfunctionArgument* firstFunctionArgumentInFunction)
 {
 	int count = 0;
 	const CSfunctionArgument* currentFunctionArgumentInFunction = firstFunctionArgumentInFunction;
