@@ -26,7 +26,7 @@
  * File Name: CSgenerateHTMLdocumentation.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e7a 27-January-2015
+ * Project Version: 3e7b 27-January-2015
  *
  *******************************************************************************/
 
@@ -41,8 +41,8 @@
 void generateHTMLdocumentationFunctions(XMLparserTag* firstTagInSVGFile, CSfileReference* firstReferenceInTopLevelBelowList, int generateHTMLdocumentationMode, bool useOutputHTMLfile, bool traceFunctionUpwards, bool usePredefinedGrid, string outputHTMLfileName);
 	string generateHTMLdocumentationHeader(string name, bool htmlHeader, bool isFile);
 	string generateHTMLdocumentationFooter(bool htmlFileFooter);
-	void generateHTMLdocumentationForAllFunctions(CSfileReference* firstReferenceInAboveLevelBelowList, Reference* currentReferenceInPrintList, CSfileReference* firstReferenceInTopLevelBelowList, int generateHTMLdocumentationMode, bool useOutputHTMLfile, string* HTMLdocumentationBody, XMLparserTag* firstTagInSVGFile, XMLparserTag* lastTagInSVGFile, bool traceFunctionUpwards, bool usePredefinedGrid);
-		void generateHTMLdocumentationForFunction(Reference* currentReferenceInPrintList, CSfileReference* firstReferenceInTopLevelBelowList, CSfunctionReference* bottomLevelFunctionToTraceUpwards, string fileNameHoldingFunction, XMLparserTag** currentTag, int generateHTMLdocumentationMode, string* HTMLdocumentationFunctionBody, string* outputSVGfileNameFunction, bool useOutputHTMLfile, string outputHTMLfileName, bool traceFunctionUpwards);
+	void generateHTMLdocumentationForAllFunctions(CSfileReference* firstReferenceInAboveLevelBelowList, LDreference* currentReferenceInPrintList, CSfileReference* firstReferenceInTopLevelBelowList, int generateHTMLdocumentationMode, bool useOutputHTMLfile, string* HTMLdocumentationBody, XMLparserTag* firstTagInSVGFile, XMLparserTag* lastTagInSVGFile, bool traceFunctionUpwards, bool usePredefinedGrid);
+		void generateHTMLdocumentationForFunction(LDreference* currentReferenceInPrintList, CSfileReference* firstReferenceInTopLevelBelowList, CSfunctionReference* bottomLevelFunctionToTraceUpwards, string fileNameHoldingFunction, XMLparserTag** currentTag, int generateHTMLdocumentationMode, string* HTMLdocumentationFunctionBody, string* outputSVGfileNameFunction, bool useOutputHTMLfile, string outputHTMLfileName, bool traceFunctionUpwards);
 			void generateHTMLdocumentationFunctionSummary(string* functionName, string* functionNameFull, string* HTMLdocumentationFunctionSummary);
 			void generateHTMLdocumentationFunctionInputArguments(string* functionName, string* functionNameFull, string* HTMLdocumentationFunctionInputArguments);
 				int findEndPositionOfArgument(string* functionArgumentsRaw, int startPositionOfArgument);

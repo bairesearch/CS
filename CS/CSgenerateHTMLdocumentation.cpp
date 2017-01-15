@@ -26,7 +26,7 @@
  * File Name: CSgenerateHTMLdocumentation.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e7a 27-January-2015
+ * Project Version: 3e7b 27-January-2015
  *
  *******************************************************************************/
 
@@ -62,7 +62,7 @@ void generateHTMLdocumentationFunctions(XMLparserTag* firstTagInSVGFile, CSfileR
 	}
 
 	string HTMLdocumentationBody = "";
-	Reference* firstReferenceInPrintListFunction = new Reference();
+	LDreference* firstReferenceInPrintListFunction = new LDreference();
 	generateHTMLdocumentationForAllFunctions(firstReferenceInTopLevelBelowList, firstReferenceInPrintListFunction, firstReferenceInTopLevelBelowList, generateHTMLdocumentationMode, useOutputHTMLfile, &HTMLdocumentationBody, firstTagInSVGFile, lastTagInSVGFile, traceFunctionUpwards, usePredefinedGrid);
 	delete firstReferenceInPrintListFunction;	//should delete this, as it will contain far too many LD vector graphics references (ie a set of traced references for each function)
 
@@ -81,7 +81,7 @@ string generateHTMLdocumentationHeader(string name, bool htmlHeader, bool isFile
 	string HTMLdocumentationHeader = "";
 	if(htmlHeader)
 	{
-		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3e7a 27-January-2015<p>\n";
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3e7b 27-January-2015<p>\n";
 	}
 	else
 	{
@@ -119,7 +119,7 @@ void writeStringPointerToFileObject(string* s, ofstream* writeFileObject)
 	}
 }
 
-void generateHTMLdocumentationForAllFunctions(CSfileReference* firstReferenceInAboveLevelBelowList, Reference* currentReferenceInPrintList, CSfileReference* firstReferenceInTopLevelBelowList, int generateHTMLdocumentationMode, bool useOutputHTMLfile, string* HTMLdocumentationBody, XMLparserTag* firstTagInSVGFile, XMLparserTag* lastTagInSVGFile, bool traceFunctionUpwards, bool usePredefinedGrid)
+void generateHTMLdocumentationForAllFunctions(CSfileReference* firstReferenceInAboveLevelBelowList, LDreference* currentReferenceInPrintList, CSfileReference* firstReferenceInTopLevelBelowList, int generateHTMLdocumentationMode, bool useOutputHTMLfile, string* HTMLdocumentationBody, XMLparserTag* firstTagInSVGFile, XMLparserTag* lastTagInSVGFile, bool traceFunctionUpwards, bool usePredefinedGrid)
 {
 	bool result = true;
 
@@ -260,7 +260,7 @@ void generateHTMLdocumentationForAllFunctions(CSfileReference* firstReferenceInA
 	}
 }
 
-void generateHTMLdocumentationForFunction(Reference* currentReferenceInPrintList, CSfileReference* firstReferenceInTopLevelBelowList, CSfunctionReference* bottomLevelFunctionToTraceUpwards, string fileNameHoldingFunction, XMLparserTag** currentTag, int generateHTMLdocumentationMode, string* HTMLdocumentationFunctionBody, string* outputSVGfileNameFunction, bool useOutputHTMLfile, string outputHTMLfileName, bool traceFunctionUpwards)
+void generateHTMLdocumentationForFunction(LDreference* currentReferenceInPrintList, CSfileReference* firstReferenceInTopLevelBelowList, CSfunctionReference* bottomLevelFunctionToTraceUpwards, string fileNameHoldingFunction, XMLparserTag** currentTag, int generateHTMLdocumentationMode, string* HTMLdocumentationFunctionBody, string* outputSVGfileNameFunction, bool useOutputHTMLfile, string outputHTMLfileName, bool traceFunctionUpwards)
 {
 	if(generateHTMLdocumentationMode == CS_GENERATE_HTML_DOCUMENTATION_MODE_OFF)
 	{
@@ -613,7 +613,7 @@ void generateHTMLdocumentationFunctionReferenceList(CSfunctionReference* functio
 	//generate list
 
 	*HTMLdocumentationFunctionReferenceList = "";
-	*HTMLdocumentationFunctionReferenceList =* HTMLdocumentationFunctionReferenceList + "\t<p><b>Function Reference List</b><br />\n";
+	*HTMLdocumentationFunctionReferenceList =* HTMLdocumentationFunctionReferenceList + "\t<p><b>Function LDreference List</b><br />\n";
 	CSfunctionReference* currentReferenceInFunctionReferenceListRepeats = function->firstReferenceInFunctionReferenceListRepeats;
 	string HTMLdocumentationFunctionReferenceListBody = "\t<ul>\n";
 	#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST_WITH_INDENTATION_ADVANCED
@@ -769,8 +769,8 @@ void generateFileDiagramFunctionsHeirachy(CSfileReference* currentFileReference,
 	{//file does not exist
 
 		initiateMaxXatParticularY();
-		Reference* firstReferenceInPrintList = new Reference();
-		Reference* currentReferenceInPrintList = firstReferenceInPrintList;
+		LDreference* firstReferenceInPrintList = new LDreference();
+		LDreference* currentReferenceInPrintList = firstReferenceInPrintList;
 
 		setCurrentDirectory(tempFolderCharStar);
 

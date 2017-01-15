@@ -26,7 +26,7 @@
  * File Name: CSexecflow.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e7a 27-January-2015
+ * Project Version: 3e7b 27-January-2015
  *
  *******************************************************************************/
 
@@ -107,7 +107,7 @@ void generateCodeStructure(string topLevelFileName, int width, int height, strin
 	}
 
 	initiateMaxXatParticularY();
-	Reference* firstReferenceInPrintList = new Reference();
+	LDreference* firstReferenceInPrintList = new LDreference();
 
 	setCurrentDirectory(tempFolderCharStar);
 
@@ -142,7 +142,7 @@ void generateCodeStructure(string topLevelFileName, int width, int height, strin
 	}
 	#endif
 
-	Reference* currentReferenceInPrintList = createFileReferenceListBoxes(firstReferenceInPrintList, firstReferenceInTopLevelBelowList, firstReferenceInTopLevelBelowList, &currentTagInSVGFile, outputFunctionsConnectivity, traceFunctionUpwards, firstTagInGridTag, usePredefinedGrid);
+	LDreference* currentReferenceInPrintList = createFileReferenceListBoxes(firstReferenceInPrintList, firstReferenceInTopLevelBelowList, firstReferenceInTopLevelBelowList, &currentTagInSVGFile, outputFunctionsConnectivity, traceFunctionUpwards, firstTagInGridTag, usePredefinedGrid);
 	if(outputFileConnections)
 	{
 		currentReferenceInPrintList = createFileReferenceListConnections(currentReferenceInPrintList, firstReferenceInTopLevelBelowList, firstReferenceInTopLevelBelowList, &currentTagInSVGFile, traceFunctionUpwards);
@@ -258,8 +258,8 @@ void generateCodeStructure(string topLevelFileName, int width, int height, strin
 			//method1:
 			char* topLevelSceneFileName = outputFileNameLDRcharstar;
 			char* topLevelSceneFileNameCollapsed = "sceneCollapsedForRaytracing.ldr";
-			Reference* initialReferenceInSceneFile = new Reference();
-			Reference* topLevelReferenceInSceneFile = new Reference(topLevelSceneFileName, 1, true);	//The information in this object is not required or meaningful, but needs to be passed into the parseFile/parseReferenceList recursive function
+			LDreference* initialReferenceInSceneFile = new LDreference();
+			LDreference* topLevelReferenceInSceneFile = new LDreference(topLevelSceneFileName, 1, true);	//The information in this object is not required or meaningful, but needs to be passed into the parseFile/parseReferenceList recursive function
 			if(!parseFile(topLevelSceneFileName, initialReferenceInSceneFile, topLevelReferenceInSceneFile, true))
 			{//file does not exist
 				cout << "The file: " << topLevelSceneFileName << " does not exist in the directory" << endl;
@@ -274,8 +274,8 @@ void generateCodeStructure(string topLevelFileName, int width, int height, strin
 			setViewPort3Dortho(-100.0, 2000, 2000.0, -100.0, 1.0, -1.0);
 
 			//now reparse file
-			Reference* initialReferenceInCollapsedSceneFile = new Reference();
-			Reference* topLevelReferenceInCollapsedSceneFile = new Reference(topLevelSceneFileNameCollapsed, 1, true);	//The information in this object is not required or meaningful, but needs to be passed into the parseFile/parseReferenceList recursive function
+			LDreference* initialReferenceInCollapsedSceneFile = new LDreference();
+			LDreference* topLevelReferenceInCollapsedSceneFile = new LDreference(topLevelSceneFileNameCollapsed, 1, true);	//The information in this object is not required or meaningful, but needs to be passed into the parseFile/parseReferenceList recursive function
 			if(!parseFile(topLevelSceneFileNameCollapsed, initialReferenceInCollapsedSceneFile, topLevelReferenceInCollapsedSceneFile, true))
 			{//file does not exist
 				cout << "The file: " << topLevelSceneFileNameCollapsed << " does not exist in the directory" << endl;
