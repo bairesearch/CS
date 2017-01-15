@@ -26,7 +26,7 @@
  * File Name: CSmain.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3j1b 14-January-2017
+ * Project Version: 3j1c 14-January-2017
  *
  *******************************************************************************/
 
@@ -40,7 +40,7 @@
 #endif
 
 
-static char errmessage[] = "Usage:  OpenCS.exe [options]"
+static char errmessage[] = "Usage:  CS.exe [options]"
 "\n"
 "\n\twhere options are any of the following"
 "\n"
@@ -68,7 +68,7 @@ static char errmessage[] = "Usage:  OpenCS.exe [options]"
 #endif
 "\n"
 "\n\t-workingfolder [string] : working directory name for input files (def: same as exe)"
-"\n\t-exefolder [string]     : exe directory name for executables; OpenCS.exe (def: same as exe)"
+"\n\t-exefolder [string]     : exe directory name for executables; CS.exe (def: same as exe)"
 "\n\t-tempfolder [string]    : temp directory name for temporary and output files (def: same as exe)"
 "\n"
 "\n\t-version                : print version"
@@ -287,7 +287,7 @@ int main(const int argc, const char** argv)
 
 	if(SHAREDvarsClass().argumentExists(argc, argv, "-version"))
 	{
-		cout << "OpenCS.exe - Project Version: 3j1b 14-January-2017" << endl;
+		cout << "CS.exe - Project Version: 3j1c 14-January-2017" << endl;
 		exit(1);
 	}
 
