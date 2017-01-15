@@ -83,6 +83,7 @@
 		<file name="NLCprint.h" x="8" y="2" />
 		<file name="NLCtranslatorCodeBlocks.h" x="4" y="3" />
 		<file name="NLCtranslatorCodeBlocksLogicalConditions.h" x="4" y="4" />
+		<file name="NLCtranslatorCodeBlocksLogicalConditionsAdvanced.h" x="5" y="4" />
 		<file name="NLCtranslatorCodeBlocksOperations.h" x="4" y="5" />
 		<file name="NLCtranslatorClassDefinitions.h" x="5" y="3" />
 		<file name="NLCprintCodeBlocks.h" x="8" y="3" />
