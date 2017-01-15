@@ -23,7 +23,7 @@
  * File Name: CSoperations.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c4c 03-December-2012
+ * Project Version: 3c5a 15-December-2012
  *
  *******************************************************************************/
 
@@ -775,7 +775,9 @@ void getFunctionReferenceNamesFromFunctionsInCfile(CSfileReference * firstRefere
 
 				if(positionOfFunctionReference != -1)
 				{
-					/*
+					#define CS_MAX_NUM_CHARACTERS_PER_FUNCTION (1000000)
+					
+				#ifdef CS_IGNORE_COMMENTS_IN_FUNCTIONS
 					//NEW method - comments are ignored - there is a problem with this and so it has been disabled at present...
 
 					string functionContentsString = "";
@@ -785,32 +787,31 @@ void getFunctionReferenceNamesFromFunctionsInCfile(CSfileReference * firstRefere
 					bool waitingForNewLine = false;
 					bool readingLargeComment = false;
 					int lineCount = 0;
+					bool newLineFound = false;
 
-					int currentIndexInFunction = positionOfFunctionReference;
+					int currentIndexInFunction = positionOfFunctionReference + fullFunctionName.length();
 					while(stillFindingEndOfFunction)
 					{
 						char c = fileContentsString[currentIndexInFunction];
-						currentIndexInFunction++;
+						//cout << c;
 						if(readingLargeComment)
 						{
 							if(c == '\n')
 							{
-								lineCount++;
 							}
 							else
 							{
 								while(c == '*')
 								{
-
-									c = fileContentsString[currentIndexInFunction];
 									currentIndexInFunction++;
+									c = fileContentsString[currentIndexInFunction];
+									//cout << c;
 									if(c == '/')
 									{
 										readingLargeComment = false;
 									}
 									else if(c == '\n')
 									{
-										lineCount++;
 									}
 								}
 							}
@@ -818,8 +819,9 @@ void getFunctionReferenceNamesFromFunctionsInCfile(CSfileReference * firstRefere
 						}
 						else if(c == '/')
 						{
-							c = fileContentsString[currentIndexInFunction];
 							currentIndexInFunction++;
+							c = fileContentsString[currentIndexInFunction];
+							//cout << c;
 							if(c == '*')
 							{
 								readingLargeComment = true;
@@ -832,7 +834,6 @@ void getFunctionReferenceNamesFromFunctionsInCfile(CSfileReference * firstRefere
 							}
 							else if(c == '\n')
 							{
-								lineCount++;
 								if(waitingForNewLine)
 								{
 									waitingForNewLine = false;
@@ -851,7 +852,6 @@ void getFunctionReferenceNamesFromFunctionsInCfile(CSfileReference * firstRefere
 						{
 							if(c == '\n')
 							{
-								lineCount++;
 								waitingForNewLine = false;
 							}
 							else
@@ -859,12 +859,8 @@ void getFunctionReferenceNamesFromFunctionsInCfile(CSfileReference * firstRefere
 								//do nothing, still waiting for new line
 							}
 						}
-						else if(c == '\n')
+						else if(newLineFound)
 						{
-							functionContentsString = functionContentsString + c;
-
-							c = fileContentsString[currentIndexInFunction];
-							currentIndexInFunction++;
 							if(c == '}')
 							{
 								stillFindingEndOfFunction = false;
@@ -873,16 +869,39 @@ void getFunctionReferenceNamesFromFunctionsInCfile(CSfileReference * firstRefere
 						}
 						else
 						{
-							functionContentsString = functionContentsString + c;
+							functionContentsString = functionContentsString + c;	
 						}
-					}
-					*/
+						
+						if(c == '\n')
+						{
+							if(!readingLargeComment)
+							{
+								newLineFound = true;
+							}
+							lineCount++;
+						}
+						else
+						{
+							newLineFound = false;
+						}
+							
+						if(currentIndexInFunction > CS_MAX_NUM_CHARACTERS_PER_FUNCTION)
+						{
+							cout << "getFunctionReferenceNamesFromFunctionsInCfile() error: function definitions in .cpp files must end with a } without any leading white space" << endl;
+							exit(0);
+						}
+												
+						currentIndexInFunction++;
 
+					}
+					
+					//cout << "functionContentsString = " << functionContentsString << endl;
+				#else
+					
 					//OLD method - comments are not ignored;
 					bool stillFindingEndOfFunction = true;
 					bool newLineFound = false;
 
-					#define CS_MAX_NUM_CHARACTERS_PER_FUNCTION (1000000)
 					int currentIndexInFunction = positionOfFunctionReference;
 					while(stillFindingEndOfFunction)
 					{
@@ -917,11 +936,14 @@ void getFunctionReferenceNamesFromFunctionsInCfile(CSfileReference * firstRefere
 
 						currentIndexInFunction++;
 					}
+					
 					int positionOfFunctionReferenceEnd = currentIndexInFunction;
 					string functionContentsString = fileContentsString.substr(positionOfFunctionReference+fullFunctionName.length(), (positionOfFunctionReferenceEnd-positionOfFunctionReference)-fullFunctionName.length());
-
-
-
+				#endif
+					
+					#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST
+					currentReference->functionText = functionContentsString;
+					#endif
 
 
 					//3. search this string for any of the function (not full function names) across all include/header files

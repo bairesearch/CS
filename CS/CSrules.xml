@@ -33,7 +33,7 @@
 		<miscellaneousItem name="CS_FILE_OR_FUNCTION_TEXT_BOX_BOX_SCALE_FACTOR_Y_SPACING_FRACTION_SVG" stringValue="" fractionalValue="0.1" />
 		
 		<miscellaneousItem name="CS_FILE_FUNCTIONS_DISABLED_VECTOROBJECTS_SCALE_FACTOR" stringValue="" fractionalValue="500" />
-		<miscellaneousItem name="CS_FILE_FUNCTIONS_ENABLED_VECTOROBJECTS_SCALE_FACTOR" stringValue="" fractionalValue="500" />
+		<miscellaneousItem name="CS_FILE_FUNCTIONS_ENABLED_VECTOROBJECTS_SCALE_FACTOR" stringValue="" fractionalValue="200" />
 		<miscellaneousItem name="CS_FILE_MAX_TEXT_LENGTH" stringValue="" fractionalValue="20" />
 		<miscellaneousItem name="CS_FILE_TEXT_BOX_PADDING_FRACTION_OF_TEXT_LENGTH" stringValue="" fractionalValue="1.25" />
 		<miscellaneousItem name="CS_FILE_FUNCTIONS_DISABLED_TEXT_BOX_SCALE_FACTOR_X_SPACING_FRACTION" stringValue="" fractionalValue="0.9" />

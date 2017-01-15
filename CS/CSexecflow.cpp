@@ -23,7 +23,7 @@
  * File Name: CSexecflow.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c4c 03-December-2012
+ * Project Version: 3c5a 15-December-2012
  *
  *******************************************************************************/
 
@@ -48,6 +48,8 @@
 #include <fstream>
 #include <time.h>
 #include <math.h>
+#include <map>		//required for use with generateHTMLdocumentationFunctionReferenceList	
+#include <utility>
 using namespace std;
 
 #ifndef LINUX
@@ -258,7 +260,7 @@ string generateHTMLdocumentationHeader(string name, bool htmlHeader, bool isFile
 	string HTMLdocumentationHeader = "";
 	if(htmlHeader)
 	{
-		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h2>" + name + " Documentation</h2><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3c4c 03-December-2012<p>\n";
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h2>" + name + " Documentation</h2><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3c5a 15-December-2012<p>\n";
 	}
 	else
 	{
@@ -800,6 +802,8 @@ void generateHTMLdocumentationFunctionReferenceList(CSfunctionReference * functi
 	#endif
 	int referenceIndex=0;
 	bool foundReferences = false;
+	
+	map<int, CSfunctionReference*> CSfunctionReferenceListOrdered;
 	while(currentReferenceInFunctionReferenceList->next != NULL)
 	{
 		//check reference has not already been added (NB if the reference is the function name itself - it may be a comment and not actually indicate recursion) 
@@ -819,29 +823,47 @@ void generateHTMLdocumentationFunctionReferenceList(CSfunctionReference * functi
 
 		if(!alreadyRecordedReference)
 		{	
-		#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST_WITH_INDENTATION_ADVANCED
-			addToHTMLdocumentationFileFunctionList(currentReferenceInFunctionReferenceList, &HTMLdocumentationFunctionReferenceListBody, &previousIndentation, &previousIndentationFirst);
-			//cout << "currentReferenceInFunctionReferenceList->name = " << currentReferenceInFunctionReferenceList->name << endl;		
-			//cout << "HTMLdocumentationFunctionReferenceList = " << *HTMLdocumentationFunctionReferenceList << endl;		
-		#else
-			#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST_WITH_INDENTATION
-			HTMLdocumentationFunctionReferenceListBody = HTMLdocumentationFunctionReferenceListBody + "\t\t<li>";		
-			for(int i=0; i<currentReferenceInFunctionReferenceList->functionReferenceIndentation; i++)
-			{
-				HTMLdocumentationFunctionReferenceListBody = HTMLdocumentationFunctionReferenceListBody + "&#160&#160&#160&#160&#160";
+			//now find all instances of the reference in the function text, and for each instance found add to CSfunctionReferenceListOrdered
+			int startPosOfFunctionReferenceInFunction = 0;
+			//cout << "function->functionText = " << function->functionText << endl;
+			while(std::string::npos != (startPosOfFunctionReferenceInFunction = (function->functionText).find(currentReferenceInFunctionReferenceList->name + '(', startPosOfFunctionReferenceInFunction)))
+			{	
+				//cout << "startPosOfFunctionReferenceInFunction = " << startPosOfFunctionReferenceInFunction << endl;
+				int functionCharacterIndexOfReference = startPosOfFunctionReferenceInFunction;
+				CSfunctionReferenceListOrdered.insert(pair<int, CSfunctionReference*>(functionCharacterIndexOfReference, currentReferenceInFunctionReferenceList));
+				startPosOfFunctionReferenceInFunction++;
 			}
-			HTMLdocumentationFunctionReferenceListBody = HTMLdocumentationFunctionReferenceListBody + currentReferenceInFunctionReferenceList->name + "</li>\n";				
-			#else
-			HTMLdocumentationFunctionReferenceListBody = HTMLdocumentationFunctionReferenceListBody + "\t\t<li>" + currentReferenceInFunctionReferenceList->name + "</li>\n";		
-			#endif
-		#endif
 		}
 		foundReferences = true;
 
 		currentReferenceInFunctionReferenceList = currentReferenceInFunctionReferenceList->next;
 		referenceIndex++;
 		
-	}	
+	}
+	
+	for(map<int, CSfunctionReference*>::iterator CSfunctionReferenceListOrderedIter = CSfunctionReferenceListOrdered.begin(); CSfunctionReferenceListOrderedIter != CSfunctionReferenceListOrdered.end(); CSfunctionReferenceListOrderedIter++)
+	{		
+		CSfunctionReference * currentReferenceInFunctionReferenceList = CSfunctionReferenceListOrderedIter->second;
+		
+	#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST_WITH_INDENTATION_ADVANCED
+		addToHTMLdocumentationFileFunctionList(currentReferenceInFunctionReferenceList, &HTMLdocumentationFunctionReferenceListBody, &previousIndentation, &previousIndentationFirst);
+		//cout << "currentReferenceInFunctionReferenceList->name = " << currentReferenceInFunctionReferenceList->name << endl;		
+		//cout << "HTMLdocumentationFunctionReferenceList = " << *HTMLdocumentationFunctionReferenceList << endl;		
+	#else
+		#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST_WITH_INDENTATION
+		HTMLdocumentationFunctionReferenceListBody = HTMLdocumentationFunctionReferenceListBody + "\t\t<li>";		
+		for(int i=0; i<currentReferenceInFunctionReferenceList->functionReferenceIndentation; i++)
+		{
+			HTMLdocumentationFunctionReferenceListBody = HTMLdocumentationFunctionReferenceListBody + "&#160&#160&#160&#160&#160";
+		}
+		HTMLdocumentationFunctionReferenceListBody = HTMLdocumentationFunctionReferenceListBody + currentReferenceInFunctionReferenceList->name + "</li>\n";				
+		#else
+		HTMLdocumentationFunctionReferenceListBody = HTMLdocumentationFunctionReferenceListBody + "\t\t<li>" + currentReferenceInFunctionReferenceList->name + "</li>\n";		
+		#endif
+	#endif	
+	}
+	
+		
 	#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST_WITH_INDENTATION_ADVANCED
 	for(int i=0; i<previousIndentation; i++)
 	{

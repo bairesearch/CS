@@ -23,7 +23,7 @@
  * File Name: CSglobalsDefs.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c4c 03-December-2012
+ * Project Version: 3c5a 15-December-2012
  * Description: CS specific global definitions
  *
  *******************************************************************************/
@@ -42,6 +42,8 @@
 #ifdef CS_GENERATE_CLASS_HTML_DOCUMENTATION_FROM_CUSTOM_CSCLASS_FORMAT
 	#define CS_GENERATE_CLASS_HTML_DOCUMENTATION_FROM_CUSTOM_CSCLASS_FORMAT_COMBINED	//use project wide CSclass files
 #endif
+
+#define CS_IGNORE_COMMENTS_IN_FUNCTIONS
 
 #define CS_SUPPORT_FUNCTION_RETURN_POINTERS
 
