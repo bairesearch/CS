@@ -26,7 +26,7 @@
  * File Name: CSgenerateObjectOrientedCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e1a 27-August-2014
+ * Project Version: 3e1b 27-August-2014
  *
  *******************************************************************************/
 
@@ -34,6 +34,17 @@
 #include "CSgenerateObjectOrientedCode.h"
 #include "CSdraw.h"
 #include "SHAREDvars.h"
+
+#include <iostream>
+#include <fstream>
+#include <ctime>
+#include <cstring>
+#include <cstdlib>
+#include <cmath>
+#include <string>
+#include <vector>
+using namespace std;
+
 
 
 #ifdef CS_GENERATE_CPP_CLASSES
@@ -268,6 +279,9 @@ bool generateCPPclassesFile(CSfileReference * currentFileReference, CSfileRefere
 	cout << "currentFileReference->headerFileText = \n" << currentFileReference->headerFileText << endl;
 	cout << "currentFileReference->sourceFileText = \n" << currentFileReference->sourceFileText << endl;
 	#endif
+	
+	writeStringToFile(&(currentFileReference->headerFileName), &(currentFileReference->headerFileText));
+	writeStringToFile(&(currentFileReference->sourceFileName), &(currentFileReference->sourceFileText));
 		
 	return result;
 }
@@ -444,6 +458,18 @@ string generateReferencedClassesDeclarations(ReferencedClass * firstReferencedCl
 		currentReferencedClassInList = currentReferencedClassInList->next;
 	}
 	return referencedClassesDeclarations;
+}
+
+void writeStringToFile(string * fileName, string * s)
+{
+	ofstream writeFileObject(fileName->c_str());
+
+	for(int i=0; i < s->size(); i++)
+	{
+		writeFileObject.put((*s)[i]);
+	}
+
+	writeFileObject.close();
 }
 
 

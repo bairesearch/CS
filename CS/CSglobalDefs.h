@@ -26,7 +26,7 @@
  * File Name: CSglobalsDefs.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e1a 27-August-2014
+ * Project Version: 3e1b 27-August-2014
  * Description: CS specific global definitions
  *
  *******************************************************************************/
@@ -38,7 +38,7 @@
 
 #define CS_GENERATE_CPP_CLASSES	//added 3e1a/27-August-2014
 #ifdef CS_GENERATE_CPP_CLASSES
-	#define CS_GENERATE_CPP_CLASSES_SOURCE_FILE_EXTENSION "cpp2"	//default: cpp (cpp2 used for debug)
+	#define CS_GENERATE_CPP_CLASSES_SOURCE_FILE_EXTENSION "cpp"
 	#define CS_GENERATE_CPP_CLASSES_HEADER_FILE_EXTENSION "hpp"
 	#define CS_GENERATE_CPP_CLASSES_FUNCTION_PRIVATE "private: "
 	#define CS_GENERATE_CPP_CLASSES_FUNCTION_PUBLIC "public: "
@@ -94,7 +94,7 @@
 #define CS_DRAW_APPLY_EVEN_ODD_X_OFFSET
 
 //#define CS_DEBUG
-#define CS_DEBUG_GENERATE_OBJECT_ORIENTED_CODE
+//#define CS_DEBUG_GENERATE_OBJECT_ORIENTED_CODE
 //#define CS_DEBUG_VERBOSE
 //#define CS_DEBUG_HTML_DOCUMENTATION
 #define CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_SUMMARY
@@ -120,7 +120,7 @@
 #define HTML_EXTENSION ".html"
 #define SVG_EXTENSION ".svg"
 
-#define CS_SOURCE_FILE_EXTENSION "cpp"
+#define CS_SOURCE_FILE_EXTENSION "c"
 #define CS_SOURCE_FILE_INDENTATION_CHARACTER '\t'
 
 #endif

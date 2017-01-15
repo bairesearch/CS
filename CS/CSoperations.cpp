@@ -26,7 +26,7 @@
  * File Name: CSoperations.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e1a 27-August-2014
+ * Project Version: 3e1b 27-August-2014
  *
  *******************************************************************************/
 
@@ -252,8 +252,8 @@ bool getIncludeFileNamesFromCorHfile(CSfileReference * firstReferenceInIncludeFi
 						string hashIncludeFileNameCFile = generateSourceFileNameFromHeaderFileName(hashIncludeFileName, CS_SOURCE_FILE_EXTENSION);
 						#ifdef CS_GENERATE_CPP_CLASSES
 						currentReferenceInIncludeFileList->sourceFileNameOrig = hashIncludeFileNameCFile;
-						currentReferenceInIncludeFileList->headerFileName = generateSourceFileNameFromHeaderFileName(currentReferenceInIncludeFileList->name, CS_GENERATE_CPP_CLASSES_SOURCE_FILE_EXTENSION);
-						currentReferenceInIncludeFileList->sourceFileName = generateSourceFileNameFromHeaderFileName(currentReferenceInIncludeFileList->sourceFileNameOrig, CS_GENERATE_CPP_CLASSES_HEADER_FILE_EXTENSION);
+						currentReferenceInIncludeFileList->headerFileName = generateSourceFileNameFromHeaderFileName(currentReferenceInIncludeFileList->name, CS_GENERATE_CPP_CLASSES_HEADER_FILE_EXTENSION);
+						currentReferenceInIncludeFileList->sourceFileName = generateSourceFileNameFromHeaderFileName(currentReferenceInIncludeFileList->sourceFileNameOrig, CS_GENERATE_CPP_CLASSES_SOURCE_FILE_EXTENSION);
 						#endif
 						currentReferenceInIncludeFileList->id = id;
 						currentReferenceInIncludeFileList->level = level;
