@@ -26,7 +26,7 @@
  * File Name: CSglobalsDefs.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2016 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3i16a 27-August-2016
+ * Project Version: 3i17a 20-September-2016
  * Description: CS specific global definitions
  *
  *******************************************************************************/
@@ -37,6 +37,9 @@
 #include "SHAREDglobalDefs.h"
 
 #define CS_MATCH_FUNCTION_REFERENCES_WITH_CORRECT_NUMBER_OF_ARGUMENTS		//added 3h1e
+#ifdef CS_MATCH_FUNCTION_REFERENCES_WITH_CORRECT_NUMBER_OF_ARGUMENTS
+	#define CS_IDENTIFY_FUNCTION_DECLARATION_ARGUMENTS	//changed requirements 3i17a
+#endif
 
 #define CS_SUPPORT_POINTER_TYPE_DECLARATIONS_WITH_SPACE_BEFORE_RATHER_THAN_AFTER_ASTERIX	//3h9b	//not disabling this can serve presentation lint purposes
 
@@ -46,6 +49,8 @@
 	//#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS	//added 3h1a/14-November-2014	//requires CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST
 	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
 
+		#define CS_IDENTIFY_FUNCTION_DECLARATION_ARGUMENTS	//changed requirements 3i17a
+		
 		//#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DISABLE_OUTPUT	//safe for debug (no source/header file overwrites)
 
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_SUPPORT_PSEUDO_CONSTS	//2h13a		//relies on "#define constEffective" being defined in target code	//OLD: user must manually replace all instances of "constEffective " with "" before compiling code

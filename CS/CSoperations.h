@@ -26,7 +26,7 @@
  * File Name: CSoperations.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2016 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3i16a 27-August-2016
+ * Project Version: 3i17a 20-September-2016
  *
  *******************************************************************************/
 
@@ -44,9 +44,9 @@ bool getIncludeFileNamesFromCorHfile(CSfileContainer* firstReferenceInIncludeFil
 	void getFunctionObjectNamesFromFunctionsInCfile(CSfile* firstFileInIncludeFileList, CSfunction* firstFunctionInFunctionList, CSfile* aboveLevelObject, string topLevelFileName, int level);
 		bool searchFunctionStringForFunctionReferencesRecursive(CSfile* firstFileInIncludeFileList, CSfileContainer* firstFileNameInLayerContainingFunctionReferencesToSearchFor, CSfunction** currentReferenceInFunctionReferenceList, CSfunction** currentReferenceInFunctionReferenceListRepeats, string* functionContentsString);
 			bool searchFunctionStringForFunctionReferences(CSfile* firstFileInIncludeFileList, CSfile* fileNameContainingFunctionReferencesToSearchFor, CSfunction** currentReferenceInFunctionReferenceList, CSfunction** currentReferenceInFunctionReferenceListRepeats, string* functionContentsString);
-				void identifyFunctionReferenceArguments(CSfunction* currentReferenceInFunctionReferenceListRepeats, string* functionContentsString, int indexToFunctionObject);
+				void identifyFunctionReferenceArguments(CSfunction* currentReferenceInFunctionReferenceList, string* functionContentsString, int indexToFunctionObject);
 					string removePrependedWhiteSpace(string argument);
-				#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
+				#ifdef CS_IDENTIFY_FUNCTION_DECLARATION_ARGUMENTS
 				void identifyFunctionDeclarationArguments(CSfunction* currentReferenceInFunctionReferenceList, string* functionNameFull);
 				#endif
 

@@ -26,7 +26,7 @@
  * File Name: CSdraw.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2016 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3i16a 27-August-2016
+ * Project Version: 3i17a 20-September-2016
  *
  *******************************************************************************/
 
@@ -1081,10 +1081,10 @@ LDreference* createFunctionObjectListBoxesAndConnections(LDreference* currentRef
 				cout << "\createFunctionObjectListBoxesAndConnections{}:" << endl;
 				cout << "functionReferenceNameToFind functionReference->name = " << functionReference->name << endl;
 				cout << "aboveLevelFileObject->name = " << aboveLevelFileObject->name << endl;
-				cout << "fileObject->name = " << fileObject << endl;
-				cout << "functionObject->name = " << functionObject << endl;
-				cout << "countArguments = " << countArguments << endl;
 				cout << "aboveLevelFunctionObject->name = " << aboveLevelFunctionObject->name << endl;
+				cout << "countArguments = " << countArguments << endl;				
+				cout << "fileObject->name = " << fileObject->name << endl;
+				cout << "functionObject->name = " << functionObject->name << endl;
 				exit(0);
 			#ifdef CS_HTML_DOCUMENTATION_GENERATE_FILE_CODE_STRUCTURE_DIAGRAMS_UPDATES_MAY_NOT_BE_REQUIRED
 			}

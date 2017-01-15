@@ -26,7 +26,7 @@
  * File Name: CSexecflow.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2016 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3i16a 27-August-2016
+ * Project Version: 3i17a 20-September-2016
  *
  *******************************************************************************/
 
@@ -96,6 +96,7 @@ void generateCodeStructure(string topLevelFileName, int width, int height, strin
 	{
 		cout << "generateCodeStructure{} error: !hFileFound: " << topLevelFileName << endl;
 	}
+	//cout << "done getIncludeFileNamesFromCorHfile" << endl;
 
 	CSfile* firstReferenceInTopLevelBelowList = firstObjectInTopLevelBelowListContainer->fileObject;
 
@@ -109,7 +110,8 @@ void generateCodeStructure(string topLevelFileName, int width, int height, strin
 	XMLparserTag* firstTagInSVGFile = new XMLparserTag();
 	XMLparserTag* currentTagInSVGFile = firstTagInSVGFile;
 
-
+	//cout << "qt0" << endl;
+	
 	#ifdef CS_SUPPORT_PREDEFINED_GRID
 	bool usePredefinedGrid = false;
 	bool tempResult = true;
@@ -137,11 +139,14 @@ void generateCodeStructure(string topLevelFileName, int width, int height, strin
 	}
 	#endif
 
+	//cout << "qt1" << endl;
+	
 	LDreference* currentReferenceInPrintList = createFileObjectListBoxes(firstReferenceInPrintList, firstObjectInTopLevelBelowListContainer, firstObjectInTopLevelBelowListContainer, &currentTagInSVGFile, outputFunctionsConnectivity, traceFunctionUpwards, firstTagInGridTag, usePredefinedGrid);
 	if(outputFileConnections)
 	{
 		currentReferenceInPrintList = createFileObjectListConnections(currentReferenceInPrintList, firstObjectInTopLevelBelowListContainer, NULL, &currentTagInSVGFile, traceFunctionUpwards);
 	}
+	//cout << "qt2" << endl;
 	if(outputFunctionsConnectivity)
 	{
 		CSfunction* currentObjectInTopLevelBelowList = firstReferenceInTopLevelBelowList->firstFunctionInFunctionList;
@@ -222,6 +227,8 @@ void generateCodeStructure(string topLevelFileName, int width, int height, strin
 		}
 	}
 
+	//cout << "qt3" << endl;
+	
 	#ifdef CS_GENERATE_CPP_CLASSES
 	if(generateOOcode)
 	{
@@ -303,6 +310,7 @@ void generateCodeStructure(string topLevelFileName, int width, int height, strin
 			//must use an external program to view the .ldr file (Eg LDView)
 		}
 	}
+	//cout << "qt4" << endl;
 
 	if(display)
 	{
