@@ -26,7 +26,7 @@
  * File Name: CSglobalsDefs.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3e2a 29-August-2014
+ * Project Version: 3e2b 29-August-2014
  * Description: CS specific global definitions
  *
  *******************************************************************************/
@@ -44,8 +44,9 @@
 	#define CS_GENERATE_CPP_CLASSES_FUNCTION_PRIVATE "private: "
 	#define CS_GENERATE_CPP_CLASSES_FUNCTION_PUBLIC "public: "
 	#define CS_GENERATE_CPP_CLASSES_CLASS_PERMISSIONS_IDENTIFIER "::"	//class membership
-	#define CS_GENERATE_CPP_CLASSES_FUNCTION_REFERENCE_CONTEXT_LOCAL "this->"
+	#define CS_GENERATE_CPP_CLASSES_FUNCTION_REFERENCE_CONTEXT_LOCAL "this"
 	#define CS_GENERATE_CPP_CLASSES_FUNCTION_REFERENCE_CONTEXT_DELIMITER "."	//OLD: "->"
+	#define CS_GENERATE_CPP_CLASSES_FUNCTION_REFERENCE_CONTEXT_DELIMITER_POINTER "->"
 	#define CS_GENERATE_CPP_CLASSES_CLASS_OBJECT_APPENDITION ""	//OLD: "Obj"
 	#define CS_GENERATE_CPP_CLASSES_CLASS_DECLARATION_APPENDITION "Class"	//OLD: ""
 	#define CS_GENERATE_CPP_CLASSES_CLASS_HEADER_PART1 "class "
@@ -54,6 +55,8 @@
 	#define CS_GENERATE_CPP_CLASSES_FUNCTION_MAIN_NAME "main"
 	#define CS_GENERATE_CPP_CLASSES_INCLUDE_START "#include \""
 	#define CS_GENERATE_CPP_CLASSES_INCLUDE_END "\""
+	#define CS_GENERATE_CPP_CLASSES_STATIC "static"
+	#define CS_GENERATE_CPP_CLASSES_NEW "new"
 #endif
 
 #define CS_SUPPORT_PREDEFINED_GRID
