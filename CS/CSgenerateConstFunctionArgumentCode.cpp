@@ -582,31 +582,10 @@ bool generateConstFunctionArgument(CSfunction* currentFunctionObject, CSfunction
 		if(isNotConst)
 		{
 			currentFunctionArgumentInFunction->isNotConst = true;
-			
-			if(currentFunctionObject->name == "locateAndAddAllFeatureTempEntities")
-			{
-				if(currentFunctionArgumentInFunction->argumentName == "GIAfeatureTempEntityNodeArray")
-				{
-					//cout << "currentLine = " << currentLine << endl;
-					cout << "zt1" << endl;
-					cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
-					//exit(0);	
-				}
-			}
 		}
 		if(isConstEffective)
 		{
 			currentFunctionArgumentInFunction->isConstEffective = true;
-			if(currentFunctionObject->name == "locateAndAddAllFeatureTempEntities")
-			{
-				if(currentFunctionArgumentInFunction->argumentName == "GIAfeatureTempEntityNodeArray")
-				{
-					//cout << "currentLine = " << currentLine << endl;
-					cout << "zt2" << endl;
-					cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
-					//exit(0);	
-				}
-			}
 		}
 	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_PERFORM_SEPARATE_PASSES_TO_SUPPORT_RECURSION
 	}
@@ -724,16 +703,6 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 			{
 				//e.g. "return functionDeclarationArgument;"
 				*isNotConst = true;
-			if(currentFunctionObject->name == "locateAndAddAllFeatureTempEntities")
-			{
-				if(currentFunctionArgumentInFunction->argumentName == "GIAfeatureTempEntityNodeArray")
-				{
-					//cout << "currentLine = " << currentLine << endl;
-					cout << "2" << endl;
-					cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
-					exit(0);	
-				}
-			}
 			}
 		}
 	}
@@ -800,17 +769,7 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 										if(functionText->substr(indexOfObjectFunctionName-codeReference[i].length(), codeReference[i].length()) == codeReference[i])
 										{
 											//detect execution of object functions: e.g. "functionArgument->WHOLEWORDFUNCTIONNAME(" / "functionArgument->someIntermediaryObject[].WHOLEWORDFUNCTIONNAME("
-											*isNotConst = true;	
-			if(currentFunctionObject->name == "locateAndAddAllFeatureTempEntities")
-			{
-				if(currentFunctionArgumentInFunction->argumentName == "GIAfeatureTempEntityNodeArray")
-				{
-					cout << "currentLine = " << currentLine << endl;
-					cout << "3" << endl;
-					cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
-					exit(0);	
-				}
-			}						
+											*isNotConst = true;						
 											
 											#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_OBJECT_FUNCTION_EXECUTIONS_DETECT_PARAMETERS_FUNCTION_ARGUMENTS_OR_SECONDARY_ASSIGNMENTS
 											CSfunctionArgument* currentFunctionArgumentInFunctionTemp = currentFunctionObject->firstFunctionArgumentInFunction;
@@ -826,16 +785,6 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 														{
 															//e.g. "entityNodesActiveListCompleteFastIndex->insert(pair<string, GIAentityNode*>(entityNodesTempActiveListCompleteIndex, entityNode));"
 															currentFunctionArgumentInFunctionTemp->isNotConst = true;
-			if(currentFunctionObject->name == "locateAndAddAllFeatureTempEntities")
-			{
-				if(currentFunctionArgumentInFunction->argumentName == "GIAfeatureTempEntityNodeArray")
-				{
-					cout << "currentLine = " << currentLine << endl;
-					cout << "4" << endl;
-					cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
-					exit(0);	
-				}
-			}
 														}
 													}
 												}
@@ -853,17 +802,7 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 														{
 															if(functionArgumentReferenceWholeWordCheck(functionText, functionArgumentSecondaryAssignmentName, indexOfFunctionArgumentSecondaryAssignment))
 															{
-																currentFunctionArgumentInFunctionTemp->isNotConst = true;
-			if(currentFunctionObject->name == "locateAndAddAllFeatureTempEntities")
-			{
-				if(currentFunctionArgumentInFunction->argumentName == "GIAfeatureTempEntityNodeArray")
-				{
-					cout << "currentLine = " << currentLine << endl;
-					cout << "5" << endl;
-					cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
-					exit(0);	
-				}
-			}	
+																currentFunctionArgumentInFunctionTemp->isNotConst = true;	
 															}
 														}
 													}
@@ -888,16 +827,6 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 						if(currentLine.find(stdLibNonObjectFunctionExecutionHypothetical) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 						{
 							*isNotConst = true;
-			if(currentFunctionObject->name == "locateAndAddAllFeatureTempEntities")
-			{
-				if(currentFunctionArgumentInFunction->argumentName == "GIAfeatureTempEntityNodeArray")
-				{
-					cout << "currentLine = " << currentLine << endl;
-					cout << "6" << endl;
-					cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
-					exit(0);	
-				}
-			}
 							//e.g. free(functionDeclarationArgument);
 							//cout << "stdLibNonObjectFunctionExecutionHypothetical = " << stdLibNonObjectFunctionExecutionHypothetical << endl;
 						}
@@ -920,16 +849,6 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 					|| (twoCharactersAfterFunctionArgument == CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_INCREMENT) || (twoCharactersAfterFunctionArgument == CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_DECREMENT))
 					{
 						*isNotConst = true;
-			if(currentFunctionObject->name == "locateAndAddAllFeatureTempEntities")
-			{
-				if(currentFunctionArgumentInFunction->argumentName == "GIAfeatureTempEntityNodeArray")
-				{
-					cout << "currentLine = " << currentLine << endl;
-					cout << "6" << endl;
-					cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
-					exit(0);	
-				}
-			}
 					}
 					#endif
 										
@@ -984,30 +903,10 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 								if(doublePointerAssignmentDetected)
 								{
 									*isConstEffective = true;
-			if(currentFunctionObject->name == "locateAndAddAllFeatureTempEntities")
-			{
-				if(currentFunctionArgumentInFunction->argumentName == "GIAfeatureTempEntityNodeArray")
-				{
-					cout << "currentLine = " << currentLine << endl;
-					cout << "7a" << endl;
-					cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
-					exit(0);	
-				}
-			}
 								}
 								else
 								{
 									*isNotConst = true;
-			if(currentFunctionObject->name == "locateAndAddAllFeatureTempEntities")
-			{
-				if(currentFunctionArgumentInFunction->argumentName == "GIAfeatureTempEntityNodeArray")
-				{
-					cout << "currentLine = " << currentLine << endl;
-					cout << "7b" << endl;
-					cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
-					//exit(0);	
-				}
-			}
 								}
 								#else
 								*isNotConst = true;
@@ -1105,16 +1004,6 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 								#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
 								cout << "checkIfVariableIsBeingModifiedInFunction{}: inverseNonConstAssignmentDetected: isNotConst = true" << endl;
 								#endif
-			if(currentFunctionObject->name == "locateAndAddAllFeatureTempEntities")
-			{
-				if(currentFunctionArgumentInFunction->argumentName == "GIAfeatureTempEntityNodeArray")
-				{
-					cout << "currentLine = " << currentLine << endl;
-					cout << "8" << endl;
-					cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
-					exit(0);	
-				}
-			}
 							}
 							if(inverseNonConstAssignmentDetectedAlias)
 							{
@@ -1122,16 +1011,6 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 								#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS
 								cout << "checkIfVariableIsBeingModifiedInFunction{}: inverseNonConstAssignmentDetected: isNotConst = true" << endl;
 								#endif
-			if(currentFunctionObject->name == "locateAndAddAllFeatureTempEntities")
-			{
-				if(currentFunctionArgumentInFunction->argumentName == "GIAfeatureTempEntityNodeArray")
-				{
-					cout << "currentLine = " << currentLine << endl;
-					cout << "9" << endl;
-					cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
-					exit(0);	
-				}
-			}
 							}
 						}
 					}
@@ -1144,16 +1023,6 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 					if(indexOfSpecialCaseTextForAssignmentOfNonConst != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 					{
 						*isNotConst = true;
-			if(currentFunctionObject->name == "locateAndAddAllFeatureTempEntities")
-			{
-				if(currentFunctionArgumentInFunction->argumentName == "GIAfeatureTempEntityNodeArray")
-				{
-					cout << "currentLine = " << currentLine << endl;
-					cout << "10" << endl;
-					cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
-					exit(0);	
-				}
-			}
 					}
 				}
 				#endif
@@ -1171,16 +1040,6 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 						if(functionArgumentReferenceWholeWordCheck(functionText, returnVar, indexOfReturnVar))
 						{
 							*isNotConst = true;
-			if(currentFunctionObject->name == "locateAndAddAllFeatureTempEntities")
-			{
-				if(currentFunctionArgumentInFunction->argumentName == "GIAfeatureTempEntityNodeArray")
-				{
-					cout << "currentLine = " << currentLine << endl;
-					cout << "11" << endl;
-					cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
-					exit(0);	
-				}
-			}
 							//cout << "returnVarSetTextHypothetical = " << returnVarSetTextHypothetical << endl;
 						}
 					}
@@ -1193,17 +1052,7 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 					string nonConstGlobalAssignmentHypothetical = specialCaseTextForAssignmentOfNonConstGlobal[i] + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET + functionDeclarationArgument + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_END_OF_COMMAND;	//e.g. entityNodesActiveListComplete = newEntityNodesCompleteList;
 					if(functionText->find(nonConstGlobalAssignmentHypothetical) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 					{
-						*isNotConst = true;
-			if(currentFunctionObject->name == "locateAndAddAllFeatureTempEntities")
-			{
-				if(currentFunctionArgumentInFunction->argumentName == "GIAfeatureTempEntityNodeArray")
-				{
-					cout << "currentLine = " << currentLine << endl;
-					cout << "12" << endl;
-					cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
-					exit(0);	
-				}
-			}						
+						*isNotConst = true;						
 						//cout << "nonConstGlobalAssignmentHypothetical = " << nonConstGlobalAssignmentHypothetical << endl;
 					}
 				}	
@@ -1220,16 +1069,6 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 		#else
 		*isNotConst = true;
 		#endif
-			if(currentFunctionObject->name == "locateAndAddAllFeatureTempEntities")
-			{
-				if(currentFunctionArgumentInFunction->argumentName == "GIAfeatureTempEntityNodeArray")
-				{
-					//cout << "currentLine = " << currentLine << endl;
-					cout << "13" << endl;
-					cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
-					//exit(0);	
-				}
-			}
 	}	
 	#endif
 	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_MAKE_ALL_DOUBLE_POINTER_TYPES_NON_CONST
@@ -1240,16 +1079,6 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 		#else
 		*isNotConst = true;
 		#endif
-			if(currentFunctionObject->name == "locateAndAddAllFeatureTempEntities")
-			{
-				if(currentFunctionArgumentInFunction->argumentName == "GIAfeatureTempEntityNodeArray")
-				{
-					//cout << "currentLine = " << currentLine << endl;
-					cout << "14" << endl;
-					cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
-					exit(0);	
-				}
-			}
 	}
 	#endif
 
@@ -1308,17 +1137,7 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 											if(functionArgumentReferenceWholeWordCheck(functionText, currentFunctionArgumentInFunctionTemp->argumentName, indexOfFunctionArgumentTemp))
 											{
 												//e.g. "entityNodesActiveListCompleteFastIndex->insert(pair<string, GIAentityNode*>(entityNodesTempActiveListCompleteIndex, entityNode));"
-												currentFunctionArgumentInFunctionTemp->isNotConst = true;
-								if(currentFunctionObject->name == "locateAndAddAllFeatureTempEntities")
-								{
-									if(currentFunctionArgumentInFunction->argumentName == "GIAfeatureTempEntityNodeArray")
-									{
-										cout << "variableName = " << variableName << endl;
-										cout << "444" << endl;
-										cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
-										//exit(0);	
-									}
-								}	
+												currentFunctionArgumentInFunctionTemp->isNotConst = true;	
 											}
 										}
 									}
@@ -1336,17 +1155,7 @@ void checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject,
 											{
 												if(functionArgumentReferenceWholeWordCheck(functionText, functionArgumentSecondaryAssignmentName, indexOfFunctionArgumentSecondaryAssignment))
 												{
-													currentFunctionArgumentInFunctionTemp->isNotConst = true;
-								if(currentFunctionObject->name == "locateAndAddAllFeatureTempEntities")
-								{
-									if(currentFunctionArgumentInFunction->argumentName == "GIAfeatureTempEntityNodeArray")
-									{
-										cout << "variableName = " << variableName << endl;
-										cout << "555" << endl;
-										cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
-										//exit(0);
-									}
-								}		
+													currentFunctionArgumentInFunctionTemp->isNotConst = true;		
 												}
 											}
 										}
