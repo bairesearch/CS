@@ -26,7 +26,7 @@
  * File Name: CSgenerateHTMLdocumentation.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3f7a 16-August-2015
+ * Project Version: 3f7b 16-August-2015
  *
  *******************************************************************************/
 
@@ -69,7 +69,7 @@ string generateHTMLdocumentationHeader(string name, bool htmlHeader, bool isFile
 	string HTMLdocumentationHeader = "";
 	if(htmlHeader)
 	{
-		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3f7a 16-August-2015<p>\n";
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3f7b 16-August-2015<p>\n";
 	}
 	else
 	{
@@ -366,7 +366,7 @@ void generateHTMLdocumentationFunctionInputArguments(string* functionName, strin
 		int startPositionOfArgument = 0;
 		int endPositionOfArgument = findEndPositionOfArgument(&functionArgumentsRaw, 0);
 		bool lastArgument = false;
-		if(endPositionOfArgument == string::npos)
+		if(endPositionOfArgument == CPP_STRING_FIND_RESULT_FAIL_VALUE)
 		{//only 1 argument in function
 			endPositionOfArgument = endPositionOfFunctionArguments;
 			lastArgument = true;
@@ -386,9 +386,9 @@ void generateHTMLdocumentationFunctionInputArguments(string* functionName, strin
 			string currentArgument = functionArgumentsRaw.substr(startPositionOfArgument, endPositionOfArgument-startPositionOfArgument+1);
 
 			int startPositionOfArgumentName = currentArgument.rfind(CHAR_SPACE) + 1;	//last space
-			if(startPositionOfArgumentName == string::npos)
+			if(startPositionOfArgumentName == CPP_STRING_FIND_RESULT_FAIL_VALUE)
 			{
-				cout << "generateHTMLdocumentationFunctionInputArguments{} error: (startPositionOfArgumentName == string::npos)" << endl;
+				cout << "generateHTMLdocumentationFunctionInputArguments{} error: (startPositionOfArgumentName == CPP_STRING_FIND_RESULT_FAIL_VALUE)" << endl;
 				exit(0);
 			}
 			string currentArgumentName = currentArgument.substr(startPositionOfArgumentName, endPositionOfArgument-startPositionOfArgumentName+1);
@@ -422,7 +422,7 @@ void generateHTMLdocumentationFunctionInputArguments(string* functionName, strin
 			startPositionOfArgument = endPositionOfArgument+2;
 			endPositionOfArgument = findEndPositionOfArgument(&functionArgumentsRaw, startPositionOfArgument);
 
-			if(endPositionOfArgument == string::npos)
+			if(endPositionOfArgument == CPP_STRING_FIND_RESULT_FAIL_VALUE)
 			{
 				lastArgument = true;
 				endPositionOfArgument = endPositionOfFunctionArguments;
@@ -551,7 +551,7 @@ int findEndPositionOfArgument(string* functionArgumentsRaw, int startPositionOfA
 		//cout << "endPositionOfArgument = " << endPositionOfArgument << endl;
 		#endif
 
-		if(endPositionOfArgument == string::npos)
+		if(endPositionOfArgument == CPP_STRING_FIND_RESULT_FAIL_VALUE)
 		{
 			stillFindingEndPositionOfArgument = false;
 		}
@@ -559,7 +559,7 @@ int findEndPositionOfArgument(string* functionArgumentsRaw, int startPositionOfA
 		{
 			int nextPositionOfClassTypeOpenTag = functionArgumentsRaw->find(CLASS_TYPE_OPEN_TAG, startPositionOfArgumentTemp);	//find next comma
 			int nextPositionOfClassTypeCloseTag = functionArgumentsRaw->find(CLASS_TYPE_CLOSE_TAG, startPositionOfArgumentTemp);	//find next comma
-			if(nextPositionOfClassTypeOpenTag == string::npos)
+			if(nextPositionOfClassTypeOpenTag == CPP_STRING_FIND_RESULT_FAIL_VALUE)
 			{
 				stillFindingEndPositionOfArgument = false;
 			}
@@ -569,7 +569,7 @@ int findEndPositionOfArgument(string* functionArgumentsRaw, int startPositionOfA
 				{
 					bool foundCloseTag = false;
 
-					if(nextPositionOfClassTypeCloseTag != string::npos)
+					if(nextPositionOfClassTypeCloseTag != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 					{
 						if(nextPositionOfClassTypeCloseTag < endPositionOfArgument)
 						{
