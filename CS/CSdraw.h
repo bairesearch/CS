@@ -26,7 +26,7 @@
  * File Name: CSdraw.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3d6a 05-August-2014
+ * Project Version: 3e1a 27-August-2014
  *
  *******************************************************************************/
 
@@ -199,7 +199,7 @@ Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentRe
 int calculateCSBoxAndConnectionColourBasedUponLevel(int yIndex);
 int calculateCSBoxAndConnectionColourBasedUponFileName(CSfileReference * currentFileReference);
 
-CSfunctionReference * findPrintedFunctionReferenceWithName(string name, CSfunctionReference * reference, CSfileReference * firstReferenceInAboveLevelBelowList, bool * foundPrintedReferenceWithName, string * fileNameHoldingFunction);
+CSfunctionReference * findPrintedFunctionReferenceWithName(string name, CSfunctionReference * reference, CSfileReference * firstReferenceInAboveLevelBelowList, bool * foundPrintedReferenceWithName, CSfileReference ** fileReferenceHoldingFunction);
 Reference * traceFunctionsUpwardsAndDrawOrHighLightThese(Reference * currentReferenceInPrintList, CSfileReference * firstReferenceInTopLevelBelowList, CSfunctionReference * currentFunctionBeingTraced, XMLparserTag ** currentTag, int generateHTMLdocumentationMode, string * HTMLdocumentationFunctionTraceTableRows);
 	void traceFunctionsUpwardsAndDrawOrHighLightTheseReset(CSfileReference * firstReferenceInTopLevelBelowList, CSfunctionReference * currentFunctionBeingTraced);
 

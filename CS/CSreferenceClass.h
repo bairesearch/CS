@@ -26,7 +26,7 @@
  * File Name: CSreferenceClass.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3d6a 05-August-2014
+ * Project Version: 3e1a 27-August-2014
  *
  *******************************************************************************/
 
@@ -120,8 +120,17 @@ public:
 	#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST
 	string functionText;
 	#endif
-
+	#ifdef CS_GENERATE_CPP_CLASSES 
+	string functionTextRaw;	//function contents without comments
+	#endif	
+	#ifdef CS_GENERATE_CPP_CLASSES
+	string headerFunctionNameFullUpdated;
+	string sourceFunctionNameFullUpdated;
+	#endif
+	
 	int maxFunctionPrintXAtAParticularY[MAX_INCLUDE_DEPTH_FUNCTION];
+	
+
 
 };
 
@@ -150,7 +159,7 @@ public:
 	//file/function reference [shared]
 	int id;			//file/function id
 	int level;		//file/function Level
-	string name;		//file/function
+	string name;		//file/function (headerFileNameOrig, eg "x.h")
 	int col;		//	file/function colour + connection colour to all children
 	bool printed;		//file/function printed
 	bool printedFileConnections;	//file/function connections printed
@@ -177,6 +186,15 @@ public:
 
 	int maxFunctionPrintXAtAParticularY[MAX_INCLUDE_DEPTH_FUNCTION];
 
+	string sourceFileNameOrig;	//eg "x.c"
+	#ifdef CS_GENERATE_CPP_CLASSES
+	string sourceFileTextOrig;
+	string headerFileTextOrig;
+	string headerFileName;	//eg "x.hpp"
+	string sourceFileName;	//eg "x.cpp"
+	string sourceFileText;
+	string headerFileText;
+	#endif
 };
 
 

@@ -26,7 +26,7 @@
  * File Name: CSoperations.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3d6a 05-August-2014
+ * Project Version: 3e1a 27-August-2014
  *
  *******************************************************************************/
 
@@ -83,16 +83,29 @@ bool getIncludeFileNamesFromCorHfile(CSfileReference * firstReferenceInIncludeFi
 		bool readingHashInclude = false;
 		bool readingHashIncludeFileName = false;
 		bool waitingForNewLine = false;
-		char hashInclude[CS_MAX_NUM_CHARACTERS_PER_LINE] = "";
-		char hashIncludeFileName[CS_MAX_NUM_CHARACTERS_PER_LINE] = "";
+		string hashInclude = "";
+		string hashIncludeFileName = "";
 		//bool readingLineComment = false;	//same as waitingForNewLine
 		bool readingLargeComment = false;
-
+		
+		/*//this implementation will use up too much memory
+		#ifdef CS_GENERATE_CPP_CLASSES
+		string fileContentsString = "";
+		#endif
+		*/
+		
 		while(parseFileObject->get(c))
 		{
 			#ifdef CS_DEBUG_VERBOSE
 			//cout << c;
 			#endif
+			
+			/*//this implementation will use up too much memory
+			#ifdef CS_GENERATE_CPP_CLASSES
+			fileContentsString = fileContentsString + c;
+			#endif
+			*/
+			
 			charCount++;
 
 			if(readingLargeComment)
@@ -141,7 +154,7 @@ bool getIncludeFileNamesFromCorHfile(CSfileReference * firstReferenceInIncludeFi
 					readingHashIncludePreceedingWhiteSpace = true;
 					readingHashInclude = false;
 					readingHashIncludeFileName = false;
-					hashInclude[0] = '\0';
+					hashInclude = "";
 				}
 				else
 				{
@@ -158,7 +171,7 @@ bool getIncludeFileNamesFromCorHfile(CSfileReference * firstReferenceInIncludeFi
 					readingHashIncludePreceedingWhiteSpace = true;
 					readingHashInclude = false;
 					readingHashIncludeFileName = false;
-					hashInclude[0] = '\0';
+					hashInclude = "";
 				}
 				else
 				{
@@ -174,7 +187,7 @@ bool getIncludeFileNamesFromCorHfile(CSfileReference * firstReferenceInIncludeFi
 				else if((c == '\n'))
 				{
 					lineCount++;
-					hashInclude[0] = '\0';
+					hashInclude = "";
 				}
 				else
 				{
@@ -182,10 +195,7 @@ bool getIncludeFileNamesFromCorHfile(CSfileReference * firstReferenceInIncludeFi
 					readingHashInclude = true;
 
 					//add this character to first character
-					char typeString[2];
-					typeString[0] = c;
-					typeString[1] = '\0';
-					strcat(hashInclude, typeString);
+					hashInclude = hashInclude + c;
 				}
 			}
 			else if(readingHashInclude)
@@ -194,7 +204,7 @@ bool getIncludeFileNamesFromCorHfile(CSfileReference * firstReferenceInIncludeFi
 				{
 					readingHashIncludePreceedingWhiteSpace = false;
 
-					if(!strcmp(hashInclude, "#include"))
+					if(hashInclude == "#include")
 					{
 						#ifdef CS_DEBUG
 						//cout << "hashInclude = " << hashInclude << endl;
@@ -224,14 +234,11 @@ bool getIncludeFileNamesFromCorHfile(CSfileReference * firstReferenceInIncludeFi
 				{
 					readingHashInclude = false;
 					readingHashIncludePreceedingWhiteSpace = true;
-					hashInclude[0] = '\0';
+					hashInclude = "";
 				}
 				else
 				{
-					char typeString[2];
-					typeString[0] = c;
-					typeString[1] = '\0';
-					strcat(hashInclude, typeString);
+					hashInclude = hashInclude + c;
 				}
 
 			}
@@ -239,28 +246,15 @@ bool getIncludeFileNamesFromCorHfile(CSfileReference * firstReferenceInIncludeFi
 			{
 				if(c == '\"')
 				{
-					string hashIncludeFileNameString = hashIncludeFileName;
-					if(hashIncludeFileNameString != topLevelReference->name)	//this is added so that do not parse method.h from within method.cpp!
+					if(hashIncludeFileName != topLevelReference->name)	//this is added so that do not parse method.h from within method.cpp!
 					{
-
-						/*
-						string hashIncludeFileNameStringCNotH = hashIncludeFileName;
-						string cExtension = ".c";
-						string hExtension = ".h";
-						int positionOfHExtension =
-						hashIncludeFileNameStringCNotH.replace(9,5,cExtension);
-						currentReferenceInIncludeFileList->name = hashIncludeFileNameCNotH;
-						*/
-
-						char hashIncludeFileNameCFile[100];
-						strcpy(hashIncludeFileNameCFile, hashIncludeFileName);
-						int stringLength = strlen(hashIncludeFileNameCFile);
-						hashIncludeFileNameCFile[stringLength-1] = CS_SOURCE_FILE_EXTENSION_CHARACTER_1;
-						hashIncludeFileNameCFile[stringLength+0] = CS_SOURCE_FILE_EXTENSION_CHARACTER_2;
-						hashIncludeFileNameCFile[stringLength+1] = CS_SOURCE_FILE_EXTENSION_CHARACTER_3;
-						hashIncludeFileNameCFile[stringLength+2] = '\0';
-
 						currentReferenceInIncludeFileList->name = hashIncludeFileName;
+						string hashIncludeFileNameCFile = generateSourceFileNameFromHeaderFileName(hashIncludeFileName, CS_SOURCE_FILE_EXTENSION);
+						#ifdef CS_GENERATE_CPP_CLASSES
+						currentReferenceInIncludeFileList->sourceFileNameOrig = hashIncludeFileNameCFile;
+						currentReferenceInIncludeFileList->headerFileName = generateSourceFileNameFromHeaderFileName(currentReferenceInIncludeFileList->name, CS_GENERATE_CPP_CLASSES_SOURCE_FILE_EXTENSION);
+						currentReferenceInIncludeFileList->sourceFileName = generateSourceFileNameFromHeaderFileName(currentReferenceInIncludeFileList->sourceFileNameOrig, CS_GENERATE_CPP_CLASSES_HEADER_FILE_EXTENSION);
+						#endif
 						currentReferenceInIncludeFileList->id = id;
 						currentReferenceInIncludeFileList->level = level;
 						currentReferenceInIncludeFileList->firstReferenceInAboveList = topLevelReference;
@@ -361,12 +355,12 @@ bool getIncludeFileNamesFromCorHfile(CSfileReference * firstReferenceInIncludeFi
 					else
 					{
 						#ifdef CS_DEBUG
-						//cout << "hashIncludeFileNameString = " << hashIncludeFileNameString << endl;
+						//cout << "hashIncludeFileName = " << hashIncludeFileName << endl;
 						//cout << "topLevelReference->name = " << topLevelReference->name << endl;
 						#endif
 					}
 
-					hashIncludeFileName[0] = '\0';
+					hashIncludeFileName = "";
 
 					lineCount++;
 					readingHashIncludeFileName = false;
@@ -374,10 +368,7 @@ bool getIncludeFileNamesFromCorHfile(CSfileReference * firstReferenceInIncludeFi
 				}
 				else
 				{
-					char typeString[2];
-					typeString[0] = c;
-					typeString[1] = '\0';
-					strcat(hashIncludeFileName, typeString);
+					hashIncludeFileName = hashIncludeFileName + c;
 				}
 			}
 			else
@@ -389,6 +380,19 @@ bool getIncludeFileNamesFromCorHfile(CSfileReference * firstReferenceInIncludeFi
 			}
 		}
 		parseFileObject->close();
+		
+		/*//this implementation will use up too much memory
+		#ifdef CS_GENERATE_CPP_CLASSES
+		if(isHeader)
+		{
+			topLevelReference->headerFileText = fileContentsString;
+		}
+		else
+		{
+			topLevelReference->sourceFileText = fileContentsString;
+		}
+		#endif
+		*/
 	}
 
 	delete parseFileObject;
@@ -430,8 +434,8 @@ bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunctionReference * first
 		bool waitingForNewLine = false;
 		bool readingLargeComment = false;
 
-		char functionName[CS_MAX_NUM_CHARACTERS_PER_LINE] = "";
-		char functionNameFull[CS_MAX_NUM_CHARACTERS_PER_LINE] = "";
+		string functionName = "";
+		string functionNameFull = "";
 
 		while(parseFileObject->get(c))
 		{
@@ -487,8 +491,8 @@ bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunctionReference * first
 					readingBeforeSpaceBetweenFunctionTypeAndName = false;
 					readingBeforeOpeningBracket = false;
 					readingBeforeClosingBracket = false;
-					functionName[0] = '\0';
-					functionNameFull[0] = '\0';
+					functionName = "";
+					functionNameFull = "";
 				}
 				else
 				{
@@ -509,8 +513,8 @@ bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunctionReference * first
 					readingBeforeSpaceBetweenFunctionTypeAndName = false;
 					readingBeforeOpeningBracket = false;
 					readingBeforeClosingBracket = false;
-					functionName[0] = '\0';
-					functionNameFull[0] = '\0';
+					functionName = "";
+					functionNameFull = "";
 				}
 				else
 				{
@@ -540,8 +544,8 @@ bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunctionReference * first
 					readingBeforeSpaceBetweenFunctionTypeAndName = false;
 					readingBeforeOpeningBracket = false;
 					readingBeforeClosingBracket = false;
-					functionName[0] = '\0';
-					functionNameFull[0] = '\0';
+					functionName = "" ;
+					functionNameFull = "";
 				}
 				else
 				{
@@ -549,10 +553,7 @@ bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunctionReference * first
 					readingBeforeSpaceBetweenFunctionTypeAndNamePreceedingWhiteSpace = false;
 					readingBeforeSpaceBetweenFunctionTypeAndName = true;
 
-					char typeString[2];
-					typeString[0] = c;
-					typeString[1] = '\0';
-					strcat(functionNameFull, typeString);
+					functionNameFull = functionNameFull + c;
 				}
 			}
 			else if(readingBeforeSpaceBetweenFunctionTypeAndName)
@@ -561,13 +562,10 @@ bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunctionReference * first
 				{
 					readingBeforeSpaceBetweenFunctionTypeAndName = false;
 
-					char typeString[2];
-					typeString[0] = c;
-					typeString[1] = '\0';
-					strcat(functionNameFull, typeString);
+					functionNameFull = functionNameFull + c;
 
 					//restart function name fill;
-					functionName[0] = '\0';
+					functionName = "";
 					readingBeforeOpeningBracket = true;
 				}
 				else if(c == '\n')
@@ -581,15 +579,12 @@ bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunctionReference * first
 					readingBeforeSpaceBetweenFunctionTypeAndName = false;
 					readingBeforeOpeningBracket = false;
 					readingBeforeClosingBracket = false;
-					functionName[0] = '\0';
-					functionNameFull[0] = '\0';
+					functionName = "";
+					functionNameFull = "";
 				}
 				else
 				{
-					char typeString[2];
-					typeString[0] = c;
-					typeString[1] = '\0';
-					strcat(functionNameFull, typeString);
+					functionNameFull = functionNameFull + c;
 				}
 
 			}
@@ -597,22 +592,14 @@ bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunctionReference * first
 			{
 				if(c == ' ')
 				{
-
-					char typeString[2];
-					typeString[0] = c;
-					typeString[1] = '\0';
-					strcat(functionNameFull, typeString);
+					functionNameFull = functionNameFull + c;
 
 					//not a function, restart function name fill;
-					functionName[0] = '\0';
+					functionName = "";
 				}
 				else if((readingBeforeOpeningBracket) && (c == '('))
 				{
-
-					char typeString[2];
-					typeString[0] = c;
-					typeString[1] = '\0';
-					strcat(functionNameFull, typeString);
+					functionNameFull = functionNameFull + c;
 
 					readingBeforeOpeningBracket = false;
 					readingBeforeClosingBracket = true;
@@ -628,41 +615,31 @@ bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunctionReference * first
 					readingBeforeSpaceBetweenFunctionTypeAndName = false;
 					readingBeforeOpeningBracket = false;
 					readingBeforeClosingBracket = false;
-					functionName[0] = '\0';
-					functionNameFull[0] = '\0';
+					functionName = "";
+					functionNameFull = "";
 				}
 				else
 				{
-					char typeString[2];
-					typeString[0] = c;
-					typeString[1] = '\0';
-					strcat(functionName, typeString);
-
-					typeString[0] = c;
-					typeString[1] = '\0';
-					strcat(functionNameFull, typeString);
+					functionName = functionName + c;
+					functionNameFull = functionNameFull + c;
 				}
 			}
 			else if(readingBeforeClosingBracket)
 			{
 				if(c == ')')
 				{
-					char typeString[2];
-					typeString[0] = c;
-					typeString[1] = '\0';
-					strcat(functionNameFull, typeString);
+					functionNameFull = functionNameFull + c;
 
 					char newC;
 					parseFileObject->get(newC);
 					if(newC == ';')
 					{//function reference found
 
-						string functionNameCpp = functionName;
 						#ifdef CS_SUPPORT_FUNCTION_RETURN_POINTERS
-						if(functionNameCpp[0] == '*')
+						if(functionName[0] == '*')
 						{
-							int functionNameLength = functionNameCpp.length();
-							functionNameCpp = functionNameCpp.substr(1, functionNameLength-1);
+							int functionNameLength = functionName.length();
+							functionName = functionName.substr(1, functionNameLength-1);
 						}
 						#endif
 
@@ -673,7 +650,7 @@ bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunctionReference * first
 						{
 							cout << "\t";
 						}
-						cout << functionNameCpp << endl;
+						cout << functionName << endl;
 						cout << functionNameFull << endl;
 						*/
 						/*
@@ -682,12 +659,12 @@ bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunctionReference * first
 						{
 							cout << "\t";
 						}
-						cout << topLevelFileName << ": " << functionNameCpp << endl;
+						cout << topLevelFileName << ": " << functionName << endl;
 						*/
 						#endif
 
 						currentReferenceInFunctionList->isFunctionReference = true;
-						currentReferenceInFunctionList->name = functionNameCpp;
+						currentReferenceInFunctionList->name = functionName;
 						currentReferenceInFunctionList->nameFull = functionNameFull;
 						currentReferenceInFunctionList->functionReferenceIndentation = functionReferenceIndentationInHfileTemp;
 						CSfunctionReference * newCSReference = new CSfunctionReference();
@@ -708,7 +685,7 @@ bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunctionReference * first
 					#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION
 					functionReferenceIndentationInHfileTemp = 0;
 					#endif
-					functionNameFull[0] = '\0';
+					functionNameFull = "";
 				}
 				else if(c == '\n')
 				{
@@ -721,15 +698,12 @@ bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunctionReference * first
 					readingBeforeSpaceBetweenFunctionTypeAndName = false;
 					readingBeforeOpeningBracket = false;
 					readingBeforeClosingBracket = false;
-					functionName[0] = '\0';
-					functionNameFull[0] = '\0';
+					functionName = "";
+					functionNameFull = "";
 				}
 				else
 				{
-					char typeString[2];
-					typeString[0] = c;
-					typeString[1] = '\0';
-					strcat(functionNameFull, typeString);
+					functionNameFull = functionNameFull + c;
 				}
 			}
 			else
@@ -791,10 +765,10 @@ void getFunctionReferenceNamesFromFunctionsInCfile(CSfileReference * firstRefere
 					#define CS_MAX_NUM_CHARACTERS_PER_FUNCTION (1000000)
 
 				#ifdef CS_IGNORE_COMMENTS_IN_FUNCTIONS
-					//NEW method - comments are ignored - there is a problem with this and so it has been disabled at present...
+					//NEW method - comments are ignored
 
 					string functionContentsString = "";
-
+					
 					//2. create a string containing all text from this position to the closing bracket "\n}"
 					bool stillFindingEndOfFunction = true;
 					bool waitingForNewLine = false;
@@ -953,7 +927,14 @@ void getFunctionReferenceNamesFromFunctionsInCfile(CSfileReference * firstRefere
 					int positionOfFunctionReferenceEnd = currentIndexInFunction;
 					string functionContentsString = fileContentsString.substr(positionOfFunctionReference+fullFunctionName.length(), (positionOfFunctionReferenceEnd-positionOfFunctionReference)-fullFunctionName.length());
 				#endif
-
+					#ifdef CS_GENERATE_CPP_CLASSES
+					int positionOfFunctionReferenceEnd = currentIndexInFunction;
+					string functionContentsStringRaw = fileContentsString.substr(positionOfFunctionReference+fullFunctionName.length(), (positionOfFunctionReferenceEnd-positionOfFunctionReference)-fullFunctionName.length());
+					currentReference->functionTextRaw = functionContentsStringRaw;
+					functionContentsStringRaw = "";
+					//cout << "functionContentsStringRaw = " << functionContentsStringRaw << endl;
+					#endif
+					
 					#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST
 					currentReference->functionText = functionContentsString;
 					#endif
@@ -1038,7 +1019,12 @@ void getFunctionReferenceNamesFromFunctionsInCfile(CSfileReference * firstRefere
 			currentReference = currentReference->next;
 		}
 	}
-
+	
+	/*
+	#ifdef CS_GENERATE_CPP_CLASSES
+	topLevelReference->sourceFileText = fileContentsString;
+	#endif
+	*/
 }
 
 CSfunctionReference * searchFunctionStringForFunctionReferencesRecursive(CSfileReference * firstReferenceInIncludeFileList, CSfileReference * firstFileNameInLayerContainingFunctionReferencesToSearchFor, CSfunctionReference * firstReferenceInFunctionReferenceList, string functionContentsString)
@@ -1212,10 +1198,19 @@ CSfileReference * findReferenceInIncludeFileList(CSfileReference * firstReferenc
 }
 
 
+string generateSourceFileNameFromHeaderFileName(string headerFileName, string sourceFileNameExtension)
+{
+	string sourceFileName = "";
+	int positionOfExtension = headerFileName.rfind(CHAR_FULLSTOP);
+	if(positionOfExtension != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+	{
+		sourceFileName = headerFileName.substr(0, positionOfExtension+1) + sourceFileNameExtension;
+		//cout << "sourceFileName = " << sourceFileName << endl;
+	}
+	return sourceFileName;
+}
 
-
-
-
+			
 
 
 

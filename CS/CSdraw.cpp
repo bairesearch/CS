@@ -26,7 +26,7 @@
  * File Name: CSdraw.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3d6a 05-August-2014
+ * Project Version: 3e1a 27-August-2014
  *
  *******************************************************************************/
 
@@ -1863,7 +1863,7 @@ int calculateCSBoxAndConnectionColourBasedUponFileName(CSfileReference * current
 
 
 
-CSfunctionReference * findPrintedFunctionReferenceWithName(string name, CSfunctionReference * reference, CSfileReference * firstReferenceInAboveLevelBelowList, bool * foundPrintedReferenceWithName, string * fileNameHoldingFunction)
+CSfunctionReference * findPrintedFunctionReferenceWithName(string name, CSfunctionReference * reference, CSfileReference * firstReferenceInAboveLevelBelowList, bool * foundPrintedReferenceWithName, CSfileReference ** fileReferenceHoldingFunction)
 {
 	CSfunctionReference * updatedFunctionReference = reference;
 	CSfileReference * currentFileReference = firstReferenceInAboveLevelBelowList;
@@ -1880,7 +1880,7 @@ CSfunctionReference * findPrintedFunctionReferenceWithName(string name, CSfuncti
 
 					updatedFunctionReference = currentFunctionReference;
 					*foundPrintedReferenceWithName = true;
-					*fileNameHoldingFunction = currentFileReference->name;
+					*fileReferenceHoldingFunction = currentFileReference;
 				}
 			}
 			currentFunctionReference = currentFunctionReference->next;
@@ -1888,7 +1888,7 @@ CSfunctionReference * findPrintedFunctionReferenceWithName(string name, CSfuncti
 
 		if(currentFileReference->firstReferenceInBelowList != NULL)
 		{
-			updatedFunctionReference = findPrintedFunctionReferenceWithName(name, updatedFunctionReference, currentFileReference->firstReferenceInBelowList, foundPrintedReferenceWithName, fileNameHoldingFunction);
+			updatedFunctionReference = findPrintedFunctionReferenceWithName(name, updatedFunctionReference, currentFileReference->firstReferenceInBelowList, foundPrintedReferenceWithName, fileReferenceHoldingFunction);
 		}
 
 		currentFileReference = currentFileReference->next;
@@ -1943,11 +1943,13 @@ Reference * traceFunctionsUpwardsAndDrawOrHighLightThese(Reference * currentRefe
 		//cout << "\tcurrentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList->name = " << currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList->name << endl;
 
 		bool higherLevelFunctionFound = false;
-		string fileNameHoldingFunction = "";
-		CSfunctionReference * higherLevelFunction = findPrintedFunctionReferenceWithName(currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList->name, NULL, firstReferenceInTopLevelBelowList, &higherLevelFunctionFound, &fileNameHoldingFunction);
-
+		CSfileReference * fileReferenceHoldingFunction = NULL;
+		CSfunctionReference * higherLevelFunction = findPrintedFunctionReferenceWithName(currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList->name, NULL, firstReferenceInTopLevelBelowList, &higherLevelFunctionFound, &fileReferenceHoldingFunction);
+		
 		if(higherLevelFunctionFound)
 		{
+			string fileNameHoldingFunction = fileReferenceHoldingFunction->name;
+
 			if(higherLevelFunction->printedTrace == false)
 			{
 				//print function connection;
@@ -2012,11 +2014,13 @@ void traceFunctionsUpwardsAndDrawOrHighLightTheseReset(CSfileReference * firstRe
 		//cout << "currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList->name = " << currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList->name << endl;
 
 		bool higherLevelFunctionFound = false;
-		string fileNameHoldingFunction = "";
-		CSfunctionReference * higherLevelFunction = findPrintedFunctionReferenceWithName(currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList->name, NULL, firstReferenceInTopLevelBelowList, &higherLevelFunctionFound, &fileNameHoldingFunction);
-
+		CSfileReference * fileReferenceHoldingFunction = NULL;
+		CSfunctionReference * higherLevelFunction = findPrintedFunctionReferenceWithName(currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList->name, NULL, firstReferenceInTopLevelBelowList, &higherLevelFunctionFound, &fileReferenceHoldingFunction);
+		
 		if(higherLevelFunctionFound)
 		{
+			string fileNameHoldingFunction = fileReferenceHoldingFunction->name;
+
 			if(higherLevelFunction->printedTraceReset == false)
 			{
 				traceFunctionsUpwardsAndDrawOrHighLightTheseReset(firstReferenceInTopLevelBelowList, higherLevelFunction);

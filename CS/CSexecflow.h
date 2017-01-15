@@ -26,7 +26,7 @@
  * File Name: CSexecflow.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3d6a 05-August-2014
+ * Project Version: 3e1a 27-August-2014
  *
  *******************************************************************************/
 
@@ -51,57 +51,13 @@
 #endif
 using namespace std;
 
-#define CS_CODE_STRUCTURE_FUNCTION_DIAGRAM_MINX -400
-#define CS_CODE_STRUCTURE_FUNCTION_DIAGRAM_MINY -100
-#define CS_CODE_STRUCTURE_FUNCTION_DIAGRAM_MAXX 10000
-#define CS_CODE_STRUCTURE_FUNCTION_DIAGRAM_MAXY 3500	//CS <=3d2c: 2000
-#define CS_CODE_STRUCTURE_SINGLE_FILE_DIAGRAM_MINX -300
-#define CS_CODE_STRUCTURE_SINGLE_FILE_DIAGRAM_MINY 0
-#define CS_CODE_STRUCTURE_SINGLE_FILE_DIAGRAM_MAXX 1000
-#define CS_CODE_STRUCTURE_SINGLE_FILE_DIAGRAM_MAXY 300
-
-#define HTML_EXTENSION ".html"
-#define SVG_EXTENSION ".svg"
-
 #ifdef LINUX
 	#define SYSTEM_COPY_COMMAND "cp"
 #else
 	#define SYSTEM_COPY_COMMAND "copy"
 #endif
 
-void printCS(string topLevelFileName, int width, int height, string outputLDRfileName, string outputSVGfileName, string outputPPMfileName, string outputHTMLfileName, bool useOutputLDRfile, bool useOutputPPMfile, bool useOutputHTMLfile, int generateHTMLdocumentationMode, bool display, bool outputFunctionsConnectivity, bool traceFunctionUpwards, string bottomLevelFunctionNameToTraceUpwards, bool outputFileConnections, string topLevelFunctionName);
-	string generateHTMLdocumentationHeader(string name, bool htmlHeader, bool isFile);
-	string generateHTMLdocumentationFooter(bool htmlFileFooter);
-	void generateHTMLdocumentationForAllFunctions(CSfileReference * firstReferenceInAboveLevelBelowList, Reference * currentReferenceInPrintList, CSfileReference * firstReferenceInTopLevelBelowList, int generateHTMLdocumentationMode, bool useOutputHTMLfile, string * HTMLdocumentationBody, XMLparserTag * firstTagInSVGFile, XMLparserTag * lastTagInSVGFile, bool traceFunctionUpwards, bool usePredefinedGrid);
-		void generateHTMLdocumentationForFunction(Reference * currentReferenceInPrintList, CSfileReference * firstReferenceInTopLevelBelowList, CSfunctionReference * bottomLevelFunctionToTraceUpwards, string fileNameHoldingFunction, XMLparserTag ** currentTag, int generateHTMLdocumentationMode, string * HTMLdocumentationFunctionBody, string * outputSVGfileNameFunction, bool useOutputHTMLfile, string outputHTMLfileName, bool traceFunctionUpwards);
-			void generateHTMLdocumentationFunctionSummary(string * functionName, string * functionNameFull, string * HTMLdocumentationFunctionSummary);
-			void generateHTMLdocumentationFunctionInputArguments(string * functionName, string * functionNameFull, string * HTMLdocumentationFunctionInputArguments);
-				int findEndPositionOfArgument(string * functionArgumentsRaw, int startPositionOfArgument);
-				string ensureHTMLTagSafe(string str);
-				string createDescriptionFromCaseSensitiveMultiwordString(string str);
-			void generateHTMLdocumentationFunctionReferenceList(CSfunctionReference * function, string * HTMLdocumentationFunctionReferenceList);
-			string generateHTMLdocumentationImagePlaceHolder(string * traceImageFileName, string imageTitle);
-		void generateFileDiagramFunctionsHeirachy(CSfileReference * currentFileReference, string outputSVGFileNameFile, CSfileReference * firstReferenceInTopLevelBelowList, bool usePredefinedGrid);
-	void writeStringToFileObject(string * s, ofstream * writeFileObject);
-	void addToHTMLdocumentationFileFunctionList(CSfunctionReference * currentFunctionReference, string * HTMLdocumentationFileFunctionList, int * previousIndentation, bool * previousIndentationFirst);
-
-#ifdef CS_GENERATE_CLASS_HTML_DOCUMENTATION_FROM_CUSTOM_CSCLASS_FORMAT
-#ifdef CS_GENERATE_CLASS_HTML_DOCUMENTATION_FROM_CUSTOM_CSCLASS_FORMAT_COMBINED
-#define NUMBER_OF_CSCLASSES (9)
-static string CSclassesArray[NUMBER_OF_CSCLASSES] = {"NLC.CSclass", "GIA.CSclass", "OR.CSclass", "CS.CSclass", "ANN.CSclass", "RT.CSclass", "LD.CSclass", "SHARED.CSclass", "XML.CSclass"};
-#else
-#define NUMBER_OF_CSCLASSES (29)
-static string CSclassesArray[NUMBER_OF_CSCLASSES] = {"NLCcodeBlockClass.CSclass", "NLCclassDefinitionClass.CSclass", "NLCitemClass.CSclass", "NLCpreprocessorMathLogicalConditions.CSclass", "NLCpreprocessorSentenceClass.CSclass", "GIAconditionNodeClass.CSclass", "GIAentityConnectionClass.CSclass", "GIAentityNodeClass.CSclass", "GIAlrp.CSclass", "GIAnlg.CSclass", "GIAquery.CSclass", "GIAsentenceClass.CSclass", "GIAtranslatorGeneric.CSclass", "ORpolygonList.CSclass", "ORquadraticFit.CSclass", "ORTHimageCategorisationNN.CSclass", "CSreferenceClass.CSclass", "ANNexperienceClass.CSclass", "ANNneuronClass.CSclass", "RToperations.CSclass", "RTparser.CSclass", "RTppm.CSclass", "RTraytracer.CSclass", "RTscene.CSclass", "RTviewinfo.CSclass", "LDreferenceClass.CSclass", "SHAREDvars.CSclass", "XMLparser.CSclass", "XMLrules.CSclass"};
-#endif
-void generateClassHTMLdocumentationFromCustomCSclassFormat();
-string getFunctionNameFromFunctionNameFull(string * functionNameFull);
-#endif
-
-#ifdef CS_CONVERT_INDENTED_LIST_TO_HTML_LIST
-void convertIndentedListToHTMLlist();
-	bool readIndentedListFile(string indentedListFileName, vector<string> * indentedListVector);
-	void generateHTMLdocumentationIndentedList(vector<string> * indentedListVector, string * HTMLdocumentationIndentationList);
-#endif
+void generateCodeStructure(string topLevelFileName, int width, int height, string outputLDRfileName, string outputSVGfileName, string outputPPMfileName, string outputHTMLfileName, bool useOutputLDRfile, bool useOutputPPMfile, bool useOutputHTMLfile, int generateHTMLdocumentationMode, bool display, bool outputFunctionsConnectivity, bool traceFunctionUpwards, string bottomLevelFunctionNameToTraceUpwards, bool outputFileConnections, string topLevelFunctionName, bool generateOOcode);
 
 
 #endif

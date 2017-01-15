@@ -26,7 +26,7 @@
  * File Name: CSmain.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3d6a 05-August-2014
+ * Project Version: 3e1a 27-August-2014
  *
  *******************************************************************************/
 
@@ -64,6 +64,9 @@ static char errmessage[] = "Usage:  OpenCS.exe [options]"
 "\n\t-trace                  : trace a function's usage upwards"
 "\n\t-tracefunction [string] : bottom level function name to trace upwards / document (eg, y for int y())"
 "\n\t-html                   : generate html documentation (user must specify tracefunction, else will document all functions)"
+#ifdef CS_GENERATE_CPP_CLASSES
+"\n\t-generateoo             : generate object oriented C++ code (must specify tempfolder else input files will be overwritten)"
+#endif
 "\n"
 "\n\t-workingfolder [string] : working directory name for input files (def: same as exe)"
 "\n\t-exefolder [string]     : exe directory name for executables OpenCS.exe and (def: same as exe)"
@@ -117,6 +120,10 @@ int main(int argc,char **argv)
 
 	int generateHTMLdocumentationMode = CS_GENERATE_HTML_DOCUMENTATION_MODE_OFF;
 
+	//#ifdef CS_GENERATE_CPP_CLASSES
+	bool generateOOcode = false;
+	//#endif
+	
 	bool passInputReq = true;
 	bool outputFunctionsConnectivity = false;
 	bool traceFunctionUpwards = false;
@@ -234,6 +241,13 @@ int main(int argc,char **argv)
 		//getFloatArgument(argc,argv,"-html");
 	}
 
+	#ifdef CS_GENERATE_CPP_CLASSES
+	if(argumentExists(argc,argv,"-generateoo"))
+	{
+		generateOOcode = true;
+	}
+	#endif		
+
 	char currentFolder[EXE_FOLDER_PATH_MAX_LENGTH];
 	getCurrentDirectory(currentFolder);
 
@@ -266,7 +280,7 @@ int main(int argc,char **argv)
 
 	if(argumentExists(argc,argv,"-version"))
 	{
-		cout << "OpenCS.exe - Project Version: 3d6a 05-August-2014" << endl;
+		cout << "OpenCS.exe - Project Version: 3e1a 27-August-2014" << endl;
 		exit(1);
 	}
 
@@ -340,10 +354,9 @@ int main(int argc,char **argv)
 	fillInLDspriteExternVariables();
 	fillInCSrulesExternVariables();
 
-
 	if(mode == CS_MODE_OUTPUT_EXECUTION_FLOW)
 	{
-		printCS(topLevelFileName, rasterImageWidth, rasterImageHeight, outputLDRfileName, outputSVGfileName, outputPPMfileName, outputHTMLfileName, useOutputLDRfile, useOutputPPMfile, useOutputHTMLfile, generateHTMLdocumentationMode, displayInOpenGLAndOutputScreenshot, outputFunctionsConnectivity, traceFunctionUpwards, bottomLevelFunctionNameToTraceUpwards, outputFileConnections, topLevelFunctionName);
+		generateCodeStructure(topLevelFileName, rasterImageWidth, rasterImageHeight, outputLDRfileName, outputSVGfileName, outputPPMfileName, outputHTMLfileName, useOutputLDRfile, useOutputPPMfile, useOutputHTMLfile, generateHTMLdocumentationMode, displayInOpenGLAndOutputScreenshot, outputFunctionsConnectivity, traceFunctionUpwards, bottomLevelFunctionNameToTraceUpwards, outputFileConnections, topLevelFunctionName, generateOOcode);
 	}
 	else if(mode == CS_MODE_OUTPUT_DATA_FLOW)
 	{

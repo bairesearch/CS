@@ -26,7 +26,7 @@
  * File Name: CSoperations.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3d6a 05-August-2014
+ * Project Version: 3e1a 27-August-2014
  *
  *******************************************************************************/
 
@@ -37,13 +37,6 @@
 #include "CSglobalDefs.h"
 #include "CSreferenceClass.h"
 
-#define CS_SOURCE_FILE_EXTENSION_CHARACTER_1 'c'
-#define CS_SOURCE_FILE_EXTENSION_CHARACTER_2 'p'
-#define CS_SOURCE_FILE_EXTENSION_CHARACTER_3 'p'
-#define CS_SOURCE_FILE_INDENTATION_CHARACTER '\t'
-
-#define CS_MAX_NUM_CHARACTERS_PER_LINE (3000)
-
 bool getIncludeFileNamesFromCorHfile(CSfileReference * firstReferenceInIncludeFileList, CSfileReference * topLevelReference, string topLevelReferenceName, int level);
 	bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunctionReference * firstReferenceInFunctionList, string topLevelFileName, int level);
 	void getFunctionReferenceNamesFromFunctionsInCfile(CSfileReference * firstReferenceInIncludeFileList, CSfunctionReference * firstReferenceInFunctionList, CSfileReference * topLevelReference, string topLevelFileName, int level);
@@ -53,7 +46,7 @@ bool getIncludeFileNamesFromCorHfile(CSfileReference * firstReferenceInIncludeFi
 
 CSfileReference * findReferenceInIncludeFileList(CSfileReference * firstReferenceInAboveLevelBelowList, string referenceName, CSfileReference * foundReference, bool * referenceFound);
 
-
+string generateSourceFileNameFromHeaderFileName(string headerFileName, string sourceFileNameExtension);
 
 #endif
 
