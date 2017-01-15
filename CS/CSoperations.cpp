@@ -1,21 +1,21 @@
 /*******************************************************************************
- * 
+ *
  * This file is part of BAIPROJECT.
- * 
+ *
  * BAIPROJECT is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License version 3
  * only, as published by the Free Software Foundation.
- * 
+ *
  * BAIPROJECT is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License version 3 for more details
  * (a copy is included in the LICENSE file that accompanied this code).
- * 
+ *
  * You should have received a copy of the GNU Affero General Public License
  * version 3 along with BAIPROJECT.  If not, see <http://www.gnu.org/licenses/>
  * for a copy of the AGPLv3 License.
- * 
+ *
  *******************************************************************************/
 
 /*******************************************************************************
@@ -23,7 +23,7 @@
  * File Name: CSoperations.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3d2b 14-April-2014
+ * Project Version: 3d2c 14-April-2014
  *
  *******************************************************************************/
 
@@ -193,7 +193,7 @@ bool getIncludeFileNamesFromCorHfile(CSfileReference * firstReferenceInIncludeFi
 						#ifdef CS_DEBUG
 						//cout << "hashInclude = " << hashInclude << endl;
 						#endif
-						
+
 						char tempChar;
 						parseFileObject->get(tempChar);
 						if(tempChar == '\"')
@@ -410,7 +410,7 @@ bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunctionReference * first
 		bool readingBeforeSpaceBetweenFunctionTypeAndNamePreceedingWhiteSpace = true;
 		#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION
 		int functionReferenceIndentationInHfileTemp = 0;
-		#endif		
+		#endif
 		bool readingBeforeSpaceBetweenFunctionTypeAndName = false;
 		bool readingBeforeOpeningBracket = false;
 		bool readingBeforeClosingBracket = false;
@@ -419,7 +419,7 @@ bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunctionReference * first
 
 		char functionName[1000] = "";
 		char functionNameFull[1000] = "";
-		
+
 		while(parseFileObject->get(c))
 		{
 			charCount++;
@@ -464,13 +464,13 @@ bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunctionReference * first
 
 				}
 				else if(c == '\n')
-				{				
+				{
 					lineCount++;
 					waitingForNewLine = false;
 					readingBeforeSpaceBetweenFunctionTypeAndNamePreceedingWhiteSpace = true;
-					#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION	
+					#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION
 					functionReferenceIndentationInHfileTemp = 0;
-					#endif						
+					#endif
 					readingBeforeSpaceBetweenFunctionTypeAndName = false;
 					readingBeforeOpeningBracket = false;
 					readingBeforeClosingBracket = false;
@@ -486,13 +486,13 @@ bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunctionReference * first
 			else if(waitingForNewLine)
 			{
 				if(c == '\n')
-				{				
+				{
 					lineCount++;
 					waitingForNewLine = false;
 					readingBeforeSpaceBetweenFunctionTypeAndNamePreceedingWhiteSpace = true;
-					#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION	
+					#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION
 					functionReferenceIndentationInHfileTemp = 0;
-					#endif						
+					#endif
 					readingBeforeSpaceBetweenFunctionTypeAndName = false;
 					readingBeforeOpeningBracket = false;
 					readingBeforeClosingBracket = false;
@@ -508,7 +508,7 @@ bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunctionReference * first
 			{
 				if((c == ' ') || (c == '\t'))
 				{
-					#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION	
+					#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION
 					if(c == CS_SOURCE_FILE_INDENTATION_CHARACTER)
 					{
 						functionReferenceIndentationInHfileTemp++;
@@ -517,13 +517,13 @@ bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunctionReference * first
 					//ignore preceeding white space
 				}
 				else if(c == '\n')
-				{			
+				{
 					lineCount++;
 					waitingForNewLine = false;
 					readingBeforeSpaceBetweenFunctionTypeAndNamePreceedingWhiteSpace = true;
-					#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION	
+					#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION
 					functionReferenceIndentationInHfileTemp = 0;
-					#endif					
+					#endif
 					readingBeforeSpaceBetweenFunctionTypeAndName = false;
 					readingBeforeOpeningBracket = false;
 					readingBeforeClosingBracket = false;
@@ -558,13 +558,13 @@ bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunctionReference * first
 					readingBeforeOpeningBracket = true;
 				}
 				else if(c == '\n')
-				{				
+				{
 					lineCount++;
 					waitingForNewLine = false;
 					readingBeforeSpaceBetweenFunctionTypeAndNamePreceedingWhiteSpace = true;
-					#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION	
+					#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION
 					functionReferenceIndentationInHfileTemp = 0;
-					#endif						
+					#endif
 					readingBeforeSpaceBetweenFunctionTypeAndName = false;
 					readingBeforeOpeningBracket = false;
 					readingBeforeClosingBracket = false;
@@ -605,13 +605,13 @@ bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunctionReference * first
 					readingBeforeClosingBracket = true;
 				}
 				else if(c == '\n')
-				{			
+				{
 					lineCount++;
 					waitingForNewLine = false;
 					readingBeforeSpaceBetweenFunctionTypeAndNamePreceedingWhiteSpace = true;
-					#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION	
+					#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION
 					functionReferenceIndentationInHfileTemp = 0;
-					#endif						
+					#endif
 					readingBeforeSpaceBetweenFunctionTypeAndName = false;
 					readingBeforeOpeningBracket = false;
 					readingBeforeClosingBracket = false;
@@ -652,7 +652,7 @@ bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunctionReference * first
 							functionNameCpp = functionNameCpp.substr(1, functionNameLength-1);
 						}
 						#endif
-						
+
 						#ifdef CS_DEBUG
 						/*
 						//add function reference reference;
@@ -689,22 +689,22 @@ bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunctionReference * first
 						//cout << "invalid function reference" << endl;
 						#endif
 					}
-	
+
 					readingBeforeClosingBracket = false;
 					readingBeforeSpaceBetweenFunctionTypeAndNamePreceedingWhiteSpace = true;
-					#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION	
+					#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION
 					functionReferenceIndentationInHfileTemp = 0;
-					#endif					
+					#endif
 					functionNameFull[0] = '\0';
 				}
 				else if(c == '\n')
-				{					
+				{
 					lineCount++;
 					waitingForNewLine = false;
 					readingBeforeSpaceBetweenFunctionTypeAndNamePreceedingWhiteSpace = true;
-					#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION	
+					#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION
 					functionReferenceIndentationInHfileTemp = 0;
-					#endif					
+					#endif
 					readingBeforeSpaceBetweenFunctionTypeAndName = false;
 					readingBeforeOpeningBracket = false;
 					readingBeforeClosingBracket = false;
@@ -776,7 +776,7 @@ void getFunctionReferenceNamesFromFunctionsInCfile(CSfileReference * firstRefere
 				if(positionOfFunctionReference != -1)
 				{
 					#define CS_MAX_NUM_CHARACTERS_PER_FUNCTION (1000000)
-					
+
 				#ifdef CS_IGNORE_COMMENTS_IN_FUNCTIONS
 					//NEW method - comments are ignored - there is a problem with this and so it has been disabled at present...
 
@@ -869,9 +869,9 @@ void getFunctionReferenceNamesFromFunctionsInCfile(CSfileReference * firstRefere
 						}
 						else
 						{
-							functionContentsString = functionContentsString + c;	
+							functionContentsString = functionContentsString + c;
 						}
-						
+
 						if(c == '\n')
 						{
 							if(!readingLargeComment)
@@ -884,20 +884,20 @@ void getFunctionReferenceNamesFromFunctionsInCfile(CSfileReference * firstRefere
 						{
 							newLineFound = false;
 						}
-							
+
 						if(currentIndexInFunction > CS_MAX_NUM_CHARACTERS_PER_FUNCTION)
 						{
 							cout << "getFunctionReferenceNamesFromFunctionsInCfile() error: function definitions in .cpp files must end with a } without any leading white space" << endl;
 							exit(0);
 						}
-												
+
 						currentIndexInFunction++;
 
 					}
-					
+
 					//cout << "functionContentsString = " << functionContentsString << endl;
 				#else
-					
+
 					//OLD method - comments are not ignored;
 					bool stillFindingEndOfFunction = true;
 					bool newLineFound = false;
@@ -936,11 +936,11 @@ void getFunctionReferenceNamesFromFunctionsInCfile(CSfileReference * firstRefere
 
 						currentIndexInFunction++;
 					}
-					
+
 					int positionOfFunctionReferenceEnd = currentIndexInFunction;
 					string functionContentsString = fileContentsString.substr(positionOfFunctionReference+fullFunctionName.length(), (positionOfFunctionReferenceEnd-positionOfFunctionReference)-fullFunctionName.length());
 				#endif
-					
+
 					#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST
 					currentReference->functionText = functionContentsString;
 					#endif
@@ -1059,7 +1059,7 @@ CSfunctionReference * searchFunctionStringForFunctionReferences(CSfileReference 
 	#ifdef CS_DEBUG
 	//cout << "\tcurrentValidFileNameToSearchReferencesFor->name = " << fileNameContainingFunctionReferencesToSearchFor->name << endl;
 	#endif
-	
+
 	//now search function string for all functions within referenceFound;
 	//CSfunctionReference * currentFunction = foundReference->firstReferenceInFunctionList;
 	CSfunctionReference * currentFunction = fileNameContainingFunctionReferencesToSearchFor->firstReferenceInFunctionList;
@@ -1069,7 +1069,7 @@ CSfunctionReference * searchFunctionStringForFunctionReferences(CSfileReference 
 		#ifdef CS_DEBUG
 		//cout << "\t\tcurrentFunction->name = " << currentFunction->name << endl;
 		#endif
-		
+
 		//now search the function string for this function reference;
 		int indexToFunctionReference  = functionContentsString.find((currentFunction->name + '('));
 		if(indexToFunctionReference != -1)
@@ -1078,7 +1078,7 @@ CSfunctionReference * searchFunctionStringForFunctionReferences(CSfileReference 
 			int indexOfFunctionReferenceStartOfLine = functionContentsString.rfind("\n", indexToFunctionReference);
 			string functionReferenceWholeLine = functionContentsString.substr(indexOfFunctionReferenceStartOfLine, indexToFunctionReference-indexOfFunctionReferenceStartOfLine);
 			int functionReferenceIndentationInCfileTemp = 0;
-			
+
 			for(int i=0; i<functionReferenceWholeLine.length(); i++)
 			{
 				if(functionReferenceWholeLine[i] == CS_SOURCE_FILE_INDENTATION_CHARACTER)

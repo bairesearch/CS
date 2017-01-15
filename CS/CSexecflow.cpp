@@ -1,21 +1,21 @@
 /*******************************************************************************
- * 
+ *
  * This file is part of BAIPROJECT.
- * 
+ *
  * BAIPROJECT is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License version 3
  * only, as published by the Free Software Foundation.
- * 
+ *
  * BAIPROJECT is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License version 3 for more details
  * (a copy is included in the LICENSE file that accompanied this code).
- * 
+ *
  * You should have received a copy of the GNU Affero General Public License
  * version 3 along with BAIPROJECT.  If not, see <http://www.gnu.org/licenses/>
  * for a copy of the AGPLv3 License.
- * 
+ *
  *******************************************************************************/
 
 /*******************************************************************************
@@ -23,7 +23,7 @@
  * File Name: CSexecflow.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3d2b 14-April-2014
+ * Project Version: 3d2c 14-April-2014
  *
  *******************************************************************************/
 
@@ -47,7 +47,7 @@
 #include <fstream>
 #include <time.h>
 #include <math.h>
-#include <map>		//required for use with generateHTMLdocumentationFunctionReferenceList	
+#include <map>		//required for use with generateHTMLdocumentationFunctionReferenceList
 #include <utility>
 using namespace std;
 
@@ -61,16 +61,16 @@ using namespace std;
 void printCS(string topLevelFileName, int width, int height, string outputLDRfileName, string outputSVGfileName, string outputPPMfileName, string outputHTMLfileName, bool useOutputLDRfile, bool useOutputPPMfile, bool useOutputHTMLfile, int generateHTMLdocumentationMode, bool display, bool outputFunctionsConnectivity, bool traceFunctionUpwards, string bottomLevelFunctionNameToTraceUpwards, bool outputFileConnections, string topLevelFunctionName)
 {
 	bool result = true;
-	
+
 	bool htmlDocumentationGenerationPreventsDisplay = false;
-	
+
 	#ifdef CS_DEBUG_HTML_DOCUMENTATION
 	cout << "useOutputHTMLfile = " << int(useOutputHTMLfile) << endl;
 	cout << "outputHTMLfileName = " << outputHTMLfileName << endl;
 	cout << "generateHTMLdocumentationMode = " << generateHTMLdocumentationMode << endl;
 	cout << "traceFunctionUpwards = " << traceFunctionUpwards << endl;
 	#endif
-						
+
 	if(display)
 	{
 		initiateOpenGL(width, height, 0, 0, false);
@@ -79,7 +79,7 @@ void printCS(string topLevelFileName, int width, int height, string outputLDRfil
 	char * outputFileNameLDRcharstar = const_cast<char*>(outputLDRfileName.c_str());
 	char * displayFileNamePPMcharstar = const_cast<char*>(outputPPMfileName.c_str());
 	char * outputFileNameSVGcharstar = const_cast<char*>(outputSVGfileName.c_str());
-	
+
 	//1. for every f
 		//2. for every include f listed
 			//3. add to ref list
@@ -101,7 +101,7 @@ void printCS(string topLevelFileName, int width, int height, string outputLDRfil
 	Reference * firstReferenceInPrintList = new Reference();
 
 	setCurrentDirectory(tempFolderCharStar);
-	
+
 	XMLparserTag * firstTagInSVGFile = new XMLparserTag();
 	XMLparserTag * currentTagInSVGFile = firstTagInSVGFile;
 
@@ -123,7 +123,7 @@ void printCS(string topLevelFileName, int width, int height, string outputLDRfil
 				{
 					usePredefinedGrid = true;
 				}
-			} 
+			}
 			currentTag = currentTag->nextTag;
 		}
 		if(!usePredefinedGrid)
@@ -154,7 +154,7 @@ void printCS(string topLevelFileName, int width, int height, string outputLDRfil
 			currentReferenceInTopLevelBelowList = currentReferenceInTopLevelBelowList->next;
 		}
 		if(topLevelFunctionNameFound)
-		{		
+		{
 			//CSfunctionReference * topLevelFunctionReference = firstReferenceInTopLevelBelowList->firstReferenceInFunctionList;
 			topLevelFunctionReference->printX = firstReferenceInTopLevelBelowList->printX;
 			topLevelFunctionReference->printY = firstReferenceInTopLevelBelowList->printY;
@@ -181,7 +181,7 @@ void printCS(string topLevelFileName, int width, int height, string outputLDRfil
 				string fileNameHoldingFunction = "";
 				CSfunctionReference * bottomLevelFunctionToTraceUpwards = findPrintedFunctionReferenceWithName(bottomLevelFunctionNameToTraceUpwards, NULL, firstReferenceInTopLevelBelowList, &foundBottomLevelFunctionRef, &fileNameHoldingFunction);
 				if(foundBottomLevelFunctionRef)
-				{	
+				{
 					if(generateHTMLdocumentationMode == CS_GENERATE_HTML_DOCUMENTATION_MODE_ON)
 					{
 						if(!useOutputHTMLfile)
@@ -191,7 +191,7 @@ void printCS(string topLevelFileName, int width, int height, string outputLDRfil
 						}
 					}
 					string HTMLdocumentationFunctionNOTUSED = "";
-					generateHTMLdocumentationForFunction(currentReferenceInPrintList, firstReferenceInTopLevelBelowList, bottomLevelFunctionToTraceUpwards, fileNameHoldingFunction, &currentTagInSVGFile, generateHTMLdocumentationMode, &HTMLdocumentationFunctionNOTUSED, &outputSVGfileName, useOutputHTMLfile, outputHTMLfileName, traceFunctionUpwards);							
+					generateHTMLdocumentationForFunction(currentReferenceInPrintList, firstReferenceInTopLevelBelowList, bottomLevelFunctionToTraceUpwards, fileNameHoldingFunction, &currentTagInSVGFile, generateHTMLdocumentationMode, &HTMLdocumentationFunctionNOTUSED, &outputSVGfileName, useOutputHTMLfile, outputHTMLfileName, traceFunctionUpwards);
 				}
 				else
 				{
@@ -214,20 +214,20 @@ void printCS(string topLevelFileName, int width, int height, string outputLDRfil
 					}
 
 					string HTMLdocumentationBody = "";
-					Reference * firstReferenceInPrintListFunction = new Reference();								
+					Reference * firstReferenceInPrintListFunction = new Reference();
 					generateHTMLdocumentationForAllFunctions(firstReferenceInTopLevelBelowList, firstReferenceInPrintListFunction, firstReferenceInTopLevelBelowList, generateHTMLdocumentationMode, useOutputHTMLfile, &HTMLdocumentationBody, firstTagInSVGFile, lastTagInSVGFile, traceFunctionUpwards, usePredefinedGrid);
 					delete firstReferenceInPrintListFunction;	//should delete this, as it will contain far too many LD vector graphics references (ie a set of traced references for each function)
 					htmlDocumentationGenerationPreventsDisplay = true;	//cannot display in OpenGL/save to file, as LD vector graphics references have been deleted
 
 					if(useOutputHTMLfile)
 					{//use single html file for project (rather than unique html file per file in project)
-						string HTMLdocumentationHeader = generateHTMLdocumentationHeader("Software Project", true, false);					
+						string HTMLdocumentationHeader = generateHTMLdocumentationHeader("Software Project", true, false);
 						string HTMLdocumentationFooter = generateHTMLdocumentationFooter(true);
 						string HTMLdocumentation = HTMLdocumentationHeader + HTMLdocumentationBody + HTMLdocumentationFooter;
 						ofstream writeFileObjectHTML(outputHTMLfileName.c_str());
-						writeStringToFileObject(&HTMLdocumentation, &writeFileObjectHTML);					
-					}				
-				}		
+						writeStringToFileObject(&HTMLdocumentation, &writeFileObjectHTML);
+					}
+				}
 			}
 		}
 		else
@@ -236,16 +236,16 @@ void printCS(string topLevelFileName, int width, int height, string outputLDRfil
 			exit(0);
 		}
 	}
-	
+
 	if(!htmlDocumentationGenerationPreventsDisplay)
 	{//do not display if generating html (unless tracing single file)
-		
+
 		if(!writeSVGfile(outputFileNameSVGcharstar, firstTagInSVGFile, CS_CODE_STRUCTURE_FUNCTION_DIAGRAM_MINX, CS_CODE_STRUCTURE_FUNCTION_DIAGRAM_MAXX, CS_CODE_STRUCTURE_FUNCTION_DIAGRAM_MINY, CS_CODE_STRUCTURE_FUNCTION_DIAGRAM_MAXY))
 		{
 			result = false;
 		}
 		delete firstTagInSVGFile;
-			
+
 		if(useOutputLDRfile || display)
 		{
 			writeReferencesToFile(outputFileNameLDRcharstar, firstReferenceInPrintList);
@@ -265,7 +265,7 @@ void printCS(string topLevelFileName, int width, int height, string outputLDRfil
 				exit(0);
 			}
 			write2DreferenceListCollapsedTo1DtoFile(topLevelSceneFileNameCollapsed, initialReferenceInSceneFile);
-			
+
 
 			unsigned char * rgbMap = new unsigned char[width*height*RGB_NUM];
 
@@ -306,17 +306,17 @@ string generateHTMLdocumentationHeader(string name, bool htmlHeader, bool isFile
 	string HTMLdocumentationHeader = "";
 	if(htmlHeader)
 	{
-		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3d2b 14-April-2014<p>\n";
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3d2c 14-April-2014<p>\n";
 	}
 	else
 	{
-		HTMLdocumentationHeader = HTMLdocumentationHeader + "<h3>" + name + " Documentation</h3>\n";	
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<h3>" + name + " Documentation</h3>\n";
 	}
 	if(isFile)
 	{
 		int indexOfFileExtension = name.find(".");
 		string fileNameWithoutExtension = name.substr(0, indexOfFileExtension);
-		string HTMLdocumentationFileDescription = createDescriptionFromCaseSensitiveMultiwordString(fileNameWithoutExtension);	
+		string HTMLdocumentationFileDescription = createDescriptionFromCaseSensitiveMultiwordString(fileNameWithoutExtension);
 		HTMLdocumentationHeader = HTMLdocumentationHeader + "<p><b>File description:</b> " + HTMLdocumentationFileDescription + "</p>";
 	}
 	return HTMLdocumentationHeader;
@@ -331,7 +331,7 @@ string generateHTMLdocumentationFooter(bool htmlFileFooter)
 	}
 	else
 	{
-		HTMLdocumentationFooter = "\n";	
+		HTMLdocumentationFooter = "\n";
 	}
 	return HTMLdocumentationFooter;
 }
@@ -347,16 +347,16 @@ void writeStringToFileObject(string * s, ofstream * writeFileObject)
 void generateHTMLdocumentationForAllFunctions(CSfileReference * firstReferenceInAboveLevelBelowList, Reference * currentReferenceInPrintList, CSfileReference * firstReferenceInTopLevelBelowList, int generateHTMLdocumentationMode, bool useOutputHTMLfile, string * HTMLdocumentationBody, XMLparserTag * firstTagInSVGFile, XMLparserTag * lastTagInSVGFile, bool traceFunctionUpwards, bool usePredefinedGrid)
 {
 	bool result = true;
-	
+
 	CSfileReference * currentFileReference = firstReferenceInAboveLevelBelowList;
 
 	while(currentFileReference->next != NULL)
 	{
 		string fileNameHoldingFunction = currentFileReference->name;
 		string outputHTMLfileName = currentFileReference->name + HTML_EXTENSION;
-		
+
 		ifstream tempFileStream(outputHTMLfileName.c_str());
-		
+
 		bool passed = false;
 		if(!useOutputHTMLfile)
 		{
@@ -371,7 +371,7 @@ void generateHTMLdocumentationForAllFunctions(CSfileReference * firstReferenceIn
 		}
 		if(passed)
 		{
-		
+
 			if(!(currentFileReference->HTMLgenerated))	//this constraint doesnt work as planned
 			{//do not parse a file twice
 				currentFileReference->HTMLgenerated = true;
@@ -387,10 +387,10 @@ void generateHTMLdocumentationForAllFunctions(CSfileReference * firstReferenceIn
 				bool previousIndentationFirst = true;
 				#endif
 				bool HTMLgeneratedSafe = false;
-				
+
 				CSfunctionReference * currentFunctionReference = currentFileReference->firstReferenceInFunctionList;
 				while(currentFunctionReference->next != NULL)
-				{	
+				{
 					if(currentFunctionReference->printed)
 					{//only create connections to printed boxes
 
@@ -408,12 +408,12 @@ void generateHTMLdocumentationForAllFunctions(CSfileReference * firstReferenceIn
 							}
 
 							string HTMLdocumentationFunction = "";
-							generateHTMLdocumentationForFunction(currentReferenceInPrintList, firstReferenceInTopLevelBelowList, currentFunctionReference, fileNameHoldingFunction, &currentTagInSVGFileFunction, generateHTMLdocumentationMode, &HTMLdocumentationFunction, &outputSVGfileNameFunction, false, "", traceFunctionUpwards);		
-							HTMLdocumentationFileBody = HTMLdocumentationFileBody + HTMLdocumentationFunction; 
+							generateHTMLdocumentationForFunction(currentReferenceInPrintList, firstReferenceInTopLevelBelowList, currentFunctionReference, fileNameHoldingFunction, &currentTagInSVGFileFunction, generateHTMLdocumentationMode, &HTMLdocumentationFunction, &outputSVGfileNameFunction, false, "", traceFunctionUpwards);
+							HTMLdocumentationFileBody = HTMLdocumentationFileBody + HTMLdocumentationFunction;
 							#ifdef CS_DEBUG_HTML_DOCUMENTATION
 							//cout << "HTMLdocumentationFunction = " << HTMLdocumentationFunction << endl;
 							#endif
-							
+
 							if(traceFunctionUpwards)
 							{
 								lastTagInSVGFile->nextTag = firstTagInSVGFileFunction;
@@ -424,39 +424,39 @@ void generateHTMLdocumentationForAllFunctions(CSfileReference * firstReferenceIn
 								lastTagInSVGFile->nextTag = NULL;
 								delete firstTagInSVGFileFunction;
 							}
-							
+
 							#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION
 							addToHTMLdocumentationFileFunctionList(currentFunctionReference, &HTMLdocumentationFileFunctionList, &previousIndentation, &previousIndentationFirst);
-							#endif							
+							#endif
 						}
 					}
 
 					currentFunctionReference = currentFunctionReference->next;
 				}
-				
+
 				string HTMLdocumentationFileIntroduction = "";
 				#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION
 				for(int i=0; i<previousIndentation; i++)
 				{
-					HTMLdocumentationFileFunctionList = HTMLdocumentationFileFunctionList + "</li></ul>";		
-				}	
+					HTMLdocumentationFileFunctionList = HTMLdocumentationFileFunctionList + "</li></ul>";
+				}
 				HTMLdocumentationFileFunctionList = HTMLdocumentationFileFunctionList + "</li></ul>\n</p>";
 				HTMLdocumentationFileIntroduction = HTMLdocumentationFileIntroduction + HTMLdocumentationFileFunctionList;
 				#endif
 				#ifdef CS_HTML_DOCUMENTATION_GENERATE_FILE_CODE_STRUCTURE_DIAGRAMS
-				string outputSVGFileNameFile = currentFileReference->name + SVG_EXTENSION;				
+				string outputSVGFileNameFile = currentFileReference->name + SVG_EXTENSION;
 				generateFileDiagramFunctionsHeirachy(currentFileReference, outputSVGFileNameFile, firstReferenceInTopLevelBelowList, usePredefinedGrid);
-				string HTMLdocumentationFileImagePlaceHolder = generateHTMLdocumentationImagePlaceHolder(&outputSVGFileNameFile, "File Diagram (functions heirachy)");	
+				string HTMLdocumentationFileImagePlaceHolder = generateHTMLdocumentationImagePlaceHolder(&outputSVGFileNameFile, "File Diagram (functions heirachy)");
 				HTMLdocumentationFileIntroduction = HTMLdocumentationFileIntroduction + HTMLdocumentationFileImagePlaceHolder;
 				#endif
-				HTMLdocumentationFileBody = HTMLdocumentationFileIntroduction + HTMLdocumentationFileBody;				
-												
-				string HTMLdocumentationFileHeader = generateHTMLdocumentationHeader(currentFileReference->name, !useOutputHTMLfile, true);					
+				HTMLdocumentationFileBody = HTMLdocumentationFileIntroduction + HTMLdocumentationFileBody;
+
+				string HTMLdocumentationFileHeader = generateHTMLdocumentationHeader(currentFileReference->name, !useOutputHTMLfile, true);
 				string HTMLdocumentationFileFooter = generateHTMLdocumentationFooter(!useOutputHTMLfile);
 				string HTMLdocumentationFile = "";
 				HTMLdocumentationFile = HTMLdocumentationFile + HTMLdocumentationFileHeader + HTMLdocumentationFileBody + HTMLdocumentationFileFooter;
-		
-													
+
+
 				if(!useOutputHTMLfile)
 				{//create multiple html files (ie, a single HTML file per parsed source file)
 					#ifdef CS_DEBUG_HTML_DOCUMENTATION
@@ -480,18 +480,18 @@ void generateHTMLdocumentationForAllFunctions(CSfileReference * firstReferenceIn
 				}
 			}
 		}
-		
+
 		currentFileReference = currentFileReference->next;
 	}
 }
 
 void generateHTMLdocumentationForFunction(Reference * currentReferenceInPrintList, CSfileReference * firstReferenceInTopLevelBelowList, CSfunctionReference * bottomLevelFunctionToTraceUpwards, string fileNameHoldingFunction, XMLparserTag ** currentTag, int generateHTMLdocumentationMode, string * HTMLdocumentationFunctionBody, string * outputSVGfileNameFunction, bool useOutputHTMLfile, string outputHTMLfileName, bool traceFunctionUpwards)
-{			
+{
 	if(generateHTMLdocumentationMode == CS_GENERATE_HTML_DOCUMENTATION_MODE_OFF)
 	{
 		#ifdef CS_DISPLAY_INCLUDE_FILE_PARSING
 		cout << "\nStart Trace upwards: \t\t" << fileNameHoldingFunction << "\t\t" << bottomLevelFunctionToTraceUpwards->name << "()" << endl;
-		cout << bottomLevelFunctionToTraceUpwards->nameFull << endl;					
+		cout << bottomLevelFunctionToTraceUpwards->nameFull << endl;
 		#endif
 	}
 
@@ -499,24 +499,24 @@ void generateHTMLdocumentationForFunction(Reference * currentReferenceInPrintLis
 	if(traceFunctionUpwards)
 	{
 		currentReferenceInPrintList = traceFunctionsUpwardsAndDrawOrHighLightThese(currentReferenceInPrintList, firstReferenceInTopLevelBelowList, bottomLevelFunctionToTraceUpwards, currentTag, generateHTMLdocumentationMode, &HTMLdocumentationFunctionTraceTableRows);
-	
+
 		traceFunctionsUpwardsAndDrawOrHighLightTheseReset(firstReferenceInTopLevelBelowList, bottomLevelFunctionToTraceUpwards);	//this is required for multiple traces per CS execution
 	}
-	
+
 	if(generateHTMLdocumentationMode == CS_GENERATE_HTML_DOCUMENTATION_MODE_ON)
 	{
 		#ifdef CS_DEBUG_HTML_DOCUMENTATION
 		//cout << "bottomLevelFunctionToTraceUpwards->name = " << bottomLevelFunctionToTraceUpwards->name << endl;
 		//cout << "bottomLevelFunctionToTraceUpwards->nameFull = " << bottomLevelFunctionToTraceUpwards->nameFull << endl;
 		#endif
-		
+
 		string HTMLdocumentationFunctionTitle = "";
 		HTMLdocumentationFunctionTitle = HTMLdocumentationFunctionTitle + "<h4>" + (bottomLevelFunctionToTraceUpwards->name) + "()</h4>";
-		string HTMLdocumentationFunctionSummary = "";		
+		string HTMLdocumentationFunctionSummary = "";
 		#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_SUMMARY
 		generateHTMLdocumentationFunctionSummary(&(bottomLevelFunctionToTraceUpwards->name), &(bottomLevelFunctionToTraceUpwards->nameFull), &HTMLdocumentationFunctionSummary);
 		#endif
-			
+
 		string HTMLdocumentationFunctionInputArguments = "";
 		generateHTMLdocumentationFunctionInputArguments(&(bottomLevelFunctionToTraceUpwards->name), &(bottomLevelFunctionToTraceUpwards->nameFull), &HTMLdocumentationFunctionInputArguments);
 
@@ -526,32 +526,32 @@ void generateHTMLdocumentationForFunction(Reference * currentReferenceInPrintLis
 		#endif
 
 		*HTMLdocumentationFunctionBody = *HTMLdocumentationFunctionBody + HTMLdocumentationFunctionTitle + HTMLdocumentationFunctionSummary + HTMLdocumentationFunctionInputArguments + HTMLdocumentationFunctionReferenceList + "<br />";
-		
+
 		if(traceFunctionUpwards)
 		{
 			string HTMLdocumentationFunctionTraceTableHeader = "";
 			string HTMLdocumentationFunctionTraceTableFooter = "";
 			HTMLdocumentationFunctionTraceTableHeader = HTMLdocumentationFunctionTraceTableHeader + "\t<b>Function Trace</b><br /><table border=\"1\"><tr><th>" + "location" + "</th><th>" + "current function being traced" + "</th></tr>\n";
-			HTMLdocumentationFunctionTraceTableFooter = HTMLdocumentationFunctionTraceTableFooter + "\t</table>";					
+			HTMLdocumentationFunctionTraceTableFooter = HTMLdocumentationFunctionTraceTableFooter + "\t</table>";
 			string HTMLdocumentationFunctionTraceTable = HTMLdocumentationFunctionTraceTableHeader + HTMLdocumentationFunctionTraceTableRows + HTMLdocumentationFunctionTraceTableFooter;
-		
-			string HTMLdocumentationFunctionTraceImagePlaceHolder = generateHTMLdocumentationImagePlaceHolder(outputSVGfileNameFunction, "Trace Diagram (magenta)");	
-			
-			*HTMLdocumentationFunctionBody = *HTMLdocumentationFunctionBody +  HTMLdocumentationFunctionTraceTable + HTMLdocumentationFunctionTraceImagePlaceHolder;			
+
+			string HTMLdocumentationFunctionTraceImagePlaceHolder = generateHTMLdocumentationImagePlaceHolder(outputSVGfileNameFunction, "Trace Diagram (magenta)");
+
+			*HTMLdocumentationFunctionBody = *HTMLdocumentationFunctionBody +  HTMLdocumentationFunctionTraceTable + HTMLdocumentationFunctionTraceImagePlaceHolder;
 		}
-				
+
 		if(useOutputHTMLfile)
 		{//use single html file for function
-			string HTMLdocumentationFunctionHeader = generateHTMLdocumentationHeader(bottomLevelFunctionToTraceUpwards->name, true, false);					
-			string HTMLdocumentationFunctionFooter = generateHTMLdocumentationFooter(true);	
+			string HTMLdocumentationFunctionHeader = generateHTMLdocumentationHeader(bottomLevelFunctionToTraceUpwards->name, true, false);
+			string HTMLdocumentationFunctionFooter = generateHTMLdocumentationFooter(true);
 			string HTMLdocumentationFunction = HTMLdocumentationFunctionHeader + *HTMLdocumentationFunctionBody + HTMLdocumentationFunctionFooter;
 
 			ofstream writeFileObjectHTML(outputHTMLfileName.c_str());
 			writeStringToFileObject(&HTMLdocumentationFunction, &writeFileObjectHTML);
-		}	
+		}
 	}
 
-	
+
 }
 
 void generateHTMLdocumentationFunctionSummary(string * functionName, string * functionNameFull, string * HTMLdocumentationFunctionSummary)
@@ -574,12 +574,12 @@ void generateHTMLdocumentationFunctionInputArguments(string * functionName, stri
 {
 	*HTMLdocumentationFunctionInputArguments = "";
 	#ifdef CS_GENERATE_CLASS_HTML_DOCUMENTATION_FROM_CUSTOM_CSCLASS_FORMAT
-	*HTMLdocumentationFunctionInputArguments = *HTMLdocumentationFunctionInputArguments + "\t<b>Class Data</b><br />";	
+	*HTMLdocumentationFunctionInputArguments = *HTMLdocumentationFunctionInputArguments + "\t<b>Class Data</b><br />";
 	#else
 	*HTMLdocumentationFunctionInputArguments = *HTMLdocumentationFunctionInputArguments + "\t<b>Function Arguments</b><br />";
 	#endif
 	*HTMLdocumentationFunctionInputArguments = *HTMLdocumentationFunctionInputArguments + "<table border=\"1\">\n\t\t<tr><th>" + "name" + "</th><th>" + "type" + "</th><th>" + "description" + "</th></tr>\n";
-	
+
 	int startPositionOfFunctionBrackets = functionNameFull->find(CHAR_OPEN_BRACKET);
 	int endPositionOfFunctionBrackets = functionNameFull->find(CHAR_CLOSE_BRACKET);
 	bool functionHasArguments = false;
@@ -592,7 +592,7 @@ void generateHTMLdocumentationFunctionInputArguments(string * functionName, stri
 		#ifdef CS_DEBUG_HTML_DOCUMENTATION
 		cout << "functionHasArguments: functionNameFull = " << *functionNameFull << endl;
 		#endif
-		
+
 		int startPositionOfFunctionArguments = startPositionOfFunctionBrackets+1;
 		int endPositionOfFunctionArguments = endPositionOfFunctionBrackets-1;
 		string functionArgumentsRaw = functionNameFull->substr(startPositionOfFunctionArguments, endPositionOfFunctionArguments-startPositionOfFunctionArguments+1);
@@ -610,16 +610,16 @@ void generateHTMLdocumentationFunctionInputArguments(string * functionName, stri
 		{
 			endPositionOfArgument = endPositionOfArgument-1;
 		}
-		
+
 		while(stillParsingArguments)
 		{
 			if(lastArgument)
 			{
 				stillParsingArguments = false;
 			}
-					
+
 			string currentArgument = functionArgumentsRaw.substr(startPositionOfArgument, endPositionOfArgument-startPositionOfArgument+1);
-			
+
 			int startPositionOfArgumentName = currentArgument.rfind(CHAR_SPACE) + 1;	//last space
 			if(startPositionOfArgumentName == string::npos)
 			{
@@ -629,34 +629,34 @@ void generateHTMLdocumentationFunctionInputArguments(string * functionName, stri
 			string currentArgumentName = currentArgument.substr(startPositionOfArgumentName, endPositionOfArgument-startPositionOfArgumentName+1);
 			string currentArgumentType = currentArgument.substr(0, startPositionOfArgumentName);
 			string currentArgumentDescription = createDescriptionFromCaseSensitiveMultiwordString(currentArgumentName);
-			
+
 			#ifdef CS_DEBUG_HTML_DOCUMENTATION
 			/*
 			if(*functionName == "...")
 			{
 				cout << "functionArgumentsRaw = " << functionArgumentsRaw << endl;
 				cout << "startPositionOfArgument = " << startPositionOfArgument << endl;
-				cout << "endPositionOfArgument = " << endPositionOfArgument << endl;		      
+				cout << "endPositionOfArgument = " << endPositionOfArgument << endl;
 				cout << "currentArgument = " << currentArgument << endl;
 				cout << "startPositionOfArgumentName = " << startPositionOfArgumentName << endl;
 				cout << "currentArgumentName = " << currentArgumentName << endl;
 				cout << "currentArgumentType = " << currentArgumentType << endl;
-				cout << "currentArgumentDescription = " << currentArgumentDescription << endl;				
+				cout << "currentArgumentDescription = " << currentArgumentDescription << endl;
 				cout << "currentArgumentTypeLength = " << startPositionOfArgumentName << endl;
 			}
-			*/		
+			*/
 			#endif
-			
+
 			currentArgumentName = ensureHTMLTagSafe(currentArgumentName);
 			currentArgumentType = ensureHTMLTagSafe(currentArgumentType);
 			currentArgumentDescription = ensureHTMLTagSafe(currentArgumentDescription);
-			
+
 			string HTMLdocumentationFunctionInputArgumentsRow = "\t\t<tr><td>" + currentArgumentName + "</td><td>" + currentArgumentType + "</td><td>" + currentArgumentDescription + "</td></tr>\n";
 			*HTMLdocumentationFunctionInputArguments = *HTMLdocumentationFunctionInputArguments + HTMLdocumentationFunctionInputArgumentsRow;
-			
+
 			startPositionOfArgument = endPositionOfArgument+2;
 			endPositionOfArgument = findEndPositionOfArgument(&functionArgumentsRaw, startPositionOfArgument);
-				
+
 			if(endPositionOfArgument == string::npos)
 			{
 				lastArgument = true;
@@ -665,7 +665,7 @@ void generateHTMLdocumentationFunctionInputArguments(string * functionName, stri
 			else
 			{
 				endPositionOfArgument = endPositionOfArgument-1;
-			}			
+			}
 		}
 		#ifdef CS_DEBUG_HTML_DOCUMENTATION
 		/*
@@ -673,16 +673,16 @@ void generateHTMLdocumentationFunctionInputArguments(string * functionName, stri
 		{
 			exit(0);
 		}
-		*/		
+		*/
 		#endif
 	}
 	else
 	{
 		#ifdef CS_DEBUG_HTML_DOCUMENTATION
 		cout << "!functionHasArguments: functionNameFull = " << *functionNameFull << endl;
-		#endif	
+		#endif
 	}
-	
+
 	*HTMLdocumentationFunctionInputArguments = *HTMLdocumentationFunctionInputArguments + "\t</table>\n";
 	#ifdef CS_DEBUG_HTML_DOCUMENTATION
 	cout << "HTMLdocumentationFunctionInputArguments: " << *HTMLdocumentationFunctionInputArguments << endl;
@@ -764,7 +764,7 @@ string createDescriptionFromCaseSensitiveMultiwordString(string str)
 		}
 		description = description + characterToAdd;
 	}
-	return description;	
+	return description;
 }
 
 
@@ -775,7 +775,7 @@ int findEndPositionOfArgument(string * functionArgumentsRaw, int startPositionOf
 	//cout << "functionArgumentsRaw = " << *functionArgumentsRaw << endl;
 	//cout << "startPositionOfArgument = " << startPositionOfArgument << endl;
 	#endif
-	
+
 	int startPositionOfArgumentTemp = startPositionOfArgument;
 	bool stillFindingEndPositionOfArgument = true;
 	int endPositionOfArgument = -1;
@@ -785,13 +785,13 @@ int findEndPositionOfArgument(string * functionArgumentsRaw, int startPositionOf
 		#ifdef CS_DEBUG_HTML_DOCUMENTATION
 		//cout << "endPositionOfArgument = " << endPositionOfArgument << endl;
 		#endif
-		
+
 		if(endPositionOfArgument == string::npos)
 		{
 			stillFindingEndPositionOfArgument = false;
 		}
 		else
-		{		
+		{
 			int nextPositionOfClassTypeOpenTag = functionArgumentsRaw->find(CLASS_TYPE_OPEN_TAG, startPositionOfArgumentTemp);	//find next comma
 			int nextPositionOfClassTypeCloseTag = functionArgumentsRaw->find(CLASS_TYPE_CLOSE_TAG, startPositionOfArgumentTemp);	//find next comma
 			if(nextPositionOfClassTypeOpenTag == string::npos)
@@ -803,16 +803,16 @@ int findEndPositionOfArgument(string * functionArgumentsRaw, int startPositionOf
 				if(nextPositionOfClassTypeOpenTag < endPositionOfArgument)
 				{
 					bool foundCloseTag = false;
-					
+
 					if(nextPositionOfClassTypeCloseTag != string::npos)
 					{
 						if(nextPositionOfClassTypeCloseTag < endPositionOfArgument)
-						{					
+						{
 							foundCloseTag = true;
 						}
-					}	
+					}
 					if(!foundCloseTag)
-					{				
+					{
 						startPositionOfArgumentTemp = endPositionOfArgument+1;
 						#ifdef CS_DEBUG_HTML_DOCUMENTATION
 						//cout << "startPositionOfArgumentTemp = " << startPositionOfArgumentTemp << endl;
@@ -828,7 +828,7 @@ int findEndPositionOfArgument(string * functionArgumentsRaw, int startPositionOf
 					stillFindingEndPositionOfArgument = false;
 				}
 			}
-		}		
+		}
 	}
 	return endPositionOfArgument;
 }
@@ -836,7 +836,7 @@ int findEndPositionOfArgument(string * functionArgumentsRaw, int startPositionOf
 void generateHTMLdocumentationFunctionReferenceList(CSfunctionReference * function, string * HTMLdocumentationFunctionReferenceList)
 {
 	//generate list
-	
+
 	*HTMLdocumentationFunctionReferenceList = "";
 	*HTMLdocumentationFunctionReferenceList = *HTMLdocumentationFunctionReferenceList + "\t<p><b>Function Reference List</b><br />\n";
 	CSfunctionReference * currentReferenceInFunctionReferenceList = function->firstReferenceInFunctionReferenceList;
@@ -848,11 +848,11 @@ void generateHTMLdocumentationFunctionReferenceList(CSfunctionReference * functi
 	#endif
 	int referenceIndex=0;
 	bool foundReferences = false;
-	
+
 	map<int, CSfunctionReference*> CSfunctionReferenceListOrdered;
 	while(currentReferenceInFunctionReferenceList->next != NULL)
 	{
-		//check reference has not already been added (NB if the reference is the function name itself - it may be a comment and not actually indicate recursion) 
+		//check reference has not already been added (NB if the reference is the function name itself - it may be a comment and not actually indicate recursion)
 		CSfunctionReference * currentReferenceInFunctionReferenceListTemp = function->firstReferenceInFunctionReferenceList;
 		int referenceIndexTemp = 0;
 		bool alreadyRecordedReference = false;
@@ -868,12 +868,12 @@ void generateHTMLdocumentationFunctionReferenceList(CSfunctionReference * functi
 		}
 
 		if(!alreadyRecordedReference)
-		{	
+		{
 			//now find all instances of the reference in the function text, and for each instance found add to CSfunctionReferenceListOrdered
 			int startPosOfFunctionReferenceInFunction = 0;
 			//cout << "function->functionText = " << function->functionText << endl;
 			while(std::string::npos != (startPosOfFunctionReferenceInFunction = (function->functionText).find(currentReferenceInFunctionReferenceList->name + '(', startPosOfFunctionReferenceInFunction)))
-			{	
+			{
 				//cout << "startPosOfFunctionReferenceInFunction = " << startPosOfFunctionReferenceInFunction << endl;
 				int functionCharacterIndexOfReference = startPosOfFunctionReferenceInFunction;
 				CSfunctionReferenceListOrdered.insert(pair<int, CSfunctionReference*>(functionCharacterIndexOfReference, currentReferenceInFunctionReferenceList));
@@ -884,51 +884,51 @@ void generateHTMLdocumentationFunctionReferenceList(CSfunctionReference * functi
 
 		currentReferenceInFunctionReferenceList = currentReferenceInFunctionReferenceList->next;
 		referenceIndex++;
-		
+
 	}
-	
+
 	for(map<int, CSfunctionReference*>::iterator CSfunctionReferenceListOrderedIter = CSfunctionReferenceListOrdered.begin(); CSfunctionReferenceListOrderedIter != CSfunctionReferenceListOrdered.end(); CSfunctionReferenceListOrderedIter++)
-	{		
+	{
 		CSfunctionReference * currentReferenceInFunctionReferenceList = CSfunctionReferenceListOrderedIter->second;
-		
+
 	#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST_WITH_INDENTATION_ADVANCED
 		addToHTMLdocumentationFileFunctionList(currentReferenceInFunctionReferenceList, &HTMLdocumentationFunctionReferenceListBody, &previousIndentation, &previousIndentationFirst);
-		//cout << "currentReferenceInFunctionReferenceList->name = " << currentReferenceInFunctionReferenceList->name << endl;		
-		//cout << "HTMLdocumentationFunctionReferenceList = " << *HTMLdocumentationFunctionReferenceList << endl;		
+		//cout << "currentReferenceInFunctionReferenceList->name = " << currentReferenceInFunctionReferenceList->name << endl;
+		//cout << "HTMLdocumentationFunctionReferenceList = " << *HTMLdocumentationFunctionReferenceList << endl;
 	#else
 		#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST_WITH_INDENTATION
-		HTMLdocumentationFunctionReferenceListBody = HTMLdocumentationFunctionReferenceListBody + "\t\t<li>";		
+		HTMLdocumentationFunctionReferenceListBody = HTMLdocumentationFunctionReferenceListBody + "\t\t<li>";
 		for(int i=0; i<currentReferenceInFunctionReferenceList->functionReferenceIndentation; i++)
 		{
 			HTMLdocumentationFunctionReferenceListBody = HTMLdocumentationFunctionReferenceListBody + "&#160&#160&#160&#160&#160";
 		}
-		HTMLdocumentationFunctionReferenceListBody = HTMLdocumentationFunctionReferenceListBody + currentReferenceInFunctionReferenceList->name + "</li>\n";				
+		HTMLdocumentationFunctionReferenceListBody = HTMLdocumentationFunctionReferenceListBody + currentReferenceInFunctionReferenceList->name + "</li>\n";
 		#else
-		HTMLdocumentationFunctionReferenceListBody = HTMLdocumentationFunctionReferenceListBody + "\t\t<li>" + currentReferenceInFunctionReferenceList->name + "</li>\n";		
+		HTMLdocumentationFunctionReferenceListBody = HTMLdocumentationFunctionReferenceListBody + "\t\t<li>" + currentReferenceInFunctionReferenceList->name + "</li>\n";
 		#endif
-	#endif	
+	#endif
 	}
-	
-		
+
+
 	#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST_WITH_INDENTATION_ADVANCED
 	for(int i=0; i<previousIndentation; i++)
 	{
-		HTMLdocumentationFunctionReferenceListBody = HTMLdocumentationFunctionReferenceListBody + "</li></ul>";		
-	}	
+		HTMLdocumentationFunctionReferenceListBody = HTMLdocumentationFunctionReferenceListBody + "</li></ul>";
+	}
 	HTMLdocumentationFunctionReferenceListBody = HTMLdocumentationFunctionReferenceListBody + "</li>\n";
-	#endif	
-	HTMLdocumentationFunctionReferenceListBody = HTMLdocumentationFunctionReferenceListBody + "\t</ul>";					
-					
+	#endif
+	HTMLdocumentationFunctionReferenceListBody = HTMLdocumentationFunctionReferenceListBody + "\t</ul>";
+
 	if(foundReferences)
-	{	
+	{
 		*HTMLdocumentationFunctionReferenceList = *HTMLdocumentationFunctionReferenceList + HTMLdocumentationFunctionReferenceListBody;
 	}
 	else
 	{
-		*HTMLdocumentationFunctionReferenceList = *HTMLdocumentationFunctionReferenceList + "N/A";	
+		*HTMLdocumentationFunctionReferenceList = *HTMLdocumentationFunctionReferenceList + "N/A";
 	}
 	*HTMLdocumentationFunctionReferenceList = *HTMLdocumentationFunctionReferenceList + "</p>\n";
-	
+
 	//exit(0);
 	#ifdef CS_DEBUG_HTML_DOCUMENTATION
 	cout << "HTMLdocumentationFunctionReferenceList: " << *HTMLdocumentationFunctionReferenceList << endl;
@@ -946,27 +946,27 @@ string generateHTMLdocumentationImagePlaceHolder(string * traceImageFileName, st
 void addToHTMLdocumentationIndentedList(string currentFunctionReferenceName, int currentFunctionReferenceIndentation, string * HTMLdocumentationFileFunctionList, int * previousIndentation, bool * previousIndentationFirst)
 {
 	string functionNameCompact = currentFunctionReferenceName;	// + "()";
-	
+
 	int differenceBetweenPreviousIndentation = currentFunctionReferenceIndentation - *previousIndentation;
 	string rawIndentationText = "\n";
 	for(int i=0; i<currentFunctionReferenceIndentation; i++)
 	{
-		rawIndentationText = rawIndentationText + "\t";	
+		rawIndentationText = rawIndentationText + "\t";
 	}
 	if(differenceBetweenPreviousIndentation > 0)
-	{	
+	{
 		for(int i=0; i<differenceBetweenPreviousIndentation; i++)
 		{
-			*HTMLdocumentationFileFunctionList = *HTMLdocumentationFileFunctionList + rawIndentationText + "<ul><li>";	
-		}	
-		*HTMLdocumentationFileFunctionList = *HTMLdocumentationFileFunctionList + functionNameCompact;							
+			*HTMLdocumentationFileFunctionList = *HTMLdocumentationFileFunctionList + rawIndentationText + "<ul><li>";
+		}
+		*HTMLdocumentationFileFunctionList = *HTMLdocumentationFileFunctionList + functionNameCompact;
 	}
 	else if(differenceBetweenPreviousIndentation < 0)
 	{
 		for(int i=0; i<abs(differenceBetweenPreviousIndentation); i++)
 		{
-			*HTMLdocumentationFileFunctionList = *HTMLdocumentationFileFunctionList + "</li></ul>";		
-		}	
+			*HTMLdocumentationFileFunctionList = *HTMLdocumentationFileFunctionList + "</li></ul>";
+		}
 		*HTMLdocumentationFileFunctionList = *HTMLdocumentationFileFunctionList + "</li>" + rawIndentationText + "<li>" + functionNameCompact;
 	}
 	else
@@ -992,7 +992,7 @@ void addToHTMLdocumentationFileFunctionList(CSfunctionReference * currentFunctio
 
 
 
-		
+
 void generateFileDiagramFunctionsHeirachy(CSfileReference * currentFileReference, string outputSVGFileNameFile, CSfileReference * firstReferenceInTopLevelBelowList, bool usePredefinedGrid)
 {
 	bool result = true;
@@ -1000,7 +1000,7 @@ void generateFileDiagramFunctionsHeirachy(CSfileReference * currentFileReference
 	ifstream tempFileStream(outputSVGFileNameFile.c_str());
 	if(!(tempFileStream.good()))
 	{//file does not exist
-			
+
 		initiateMaxXatParticularY();
 		Reference * firstReferenceInPrintList = new Reference();
 		Reference * currentReferenceInPrintList = firstReferenceInPrintList;
@@ -1019,7 +1019,7 @@ void generateFileDiagramFunctionsHeirachy(CSfileReference * currentFileReference
 		while(currentTopLevelFunctionReference->next != NULL)
 		{
 			if(currentTopLevelFunctionReference->printed)
-			{		
+			{
 				//cout << currentTopLevelFunctionReference->name << endl;
 				//cout << "currentTopLevelFunctionReference->name = " << currentTopLevelFunctionReference->name << endl;
 				CSfunctionReference * currentReferenceInFunctionReferenceList = currentTopLevelFunctionReference->firstReferenceInFunctionReferenceList;
@@ -1035,12 +1035,12 @@ void generateFileDiagramFunctionsHeirachy(CSfileReference * currentFileReference
 			currentTopLevelFunctionReference = currentTopLevelFunctionReference->next;
 		}
 
-		char * outputFileNameSVGcharstar = const_cast<char*>(outputSVGFileNameFile.c_str());	
+		char * outputFileNameSVGcharstar = const_cast<char*>(outputSVGFileNameFile.c_str());
 		if(!writeSVGfile(outputFileNameSVGcharstar, firstTagInSVGFile, CS_CODE_STRUCTURE_SINGLE_FILE_DIAGRAM_MINX, CS_CODE_STRUCTURE_SINGLE_FILE_DIAGRAM_MAXX, CS_CODE_STRUCTURE_SINGLE_FILE_DIAGRAM_MINY, CS_CODE_STRUCTURE_SINGLE_FILE_DIAGRAM_MAXY))
 		{
 			result = false;
 		}
-	}	
+	}
 }
 
 #ifdef CS_GENERATE_CLASS_HTML_DOCUMENTATION_FROM_CUSTOM_CSCLASS_FORMAT
@@ -1052,21 +1052,21 @@ void generateClassHTMLdocumentationFromCustomCSclassFormat()
 	{
 		string CSclassFileName = CSclassesArray[i];
 		cout << "CSclassFileName = " << CSclassFileName << endl;
-		
+
 		ifstream CSclassFileObject(CSclassFileName.c_str());
 
 		if(!CSclassFileObject.rdbuf( )->is_open( ))
 		{
 			//xml file does not exist in current directory.
 			cout << "Error: CSclass File does not exist in current directory: " << CSclassFileName << endl;
-			result = false;		
+			result = false;
 		}
 		else
 		{
 			string HTMLdocumentationFileBody = "";
-			
+
 			string currentClassBeingParsed = "";
-			bool finishedParsingObject = false;	
+			bool finishedParsingObject = false;
 			char currentToken;
 			while((currentToken = (&CSclassFileObject)->get()) != EOF)
 			{
@@ -1079,15 +1079,15 @@ void generateClassHTMLdocumentationFromCustomCSclassFormat()
 					string HTMLdocumentationClassParameters = "";
 					string functionNameNOTUSED = "";
 					generateHTMLdocumentationFunctionInputArguments(&functionNameNOTUSED, &currentClassBeingParsed, &HTMLdocumentationClassParameters);
-					currentClassBeingParsed = "";	
-					
+					currentClassBeingParsed = "";
+
 					string HTMLdocumentationClassTitle = "";
 					HTMLdocumentationClassTitle = HTMLdocumentationClassTitle + "<h4>Class " + className + "</h4>\n";
 					string HTMLdocumentationClassHeader = "";
 					HTMLdocumentationClassHeader = HTMLdocumentationClassHeader + "<p><b>Class description:</b> " + HTMLdocumentationClassDescription + "</p>\n";
-					
+
 					HTMLdocumentationFileBody = HTMLdocumentationFileBody + HTMLdocumentationClassTitle + HTMLdocumentationClassHeader + HTMLdocumentationClassParameters;
-				
+
 					//cout << "HTMLdocumentationFileBody = " << HTMLdocumentationFileBody << endl;
 				}
 				else
@@ -1095,31 +1095,31 @@ void generateClassHTMLdocumentationFromCustomCSclassFormat()
 					currentClassBeingParsed = currentClassBeingParsed + currentToken;
 				}
 			}
-			
+
 			CSclassFileObject.close();
-			
-			string HTMLdocumentationFileHeader = generateHTMLdocumentationHeader(CSclassFileName, true, false);					
+
+			string HTMLdocumentationFileHeader = generateHTMLdocumentationHeader(CSclassFileName, true, false);
 			string HTMLdocumentationFileFooter = generateHTMLdocumentationFooter(true);
 			string HTMLdocumentationFile = "";
 			HTMLdocumentationFile = HTMLdocumentationFile + HTMLdocumentationFileHeader + HTMLdocumentationFileBody + HTMLdocumentationFileFooter;
-				
+
 			string outputHTMLfileName = CSclassFileName + HTML_EXTENSION;
 			ofstream writeFileObjectHTML(outputHTMLfileName.c_str());
 			writeStringToFileObject(&HTMLdocumentationFile, &writeFileObjectHTML);
-					
 
-		}	
+
+		}
 	}
 }
 
 string getFunctionNameFromFunctionNameFull(string * functionNameFull)
-{	
+{
 	//cout << "functionNameFull = " << *functionNameFull << endl;
 
 	int startPositionOfFunctionBrackets = functionNameFull->find(CHAR_OPEN_BRACKET);
 	string functionTypeAndName = functionNameFull->substr(0, startPositionOfFunctionBrackets);
 	//cout << "functionTypeAndName = " << functionTypeAndName << endl;
-	
+
 	int startPositionOfFunctionName = functionTypeAndName.rfind(CHAR_SPACE) + 1;
 	string functionName = functionTypeAndName.substr(startPositionOfFunctionName, functionTypeAndName.length()-startPositionOfFunctionName);
 	#ifdef CS_SUPPORT_FUNCTION_RETURN_POINTERS
@@ -1130,11 +1130,11 @@ string getFunctionNameFromFunctionNameFull(string * functionNameFull)
 	}
 	#endif
 	//cout << "functionName = " << functionName << endl;
-										
+
 	return functionName;
 }
 
-#endif			
+#endif
 
 
 
@@ -1146,7 +1146,7 @@ void convertIndentedListToHTMLlist()
 {
 	string indentedListFileName = "requirementsLayout.txt";
 	string htmlListFileName = string("requirementsLayout") + HTML_EXTENSION;
-	
+
 	vector<string> indentedListVector;
 	if(readIndentedListFile(indentedListFileName, &indentedListVector))
 	{
@@ -1154,14 +1154,14 @@ void convertIndentedListToHTMLlist()
 		generateHTMLdocumentationIndentedList(&indentedListVector, &HTMLdocumentationIndentedList);
 
 		ofstream writeFileObjectHTML(htmlListFileName.c_str());
-		writeStringToFileObject(&HTMLdocumentationIndentedList, &writeFileObjectHTML);	
+		writeStringToFileObject(&HTMLdocumentationIndentedList, &writeFileObjectHTML);
 	}
 }
 
 bool readIndentedListFile(string indentedListFileName, vector<string> * indentedListVector)
 {
 	bool result = true;
-	
+
 	ifstream parseFileObject(indentedListFileName.c_str());
 	if(!parseFileObject.rdbuf( )->is_open( ))
 	{
@@ -1193,11 +1193,11 @@ bool readIndentedListFile(string indentedListFileName, vector<string> * indented
 		}
 		parseFileObject.close();
 	}
-	
+
 	return result;
 }
 
-//generic software to convert an indented list into an HTML list 
+//generic software to convert an indented list into an HTML list
 void generateHTMLdocumentationIndentedList(vector<string> * indentedListVector, string * HTMLdocumentationIndentationList)
 {
 	//generate list
@@ -1211,11 +1211,11 @@ void generateHTMLdocumentationIndentedList(vector<string> * indentedListVector, 
 	bool foundReferences = false;
 
 	for(vector<string>::iterator indentedListVectorIter = indentedListVector->begin(); indentedListVectorIter != indentedListVector->end(); indentedListVectorIter++)
-	{	
+	{
 		foundReferences = true;
-			
+
 		string currentEntry = *indentedListVectorIter;
-		int currentEntryLengthOld = currentEntry.length(); 
+		int currentEntryLengthOld = currentEntry.length();
 		int indentationLevel=0;
 		while(currentEntry[indentationLevel] == CHAR_TAB)
 		{
@@ -1224,29 +1224,29 @@ void generateHTMLdocumentationIndentedList(vector<string> * indentedListVector, 
 		currentEntry = currentEntry.substr(indentationLevel, currentEntryLengthOld-indentationLevel);
 		//cout << "2. currentEntry = " << currentEntry << endl;
 		//cout << "indentationLevel = " << indentationLevel << endl;
-		
+
 		addToHTMLdocumentationIndentedList(currentEntry, indentationLevel, &HTMLdocumentationIndentationListBody, &previousIndentation, &previousIndentationFirst);
-		//cout << "HTMLdocumentationIndentationListBody = " << HTMLdocumentationIndentationListBody << endl;		
+		//cout << "HTMLdocumentationIndentationListBody = " << HTMLdocumentationIndentationListBody << endl;
 
 	}
-	
+
 	for(int i=0; i<previousIndentation; i++)
 	{
-		HTMLdocumentationIndentationListBody = HTMLdocumentationIndentationListBody + "</li></ul>";		
-	}	
+		HTMLdocumentationIndentationListBody = HTMLdocumentationIndentationListBody + "</li></ul>";
+	}
 	HTMLdocumentationIndentationListBody = HTMLdocumentationIndentationListBody + "</li>\n";
-	HTMLdocumentationIndentationListBody = HTMLdocumentationIndentationListBody + "\t</ul>";					
-					
+	HTMLdocumentationIndentationListBody = HTMLdocumentationIndentationListBody + "\t</ul>";
+
 	if(foundReferences)
-	{	
+	{
 		*HTMLdocumentationIndentationList = *HTMLdocumentationIndentationList + HTMLdocumentationIndentationListBody;
 	}
 	else
 	{
-		*HTMLdocumentationIndentationList = *HTMLdocumentationIndentationList + "N/A";	
+		*HTMLdocumentationIndentationList = *HTMLdocumentationIndentationList + "N/A";
 	}
 	*HTMLdocumentationIndentationList = *HTMLdocumentationIndentationList + "</p>\n";
-		
+
 	//cout << "HTMLdocumentationIndentationList: " << *HTMLdocumentationIndentationList << endl;
 }
 #endif

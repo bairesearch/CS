@@ -1,21 +1,21 @@
 /*******************************************************************************
- * 
+ *
  * This file is part of BAIPROJECT.
- * 
+ *
  * BAIPROJECT is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License version 3
  * only, as published by the Free Software Foundation.
- * 
+ *
  * BAIPROJECT is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License version 3 for more details
  * (a copy is included in the LICENSE file that accompanied this code).
- * 
+ *
  * You should have received a copy of the GNU Affero General Public License
  * version 3 along with BAIPROJECT.  If not, see <http://www.gnu.org/licenses/>
  * for a copy of the AGPLv3 License.
- * 
+ *
  *******************************************************************************/
 
 /*******************************************************************************
@@ -23,7 +23,7 @@
  * File Name: CSreferenceClass.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3d2b 14-April-2014
+ * Project Version: 3d2c 14-April-2014
  *
  *******************************************************************************/
 
@@ -59,15 +59,15 @@ CSfileReference::CSfileReference(void)
 	printXIndex = 0;
 	printYIndex = 0;
 	printTextX = 0;
-	printTextY = 0;	
+	printTextY = 0;
 	HTMLgenerated = false;
-	
+
 	next = NULL;
 	previous = NULL;
 	firstReferenceContainerInAboveReferenceList = new CSfileReferenceContainer();
 	printedTrace = false;
 	printedTraceReset = false;
-	
+
 	//file reference only
 	firstReferenceInAboveList = NULL;
 	firstReferenceInBelowList = NULL;
@@ -123,7 +123,7 @@ CSfunctionReference::CSfunctionReference(void)
 	printed = false;
 	#ifdef CS_HTML_DOCUMENTATION_GENERATE_FILE_CODE_STRUCTURE_DIAGRAMS
 	singleFileOnlyPrinted = false;
-	#endif	
+	#endif
 	printX = 0;
 	printY = 0;
 	printXIndex = 0;
@@ -131,9 +131,9 @@ CSfunctionReference::CSfunctionReference(void)
 	printTextX = 0;
 	printTextY = 0;
 	filePrintXrecordForSingleFileOnly = 0;
-	filePrintYrecordForSingleFileOnly = 0;	
+	filePrintYrecordForSingleFileOnly = 0;
 	HTMLgenerated = false;
-	
+
 	next = NULL;
 	previous = NULL;
 	firstReferenceContainerInAboveReferenceList = new CSfunctionReferenceContainer();
@@ -153,7 +153,7 @@ CSfunctionReference::CSfunctionReference(void)
 	#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST
 	string functionText;
 	#endif
-		
+
 	for(int i=0; i<MAX_INCLUDE_DEPTH_FUNCTION; i++)
 	{
 		maxFunctionPrintXAtAParticularY[i] = 0;

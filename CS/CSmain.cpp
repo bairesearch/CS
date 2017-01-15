@@ -1,21 +1,21 @@
 /*******************************************************************************
- * 
+ *
  * This file is part of BAIPROJECT.
- * 
+ *
  * BAIPROJECT is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License version 3
  * only, as published by the Free Software Foundation.
- * 
+ *
  * BAIPROJECT is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License version 3 for more details
  * (a copy is included in the LICENSE file that accompanied this code).
- * 
+ *
  * You should have received a copy of the GNU Affero General Public License
  * version 3 along with BAIPROJECT.  If not, see <http://www.gnu.org/licenses/>
  * for a copy of the AGPLv3 License.
- * 
+ *
  *******************************************************************************/
 
 /*******************************************************************************
@@ -23,7 +23,7 @@
  * File Name: CSmain.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3d2b 14-April-2014
+ * Project Version: 3d2c 14-April-2014
  *
  *******************************************************************************/
 
@@ -74,7 +74,7 @@ static char errmessage[] = "Usage:  OpenCS.exe [options]"
 
 
 
-		
+
 int main(int argc,char **argv)
 {
 #ifdef CS_CONVERT_INDENTED_LIST_TO_HTML_LIST
@@ -82,7 +82,7 @@ int main(int argc,char **argv)
 #elif defined CS_GENERATE_CLASS_HTML_DOCUMENTATION_FROM_CUSTOM_CSCLASS_FORMAT
 	generateClassHTMLdocumentationFromCustomCSclassFormat();
 #else
-		
+
 	bool useOutputLDRfile = false;
 	string outputLDRfileName = "codeStructureNet.ldr";
 
@@ -94,7 +94,7 @@ int main(int argc,char **argv)
 
 	bool useOutputHTMLfile = false;
 	string outputHTMLfileName = "codeStructureNet.html";
-	
+
 	bool useOutputAllFile = false;
 	string outputAllFileName = "codeStructureNet";
 
@@ -113,7 +113,7 @@ int main(int argc,char **argv)
 	int mode = CS_MODE_OUTPUT_EXECUTION_FLOW;	//1. output execution flow, 2. output data flow, 3. filter code based upon preprocessor definitions
 
 	int generateHTMLdocumentationMode = CS_GENERATE_HTML_DOCUMENTATION_MODE_OFF;
-	
+
 	bool passInputReq = true;
 	bool outputFunctionsConnectivity = false;
 	bool traceFunctionUpwards = false;
@@ -122,12 +122,12 @@ int main(int argc,char **argv)
 	int rasterImageHeight = 1000;
 
 	bool outputFileConnections = true;
-	
+
 	if (argumentExists(argc,argv,"-mode"))
 	{
 		mode = getFloatArgument(argc,argv,"-mode");
 	}
-	
+
 	if(argumentExists(argc,argv,"-oldr"))
 	{
 		outputLDRfileName=getCharArgument(argc,argv,"-oldr");
@@ -148,13 +148,13 @@ int main(int argc,char **argv)
 		useOutputSVGFile = true;
 		printOutput = true;
 	}
-	
+
 	if(argumentExists(argc,argv,"-ohtml"))
 	{
 		outputHTMLfileName=getCharArgument(argc,argv,"-ohtml");
 		useOutputHTMLfile = true;
 	}
-	
+
 	if(argumentExists(argc,argv,"-oall"))
 	{
 		outputAllFileName=getCharArgument(argc,argv,"-oall");
@@ -191,12 +191,12 @@ int main(int argc,char **argv)
 	{
 		rasterImageWidth = getFloatArgument(argc,argv,"-width");
 	}
-	
+
 	if(argumentExists(argc,argv,"-height"))
 	{
 		rasterImageHeight = getFloatArgument(argc,argv,"-height");
 	}
-	
+
 	if(argumentExists(argc,argv,"-enablefunctions"))
 	{
 		outputFunctionsConnectivity = true;
@@ -223,14 +223,14 @@ int main(int argc,char **argv)
 	{
 		bottomLevelFunctionNameToTraceUpwards=getCharArgument(argc,argv,"-tracefunction");
 	}
-				
+
 
 	if(argumentExists(argc,argv,"-html"))
 	{
 		generateHTMLdocumentationMode = CS_GENERATE_HTML_DOCUMENTATION_MODE_ON;
 		//getFloatArgument(argc,argv,"-html");
 	}
-			
+
 	char currentFolder[EXE_FOLDER_PATH_MAX_LENGTH];
 	getCurrentDirectory(currentFolder);
 
@@ -263,7 +263,7 @@ int main(int argc,char **argv)
 
 	if(argumentExists(argc,argv,"-version"))
 	{
-		cout << "OpenCS.exe - Project Version: 3d2b 14-April-2014" << endl;
+		cout << "OpenCS.exe - Project Version: 3d2c 14-April-2014" << endl;
 		exit(1);
 	}
 
@@ -323,10 +323,10 @@ int main(int argc,char **argv)
 				useOutputHTMLfile = true;
 				outputHTMLfileName = outputAllFileName + ".html";
 			}
-		}	
+		}
 	}
 	*/
-	
+
 
 
 	if(!parseCSrulesXMLfile())

@@ -1,21 +1,21 @@
 /*******************************************************************************
- * 
+ *
  * This file is part of BAIPROJECT.
- * 
+ *
  * BAIPROJECT is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License version 3
  * only, as published by the Free Software Foundation.
- * 
+ *
  * BAIPROJECT is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License version 3 for more details
  * (a copy is included in the LICENSE file that accompanied this code).
- * 
+ *
  * You should have received a copy of the GNU Affero General Public License
  * version 3 along with BAIPROJECT.  If not, see <http://www.gnu.org/licenses/>
  * for a copy of the AGPLv3 License.
- * 
+ *
  *******************************************************************************/
 
 /*******************************************************************************
@@ -23,7 +23,7 @@
  * File Name: CSreferenceClass.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3d2b 14-April-2014
+ * Project Version: 3d2c 14-April-2014
  *
  *******************************************************************************/
 
@@ -86,7 +86,7 @@ public:
 	bool printed;		//file/function printed
 	#ifdef CS_HTML_DOCUMENTATION_GENERATE_FILE_CODE_STRUCTURE_DIAGRAMS
 	bool singleFileOnlyPrinted;	//file/function printed
-	#endif	
+	#endif
 	int printX;		//file/function printX
 	int printY;		//file/function printY
 	int printXIndex;	//file/function printXIndex
@@ -94,15 +94,15 @@ public:
 	int printTextX;		//file/function printXIndex
 	int printTextY;		//file/function printYIndex
 	int filePrintXrecordForSingleFileOnly;	//file/function printX
-	int filePrintYrecordForSingleFileOnly;	//file/function printY	
+	int filePrintYrecordForSingleFileOnly;	//file/function printY
 	bool HTMLgenerated;	//file/function HTML generated
-	
+
 	CSfunctionReference * next;
 	CSfunctionReference * previous;
 	CSfunctionReferenceContainer * firstReferenceContainerInAboveReferenceList;
 	bool printedTrace;
 	bool printedTraceReset;		//used for html generation
-	
+
 	//function reference only
 	string nameFull;	//function only
 	CSfunctionReference * firstReferenceInFunctionReferenceList;
@@ -112,11 +112,11 @@ public:
 	int numTopLevelFunctionsInFileAlreadyPrinted;
 	#ifdef CS_HTML_DOCUMENTATION_RECORD_FUNCTION_INDENTATION
 	int functionReferenceIndentation;
-	#endif	
+	#endif
 	#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST
 	string functionText;
 	#endif
-	
+
 	int maxFunctionPrintXAtAParticularY[MAX_INCLUDE_DEPTH_FUNCTION];
 
 };
@@ -156,13 +156,13 @@ public:
 	int printTextX;		//file/function printXIndex
 	int printTextY;		//file/function printYIndex
 	bool HTMLgenerated;	//file/function HTML generated
-	
+
 	CSfileReference * next;
 	CSfileReference * previous;
 	CSfileReferenceContainer * firstReferenceContainerInAboveReferenceList;
 	bool printedTrace;
 	bool printedTraceReset;		//used for html generation
-	
+
 	//file reference only
 	CSfileReference * firstReferenceInAboveList;	//filefirstReferenceInAboveList
 	CSfileReference * firstReferenceInBelowList; 	//filefirstReferenceInBelowList

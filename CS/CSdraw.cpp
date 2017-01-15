@@ -1,21 +1,21 @@
 /*******************************************************************************
- * 
+ *
  * This file is part of BAIPROJECT.
- * 
+ *
  * BAIPROJECT is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License version 3
  * only, as published by the Free Software Foundation.
- * 
+ *
  * BAIPROJECT is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License version 3 for more details
  * (a copy is included in the LICENSE file that accompanied this code).
- * 
+ *
  * You should have received a copy of the GNU Affero General Public License
  * version 3 along with BAIPROJECT.  If not, see <http://www.gnu.org/licenses/>
  * for a copy of the AGPLv3 License.
- * 
+ *
  *******************************************************************************/
 
 /*******************************************************************************
@@ -23,7 +23,7 @@
  * File Name: CSdraw.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3d2b 14-April-2014
+ * Project Version: 3d2c 14-April-2014
  *
  *******************************************************************************/
 
@@ -279,91 +279,91 @@ void fillInCSrulesExternVariables()
 			CS_LAYER_0_COLOUR = currentReferenceRulesClass->fractionalValue;
 			CS_LAYER_0_COLOUR_PROJECT_NAME = currentReferenceRulesClass->stringValue;
 			CSlayerColourArray[0] = CS_LAYER_0_COLOUR;
-			CSlayerColourProjectNameArray[0] = CS_LAYER_0_COLOUR_PROJECT_NAME;			
+			CSlayerColourProjectNameArray[0] = CS_LAYER_0_COLOUR_PROJECT_NAME;
 		}
 		else if(currentReferenceRulesClass->name == CS_LAYER_1_COLOUR_NAME)
 		{
 			CS_LAYER_1_COLOUR = currentReferenceRulesClass->fractionalValue;
 			CS_LAYER_1_COLOUR_PROJECT_NAME = currentReferenceRulesClass->stringValue;
 			CSlayerColourArray[1] = CS_LAYER_1_COLOUR;
-			CSlayerColourProjectNameArray[1] = CS_LAYER_1_COLOUR_PROJECT_NAME;			
+			CSlayerColourProjectNameArray[1] = CS_LAYER_1_COLOUR_PROJECT_NAME;
 		}
 		else if(currentReferenceRulesClass->name == CS_LAYER_2_COLOUR_NAME)
 		{
 			CS_LAYER_2_COLOUR = currentReferenceRulesClass->fractionalValue;
 			CS_LAYER_2_COLOUR_PROJECT_NAME = currentReferenceRulesClass->stringValue;
 			CSlayerColourArray[2] = CS_LAYER_2_COLOUR;
-			CSlayerColourProjectNameArray[2] = CS_LAYER_2_COLOUR_PROJECT_NAME;			
+			CSlayerColourProjectNameArray[2] = CS_LAYER_2_COLOUR_PROJECT_NAME;
 		}
 		else if(currentReferenceRulesClass->name == CS_LAYER_3_COLOUR_NAME)
 		{
 			CS_LAYER_3_COLOUR = currentReferenceRulesClass->fractionalValue;
 			CS_LAYER_3_COLOUR_PROJECT_NAME = currentReferenceRulesClass->stringValue;
 			CSlayerColourArray[3] = CS_LAYER_3_COLOUR;
-			CSlayerColourProjectNameArray[3] = CS_LAYER_3_COLOUR_PROJECT_NAME;			
+			CSlayerColourProjectNameArray[3] = CS_LAYER_3_COLOUR_PROJECT_NAME;
 		}
 		else if(currentReferenceRulesClass->name == CS_LAYER_4_COLOUR_NAME)
 		{
 			CS_LAYER_4_COLOUR = currentReferenceRulesClass->fractionalValue;
 			CS_LAYER_4_COLOUR_PROJECT_NAME = currentReferenceRulesClass->stringValue;
 			CSlayerColourArray[4] = CS_LAYER_4_COLOUR;
-			CSlayerColourProjectNameArray[4] = CS_LAYER_4_COLOUR_PROJECT_NAME;			
+			CSlayerColourProjectNameArray[4] = CS_LAYER_4_COLOUR_PROJECT_NAME;
 		}
 		else if(currentReferenceRulesClass->name == CS_LAYER_5_COLOUR_NAME)
 		{
 			CS_LAYER_5_COLOUR = currentReferenceRulesClass->fractionalValue;
 			CS_LAYER_5_COLOUR_PROJECT_NAME = currentReferenceRulesClass->stringValue;
 			CSlayerColourArray[5] = CS_LAYER_5_COLOUR;
-			CSlayerColourProjectNameArray[5] = CS_LAYER_5_COLOUR_PROJECT_NAME;			
+			CSlayerColourProjectNameArray[5] = CS_LAYER_5_COLOUR_PROJECT_NAME;
 		}
 		else if(currentReferenceRulesClass->name == CS_LAYER_6_COLOUR_NAME)
 		{
 			CS_LAYER_6_COLOUR = currentReferenceRulesClass->fractionalValue;
 			CS_LAYER_6_COLOUR_PROJECT_NAME = currentReferenceRulesClass->stringValue;
 			CSlayerColourArray[6] = CS_LAYER_6_COLOUR;
-			CSlayerColourProjectNameArray[6] = CS_LAYER_6_COLOUR_PROJECT_NAME;			
+			CSlayerColourProjectNameArray[6] = CS_LAYER_6_COLOUR_PROJECT_NAME;
 		}
 		else if(currentReferenceRulesClass->name == CS_LAYER_7_COLOUR_NAME)
 		{
 			CS_LAYER_7_COLOUR = currentReferenceRulesClass->fractionalValue;
 			CS_LAYER_7_COLOUR_PROJECT_NAME = currentReferenceRulesClass->stringValue;
 			CSlayerColourArray[7] = CS_LAYER_7_COLOUR;
-			CSlayerColourProjectNameArray[7] = CS_LAYER_7_COLOUR_PROJECT_NAME;			
+			CSlayerColourProjectNameArray[7] = CS_LAYER_7_COLOUR_PROJECT_NAME;
 		}
 		else if(currentReferenceRulesClass->name == CS_LAYER_8_COLOUR_NAME)
 		{
 			CS_LAYER_8_COLOUR = currentReferenceRulesClass->fractionalValue;
 			CS_LAYER_8_COLOUR_PROJECT_NAME = currentReferenceRulesClass->stringValue;
 			CSlayerColourArray[8] = CS_LAYER_8_COLOUR;
-			CSlayerColourProjectNameArray[8] = CS_LAYER_8_COLOUR_PROJECT_NAME;			
+			CSlayerColourProjectNameArray[8] = CS_LAYER_8_COLOUR_PROJECT_NAME;
 		}
 		else if(currentReferenceRulesClass->name == CS_LAYER_9_COLOUR_NAME)
 		{
 			CS_LAYER_9_COLOUR = currentReferenceRulesClass->fractionalValue;
 			CS_LAYER_9_COLOUR_PROJECT_NAME = currentReferenceRulesClass->stringValue;
 			CSlayerColourArray[9] = CS_LAYER_9_COLOUR;
-			CSlayerColourProjectNameArray[9] = CS_LAYER_9_COLOUR_PROJECT_NAME;			
+			CSlayerColourProjectNameArray[9] = CS_LAYER_9_COLOUR_PROJECT_NAME;
 		}
 		else if(currentReferenceRulesClass->name == CS_LAYER_10_COLOUR_NAME)
 		{
 			CS_LAYER_10_COLOUR = currentReferenceRulesClass->fractionalValue;
 			CS_LAYER_10_COLOUR_PROJECT_NAME = currentReferenceRulesClass->stringValue;
 			CSlayerColourArray[10] = CS_LAYER_10_COLOUR;
-			CSlayerColourProjectNameArray[10] = CS_LAYER_10_COLOUR_PROJECT_NAME;			
+			CSlayerColourProjectNameArray[10] = CS_LAYER_10_COLOUR_PROJECT_NAME;
 		}
 		else if(currentReferenceRulesClass->name == CS_LAYER_11_COLOUR_NAME)
 		{
 			CS_LAYER_11_COLOUR = currentReferenceRulesClass->fractionalValue;
 			CS_LAYER_11_COLOUR_PROJECT_NAME = currentReferenceRulesClass->stringValue;
 			CSlayerColourArray[11] = CS_LAYER_11_COLOUR;
-			CSlayerColourProjectNameArray[11] = CS_LAYER_11_COLOUR_PROJECT_NAME;			
+			CSlayerColourProjectNameArray[11] = CS_LAYER_11_COLOUR_PROJECT_NAME;
 		}
 		else if(currentReferenceRulesClass->name == CS_LAYER_12_COLOUR_NAME)
 		{
 			CS_LAYER_12_COLOUR = currentReferenceRulesClass->fractionalValue;
 			CS_LAYER_12_COLOUR_PROJECT_NAME = currentReferenceRulesClass->stringValue;
 			CSlayerColourArray[12] = CS_LAYER_12_COLOUR;
-			CSlayerColourProjectNameArray[12] = CS_LAYER_12_COLOUR_PROJECT_NAME;			
+			CSlayerColourProjectNameArray[12] = CS_LAYER_12_COLOUR_PROJECT_NAME;
 		}
 
 
@@ -426,10 +426,10 @@ Reference * createFileReferenceListBoxes(Reference * currentReferenceInPrintList
 
 		int maxYPos = 0;	//always print boxes with max Y pos...
 		bool aPreviousReferenceWithThisNameHasbeenPrinted = hasPreviousReferenceWithThisNameHasbeenPrinted(currentFileReference->name, firstReferenceInTopLevelBelowList, &maxYPos);
-		int xPos = maxXAtAParticularY[maxYPos];	
-			
+		int xPos = maxXAtAParticularY[maxYPos];
+
 		if(!aPreviousReferenceWithThisNameHasbeenPrinted)
-		{//add box and connections				
+		{//add box and connections
 
 			#ifdef CS_SUPPORT_PREDEFINED_GRID
 			if(usePredefinedGrid)
@@ -437,19 +437,19 @@ Reference * createFileReferenceListBoxes(Reference * currentReferenceInPrintList
 				bool foundGridCoords = false;
 				XMLparserTag * currentFileTag = firstTagInGridTag;
 				while(currentFileTag->nextTag != NULL)
-				{	
+				{
 					//cout << "currentFileTag->firstAttribute->value = " << currentFileTag->firstAttribute->value << endl;
 					if(currentFileTag->firstAttribute->name == RULES_XML_ATTRIBUTE_name)
 					{
 						if(currentFileTag->firstAttribute->value == currentFileReference->name)
-						{	
+						{
 							//cout << "currentFileReference->name = " << currentFileReference->name << endl;
 							XMLParserAttribute * currentAttributeTag = currentFileTag->firstAttribute;
 							foundGridCoords = true;
 							while(currentAttributeTag->nextAttribute != NULL)
-							{	
+							{
 								if(currentAttributeTag->name == RULES_XML_ATTRIBUTE_x)
-								{		
+								{
 									xPos = atoi(currentAttributeTag->value.c_str());
 									//cout << "xPos = " << xPos << endl;
 								}
@@ -458,11 +458,11 @@ Reference * createFileReferenceListBoxes(Reference * currentReferenceInPrintList
 									maxYPos = atoi(currentAttributeTag->value.c_str());
 									//cout << "maxYPos = " << maxYPos << endl;
 								}
-								currentAttributeTag = currentAttributeTag->nextAttribute; 
+								currentAttributeTag = currentAttributeTag->nextAttribute;
 							}
 						}
 					}
-					currentFileTag = currentFileTag->nextTag; 
+					currentFileTag = currentFileTag->nextTag;
 				}
 				if(!foundGridCoords)
 				{
@@ -470,14 +470,14 @@ Reference * createFileReferenceListBoxes(Reference * currentReferenceInPrintList
 				}
 			}
 			#endif
-			
+
 			currentFileReference->printXIndex = xPos;
 			currentFileReference->printYIndex = maxYPos;
 
 			double vectorObjectsScaleFactor;
 			if(outputFunctionsConnectivity)
 			{
-				vectorObjectsScaleFactor = CS_FILE_FUNCTIONS_ENABLED_VECTOROBJECTS_SCALE_FACTOR;			
+				vectorObjectsScaleFactor = CS_FILE_FUNCTIONS_ENABLED_VECTOROBJECTS_SCALE_FACTOR;
 				double xOffset = 0.0;
 				#ifdef CS_DRAW_APPLY_EVEN_ODD_X_OFFSET
 				#ifdef CS_SUPPORT_PREDEFINED_GRID
@@ -497,7 +497,7 @@ Reference * createFileReferenceListBoxes(Reference * currentReferenceInPrintList
 			}
 			else
 			{
-				vectorObjectsScaleFactor = CS_FILE_FUNCTIONS_DISABLED_VECTOROBJECTS_SCALE_FACTOR;			
+				vectorObjectsScaleFactor = CS_FILE_FUNCTIONS_DISABLED_VECTOROBJECTS_SCALE_FACTOR;
 				double xOffset = 0.0;
 				#ifdef CS_DRAW_APPLY_EVEN_ODD_X_OFFSET
 				#ifdef CS_SUPPORT_PREDEFINED_GRID
@@ -511,7 +511,7 @@ Reference * createFileReferenceListBoxes(Reference * currentReferenceInPrintList
 				#ifdef CS_SUPPORT_PREDEFINED_GRID
 				}
 				#endif
-				#endif				
+				#endif
 				currentFileReference->printX = xPos * (vectorObjectsScaleFactor * CS_FILE_FUNCTIONS_DISABLED_TEXT_BOX_SCALE_FACTOR_X_SPACING_FRACTION) + xOffset;
 				currentFileReference->printY = (vectorObjectsScaleFactor * CS_FILE_FUNCTIONS_DISABLED_TEXT_BOX_SCALE_FACTOR_Y_SPACING_FRACTION) * (double)maxYPos;
 			}
@@ -544,22 +544,22 @@ Reference * createFileReferenceListBoxes(Reference * currentReferenceInPrintList
 			if(!traceFunctionUpwards)
 			{//only print connections when not tracing a bottom level function upwards - saves space
 			#endif
-				
+
 				string groupID = createGroupID(currentFileReference->name, currentFileReference->printX, currentFileReference->printY);
 				nextTagOnOriginalLayer = writeSVGgroup(currentTag, &groupID);
 			#ifdef CS_DO_NOT_DRAW_ALL_FUNCTION_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
 			}
-			#endif	
-			#endif	
-						
+			#endif
+			#endif
+
 			#ifdef CS_DO_NOT_DRAW_ALL_FILE_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
 			if(!traceFunctionUpwards)
 			{//only print connections when not tracing a bottom level function upwards - saves space
 			#endif
 				vec pos;
 				pos.x = currentFileReference->printX;
-				pos.y = currentFileReference->printY;			
-				pos.z = currentFileReference->printY;	
+				pos.y = currentFileReference->printY;
+				pos.z = currentFileReference->printY;
 				newCurrentReferenceInPrintList = createFileOrFunctionReferenceBox(newCurrentReferenceInPrintList, &pos, &(currentFileReference->name), vectorObjectsScaleFactor, colour, CS_FILE_MAX_TEXT_LENGTH, CS_OUTPUT_Z_POSITION_FILE_BOX);	//add box
 
 				writeFileOrFunctionSVGbox(currentTag, &pos, currentFileReference->name.length(), vectorObjectsScaleFactor, CS_FILE_MAX_TEXT_LENGTH, colour, CS_FILE_TEXT_BOX_OUTLINE_WIDTH_SVG);
@@ -605,9 +605,9 @@ Reference * createFileReferenceListBoxes(Reference * currentReferenceInPrintList
 				(*currentTag) = nextTagOnOriginalLayer;
 			#ifdef CS_DO_NOT_DRAW_ALL_FUNCTION_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
 			}
-			#endif	
-			#endif	
-				
+			#endif
+			#endif
+
 			currentFileReference->printed = true;
 			currentFileReference->shortcutToPrintedVersionOfReference = currentFileReference;
 
@@ -759,9 +759,9 @@ Reference * findAndLinkAllFileReferencesWithSameName(Reference * currentReferenc
 					#ifdef CS_USE_RAINBOW_COLOURS_FOR_FILE_BOXES
 					int colour = calculateCSBoxAndConnectionColourBasedUponLevel(currentReferenceFirstReferenceInAboveListPrinted->printYIndex);
 					#else
-					int colour = calculateCSBoxAndConnectionColourBasedUponFileName(currentReferenceFirstReferenceInAboveListPrinted);					
+					int colour = calculateCSBoxAndConnectionColourBasedUponFileName(currentReferenceFirstReferenceInAboveListPrinted);
 					#endif
-					
+
 					newCurrentReferenceInPrintList = createFileReferenceConnection(newCurrentReferenceInPrintList, reference, currentReferenceFirstReferenceInAboveListPrinted, colour, traceFunctionUpwards, currentTag);	//add line
 				}
 			}
@@ -874,7 +874,7 @@ Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentRe
 			if(fileReference->name == *singleFileName)
 			{
 				if(functionReference->printed)
-				{				
+				{
 					printedPassSingleFileOnly = true;
 				}
 			}
@@ -885,59 +885,59 @@ Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentRe
 			printedPassSingleFileOnly = true;
 		}
 		if(printedPassSingleFileOnly)
-		{	
-			//cout << "\tprintedPassSingleFileOnly" << endl;	
+		{
+			//cout << "\tprintedPassSingleFileOnly" << endl;
 			bool printedPass = false;
 			if(useSingleFileOnly)
 			{
 				if(functionReference->singleFileOnlyPrinted == false)
-				{				
+				{
 					printedPass = true;
 					functionReference->singleFileOnlyPrinted = true;
-				}	
+				}
 			}
 			else
 			{
 				if(functionReference->printed == false)
 				{
 					printedPass = true;
-					functionReference->printed = true;			
+					functionReference->printed = true;
 				}
 			}
-			
-			
+
+
 			vec positionOriginalSingleFileOnly;
-			vec positionAboveLevelOriginalSingleFileOnly;	
+			vec positionAboveLevelOriginalSingleFileOnly;
 			if(useSingleFileOnly)
 			{
-				/*	
+				/*
 				cout << "fileReference->name = " << fileReference->name << endl;
-				cout << "\t functionReference->name = " << functionReference->name << endl;	
-				cout << "\t aboveLevelFunctionReference->name = " << aboveLevelFunctionReference->name << endl;	
-				cout << "\t\t fileReference->printX = " << fileReference->printX << endl;	
+				cout << "\t functionReference->name = " << functionReference->name << endl;
+				cout << "\t aboveLevelFunctionReference->name = " << aboveLevelFunctionReference->name << endl;
+				cout << "\t\t fileReference->printX = " << fileReference->printX << endl;
 				cout << "\t\t fileReference->printY = " << fileReference->printY << endl;
-				cout << "\t\t aboveLevelFileReference->printX = " << aboveLevelFileReference->printX << endl;	
-				cout << "\t\t aboveLevelFileReference->printY = " << aboveLevelFileReference->printY << endl;				
-				cout << "\t\t functionReference->filePrintXrecordForSingleFileOnly = " << functionReference->filePrintXrecordForSingleFileOnly << endl;	
+				cout << "\t\t aboveLevelFileReference->printX = " << aboveLevelFileReference->printX << endl;
+				cout << "\t\t aboveLevelFileReference->printY = " << aboveLevelFileReference->printY << endl;
+				cout << "\t\t functionReference->filePrintXrecordForSingleFileOnly = " << functionReference->filePrintXrecordForSingleFileOnly << endl;
 				cout << "\t\t functionReference->filePrintYrecordForSingleFileOnly = " << functionReference->filePrintYrecordForSingleFileOnly << endl;
-				cout << "\t\t aboveLevelFunctionReference->filePrintXrecordForSingleFileOnly = " << aboveLevelFunctionReference->filePrintXrecordForSingleFileOnly << endl;	
+				cout << "\t\t aboveLevelFunctionReference->filePrintXrecordForSingleFileOnly = " << aboveLevelFunctionReference->filePrintXrecordForSingleFileOnly << endl;
 				cout << "\t\t aboveLevelFunctionReference->filePrintYrecordForSingleFileOnly = " << aboveLevelFunctionReference->filePrintYrecordForSingleFileOnly << endl;
 				*/
-											
+
 				positionOriginalSingleFileOnly.x = functionReference->printX;
-				positionOriginalSingleFileOnly.y = functionReference->printY;				
+				positionOriginalSingleFileOnly.y = functionReference->printY;
 				positionAboveLevelOriginalSingleFileOnly.x = aboveLevelFunctionReference->printX;
-				positionAboveLevelOriginalSingleFileOnly.y = aboveLevelFunctionReference->printY;	
-				
+				positionAboveLevelOriginalSingleFileOnly.y = aboveLevelFunctionReference->printY;
+
 				functionReference->printX = functionReference->printX - fileReference->printX;
 				functionReference->printY = functionReference->printY - fileReference->printY;
 				aboveLevelFunctionReference->printX = aboveLevelFunctionReference->printX - fileReference->printX;
-				aboveLevelFunctionReference->printY = aboveLevelFunctionReference->printY - fileReference->printY;						      
+				aboveLevelFunctionReference->printY = aboveLevelFunctionReference->printY - fileReference->printY;
 			}
-							
+
 			if(printedPass)
 			{
-				//cout << "\tprintedPass" << endl;			
+				//cout << "\tprintedPass" << endl;
 				int aboveConnectionColour;
 				int colour = functionReference->col;
 				if(fileReference == aboveLevelFileReference)
@@ -947,7 +947,7 @@ Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentRe
 				else
 				{//function found in a new file
 					newFunctionLevel = 0;
-				}	
+				}
 
 				if(!useSingleFileOnly)
 				{
@@ -961,20 +961,20 @@ Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentRe
 					#ifdef CS_SUPPORT_PREDEFINED_GRID
 					if(!usePredefinedGrid)
 					{
-					#endif					
+					#endif
 						if((newFunctionLevel % 2) == 0)
 						{
 							xOffset = CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR/0.5 / 2.0;
 						}
 					#ifdef CS_SUPPORT_PREDEFINED_GRID
 					}
-					#endif						
-					#endif	
+					#endif
+					#endif
 					functionReference->printX = fileReference->printX + (fileReference->maxFunctionPrintXAtAParticularY[newFunctionLevel])*CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR/0.5 + xOffset - (CS_FILE_FUNCTIONS_ENABLED_VECTOROBJECTS_SCALE_FACTOR*0.5 * CS_FILE_FUNCTIONS_ENABLED_LARGE_BOX_SCALE_FACTOR_X * 0.5);
 					functionReference->printY = fileReference->printY + (1+newFunctionLevel)*CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR*CS_FUNCTION_TEXT_BOX_SCALE_FACTOR_Y_SPACING_FRACTION;
 					functionReference->filePrintXrecordForSingleFileOnly = fileReference->printX;
 					functionReference->filePrintYrecordForSingleFileOnly = fileReference->printY;
-					
+
 					fileReference->maxFunctionPrintXAtAParticularY[newFunctionLevel] = fileReference->maxFunctionPrintXAtAParticularY[newFunctionLevel] + 1;
 
 					/*
@@ -1002,7 +1002,7 @@ Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentRe
 				else
 				{
 					//assume print coordinates already set
-					aboveConnectionColour = aboveLevelFunctionReference->col;	
+					aboveConnectionColour = aboveLevelFunctionReference->col;
 				}
 
 				/*
@@ -1011,42 +1011,42 @@ Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentRe
 				{
 					if(functionReference->name == "traceFunctionsUpwardsAndDrawOrHighLightTheseReset")
 					{
-						cout << "traceFunctionsUpwardsAndDrawOrHighLightTheseReset" << endl; 
-						cout << "colour = " << colour << endl; 
-						cout << "aboveConnectionColour = " << aboveConnectionColour << endl;		       
-						cout << "functionReference->printX = " << functionReference->printX << endl; 
+						cout << "traceFunctionsUpwardsAndDrawOrHighLightTheseReset" << endl;
+						cout << "colour = " << colour << endl;
+						cout << "aboveConnectionColour = " << aboveConnectionColour << endl;
+						cout << "functionReference->printX = " << functionReference->printX << endl;
 						cout << "functionReference->printY = " << functionReference->printY << endl;
-						cout << "aboveLevelFunctionReference->printX = " << aboveLevelFunctionReference->printX << endl; 
+						cout << "aboveLevelFunctionReference->printX = " << aboveLevelFunctionReference->printX << endl;
 						cout << "aboveLevelFunctionReference->printY = " << aboveLevelFunctionReference->printY << endl;
 						cout << "fileReference->name = " << fileReference->name << endl;
-						cout << "\t functionReference->name = " << functionReference->name << endl;	
-						cout << "\t aboveLevelFunctionReference->name = " << aboveLevelFunctionReference->name << endl;	
-						cout << "\t\t fileReference->printX = " << fileReference->printX << endl;	
+						cout << "\t functionReference->name = " << functionReference->name << endl;
+						cout << "\t aboveLevelFunctionReference->name = " << aboveLevelFunctionReference->name << endl;
+						cout << "\t\t fileReference->printX = " << fileReference->printX << endl;
 						cout << "\t\t fileReference->printY = " << fileReference->printY << endl;
-						cout << "\t\t aboveLevelFileReference->printX = " << aboveLevelFileReference->printX << endl;	
-						cout << "\t\t aboveLevelFileReference->printY = " << aboveLevelFileReference->printY << endl;				
-						cout << "\t\t functionReference->filePrintXrecordForSingleFileOnly = " << functionReference->filePrintXrecordForSingleFileOnly << endl;	
+						cout << "\t\t aboveLevelFileReference->printX = " << aboveLevelFileReference->printX << endl;
+						cout << "\t\t aboveLevelFileReference->printY = " << aboveLevelFileReference->printY << endl;
+						cout << "\t\t functionReference->filePrintXrecordForSingleFileOnly = " << functionReference->filePrintXrecordForSingleFileOnly << endl;
 						cout << "\t\t functionReference->filePrintYrecordForSingleFileOnly = " << functionReference->filePrintYrecordForSingleFileOnly << endl;
-						cout << "\t\t aboveLevelFunctionReference->filePrintXrecordForSingleFileOnly = " << aboveLevelFunctionReference->filePrintXrecordForSingleFileOnly << endl;	
-						cout << "\t\t aboveLevelFunctionReference->filePrintYrecordForSingleFileOnly = " << aboveLevelFunctionReference->filePrintYrecordForSingleFileOnly << endl;						
+						cout << "\t\t aboveLevelFunctionReference->filePrintXrecordForSingleFileOnly = " << aboveLevelFunctionReference->filePrintXrecordForSingleFileOnly << endl;
+						cout << "\t\t aboveLevelFunctionReference->filePrintYrecordForSingleFileOnly = " << aboveLevelFunctionReference->filePrintYrecordForSingleFileOnly << endl;
 					}
 				}
 				*/
 
 				//print function connections;
 				newCurrentReferenceInPrintList = createFunctionReferenceConnection(newCurrentReferenceInPrintList, functionReference, aboveLevelFunctionReference, aboveConnectionColour, traceFunctionUpwards, prepareForTrace, currentTag, fileReference, aboveLevelFileReference);
-						
-			
+
+
 				//apply hack
 				if(useSingleFileOnly)
-				{				
+				{
 					if(functionLevel == 0)
-					{      
+					{
 						aboveLevelFunctionReference->printX = aboveLevelFunctionReference->printX + fileReference->printX;
-						aboveLevelFunctionReference->printY = aboveLevelFunctionReference->printY + fileReference->printY;						      
+						aboveLevelFunctionReference->printY = aboveLevelFunctionReference->printY + fileReference->printY;
 					}
 				}
-				
+
 				#ifdef CS_WRITE_SVG_GROUPS
 				XMLparserTag * nextTagOnOriginalLayer = NULL;
 				#ifdef CS_DO_NOT_DRAW_ALL_FUNCTION_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
@@ -1057,9 +1057,9 @@ Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentRe
 					nextTagOnOriginalLayer = writeSVGgroup(currentTag, &groupID);
 				#ifdef CS_DO_NOT_DRAW_ALL_FUNCTION_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
 				}
-				#endif	
-				#endif	
-								
+				#endif
+				#endif
+
 				#ifdef CS_DO_NOT_DRAW_ALL_FUNCTION_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
 				if(!traceFunctionUpwards)
 				{//only print connections when not tracing a bottom level function upwards - saves space
@@ -1067,18 +1067,18 @@ Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentRe
 					//print function box
 					vec pos;
 					pos.x = functionReference->printX;
-					pos.y = functionReference->printY;			
+					pos.y = functionReference->printY;
 					newCurrentReferenceInPrintList = createFileOrFunctionReferenceBox(newCurrentReferenceInPrintList, &pos, &(functionReference->name), CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR, colour, CS_FUNCTION_MAX_TEXT_LENGTH, CS_OUTPUT_Z_POSITION_FUNCTION_BOX);	//add box
 
 					writeFileOrFunctionSVGbox(currentTag, &pos, functionReference->name.length(), CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR, CS_FUNCTION_MAX_TEXT_LENGTH, colour, CS_FUNCTION_TEXT_BOX_OUTLINE_WIDTH_SVG);
 				#ifdef CS_DO_NOT_DRAW_ALL_FUNCTION_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
 				}
 				#endif
-				
+
 				//print box text
 				int numSpritesAdded;
 				vec positionText;
-				
+
 				#ifdef CS_CENTRE_BOXES
 				positionText.x = functionReference->printX - CS_FILE_OR_FUNCTION_TEXT_BOX_SCALE_FACTOR_X*CS_FUNCTION_VECTOROBJECTS_SCALE_FACTOR*(functionReference->name.length()/(CS_FUNCTION_MAX_TEXT_LENGTH*CS_FUNCTION_TEXT_BOX_PADDING_FRACTION_OF_TEXT_LENGTH));
 				#else
@@ -1104,8 +1104,8 @@ Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentRe
 				#ifdef CS_DO_NOT_DRAW_ALL_FUNCTION_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
 				}
 				#endif
-				
-				
+
+
 				#ifdef CS_WRITE_SVG_GROUPS
 				#ifdef CS_DO_NOT_DRAW_ALL_FUNCTION_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
 				if(!traceFunctionUpwards)
@@ -1114,27 +1114,27 @@ Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentRe
 					(*currentTag) = nextTagOnOriginalLayer;
 				#ifdef CS_DO_NOT_DRAW_ALL_FUNCTION_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
 				}
-				#endif	
-				#endif				
+				#endif
+				#endif
 
 				//apply hack
 				if(useSingleFileOnly)
-				{				
+				{
 					if(functionLevel == 0)
-					{      
+					{
 						aboveLevelFunctionReference->printX = aboveLevelFunctionReference->printX - fileReference->printX;
-						aboveLevelFunctionReference->printY = aboveLevelFunctionReference->printY - fileReference->printY;						      
+						aboveLevelFunctionReference->printY = aboveLevelFunctionReference->printY - fileReference->printY;
 					}
 				}
-				
+
 				if(useSingleFileOnly)
-				{							
+				{
 					functionReference->printX = positionOriginalSingleFileOnly.x;
-					functionReference->printY = positionOriginalSingleFileOnly.y;	
+					functionReference->printY = positionOriginalSingleFileOnly.y;
 					aboveLevelFunctionReference->printX = positionAboveLevelOriginalSingleFileOnly.x;
-					aboveLevelFunctionReference->printY = positionAboveLevelOriginalSingleFileOnly.y;		
+					aboveLevelFunctionReference->printY = positionAboveLevelOriginalSingleFileOnly.y;
 				}
-				
+
 				//functionReference->printed = true;	//has been moved;
 
 				/*
@@ -1183,26 +1183,26 @@ Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentRe
 					newCurrentReferenceInPrintList = createFunctionReferenceListBoxesAndConnections(newCurrentReferenceInPrintList, fileReference, functionReference, firstReferenceInTopLevelBelowList, (newFunctionLevel+1), currentfunctionReferenceReference->name, currentTag, traceFunctionUpwards, useSingleFileOnly, singleFileName, usePredefinedGrid);
 
 					currentfunctionReferenceReference = currentfunctionReferenceReference->next;
-				}			
+				}
 			}
 			else
-			{	
+			{
 				//print function connections;
 				newCurrentReferenceInPrintList = createFunctionReferenceConnection(newCurrentReferenceInPrintList, functionReference, aboveLevelFunctionReference, aboveLevelFunctionReference->col, traceFunctionUpwards, prepareForTrace, currentTag, fileReference, aboveLevelFileReference);
-			
+
 				if(useSingleFileOnly)
-				{			
+				{
 					functionReference->printX = positionOriginalSingleFileOnly.x;
-					functionReference->printY = positionOriginalSingleFileOnly.y;	
+					functionReference->printY = positionOriginalSingleFileOnly.y;
 					aboveLevelFunctionReference->printX = positionAboveLevelOriginalSingleFileOnly.x;
-					aboveLevelFunctionReference->printY = positionAboveLevelOriginalSingleFileOnly.y;							
-				}			
+					aboveLevelFunctionReference->printY = positionAboveLevelOriginalSingleFileOnly.y;
+				}
 			}
 		}
 	}
 	else
 	{
-		#ifdef CS_HTML_DOCUMENTATION_GENERATE_FILE_CODE_STRUCTURE_DIAGRAMS_UPDATES_MAY_NOT_BE_REQUIRED		
+		#ifdef CS_HTML_DOCUMENTATION_GENERATE_FILE_CODE_STRUCTURE_DIAGRAMS_UPDATES_MAY_NOT_BE_REQUIRED
 		if(!useSingleFileOnly)
 		{
 		#endif
@@ -1210,11 +1210,11 @@ Reference * createFunctionReferenceListBoxesAndConnections(Reference * currentRe
 			cout << "aboveLevelFileReference->name = " << aboveLevelFileReference->name << endl;
 			cout << "aboveLevelFunctionReference->name = " << aboveLevelFunctionReference->name << endl;
 			exit(0);
-		#ifdef CS_HTML_DOCUMENTATION_GENERATE_FILE_CODE_STRUCTURE_DIAGRAMS_UPDATES_MAY_NOT_BE_REQUIRED					
+		#ifdef CS_HTML_DOCUMENTATION_GENERATE_FILE_CODE_STRUCTURE_DIAGRAMS_UPDATES_MAY_NOT_BE_REQUIRED
 		}
 		#endif
 	}
-	
+
 	return newCurrentReferenceInPrintList;
 
 }
@@ -1264,7 +1264,7 @@ CSreferenceArray findFunctionReferenceInPrintedFileReference(CSfileReference * f
 	}
 	if(filePassedSingleFileOnly)
 	{
-	#endif	
+	#endif
 		CSfileReference * currentReferenceEnsuredPrinted = NULL;
 		if(!(fileReferenceToSearchIn->printed))
 		{
@@ -1427,7 +1427,7 @@ Reference * createFileReferenceConnection(Reference * currentReferenceInPrintLis
 	CSfileReferenceContainer * newCSRefContainer = new CSfileReferenceContainer();
 	currentReferenceContainerInAboveFileOrFunctionReferenceList->next = newCSRefContainer;
 	//cout << "h2" << endl;
-	
+
 	vec referencePrintPos;
 	referencePrintPos.x = reference->printX;
 	referencePrintPos.y = reference->printY;
@@ -1436,8 +1436,8 @@ Reference * createFileReferenceConnection(Reference * currentReferenceInPrintLis
 	currentReferenceInAboveListPrintPos.y = currentReferenceInAboveList->printY;
  	string startGroupID = createGroupID(reference->name, reference->printX, reference->printY);
  	string endGroupID = createGroupID(currentReferenceInAboveList->name, currentReferenceInAboveList->printX, currentReferenceInAboveList->printY);
- 		
-	return configureFileOrFunctionReferenceConnection(currentReferenceInPrintList, &referencePrintPos, &currentReferenceInAboveListPrintPos, colour, true, traceAFunctionUpwardsAndNotCurrentlyTracing, currentTag, &startGroupID, &endGroupID);		
+
+	return configureFileOrFunctionReferenceConnection(currentReferenceInPrintList, &referencePrintPos, &currentReferenceInAboveListPrintPos, colour, true, traceAFunctionUpwardsAndNotCurrentlyTracing, currentTag, &startGroupID, &endGroupID);
 }
 
 Reference * createFunctionReferenceConnection(Reference * currentReferenceInPrintList, CSfunctionReference * reference,  CSfunctionReference * currentReferenceInAboveList, int colour, bool traceAFunctionUpwardsAndNotCurrentlyTracing, bool prepareForTrace, XMLparserTag ** currentTag, CSfileReference * fileReference,  CSfileReference * currentFileReferenceInAboveList)
@@ -1456,7 +1456,7 @@ Reference * createFunctionReferenceConnection(Reference * currentReferenceInPrin
 		currentReferenceContainerInAboveFileOrFunctionReferenceList->next = newCSRefContainer;
 		//cout << "h2" << endl;
 	}
-	
+
 	vec referencePrintPos;
 	referencePrintPos.x = reference->printX;
 	referencePrintPos.y = reference->printY;
@@ -1466,7 +1466,7 @@ Reference * createFunctionReferenceConnection(Reference * currentReferenceInPrin
  	string startGroupID = createGroupID(fileReference->name, reference->printX, reference->printY);	//OLD: reference->name
  	string endGroupID = createGroupID(currentFileReferenceInAboveList->name, currentReferenceInAboveList->printX, currentReferenceInAboveList->printY);	//OLD: currentReferenceInAboveList->name
 
-	return configureFileOrFunctionReferenceConnection(currentReferenceInPrintList, &referencePrintPos, &currentReferenceInAboveListPrintPos, colour, false, traceAFunctionUpwardsAndNotCurrentlyTracing, currentTag, &startGroupID, &endGroupID);		
+	return configureFileOrFunctionReferenceConnection(currentReferenceInPrintList, &referencePrintPos, &currentReferenceInAboveListPrintPos, colour, false, traceAFunctionUpwardsAndNotCurrentlyTracing, currentTag, &startGroupID, &endGroupID);
 }
 
 
@@ -1551,19 +1551,19 @@ Reference * configureFileOrFunctionReferenceConnection(Reference * currentRefere
 		vec pos2;
 		pos2.x = currentReferenceInAboveListPrintPos->x;
 		pos2.y = currentReferenceInAboveListPrintPos->y;
-		
+
 		#ifdef CS_WRITE_SVG_INKSCAPE_CONNECTORS
 		double strokeWidth;
 		if(fileOrFunction)
-		{	
+		{
 			strokeWidth = CS_FILE_CONNECTOR_STROKE_WIDTH_SVG;
 		}
 		else
 		{
 			strokeWidth = CS_FUNCTION_CONNECTOR_STROKE_WIDTH_SVG;
 		}
-		
-		writeSVGconnector(currentTag, &pos1, &pos2, colour, startGroupID, endGroupID, strokeWidth);		
+
+		writeSVGconnector(currentTag, &pos1, &pos2, colour, startGroupID, endGroupID, strokeWidth);
 		#else
 		writeSVGline(currentTag, &pos1, &pos2, colour);
 		#endif
@@ -1713,7 +1713,7 @@ int calculateCSBoxAndConnectionColourBasedUponFileName(CSfileReference * current
 	string fileName = currentFileReference->name;
 	int colour;
 	bool foundProjectAbbreviation = false;
-	
+
 	for(int i=0; i<CS_LAYER_NUMBER_OF_LAYERS ; i++)
 	{
 		if(CSlayerColourProjectNameArray[i] != "")
@@ -1788,7 +1788,7 @@ CSfunctionReference * findPrintedFunctionReferenceWithName(string name, CSfuncti
 }
 
 Reference * traceFunctionsUpwardsAndDrawOrHighLightThese(Reference * currentReferenceInPrintList, CSfileReference * firstReferenceInTopLevelBelowList, CSfunctionReference * currentFunctionBeingTraced, XMLparserTag ** currentTag, int generateHTMLdocumentationMode, string * HTMLdocumentationFunctionTraceTableRows)
-{	
+{
 	Reference * newCurrentReferenceInPrintList = currentReferenceInPrintList;
 
 	//print function box;
@@ -1831,7 +1831,7 @@ Reference * traceFunctionsUpwardsAndDrawOrHighLightThese(Reference * currentRefe
 	{
 		//cout << "currentFunctionBeingTraced->name = " << currentFunctionBeingTraced->name << endl;
 		//cout << "\tcurrentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList->name = " << currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList->name << endl;
-	
+
 		bool higherLevelFunctionFound = false;
 		string fileNameHoldingFunction = "";
 		CSfunctionReference * higherLevelFunction = findPrintedFunctionReferenceWithName(currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionReferenceList->name, NULL, firstReferenceInTopLevelBelowList, &higherLevelFunctionFound, &fileNameHoldingFunction);
@@ -1852,7 +1852,7 @@ Reference * traceFunctionsUpwardsAndDrawOrHighLightThese(Reference * currentRefe
 					functionConnectionColour = CS_FUNCTION_CONNECTION_HIGHLIGHT_COLOUR;
 					//just highlight the connection (already drawn)
 				#endif
-				
+
 				CSfileReference fileReferenceUnkown;
 				fileReferenceUnkown.name = "";
 				CSfileReference fileReferenceInAboveLevelListUnkown;

@@ -1,21 +1,21 @@
 /*******************************************************************************
- * 
+ *
  * This file is part of BAIPROJECT.
- * 
+ *
  * BAIPROJECT is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License version 3
  * only, as published by the Free Software Foundation.
- * 
+ *
  * BAIPROJECT is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License version 3 for more details
  * (a copy is included in the LICENSE file that accompanied this code).
- * 
+ *
  * You should have received a copy of the GNU Affero General Public License
  * version 3 along with BAIPROJECT.  If not, see <http://www.gnu.org/licenses/>
  * for a copy of the AGPLv3 License.
- * 
+ *
  *******************************************************************************/
 
 /*******************************************************************************
@@ -23,7 +23,7 @@
  * File Name: CSexecflow.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2014 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3d2b 14-April-2014
+ * Project Version: 3d2c 14-April-2014
  *
  *******************************************************************************/
 
@@ -65,7 +65,7 @@ using namespace std;
 #else
 	#define SYSTEM_COPY_COMMAND "copy"
 #endif
-				
+
 void printCS(string topLevelFileName, int width, int height, string outputLDRfileName, string outputSVGfileName, string outputPPMfileName, string outputHTMLfileName, bool useOutputLDRfile, bool useOutputPPMfile, bool useOutputHTMLfile, int generateHTMLdocumentationMode, bool display, bool outputFunctionsConnectivity, bool traceFunctionUpwards, string bottomLevelFunctionNameToTraceUpwards, bool outputFileConnections, string topLevelFunctionName);
 	string generateHTMLdocumentationHeader(string name, bool htmlHeader, bool isFile);
 	string generateHTMLdocumentationFooter(bool htmlFileFooter);
@@ -76,7 +76,7 @@ void printCS(string topLevelFileName, int width, int height, string outputLDRfil
 				int findEndPositionOfArgument(string * functionArgumentsRaw, int startPositionOfArgument);
 				string ensureHTMLTagSafe(string str);
 				string createDescriptionFromCaseSensitiveMultiwordString(string str);
-			void generateHTMLdocumentationFunctionReferenceList(CSfunctionReference * function, string * HTMLdocumentationFunctionReferenceList);			
+			void generateHTMLdocumentationFunctionReferenceList(CSfunctionReference * function, string * HTMLdocumentationFunctionReferenceList);
 			string generateHTMLdocumentationImagePlaceHolder(string * traceImageFileName, string imageTitle);
 		void generateFileDiagramFunctionsHeirachy(CSfileReference * currentFileReference, string outputSVGFileNameFile, CSfileReference * firstReferenceInTopLevelBelowList, bool usePredefinedGrid);
 	void writeStringToFileObject(string * s, ofstream * writeFileObject);
@@ -92,7 +92,7 @@ static string CSclassesArray[NUMBER_OF_CSCLASSES] = {"GIAconditionNodeClass.CScl
 #endif
 void generateClassHTMLdocumentationFromCustomCSclassFormat();
 string getFunctionNameFromFunctionNameFull(string * functionNameFull);
-#endif			
+#endif
 
 #ifdef CS_CONVERT_INDENTED_LIST_TO_HTML_LIST
 void convertIndentedListToHTMLlist();
