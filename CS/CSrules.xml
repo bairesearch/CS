@@ -87,6 +87,7 @@
 		<file name="NLCtranslatorCodeBlocksOperations.h" x="4" y="5" />
 		<file name="NLCtranslatorClassDefinitions.h" x="5" y="3" />
 		<file name="NLCprintCodeBlocks.h" x="8" y="3" />
+		<file name="NLCprintCodeBlocksFunctions.h" x="8" y="4" />
 		<file name="NLCprintClassDefinitions.h" x="9" y="3" />
 		<file name="NLCcodeBlockClass.h" x="6" y="6" />
 		<file name="NLCclassDefinitionClass.h" x="7" y="6" />
@@ -111,11 +112,13 @@
 		<file name="GIAsentenceClass.h" x="3" y="16" />
 		<file name="GIAtranslator.h" x="5" y="10" />
 		<file name="GIAtranslatorDefineGrammar.h" x="3" y="11" />
-		<file name="GIAtranslatorRedistributeRelexRelations.h" x="4" y="11" />
-		<file name="GIAtranslatorRedistributeStanfordRelations.h" x="4" y="12" />
+		<file name="GIAtranslatorRedistributeRelations.h" x="4" y="11" />
+		<file name="GIAtranslatorRedistributeRelationsStanford.h" x="4" y="12" />
+		<file name="GIAtranslatorRedistributeRelationsRelex.h" x="4" y="13" />
 		<file name="GIAtranslatorDefineReferencing.h" x="5" y="11" />
 		<file name="GIAtranslatorDefineSubstances.h" x="6" y="11" />
 		<file name="GIAtranslatorLinkEntities.h" x="7" y="11" />
+		<file name="GIAtranslatorLinkEntitiesDynamic.h" x="7" y="12" />
 		<file name="GIAtranslatorApplyAdvancedFeatures.h" x="8" y="11" />
 		<file name="GIAtranslatorRules.h" x="3" y="12" />
 		<file name="GIAtranslatorGeneric.h" x="3" y="13" />
