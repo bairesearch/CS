@@ -21,7 +21,7 @@
  * File Name: CSgenerateConstFunctionArgumentCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h2c 23-November-2015
+ * Project Version: 3h2d 23-November-2015
  *
  *******************************************************************************/
 
@@ -501,91 +501,91 @@ bool checkIfVariableIsBeingModifiedInFunction(string* functionText, string funct
 	while((indexOfFunctionArgument = functionText->find(functionDeclarationArgument, indexOfFunctionArgument+1)) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 	{
 		if(functionArgumentReferenceWholeWordCheck(functionText, functionDeclarationArgument, indexOfFunctionArgument))
-		{		
-			//find next occurance of ';' on same line
-			//cout << "indexOfFunctionArgument = " << indexOfFunctionArgument << endl;
-			int indexOfEndOfCommand = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_END_OF_COMMAND, indexOfFunctionArgument);
-			int indexOfEndOfLine = functionText->find(STRING_NEW_LINE, indexOfFunctionArgument);
-			int indexOfStartOfLine = functionText->rfind(STRING_NEW_LINE, indexOfFunctionArgument);
-			int indexOfEndOfEqualsSet = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET, indexOfFunctionArgument);
-			/*
-			int indexOfEndOfEqualsTest = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_TEST, indexOfFunctionArgument);
-			int indexOfEndOfNotEqualsTest = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_NOT_EQUALS_TEST, indexOfFunctionArgument);					
-			*/
-			int indexOfSquareBracketOpen = functionText->rfind(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_ARRAY_INDEX_OPEN, indexOfFunctionArgument);
-			int indexOfSquareBracketClose = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_ARRAY_INDEX_CLOSE, indexOfFunctionArgument);
-			
-			if(indexOfEndOfCommand < indexOfEndOfLine)
-			{
-				//now see if the function argument has been reassigned in this command
-				if((indexOfEndOfEqualsSet < indexOfEndOfCommand) && (indexOfEndOfEqualsSet < indexOfEndOfLine))
-				{
-					/*
-					if((indexOfEndOfEqualsSet != indexOfEndOfEqualsTest) && (indexOfEndOfEqualsSet != indexOfEndOfNotEqualsTest))	//not required for multiline logical conditions because checking for (indexOfEndOfEqualsSet < indexOfEndOfCommand), e.g. if(chicken == 5). Only required for single line logical conditions, eg. if(chicken == 5) bat = 2;
-					{
-					*/
-					if(indexOfFunctionArgument < indexOfEndOfEqualsSet)
-					{//restored 3h2c
+		{
+			//ensure variable is not preceeded by a -> or . (ie is not actually the function argument but a subset of another object), e.g. pm->wide = wide;
+			if((indexOfFunctionArgument == 0) || !charInCharArray((*functionText)[indexOfFunctionArgument-1], referenceLastCharacters, CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_REFERENCE_LAST_CHARACTERS))
+			{//added 3h2d
 					
-						//added condition CS3h1d - ensure not a cout start, e.g. 'cout << "indexOfFunctionArgument' in; 'cout << "indexOfFunctionArgument = " << indexOfFunctionArgument << endl;'
-						if((indexOfFunctionArgument < string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_COUT_START).length()) || (functionText->substr(indexOfFunctionArgument-string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_COUT_START).length(), string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_COUT_START).length()) != CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_COUT_START))
+				//find next occurance of ';' on same line
+				//cout << "indexOfFunctionArgument = " << indexOfFunctionArgument << endl;
+				int indexOfEndOfCommand = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_END_OF_COMMAND, indexOfFunctionArgument);
+				int indexOfEndOfLine = functionText->find(STRING_NEW_LINE, indexOfFunctionArgument);
+				int indexOfStartOfLine = functionText->rfind(STRING_NEW_LINE, indexOfFunctionArgument);
+				int indexOfEndOfEqualsSet = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET, indexOfFunctionArgument);
+				/*
+				int indexOfEndOfEqualsTest = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_TEST, indexOfFunctionArgument);
+				int indexOfEndOfNotEqualsTest = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_NOT_EQUALS_TEST, indexOfFunctionArgument);					
+				*/
+				int indexOfSquareBracketOpen = functionText->rfind(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_ARRAY_INDEX_OPEN, indexOfFunctionArgument);
+				int indexOfSquareBracketClose = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_ARRAY_INDEX_CLOSE, indexOfFunctionArgument);
+
+				if(indexOfEndOfCommand < indexOfEndOfLine)
+				{
+					//now see if the function argument has been reassigned in this command
+					if((indexOfEndOfEqualsSet < indexOfEndOfCommand) && (indexOfEndOfEqualsSet < indexOfEndOfLine))
+					{
+						/*
+						if((indexOfEndOfEqualsSet != indexOfEndOfEqualsTest) && (indexOfEndOfEqualsSet != indexOfEndOfNotEqualsTest))	//not required for multiline logical conditions because checking for (indexOfEndOfEqualsSet < indexOfEndOfCommand), e.g. if(chicken == 5). Only required for single line logical conditions, eg. if(chicken == 5) bat = 2;
 						{
-							bool passMiscellaneousConditions = true;
-							if(ignoreListIterationNextAssignments)
+						*/
+						if(indexOfFunctionArgument < indexOfEndOfEqualsSet)
+						{//restored 3h2c
+
+							//added condition CS3h1d - ensure not a cout start, e.g. 'cout << "indexOfFunctionArgument' in; 'cout << "indexOfFunctionArgument = " << indexOfFunctionArgument << endl;'
+							if((indexOfFunctionArgument < string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_COUT_START).length()) || (functionText->substr(indexOfFunctionArgument-string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_COUT_START).length(), string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_COUT_START).length()) != CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_COUT_START))
 							{
-								int indexOfNextFunctionArgument = -1;
-								int indexOfNextFunctionArgumentNextPointer = -1;
-								if((indexOfNextFunctionArgument = functionText->find(functionDeclarationArgument, indexOfFunctionArgument+1)) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+								bool passMiscellaneousConditions = true;
+								if(ignoreListIterationNextAssignments)
 								{
-									if((indexOfNextFunctionArgumentNextPointer = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_LIST_VARIABLE_POINTER_NEXT, indexOfNextFunctionArgument)) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+									int indexOfNextFunctionArgument = -1;
+									int indexOfNextFunctionArgumentNextPointer = -1;
+									if((indexOfNextFunctionArgument = functionText->find(functionDeclarationArgument, indexOfFunctionArgument+1)) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 									{
-										if((indexOfNextFunctionArgumentNextPointer > indexOfNextFunctionArgument) && (indexOfNextFunctionArgumentNextPointer < indexOfEndOfCommand))
+										if((indexOfNextFunctionArgumentNextPointer = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_LIST_VARIABLE_POINTER_NEXT, indexOfNextFunctionArgument)) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 										{
-											//e.g. "currentFileObjectContainer = currentFileObjectContainer->next;"
-											passMiscellaneousConditions = false;
-											
-											string currentLine = functionText->substr(indexOfStartOfLine, indexOfEndOfLine-indexOfStartOfLine);	
-											//cout << "!passMiscellaneousConditions, currentLine = " << currentLine << endl;
+											if((indexOfNextFunctionArgumentNextPointer > indexOfNextFunctionArgument) && (indexOfNextFunctionArgumentNextPointer < indexOfEndOfCommand))
+											{
+												//e.g. "currentFileObjectContainer = currentFileObjectContainer->next;"
+												passMiscellaneousConditions = false;
+
+												string currentLine = functionText->substr(indexOfStartOfLine, indexOfEndOfLine-indexOfStartOfLine);	
+												//cout << "!passMiscellaneousConditions, currentLine = " << currentLine << endl;
+											}
 										}
 									}
 								}
-							}
-							if((indexOfSquareBracketOpen != CPP_STRING_FIND_RESULT_FAIL_VALUE) && (indexOfSquareBracketClose != CPP_STRING_FIND_RESULT_FAIL_VALUE))
-							{
-								if((indexOfSquareBracketOpen > indexOfStartOfLine) && (indexOfSquareBracketClose < indexOfEndOfEqualsSet))
+								if((indexOfSquareBracketOpen != CPP_STRING_FIND_RESULT_FAIL_VALUE) && (indexOfSquareBracketClose != CPP_STRING_FIND_RESULT_FAIL_VALUE))
 								{
-									//e.g. imageWidth in "contrastMap[y*imageWidth + x] = contrastVal;"
-									passMiscellaneousConditions = false;
+									if((indexOfSquareBracketOpen > indexOfStartOfLine) && (indexOfSquareBracketClose < indexOfEndOfEqualsSet))
+									{
+										//e.g. imageWidth in "contrastMap[y*imageWidth + x] = contrastVal;"
+										passMiscellaneousConditions = false;
+									}
 								}
-							}
-							
-							if(passMiscellaneousConditions)
-							{
-								isNotConst = true;
-								if(functionDeclarationArgument == "contrastVal")
-								{								
-									//cout << "nn functionDeclarationArgument = " << functionDeclarationArgument << endl;
-									string lineText = functionText->substr(indexOfStartOfLine, indexOfEndOfCommand-indexOfStartOfLine);
-									//cout << "lineText = " << lineText << endl;
-									//cout << "indexOfStartOfLine = " << indexOfStartOfLine << endl;
-									//cout << "indexOfEndOfEqualsSet = " << indexOfEndOfEqualsSet << endl;
-									//cout << "indexOfEndOfCommand = " << indexOfEndOfCommand << endl;
+
+								if(passMiscellaneousConditions)
+								{
+									isNotConst = true;
+									if(functionDeclarationArgument == "contrastVal")
+									{								
+										string lineText = functionText->substr(indexOfStartOfLine, indexOfEndOfCommand-indexOfStartOfLine);
+									}
 								}
+
+								/*
+								e.g.
+								functionArgument = 5;
+								*functionArgument = 5;
+								functionArgument->parameter = 5;
+								*/
 							}
-							
-							/*
-							e.g.
-							functionArgument = 5;
-							*functionArgument = 5;
-							functionArgument->parameter = 5;
-							*/
 						}
 					}
 				}
-			}
-			else
-			{
-				//function reference argument detected; ignore (as this is dealt with in step 2)
+				else
+				{
+					//function reference argument detected; ignore (as this is dealt with in step 2)
+				}
 			}
 		}
 	}
