@@ -23,7 +23,7 @@
  * File Name: CSexecflow.h
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c3h 19-November-2012
+ * Project Version: 3c4a 30-November-2012
  *
  *******************************************************************************/
 
@@ -79,5 +79,16 @@ void printCS(string topLevelFileName, int width, int height, string outputLDRfil
 	void writeStringToFileObject(string * s, ofstream * writeFileObject);
 	void addToHTMLdocumentationFileFunctionList(CSfunctionReference * currentFunctionReference, string * HTMLdocumentationFileFunctionList, int * previousIndentation, bool * previousIndentationFirst);
 
+#ifdef CS_GENERATE_CLASS_HTML_DOCUMENTATION_FROM_CUSTOM_CSCLASS_FORMAT
+#ifdef CS_GENERATE_CLASS_HTML_DOCUMENTATION_FROM_CUSTOM_CSCLASS_FORMAT_COMBINED
+#define NUMBER_OF_CSCLASSES (8)
+static string CSclassesArray[NUMBER_OF_CSCLASSES] = {"GIA.CSclass", "OR.CSclass", "CS.CSclass", "ANN.CSclass", "RT.CSclass", "LD.CSclass", "SHARED.CSclass", "XML.CSclass"};
+#else
+#define NUMBER_OF_CSCLASSES (23)
+static string CSclassesArray[NUMBER_OF_CSCLASSES] = {"GIAconditionNodeClass.CSclass", "GIAentityConnectionClass.CSclass", "GIAentityNodeClass.CSclass", "GIAlrp.CSclass", "GIAnlg.CSclass", "GIAquery.CSclass", "GIAsentenceClass.CSclass", "ORpolygonList.CSclass", "ORquadraticFit.CSclass", "ORTHimageCategorisationNN.CSclass", "CSreferenceClass.CSclass", "ANNexperienceClass.CSclass", "ANNneuronClass.CSclass", "RToperations.CSclass", "RTparser.CSclass", "RTppm.CSclass", "RTraytracer.CSclass", "RTscene.CSclass", "RTviewinfo.CSclass", "LDreferenceClass.CSclass", "SHAREDvars.CSclass", "XMLparser.CSclass", "XMLrules.CSclass"};
+#endif
+void generateClassHTMLdocumentationFromCustomCSclassFormat();
+string getFunctionNameFromFunctionNameFull(string * functionNameFull);
+#endif			
 
 #endif

@@ -23,7 +23,7 @@
  * File Name: CSexecflow.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c3h 19-November-2012
+ * Project Version: 3c4a 30-November-2012
  *
  *******************************************************************************/
 
@@ -256,7 +256,7 @@ string generateHTMLdocumentationHeader(string name, bool htmlHeader, bool isFile
 	string HTMLdocumentationHeader = "";
 	if(htmlHeader)
 	{
-		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h2>" + name + " Documentation</h2><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3c3h 19-November-2012<p>\n";
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h2>" + name + " Documentation</h2><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3c4a 30-November-2012<p>\n";
 	}
 	else
 	{
@@ -523,8 +523,13 @@ void generateHTMLdocumentationFunctionSummary(string * functionName, string * fu
 void generateHTMLdocumentationFunctionInputArguments(string * functionName, string * functionNameFull, string * HTMLdocumentationFunctionInputArguments)
 {
 	*HTMLdocumentationFunctionInputArguments = "";
-	*HTMLdocumentationFunctionInputArguments = *HTMLdocumentationFunctionInputArguments + "\t<b>Function Arguments</b><br /><table border=\"1\">\n\t\t<tr><th>" + "name" + "</th><th>" + "type" + "</th><th>" + "description" + "</th></tr>\n";
-
+	#ifdef CS_GENERATE_CLASS_HTML_DOCUMENTATION_FROM_CUSTOM_CSCLASS_FORMAT
+	*HTMLdocumentationFunctionInputArguments = *HTMLdocumentationFunctionInputArguments + "\t<b>Class Data</b><br />";	
+	#else
+	*HTMLdocumentationFunctionInputArguments = *HTMLdocumentationFunctionInputArguments + "\t<b>Function Arguments</b><br />";
+	#endif
+	*HTMLdocumentationFunctionInputArguments = *HTMLdocumentationFunctionInputArguments + "<table border=\"1\">\n\t\t<tr><th>" + "name" + "</th><th>" + "type" + "</th><th>" + "description" + "</th></tr>\n";
+	
 	int startPositionOfFunctionBrackets = functionNameFull->find(CHAR_OPEN_BRACKET);
 	int endPositionOfFunctionBrackets = functionNameFull->find(CHAR_CLOSE_BRACKET);
 	bool functionHasArguments = false;
@@ -963,4 +968,96 @@ void generateFileDiagramFunctionsHeirachy(CSfileReference * currentFileReference
 		}
 	}	
 }
+
+#ifdef CS_GENERATE_CLASS_HTML_DOCUMENTATION_FROM_CUSTOM_CSCLASS_FORMAT
+
+void generateClassHTMLdocumentationFromCustomCSclassFormat()
+{
+	bool result = true;
+	for(int i=0; i<NUMBER_OF_CSCLASSES; i++)
+	{
+		string CSclassFileName = CSclassesArray[i];
+		cout << "CSclassFileName = " << CSclassFileName << endl;
+		
+		ifstream CSclassFileObject(CSclassFileName.c_str());
+
+		if(!CSclassFileObject.rdbuf( )->is_open( ))
+		{
+			//xml file does not exist in current directory.
+			cout << "Error: CSclass File does not exist in current directory: " << CSclassFileName << endl;
+			result = false;		
+		}
+		else
+		{
+			string HTMLdocumentationFileBody = "";
+			
+			string currentClassBeingParsed = "";
+			bool finishedParsingObject = false;	
+			char currentToken;
+			while((currentToken = (&CSclassFileObject)->get()) != EOF)
+			{
+				if(currentToken == CHAR_NEWLINE)
+				{
+					string className = getFunctionNameFromFunctionNameFull(&currentClassBeingParsed);
+
+					string HTMLdocumentationClassDescription = createDescriptionFromCaseSensitiveMultiwordString(className);
+
+					string HTMLdocumentationClassParameters = "";
+					string functionNameNOTUSED = "";
+					generateHTMLdocumentationFunctionInputArguments(&functionNameNOTUSED, &currentClassBeingParsed, &HTMLdocumentationClassParameters);
+					currentClassBeingParsed = "";	
+					
+					string HTMLdocumentationClassTitle = "";
+					HTMLdocumentationClassTitle = HTMLdocumentationClassTitle + "<h3>Class " + className + "</h3>\n";
+					string HTMLdocumentationClassHeader = "";
+					HTMLdocumentationClassHeader = HTMLdocumentationClassHeader + "<p><b>Class description:</b> " + HTMLdocumentationClassDescription + "</p>\n";
+					
+					HTMLdocumentationFileBody = HTMLdocumentationFileBody + HTMLdocumentationClassTitle + HTMLdocumentationClassHeader + HTMLdocumentationClassParameters;
 				
+					//cout << "HTMLdocumentationFileBody = " << HTMLdocumentationFileBody << endl;
+				}
+				else
+				{
+					currentClassBeingParsed = currentClassBeingParsed + currentToken;
+				}
+			}
+			
+			CSclassFileObject.close();
+			
+			string HTMLdocumentationFileHeader = generateHTMLdocumentationHeader(CSclassFileName, true, false);					
+			string HTMLdocumentationFileFooter = generateHTMLdocumentationFooter(true);
+			string HTMLdocumentationFile = "";
+			HTMLdocumentationFile = HTMLdocumentationFile + HTMLdocumentationFileHeader + HTMLdocumentationFileBody + HTMLdocumentationFileFooter;
+				
+			string outputHTMLfileName = CSclassFileName + HTML_EXTENSION;
+			ofstream writeFileObjectHTML(outputHTMLfileName.c_str());
+			writeStringToFileObject(&HTMLdocumentationFile, &writeFileObjectHTML);
+					
+
+		}	
+	}
+}
+
+string getFunctionNameFromFunctionNameFull(string * functionNameFull)
+{	
+	//cout << "functionNameFull = " << *functionNameFull << endl;
+
+	int startPositionOfFunctionBrackets = functionNameFull->find(CHAR_OPEN_BRACKET);
+	string functionTypeAndName = functionNameFull->substr(0, startPositionOfFunctionBrackets);
+	//cout << "functionTypeAndName = " << functionTypeAndName << endl;
+	
+	int startPositionOfFunctionName = functionTypeAndName.rfind(CHAR_SPACE) + 1;
+	string functionName = functionTypeAndName.substr(startPositionOfFunctionName, functionTypeAndName.length()-startPositionOfFunctionName);
+	#ifdef CS_SUPPORT_FUNCTION_RETURN_POINTERS
+	if(functionName[0] == '*')
+	{
+		int functionNameLength = functionName.length();
+		functionName = functionName.substr(1, functionNameLength-1);
+	}
+	#endif
+	//cout << "functionName = " << functionName << endl;
+										
+	return functionName;
+}
+
+#endif			

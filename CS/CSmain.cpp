@@ -23,7 +23,7 @@
  * File Name: CSmain.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2012 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3c3h 19-November-2012
+ * Project Version: 3c4a 30-November-2012
  *
  *******************************************************************************/
 
@@ -72,8 +72,14 @@ static char errmessage[] = "Usage:  OpenCS.exe [options]"
 "\n";
 
 
+
+		
 int main(int argc,char **argv)
 {
+#ifdef CS_GENERATE_CLASS_HTML_DOCUMENTATION_FROM_CUSTOM_CSCLASS_FORMAT
+	generateClassHTMLdocumentationFromCustomCSclassFormat();
+#else
+		
 	bool useOutputLDRfile = false;
 	string outputLDRfileName = "codeStructureNet.ldr";
 
@@ -256,7 +262,7 @@ int main(int argc,char **argv)
 
 	if(argumentExists(argc,argv,"-version"))
 	{
-		cout << "OpenCS.exe - Project Version: 3c3h 19-November-2012" << endl;
+		cout << "OpenCS.exe - Project Version: 3c4a 30-November-2012" << endl;
 		exit(1);
 	}
 
@@ -350,4 +356,8 @@ int main(int argc,char **argv)
 		cout << "error: invalid operation mode" << endl;
 		exit(0);
 	}
+#endif
 }
+
+
+
