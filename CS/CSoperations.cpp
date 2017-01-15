@@ -26,7 +26,7 @@
  * File Name: CSoperations.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h15b 29-February-2016
+ * Project Version: 3i15a 11-August-2016
  *
  *******************************************************************************/
 
@@ -49,7 +49,7 @@ bool getIncludeFileNamesFromCorHfile(CSfileContainer* firstReferenceInIncludeFil
 
 	if(!parseFileObject.rdbuf()->is_open())
 	{
-		//cout << "CS error - file not found, " << parseFileName << endl;
+		
 	}
 	else
 	{
@@ -808,7 +808,9 @@ void getFunctionObjectNamesFromFunctionsInCfile(CSfile* firstFileInIncludeFileLi
 					while(stillFindingEndOfFunction)
 					{
 						char c = fileContentsString[currentIndexInFunction];
+						#ifdef CS_DEBUG
 						//cout << c;
+						#endif
 						if(readingLargeComment)
 						{
 							if(c == '\n')
@@ -820,7 +822,9 @@ void getFunctionObjectNamesFromFunctionsInCfile(CSfile* firstFileInIncludeFileLi
 								{
 									currentIndexInFunction++;
 									c = fileContentsString[currentIndexInFunction];
+									#ifdef CS_DEBUG
 									//cout << c;
+									#endif
 									if(c == '/')
 									{
 										readingLargeComment = false;
@@ -836,7 +840,9 @@ void getFunctionObjectNamesFromFunctionsInCfile(CSfile* firstFileInIncludeFileLi
 						{
 							currentIndexInFunction++;
 							c = fileContentsString[currentIndexInFunction];
+							#ifdef CS_DEBUG
 							//cout << c;
+							#endif
 							if(c == '*')
 							{
 								readingLargeComment = true;
@@ -911,8 +917,9 @@ void getFunctionObjectNamesFromFunctionsInCfile(CSfile* firstFileInIncludeFileLi
 						currentIndexInFunction++;
 
 					}
-
+					#ifdef CS_DEBUG
 					//cout << "functionContentsString = " << functionContentsString << endl;
+					#endif
 				#else
 
 					//OLD method - comments are not ignored;
@@ -962,7 +969,9 @@ void getFunctionObjectNamesFromFunctionsInCfile(CSfile* firstFileInIncludeFileLi
 					string functionContentsStringRaw = fileContentsString.substr(positionOfFunctionObject+fullFunctionName.length(), (positionOfFunctionObjectEnd-positionOfFunctionObject)-fullFunctionName.length());
 					currentReference->functionTextRaw = functionContentsStringRaw;
 					functionContentsStringRaw = "";
+					#ifdef CS_DEBUG
 					//cout << "functionContentsStringRaw = " << functionContentsStringRaw << endl;
+					#endif
 					#endif
 
 					#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST
@@ -997,8 +1006,8 @@ void getFunctionObjectNamesFromFunctionsInCfile(CSfile* firstFileInIncludeFileLi
 					*/
 					#endif
 
-					//cout << "search current file for function references;" << endl;
 					#ifdef CS_DEBUG
+					//cout << "search current file for function references;" << endl;
 					//cout << "firstFileInIncludeFileList->name = " << firstFileInIncludeFileList->name << endl;
 					#endif
 					//search current file for function references;
@@ -1023,8 +1032,8 @@ void getFunctionObjectNamesFromFunctionsInCfile(CSfile* firstFileInIncludeFileLi
 					#endif
 
 
-					//cout << "search include files for function references;;" << endl;
 					#ifdef CS_DEBUG
+					//cout << "search include files for function references;;" << endl;
 					//cout << "firstFileInIncludeFileList->name = " << firstFileInIncludeFileList->name << endl;
 					#endif
 					//search include files for function references;
@@ -1127,7 +1136,9 @@ bool searchFunctionStringForFunctionReferences(CSfile* firstFileInIncludeFileLis
 			//added condition CS 3f1b - ensure previous character is not a letter (this ensures that ABCfunctionName is not found when searching for functionName)
 			if((startPosOfFunctionReferenceInFunction == 0) || !charInCharArray((*functionContentsString)[startPosOfFunctionReferenceInFunction-1], functionOrVariableNameCharacters, CS_FUNCTION_OR_VARIABLE_NAME_CHARACTERS_NUMBER_OF_TYPES))
 			{
+				#ifdef CS_DEBUG
 				//cout << "startPosOfFunctionReferenceInFunction = " << startPosOfFunctionReferenceInFunction << endl;
+				#endif
 
 				//function reference found, add it to the function reference list of the funciton;
 				#ifdef CS_DEBUG
@@ -1486,7 +1497,9 @@ string generateSourceFileNameFromHeaderFileName(string headerFileName, string so
 	if(positionOfExtension != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 	{
 		sourceFileName = headerFileName.substr(0, positionOfExtension+1) + sourceFileNameExtension;
+		#ifdef CS_DEBUG
 		//cout << "sourceFileName = " << sourceFileName << endl;
+		#endif
 	}
 	return sourceFileName;
 }

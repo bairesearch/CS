@@ -26,7 +26,7 @@
  * File Name: CSreferenceContainerClass.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h15b 29-February-2016
+ * Project Version: 3i15a 11-August-2016
  *
  *******************************************************************************/
 
@@ -80,7 +80,9 @@ CSfileContainer::~CSfileContainer(void)
 //CHECKTHIS;
 int findEndPositionOfArgument(string* functionArgumentsRaw, int startPositionOfArgument, bool* lastArgument)
 {
+	#ifdef CS_DEBUG
 	//cout << "functionArgumentsRaw = " << *functionArgumentsRaw << endl;
+	#endif
 	int endPositionOfArgument = -1;
 	int bracketLevel = 1;
 	int pos = startPositionOfArgument;

@@ -26,7 +26,7 @@
  * File Name: CSexecflow.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h15b 29-February-2016
+ * Project Version: 3i15a 11-August-2016
  *
  *******************************************************************************/
 
@@ -91,9 +91,7 @@ void generateCodeStructure(string topLevelFileName, int width, int height, strin
 	CSfileContainer* firstObjectInTopLevelBelowListContainer = new CSfileContainer();
 	topLevelReferenceInList->firstFileInBelowListContainer = firstObjectInTopLevelBelowListContainer;
 
-	//cout << "start getIncludeFileNamesFromCorHfile{}" << endl;
 	bool hFileFound = getIncludeFileNamesFromCorHfile(firstObjectInTopLevelBelowListContainer, topLevelReferenceInListContainer, topLevelReferenceInList, topLevelFileName, 0);
-	//cout << "finish getIncludeFileNamesFromCorHfile{}" << endl;
 	if(!hFileFound)
 	{
 		cout << "generateCodeStructure{} error: !hFileFound: " << topLevelFileName << endl;

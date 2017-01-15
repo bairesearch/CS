@@ -26,7 +26,7 @@
  * File Name: CSgenerateHTMLdocumentation.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h15b 29-February-2016
+ * Project Version: 3i15a 11-August-2016
  *
  *******************************************************************************/
 
@@ -69,7 +69,7 @@ string generateHTMLdocumentationHeader(string name, bool htmlHeader, bool isFile
 	string HTMLdocumentationHeader = "";
 	if(htmlHeader)
 	{
-		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3h15b 29-February-2016<p>\n";
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (OpenCS), Project Version: 3i15a 11-August-2016<p>\n";
 	}
 	else
 	{
@@ -537,9 +537,11 @@ void generateHTMLdocumentationFunctionReferenceList(CSfunction* function, string
 	*/
 	while(currentReferenceInFunctionReferenceListRepeats->next != NULL)
 	{
+		#ifdef CS_DEBUG
 		//cout << "foundReferences" << endl;
 		//cout << "currentReferenceInFunctionReferenceListRepeats->functionReferenceCharacterIndex = " << currentReferenceInFunctionReferenceListRepeats->functionReferenceCharacterIndex << endl;
-
+		#endif
+		
 		foundReferences = true;
 
 		CSfunctionReferenceListOrdered.insert(pair<int, CSfunction*>(currentReferenceInFunctionReferenceListRepeats->functionReferenceCharacterIndex, currentReferenceInFunctionReferenceListRepeats));
@@ -559,8 +561,10 @@ void generateHTMLdocumentationFunctionReferenceList(CSfunction* function, string
 		}
 		*/
 		addToHTMLdocumentationFileFunctionList(currentReferenceInFunctionReferenceList, &HTMLdocumentationFunctionObjectListBody, &previousIndentation, &previousIndentationFirst);
+		#ifdef CS_DEBUG
 		//cout << "currentReferenceInFunctionReferenceList->name = " << currentReferenceInFunctionReferenceList->name << endl;
 		//cout << "HTMLdocumentationFunctionReferenceList = " <<* HTMLdocumentationFunctionReferenceList << endl;
+		#endif
 	#else
 		#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST_WITH_INDENTATION
 		HTMLdocumentationFunctionObjectListBody = HTMLdocumentationFunctionObjectListBody + "\t\t<li>";
@@ -692,17 +696,20 @@ void generateFileDiagramFunctionsHeirachy(CSfile* currentFileObject, string outp
 			if(currentTopLevelFunctionObject->printed)
 			{
 				cout << currentTopLevelFunctionObject->name << endl;
+				#ifdef CS_DEBUG
 				//cout << "currentTopLevelFunctionObject->name = " << currentTopLevelFunctionObject->name << endl;
-
-				//print function box for top level functions (added 3d3b);
 				//cout << "currentTopLevelFunctionObject->level = " << currentTopLevelFunctionObject->level << endl;
+				#endif
+				//print function box for top level functions (added 3d3b);
 				if(currentTopLevelFunctionObject->printYIndex == 0)
 				{
 					//correction applied with useSingleFileOnly
 					currentTopLevelFunctionObject->printX = currentTopLevelFunctionObject->printX - currentFileObject->printX;
 					currentTopLevelFunctionObject->printY = currentTopLevelFunctionObject->printY - currentFileObject->printY;
 
+					#ifdef CS_DEBUG
 					//cout << "currentTopLevelFunctionObject->printYIndex = " << currentTopLevelFunctionObject->printYIndex << endl;
+					#endif
 					currentReferenceInPrintList = printFunctionBox(currentReferenceInPrintList, &currentTagInSVGFile, currentTopLevelFunctionObject, currentTopLevelFunctionObject->col);
 					currentReferenceInPrintList = printFunctionBoxText(currentReferenceInPrintList, &currentTagInSVGFile, currentTopLevelFunctionObject, currentTopLevelFunctionObject->col, true);
 
@@ -714,7 +721,9 @@ void generateFileDiagramFunctionsHeirachy(CSfile* currentFileObject, string outp
 				currentTopLevelFunctionObject->printedFunctionConnections = false;
 				while(currentReferenceInFunctionReferenceList->next != NULL)
 				{
+					#ifdef CS_DEBUG
 					//cout << "currentReferenceInFunctionReferenceList->name = " << currentReferenceInFunctionReferenceList->name << endl;
+					#endif
 					currentReferenceInPrintList = createFunctionObjectListBoxesAndConnections(currentReferenceInPrintList, currentFileObject, currentTopLevelFunctionObject, firstObjectInTopLevelBelowListContainer, 0, currentReferenceInFunctionReferenceList, &currentTagInSVGFile, false, true, &(currentFileObject->name), usePredefinedGrid);
 
 					currentReferenceInFunctionReferenceList = currentReferenceInFunctionReferenceList->next;
@@ -778,7 +787,9 @@ void generateClassHTMLdocumentationFromCustomCSclassFormat()
 
 					HTMLdocumentationFileBody = HTMLdocumentationFileBody + HTMLdocumentationClassTitle + HTMLdocumentationClassHeader + HTMLdocumentationClassParameters;
 
+					#ifdef CS_DEBUG
 					//cout << "HTMLdocumentationFileBody = " << HTMLdocumentationFileBody << endl;
+					#endif
 				}
 				else
 				{
@@ -804,8 +815,10 @@ void generateClassHTMLdocumentationFromCustomCSclassFormat()
 
 string getFunctionNameFromFunctionNameFull(string* functionNameFull)
 {
+	#ifdef CS_DEBUG
 	//cout << "functionNameFull = " <<* functionNameFull << endl;
-
+	#endif
+	
 	int startPositionOfFunctionBrackets = functionNameFull->find(CHAR_OPEN_BRACKET);
 	string functionTypeAndName = functionNameFull->substr(0, startPositionOfFunctionBrackets);
 	//cout << "functionTypeAndName = " << functionTypeAndName << endl;
@@ -819,8 +832,11 @@ string getFunctionNameFromFunctionNameFull(string* functionNameFull)
 		functionName = functionName.substr(1, functionNameLength-1);
 	}
 	#endif
+	
+	#ifdef CS_DEBUG
 	//cout << "functionName = " << functionName << endl;
-
+	#endif
+	
 	return functionName;
 }
 
@@ -870,7 +886,9 @@ bool readIndentedListFile(string indentedListFileName, vector<string>* indentedL
 			if(currentToken == CHAR_NEWLINE)
 			{
 				indentedListVector->push_back(currentEntry);
+				#ifdef CS_DEBUG
 				//cout << "1. currentEntry = " << currentEntry << endl;
+				#endif
 				currentEntry = "";
 				entryIndex++;
 			}
@@ -913,11 +931,15 @@ void generateHTMLdocumentationIndentedList(vector<string>* indentedListVector, s
 			indentationLevel++;
 		}
 		currentEntry = currentEntry.substr(indentationLevel, currentEntryLengthOld-indentationLevel);
+		#ifdef CS_DEBUG
 		//cout << "2. currentEntry = " << currentEntry << endl;
 		//cout << "indentationLevel = " << indentationLevel << endl;
+		#endif
 
 		addToHTMLdocumentationIndentedList(currentEntry, indentationLevel, &HTMLdocumentationIndentationListBody, &previousIndentation, &previousIndentationFirst);
+		#ifdef CS_DEBUG
 		//cout << "HTMLdocumentationIndentationListBody = " << HTMLdocumentationIndentationListBody << endl;
+		#endif
 
 	}
 
@@ -938,6 +960,8 @@ void generateHTMLdocumentationIndentedList(vector<string>* indentedListVector, s
 	}
 	*HTMLdocumentationIndentationList = *HTMLdocumentationIndentationList + "</p>\n";
 
+	#ifdef CS_DEBUG
 	//cout << "HTMLdocumentationIndentationList: " <<* HTMLdocumentationIndentationList << endl;
+	#endif
 }
 #endif

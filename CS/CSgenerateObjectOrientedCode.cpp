@@ -21,7 +21,7 @@
  * File Name: CSgenerateObjectOrientedCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2015 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3h15b 29-February-2016
+ * Project Version: 3i15a 11-August-2016
  *
  *******************************************************************************/
 
@@ -178,7 +178,9 @@ bool generateCPPclassesFile(CSfile* currentFileObject, CSfileContainer* firstObj
 						{
 							functionReferenceNameUpdated = generateClassObjectName(classHoldingFunction) + CS_GENERATE_CPP_CLASSES_TEXT_FUNCTION_REFERENCE_CONTEXT_DELIMITER + functionReferenceName;
 
+							#ifdef CS_DEBUG
 							//cout << "classHoldingFunction = " << classHoldingFunction << endl;
+							#endif
 							bool foundReferencedClass = findReferencedClassInList(firstReferencedClassInList, classHoldingFunction);
 							if(!foundReferencedClass)
 							{
@@ -217,8 +219,9 @@ bool generateCPPclassesFile(CSfile* currentFileObject, CSfileContainer* firstObj
 							}
 							currentFileObject->sourceFileText = currentFileObject->sourceFileText.substr(0, posOfFunctionText) + currentFunctionObject->functionTextRaw + currentFileObject->sourceFileText.substr((posOfFunctionText+functionTextOrigLength), currentFileObject->sourceFileText.length()-(posOfFunctionText+functionTextOrigLength));
 
+							#ifdef CS_DEBUG
 							//cout << "currentFunctionObject->functionTextRaw = " << currentFunctionObject->functionTextRaw << endl;
-							//exit(0);
+							#endif
 						}
 						else
 						{
@@ -397,7 +400,9 @@ string generateClassName(string headerFileName)
 	if(positionOfExtension != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 	{
 		className = headerFileName.substr(0, positionOfExtension);
+		#ifdef CS_DEBUG
 		//cout << "className = " << className << endl;
+		#endif
 	}
 	return className;
 }
@@ -503,7 +508,9 @@ string generateReferencedClassesDeclarations(ReferencedClass* firstReferencedCla
 	while(currentReferencedClassInList->next != NULL)
 	{
 		referencedClassesDeclarations = referencedClassesDeclarations + CHAR_TAB + CS_GENERATE_CPP_CLASSES_TEXT_FUNCTION_PRIVATE + generateClassDeclarationName(currentReferencedClassInList->className) + CHAR_SPACE + generateClassObjectName(currentReferencedClassInList->className) + CHAR_SEMICOLON + CHAR_NEWLINE; 	//ie private: xClass x;
+		#ifdef CS_DEBUG
 		//cout << "referencedClassesDeclarations = " << referencedClassesDeclarations << endl;
+		#endif
 		currentReferencedClassInList = currentReferencedClassInList->next;
 	}
 	return referencedClassesDeclarations;
@@ -538,16 +545,19 @@ bool moveIncludeFileStatementsToHeader(CSfile* firstReferenceInAboveLevelBelowLi
 		int posEndOfLineHeader = CPP_STRING_FIND_RESULT_FAIL_VALUE;
 		if(positionOfIncludeStatementHeader != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 		{
+			#ifdef CS_DEBUG
 			//cout << "foundIncludeFileInHeader" << endl;
-
+			#endif
+			
 			foundIncludeFileInHeader = true;
 			posStartOfLineHeader = firstReferenceInAboveLevelBelowList->headerFileText.rfind(CHAR_NEWLINE, positionOfIncludeStatementHeader);
 			posEndOfLineHeader = firstReferenceInAboveLevelBelowList->headerFileText.find(CHAR_NEWLINE, positionOfIncludeStatementHeader);
 			if((posStartOfLineHeader != CPP_STRING_FIND_RESULT_FAIL_VALUE) && (posEndOfLineHeader != CPP_STRING_FIND_RESULT_FAIL_VALUE))
 			{
 				includeStatementFullLineHeader = firstReferenceInAboveLevelBelowList->headerFileText.substr(posStartOfLineHeader, posEndOfLineHeader-posStartOfLineHeader);
+				#ifdef CS_DEBUG
 				//cout << "includeStatementFullLineHeader = " << includeStatementFullLineHeader << endl;
-				//exit(0);
+				#endif
 
 				if(posEndOfLineHeader > positionOfLastIncludeStatementEndInHeader)
 				{
@@ -563,16 +573,19 @@ bool moveIncludeFileStatementsToHeader(CSfile* firstReferenceInAboveLevelBelowLi
 		int posEndOfLineSource = CPP_STRING_FIND_RESULT_FAIL_VALUE;
 		if(positionOfIncludeStatementSource != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 		{
+			#ifdef CS_DEBUG
 			//cout << "foundIncludeFileInSource" << endl;
-
+			#endif
+			
 			foundIncludeFileInSource = true;
 			posStartOfLineSource = firstReferenceInAboveLevelBelowList->sourceFileText.rfind(CHAR_NEWLINE, positionOfIncludeStatementSource);
 			posEndOfLineSource = firstReferenceInAboveLevelBelowList->sourceFileText.find(CHAR_NEWLINE, positionOfIncludeStatementSource);
 			if((posStartOfLineSource != CPP_STRING_FIND_RESULT_FAIL_VALUE) && (posEndOfLineSource != CPP_STRING_FIND_RESULT_FAIL_VALUE))
 			{
 				includeStatementFullLineSource = firstReferenceInAboveLevelBelowList->sourceFileText.substr(posStartOfLineSource, posEndOfLineSource-posStartOfLineSource);
+				#ifdef CS_DEBUG
 				//cout << "includeStatementFullLineSource = " << includeStatementFullLineSource << endl;
-				//exit(0);
+				#endif
 
 				int lineStartOfLineSource = 0;
 				for(int i=0; i<posStartOfLineSource; i++)
@@ -595,7 +608,9 @@ bool moveIncludeFileStatementsToHeader(CSfile* firstReferenceInAboveLevelBelowLi
 
 		if(foundIncludeFileInSource)
 		{
+			#ifdef CS_DEBUG
 			//cout << "foundIncludeFileInSource = " << foundIncludeFileInSource << endl;
+			#endif
 			//remove from source;
 			firstReferenceInAboveLevelBelowList->sourceFileText = firstReferenceInAboveLevelBelowList->sourceFileText.substr(0, posStartOfLineSource) + firstReferenceInAboveLevelBelowList->sourceFileText.substr(posEndOfLineSource, firstReferenceInAboveLevelBelowList->sourceFileText.length()-posEndOfLineSource);
 			if(!foundIncludeFileInHeader)
@@ -610,8 +625,10 @@ bool moveIncludeFileStatementsToHeader(CSfile* firstReferenceInAboveLevelBelowLi
 	if(includeStatementsHeaderNew != "")
 	{
 		includeStatementsHeaderNew + includeStatementsHeaderNew + CHAR_NEWLINE;
+		#ifdef CS_DEBUG
 		//cout << "includeStatementsHeaderNew = " << endl;
-
+		#endif
+		
 		int positionInHeader = 0;
 		if(positionOfLastIncludeStatementEndInHeader == CPP_STRING_FIND_RESULT_FAIL_VALUE)
 		{
@@ -640,8 +657,9 @@ bool moveIncludeFileStatementsToHeader(CSfile* firstReferenceInAboveLevelBelowLi
 		}
 		firstReferenceInAboveLevelBelowList->headerFileText = firstReferenceInAboveLevelBelowList->headerFileText.substr(0, positionInHeader) + includeStatementsHeaderNew + firstReferenceInAboveLevelBelowList->headerFileText.substr(positionInHeader, includeStatementsHeaderNew.length()-positionInHeader);
 
+		#ifdef CS_DEBUG
 		//cout << "firstReferenceInAboveLevelBelowList->headerFileText = " << firstReferenceInAboveLevelBelowList->headerFileText << endl;
-		//exit(0);
+		#endif
 	}
 
 	return result;
