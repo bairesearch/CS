@@ -900,7 +900,7 @@ void getFunctionReferenceNamesFromFunctionsInCfile(CSfileReference* firstReferen
 
 						if(currentIndexInFunction > CS_MAX_NUM_CHARACTERS_PER_FUNCTION)
 						{
-							cout << "getFunctionReferenceNamesFromFunctionsInCfile() error: function definitions in .cpp files must end with a } without any leading white space" << endl;
+							cout << "getFunctionReferenceNamesFromFunctionsInCfile{} error: function definitions in .cpp files must end with a } without any leading white space" << endl;
 							exit(0);
 						}
 
@@ -943,7 +943,7 @@ void getFunctionReferenceNamesFromFunctionsInCfile(CSfileReference* firstReferen
 
 						if(currentIndexInFunction > CS_MAX_NUM_CHARACTERS_PER_FUNCTION)
 						{
-							cout << "getFunctionReferenceNamesFromFunctionsInCfile() error: function definitions in .cpp files must end with a } without any leading white space" << endl;
+							cout << "getFunctionReferenceNamesFromFunctionsInCfile{} error: function definitions in .cpp files must end with a } without any leading white space" << endl;
 							exit(0);
 						}
 

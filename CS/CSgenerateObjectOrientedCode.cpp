@@ -135,7 +135,7 @@ bool generateCPPclassesFile(CSfileReference* currentFileReference, CSfileReferen
 			currentFileReference->headerFileText = replaceAllOccurancesOfString(&(currentFileReference->headerFileText), currentFunctionReference->nameFull, classFullFunctionNameHeader, &foundAtLeastOneInstance);
 			if(!foundAtLeastOneInstance)
 			{
-				cout << "generateCPPclassesFile() error: !foundAtLeastOneInstance of " << currentFunctionReference->nameFull << " in currentFileReference->headerFileText" << endl;
+				cout << "generateCPPclassesFile{} error: !foundAtLeastOneInstance of " << currentFunctionReference->nameFull << " in currentFileReference->headerFileText" << endl;
 				cout << "currentFileReference->name = " << currentFileReference->name << endl;
 				cout << "currentFunctionReference->nameFull = " << currentFunctionReference->nameFull << endl;
 				cout << "currentFunctionReference->name = " << currentFunctionReference->name << endl;
@@ -145,7 +145,7 @@ bool generateCPPclassesFile(CSfileReference* currentFileReference, CSfileReferen
 			currentFileReference->sourceFileText = replaceAllOccurancesOfString(&(currentFileReference->sourceFileText), currentFunctionReference->nameFull, classFullFunctionNameSource, &foundAtLeastOneInstance);
 			if(!foundAtLeastOneInstance)
 			{
-				cout << "generateCPPclassesFile() error: !foundAtLeastOneInstance of " << currentFunctionReference->nameFull << " in currentFileReference->sourceFileText" << endl;
+				cout << "generateCPPclassesFile{} error: !foundAtLeastOneInstance of " << currentFunctionReference->nameFull << " in currentFileReference->sourceFileText" << endl;
 				cout << "currentFileReference->name = " << currentFileReference->name << endl;
 				cout << "currentFunctionReference->nameFull = " << currentFunctionReference->nameFull << endl;
 				cout << "currentFunctionReference->name = " << currentFunctionReference->name << endl;
@@ -215,7 +215,7 @@ bool generateCPPclassesFile(CSfileReference* currentFileReference, CSfileReferen
 							currentFunctionReference->functionTextRaw = replaceAllOccurancesOfFunctionReferenceReferenceNameInFunction(&(currentFunctionReference->functionTextRaw), functionReferenceReferenceName, functionReferenceReferenceNameUpdated, &foundAtLeastOneInstance);
 							if(!foundAtLeastOneInstance)
 							{
-								cout << "generateCPPclassesFile() error: !foundAtLeastOneInstance of " << functionReferenceReferenceName << " in currentFunctionReference->functionTextRaw" << endl;
+								cout << "generateCPPclassesFile{} error: !foundAtLeastOneInstance of " << functionReferenceReferenceName << " in currentFunctionReference->functionTextRaw" << endl;
 								cout << "currentFileReference->name = " << currentFileReference->name << endl;
 								cout << "currentFunctionReference->nameFull = " << currentFunctionReference->nameFull << endl;
 								cout << "currentFunctionReference->name = " << currentFunctionReference->name << endl;
@@ -228,7 +228,7 @@ bool generateCPPclassesFile(CSfileReference* currentFileReference, CSfileReferen
 						}
 						else
 						{
-							cout << "generateCPPclassesFile() error: currentFunctionReference->functionTextRaw not found in currentFileReference->sourceFileText" << endl;
+							cout << "generateCPPclassesFile{} error: currentFunctionReference->functionTextRaw not found in currentFileReference->sourceFileText" << endl;
 							cout << "currentFunctionReference->functionTextRaw = " <<  currentFunctionReference->functionTextRaw << endl;
 							exit(0); 
 						}
@@ -236,7 +236,7 @@ bool generateCPPclassesFile(CSfileReference* currentFileReference, CSfileReferen
 				}
 				else
 				{
-					cout << "generateCPPclassesFile() error: !referencedFunctionFound, functionReferenceReferenceName = " << functionReferenceReferenceName << endl;
+					cout << "generateCPPclassesFile{} error: !referencedFunctionFound, functionReferenceReferenceName = " << functionReferenceReferenceName << endl;
 					cout << "currentFileReference->name = " << currentFileReference->name << endl;
 					cout << "currentFunctionReference->nameFull = " << currentFunctionReference->nameFull << endl;
 					cout << "currentFunctionReference->name = " << currentFunctionReference->name << endl;
@@ -559,7 +559,7 @@ bool moveIncludeFileStatementsToHeader(CSfileReference* firstReferenceInAboveLev
 			}	
 			else
 			{
-				cout << "moveIncludeFileStatementsToHeader() error: ((posStartOfLineHeader != CPP_STRING_FIND_RESULT_FAIL_VALUE) && (posEndOfLineHeader != CPP_STRING_FIND_RESULT_FAIL_VALUE))" << endl;
+				cout << "moveIncludeFileStatementsToHeader{} error: ((posStartOfLineHeader != CPP_STRING_FIND_RESULT_FAIL_VALUE) && (posEndOfLineHeader != CPP_STRING_FIND_RESULT_FAIL_VALUE))" << endl;
 			}	
 		}
 		int posStartOfLineSource = CPP_STRING_FIND_RESULT_FAIL_VALUE;
@@ -592,7 +592,7 @@ bool moveIncludeFileStatementsToHeader(CSfileReference* firstReferenceInAboveLev
 			}	
 			else
 			{
-				cout << "moveIncludeFileStatementsToSource() error: ((posStartOfLineSource != CPP_STRING_FIND_RESULT_FAIL_VALUE) && (posEndOfLineSource != CPP_STRING_FIND_RESULT_FAIL_VALUE))" << endl;
+				cout << "moveIncludeFileStatementsToSource{} error: ((posStartOfLineSource != CPP_STRING_FIND_RESULT_FAIL_VALUE) && (posEndOfLineSource != CPP_STRING_FIND_RESULT_FAIL_VALUE))" << endl;
 			}		
 		}
 		

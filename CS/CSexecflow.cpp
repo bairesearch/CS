@@ -93,7 +93,7 @@ void generateCodeStructure(string topLevelFileName, int width, int height, strin
 	//cout << "finish getIncludeFileNamesFromCorHfile{}" << endl;
 	if(!hFileFound)
 	{
-		cout << "generateCodeStructure() error: !hFileFound: " << topLevelFileName << endl;
+		cout << "generateCodeStructure{} error: !hFileFound: " << topLevelFileName << endl;
 	}
 	
 	CSfileReference* firstReferenceInTopLevelBelowList = firstReferenceInTopLevelBelowListContainer->fileReference;

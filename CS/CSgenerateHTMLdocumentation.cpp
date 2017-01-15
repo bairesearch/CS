@@ -388,7 +388,7 @@ void generateHTMLdocumentationFunctionInputArguments(string* functionName, strin
 			int startPositionOfArgumentName = currentArgument.rfind(CHAR_SPACE) + 1;	//last space
 			if(startPositionOfArgumentName == string::npos)
 			{
-				cout << "generateHTMLdocumentationFunctionInputArguments() error: (startPositionOfArgumentName == string::npos)" << endl;
+				cout << "generateHTMLdocumentationFunctionInputArguments{} error: (startPositionOfArgumentName == string::npos)" << endl;
 				exit(0);
 			}
 			string currentArgumentName = currentArgument.substr(startPositionOfArgumentName, endPositionOfArgument-startPositionOfArgumentName+1);

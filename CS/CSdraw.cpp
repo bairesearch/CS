@@ -1276,7 +1276,7 @@ CSreferenceArray findFunctionReferenceInPrintedFileReference(CSfileReference* fi
 		CSfileReference* currentReferenceEnsuredPrinted = NULL;
 		if(!(fileReferenceToSearchIn->printed))
 		{
-			cout << "findFunctionReferenceInPrintedFileReference() error: !(fileReferenceToSearchIn->printed)" << endl;
+			cout << "findFunctionReferenceInPrintedFileReference{} error: !(fileReferenceToSearchIn->printed)" << endl;
 			exit(0);
 		}
 		else
