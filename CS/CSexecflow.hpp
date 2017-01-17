@@ -23,10 +23,10 @@
 
 /*******************************************************************************
  *
- * File Name: CSexecflow.h
+ * File Name: CSexecflow.hpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3j1c 14-January-2017
+ * Project Version: 3j2a 17-January-2017
  *
  *******************************************************************************/
 
@@ -34,21 +34,21 @@
 #ifndef HEADER_CS_EXECFLOW
 #define HEADER_CS_EXECFLOW
 
-#include "CSglobalDefs.h"
-#include "CSreferenceContainerClass.h"
-#include "LDreferenceManipulation.h"
-#include "XMLparserClass.h"
-#include "CSoperations.h"
-#include "CSdraw.h"
-#include "LDsvg.h"
-#include "LDopengl.h"
-#include "XMLrulesClass.h"
-#include "LDparser.h"
-#include "LDsprite.h"
-#include "RTpixelMaps.h"
-#include "CSgenerateHTMLdocumentation.h"
-#include "CSgenerateObjectOrientedCode.h"
-#include "CSgenerateConstFunctionArgumentCode.h"
+#include "CSglobalDefs.hpp"
+#include "CSreferenceContainerClass.hpp"
+#include "LDreferenceManipulation.hpp"
+#include "XMLparserClass.hpp"
+#include "CSoperations.hpp"
+#include "CSdraw.hpp"
+#include "LDsvg.hpp"
+#include "LDopengl.hpp"
+#include "XMLrulesClass.hpp"
+#include "LDparser.hpp"
+#include "LDsprite.hpp"
+#include "RTpixelMaps.hpp"
+#include "CSgenerateHTMLdocumentation.hpp"
+#include "CSgenerateObjectOrientedCode.hpp"
+#include "CSgenerateConstFunctionArgumentCode.hpp"
 
 #ifdef LINUX
 	#define SYSTEM_COPY_COMMAND "cp"

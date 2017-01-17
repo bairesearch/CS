@@ -23,10 +23,10 @@
 
 /*******************************************************************************
  *
- * File Name: CSglobalsDefs.h
+ * File Name: CSglobalsDefs.hpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3j1c 14-January-2017
+ * Project Version: 3j2a 17-January-2017
  * Description: CS specific global definitions
  *
  *******************************************************************************/
@@ -34,7 +34,7 @@
 #ifndef HEADER_CS_GLOBAL_DEFS
 #define HEADER_CS_GLOBAL_DEFS
 
-#include "SHAREDglobalDefs.h"
+#include "SHAREDglobalDefs.hpp"
 
 #define CS_MATCH_FUNCTION_REFERENCES_WITH_CORRECT_NUMBER_OF_ARGUMENTS		//added 3h1e
 #ifdef CS_MATCH_FUNCTION_REFERENCES_WITH_CORRECT_NUMBER_OF_ARGUMENTS

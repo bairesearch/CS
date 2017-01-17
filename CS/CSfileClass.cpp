@@ -26,11 +26,11 @@
  * File Name: CSfileClass.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3j1c 14-January-2017
+ * Project Version: 3j2a 17-January-2017
  *
  *******************************************************************************/
 
-#include "CSfileClass.h"
+#include "CSfileClass.hpp"
 
 
 CSfile::CSfile(void)

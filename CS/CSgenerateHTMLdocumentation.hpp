@@ -23,10 +23,10 @@
 
 /*******************************************************************************
  *
- * File Name: CSgenerateHTMLdocumentation.h
+ * File Name: CSgenerateHTMLdocumentation.hpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3j1c 14-January-2017
+ * Project Version: 3j2a 17-January-2017
  *
  *******************************************************************************/
 
@@ -34,13 +34,13 @@
 #ifndef HEADER_CS_GENERATE_HTML_DOCUMENTATION
 #define HEADER_CS_GENERATE_HTML_DOCUMENTATION
 
-#include "CSglobalDefs.h"
-#include "CSreferenceContainerClass.h"
-#include "LDreferenceManipulation.h"
-#include "XMLparserClass.h"
-#include "CSdraw.h"
-#include "LDsvg.h"
-#include "XMLrulesClass.h"
+#include "CSglobalDefs.hpp"
+#include "CSreferenceContainerClass.hpp"
+#include "LDreferenceManipulation.hpp"
+#include "XMLparserClass.hpp"
+#include "CSdraw.hpp"
+#include "LDsvg.hpp"
+#include "XMLrulesClass.hpp"
 
 class CSgenerateHTMLdocumentationClass
 {

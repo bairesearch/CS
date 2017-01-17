@@ -26,13 +26,13 @@
  * File Name: CSexecflow.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3j1c 14-January-2017
+ * Project Version: 3j2a 17-January-2017
  *
  *******************************************************************************/
 
 //issues, need to flip vertically
 
-#include "CSexecflow.h"
+#include "CSexecflow.hpp"
 #ifdef CS_GENERATE_CPP_CLASSES
 #endif
 #ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS

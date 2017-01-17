@@ -23,10 +23,10 @@
 
 /*******************************************************************************
  *
- * File Name: CSfileClass.h
+ * File Name: CSfileClass.hpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3j1c 14-January-2017
+ * Project Version: 3j2a 17-January-2017
  *
  *******************************************************************************/
 
@@ -34,7 +34,7 @@
 #ifndef HEADER_CS_FILE_CLASS
 #define HEADER_CS_FILE_CLASS
 
-#include "CSglobalDefs.h"
+#include "CSglobalDefs.hpp"
 
 #define MAX_INCLUDE_DEPTH_FILE (20)	//file
 

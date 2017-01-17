@@ -23,10 +23,10 @@
 
 /*******************************************************************************
  *
- * File Name: CSdraw.h
+ * File Name: CSdraw.hpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3j1c 14-January-2017
+ * Project Version: 3j2a 17-January-2017
  *
  *******************************************************************************/
 
@@ -34,15 +34,15 @@
 #ifndef HEADER_CS_DRAW
 #define HEADER_CS_DRAW
 
-#include "LDreferenceClass.h"
-#include "XMLparserClass.h"
-#include "CSreferenceContainerClass.h"
-#include "CSglobalDefs.h"
-#include "LDsvg.h"
-#include "LDsprite.h"
-#include "LDreferenceManipulation.h"
-#include "LDreferenceManipulation.h"
-#include "XMLrulesClass.h"
+#include "LDreferenceClass.hpp"
+#include "XMLparserClass.hpp"
+#include "CSreferenceContainerClass.hpp"
+#include "CSglobalDefs.hpp"
+#include "LDsvg.hpp"
+#include "LDsprite.hpp"
+#include "LDreferenceManipulation.hpp"
+#include "LDreferenceManipulation.hpp"
+#include "XMLrulesClass.hpp"
 
 /*
 #define CS_OUTPUT_Z_POSITION_FILE_CONNECTIONS (0.6)

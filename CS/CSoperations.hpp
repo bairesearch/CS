@@ -23,10 +23,10 @@
 
 /*******************************************************************************
  *
- * File Name: CSoperations.h
+ * File Name: CSoperations.hpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3j1c 14-January-2017
+ * Project Version: 3j2a 17-January-2017
  *
  *******************************************************************************/
 
@@ -34,11 +34,11 @@
 #ifndef HEADER_CS_OPERATIONS
 #define HEADER_CS_OPERATIONS
 
-#include "LDreferenceClass.h"
-#include "CSglobalDefs.h"
-#include "CSreferenceContainerClass.h"
-#include "LDsprite.h"
-#include "LDreferenceManipulation.h"
+#include "LDreferenceClass.hpp"
+#include "CSglobalDefs.hpp"
+#include "CSreferenceContainerClass.hpp"
+#include "LDsprite.hpp"
+#include "LDreferenceManipulation.hpp"
 
 class CSoperationsClass
 {

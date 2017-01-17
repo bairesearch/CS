@@ -18,10 +18,10 @@
 
 /*******************************************************************************
  *
- * File Name: CSgenerateObjectOrientedCode.h
+ * File Name: CSgenerateObjectOrientedCode.hpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3j1c 14-January-2017
+ * Project Version: 3j2a 17-January-2017
  *
  *******************************************************************************/
 
@@ -29,10 +29,10 @@
 #ifndef HEADER_CS_GENERATE_OBJECT_ORIENTED_CODE
 #define HEADER_CS_GENERATE_OBJECT_ORIENTED_CODE
 
-#include "CSreferenceContainerClass.h"
-#include "CSglobalDefs.h"
-#include "CSdraw.h"
-#include "SHAREDvars.h"
+#include "CSreferenceContainerClass.hpp"
+#include "CSglobalDefs.hpp"
+#include "CSdraw.hpp"
+#include "SHAREDvars.hpp"
 
 #ifdef CS_GENERATE_CPP_CLASSES
 
