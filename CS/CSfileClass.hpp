@@ -26,7 +26,7 @@
  * File Name: CSfileClass.hpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3j2a 17-January-2017
+ * Project Version: 3j2b 17-January-2017
  *
  *******************************************************************************/
 
@@ -77,8 +77,8 @@ public:
 	string sourceFileNameOrig;	//eg "x.c"
 	string sourceFileTextOrig;
 	string headerFileTextOrig;
-	string headerFileName;	//eg "x.hpp"
-	string sourceFileName;	//eg "x.cpp"
+	string headerFileName;	//eg "x.h"
+	string sourceFileName;	//eg "x.c"
 	string sourceFileText;
 	string headerFileText;
 	#endif

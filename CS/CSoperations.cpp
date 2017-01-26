@@ -26,7 +26,7 @@
  * File Name: CSoperations.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3j2a 17-January-2017
+ * Project Version: 3j2b 17-January-2017
  *
  *******************************************************************************/
 
@@ -128,7 +128,7 @@ bool CSoperationsClass::getIncludeFileNamesFromCorHfile(CSfileContainer* firstRe
 				}
 				else
 				{
-					//CS does not support relative paths in #include that may include a / or a \ - header h/hpp files not be in the same folder as source c/cpp files
+					//CS does not support relative paths in #include that may include a / or a \ - header h files not be in the same folder as source c files
 					waitingForNewLine = true;
 				}
 			}
@@ -216,7 +216,7 @@ bool CSoperationsClass::getIncludeFileNamesFromCorHfile(CSfileContainer* firstRe
 			{
 				if(c == '\"')
 				{
-					if(hashIncludeFileName != aboveLevelObject->name)	//this is added so that do not parse method.h from within method.cpp!
+					if(hashIncludeFileName != aboveLevelObject->name)	//this is added so that do not parse method.h from within method.c!
 					{
 						bool alreadyParsedFile = false;
 						CSfile* currentReferenceInIncludeFileList = NULL;
@@ -264,7 +264,7 @@ bool CSoperationsClass::getIncludeFileNamesFromCorHfile(CSfileContainer* firstRe
 								cout << "\t";
 							}
 							cout << hashIncludeFileName << endl;
-							//parse into .cpp file;
+							//parse into .c file;
 							for(int i= 0; i<level; i++)
 							{
 								cout << "\t";
@@ -280,7 +280,7 @@ bool CSoperationsClass::getIncludeFileNamesFromCorHfile(CSfileContainer* firstRe
 
 							if(hFileFound)
 							{
-								//parse into .cpp file;
+								//parse into .c file;
 								CSfileContainer* lastReferenceInBelowListContainer = currentReferenceInIncludeFileList->firstFileInBelowListContainer;
 								while(lastReferenceInBelowListContainer->next != NULL)
 								{
@@ -790,7 +790,7 @@ void CSoperationsClass::getFunctionObjectNamesFromFunctionsInCfile(const CSfile*
 			{
 				string fullFunctionName = currentReference->nameFull;
 
-				//1. in cpp file, find fullfilename [identified in header];
+				//1. in c file, find fullfilename [identified in header];
 				#ifdef CS_DEBUG
 				cout << "fileContentsString = " << fileContentsString << endl;
 				cout << "fullFunctionName = " << fullFunctionName << endl;
@@ -919,7 +919,7 @@ void CSoperationsClass::getFunctionObjectNamesFromFunctionsInCfile(const CSfile*
 
 						if(currentIndexInFunction > CS_MAX_NUM_CHARACTERS_PER_FUNCTION)
 						{
-							cout << "getFunctionObjectNamesFromFunctionsInCfile{} error: function definitions in .cpp files must end with a } without any leading white space" << endl;
+							cout << "getFunctionObjectNamesFromFunctionsInCfile{} error: function definitions in .c files must end with a } without any leading white space" << endl;
 							exit(0);
 						}
 
@@ -963,7 +963,7 @@ void CSoperationsClass::getFunctionObjectNamesFromFunctionsInCfile(const CSfile*
 
 						if(currentIndexInFunction > CS_MAX_NUM_CHARACTERS_PER_FUNCTION)
 						{
-							cout << "getFunctionObjectNamesFromFunctionsInCfile{} error: function definitions in .cpp files must end with a } without any leading white space" << endl;
+							cout << "getFunctionObjectNamesFromFunctionsInCfile{} error: function definitions in .c files must end with a } without any leading white space" << endl;
 							exit(0);
 						}
 

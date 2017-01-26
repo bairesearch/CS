@@ -26,7 +26,7 @@
  * File Name: CSglobalsDefs.hpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3j2a 17-January-2017
+ * Project Version: 3j2b 17-January-2017
  * Description: CS specific global definitions
  *
  *******************************************************************************/
@@ -171,7 +171,7 @@
 		#define CS_GENERATE_CPP_CLASSES_TEXT_STATIC "static"
 		#define CS_GENERATE_CPP_CLASSES_TEXT_NEW "new"
 	#endif
-	#define CS_GENERATE_CODE_GENERIC_SOURCE_FILE_EXTENSION "cpp"
+	#define CS_GENERATE_CODE_GENERIC_SOURCE_FILE_EXTENSION "c"
 	#define CS_GENERATE_CODE_GENERIC_HEADER_FILE_EXTENSION "h"
 #endif
 

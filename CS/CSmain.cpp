@@ -26,7 +26,7 @@
  * File Name: CSmain.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3j2a 17-January-2017
+ * Project Version: 3j2b 17-January-2017
  *
  *******************************************************************************/
 
@@ -49,7 +49,7 @@ static char errmessage[] = "Usage:  CS.exe [options]"
 "\n\t-oppm [string]          : code structure display .ppm output filename (def: codeStructureNet.ppm)"
 "\n\t-ohtml [string]         : code structure display .html output filename (def: codeStructureNet.html) (use single file, else HTML file names are auto generated on a per C file basis)"
 "\n\t-oall [string]          : code structure display .svg/.ldr/.ppm default generic output filename (def: codeStructureNet)"
-"\n\t-file [string]          : top level source file name (eg, main.cpp) [compulsory]"
+"\n\t-file [string]          : top level source file name (eg, main.c) [compulsory]"
 "\n\t-function [string]      : top level function name referenced within file {recommended: not defined in file, declared within include h file} (eg, x for int x()) [compulsory]"
 "\n\t-notshow                : do not display output in opengl"
 "\n\t-width [int]            : raster graphics width in pixels (def: 1600)"
@@ -77,6 +77,26 @@ static char errmessage[] = "Usage:  CS.exe [options]"
 "\n"
 "\n";
 
+static char knownLimitationsMsg[] = "* CS is designed for non-object oriented C (it does not support C++ classes)"
+"\n* all .c and .h files that wish to be parsed/added to tree must be contained in the same directory"
+"\n* if the CS program does not stop, there might be loops in the include file structure (eg a.c includes b.c, b.c includes a.c)"
+"\n* CS supports c/c++ style commenting"
+"\n* function definitions in .c files must not have leading white space, and should be contained on a single line"
+"\n* function definitions in .c files must end with a } without any leading white space"
+"\n* function declarations for functions that wish to be parsed/added to tree must be contained in .h files, can have preceding white space, but must be contained on a single line"
+"\n* CS does not support relative paths in #include"
+"\n* CS requires include/header files that wish to be parsed/added to tree to be delimited with \" \" rather than < >"
+"\n* CS requires a single space between #include and \"this.h\""
+"\n* CS may produce large SVG files (Eg when functions are enabled via enablefunctions) which must be viewed with a viewer capable of dynamic zoom, eg, inkscape"
+"\n* CS is not designed to operate with function pointers (and object orientated code)"
+"\n* the first include file in the top level source file (eg PROJECTmain.c) must declare the top level function name (eg main)"
+"\n* make sure the temp folder is clear of all output files (ie svg/html files of the same name as expected output files)"
+"\n* function contents cannot include a reference to themselves in comments (required for HTML generation function reference list and generateoo)"
+"\n* function contents cannot include a reference to themselves in cout statements (e.g. cout << \"dothis()\")"
+"\n* function contents cannot include a reference to their name in cout statements followed by an equals sign, unless it is referenced at the start of the comment (e.g. cout << \"generateHTMLdocumentationMode = \" ...)"
+"\n* CS does not support 2 identical function declarations (with identical arguments) for a single function in a header file (separated by preprocessor definitions)"
+"\n* CS does not support 2 function declarations with different arguments for a single function in a header file (separated by preprocessor defintions)"
+"\n* CS does not support overloaded functions with the same number of arguments (required for precise referencing)";
 
 
 
@@ -287,33 +307,15 @@ int main(const int argc, const char** argv)
 
 	if(SHAREDvarsClass().argumentExists(argc, argv, "-version"))
 	{
-		cout << "CS.exe - Project Version: 3j2a 17-January-2017" << endl;
+		cout << "CS.exe - Project Version: 3j2b 17-January-2017" << endl;
 		exit(1);
 	}
 
 	if(!passInputReq)
 	{
 		printf(errmessage);
-		cout << "**** Known Limitations:* ****" << endl;
-		cout << "all c/cpp and h/hpp files that wish to be parsed/added to tree must be contained in the same directory" << endl;
-		cout << "if the CS program does not stop, there might be loops in the include file structure (eg a.cpp includes b.cpp, b.cpp includes a.cpp)" << endl;
-		cout << "CS has been upgraded to support commenting (previously illegal functions and include files had to be be removed completely)" << endl;
-		cout << "function definitions in .cpp files must not have leading white space, and should be contained on a single line" << endl;
-		cout << "function definitions in .cpp files must end with a } without any leading white space" << endl;
-		cout << "function declarations for functions that wish to be parsed/added to tree must be contained in .h files, can have preceding white space, but must be contained on a single line" << endl;
-		cout << "CS does not support relative paths in #include." << endl;
-		cout << "CS requires include/header files that wish to be parsed/added to tree to to be delimited with " " rather than < >" << endl;
-		cout << "CS requires a single space between #include and \"this.h\"" << endl;
-		cout << "CS may produce large SVG files (Eg when functions are enabled via enablefunctions) which must be viewed with a viewer capable of dynamic zoom, eg, inkscape" << endl;
-		cout << "CS is not designed to operate with function pointers (and object orientated code) - it is argued that code is easier to read without function pointers and should only be used where heavy optimisation is required" << endl;
-		cout << "the first include file in the top level source file (eg PROJECTmain.cpp) must declare the top level function name (eg main)" << endl;
-		cout << "make sure the temp folder is clear of all output files (ie svg/html files of the same name as expected output files)" << endl;
-		cout << "function contents cannot include a reference to themselves in comments (required for HTML generation function reference list and generateoo)" << endl;
-		cout << "function contents cannot include a reference to themselves in cout statements (e.g. cout << \"dothis()\")" << endl;
-		cout << "function contents cannot include a reference to their name in cout statements followed by an equals sign, unless it is referenced at the start of the comment (e.g. cout << \"generateHTMLdocumentationMode = \" ...)" << endl;
-		cout << "CS does not support 2 identical function declarations (with identical arguments) for a single function in a header file (separated by preprocessor definitions)" << endl;
-		cout << "CS does not support 2 function declarations with different arguments for a single function in a header file (separated by preprocessor defintions)" << endl;
-		cout << "CS doesn't support overloaded functions with the same number of arguments (required for precise referencing)" << endl;
+		cout << "**** Known Limitations: ****" << endl;
+		printf(knownLimitationsMsg);
 		cout << "****************************" << endl;
 		exit(0);
 	}
