@@ -25,7 +25,7 @@
  * File Name: CSgenerateObjectOrientedCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3j2b 17-January-2017
+ * Project Version: 3k2a 21-March-2017
  *
  *******************************************************************************/
 
@@ -81,10 +81,6 @@ bool CSgenerateObjectOrientedCodeClass::generateCPPclassesRecurse(CSfileContaine
 					cout << "generateCPPclassesRecurse{}: currentFileObject->sourceFileText = " << currentFileObject->sourceFileText << endl;
 					*/
 					
-					#ifdef CS_DEBUG_GENERATE_OBJECT_ORIENTED_CODE
-					//cout << "generateCPPclassesRecurse{}: currentFileObject->sourceFileName = " << currentFileObject->sourceFileName << endl;
-					//cout << "generateCPPclassesRecurse{}: currentFileObject->headerFileName = " << currentFileObject->headerFileName << endl;
-					#endif
 					if(!this->generateCPPclassesFile(currentFileObject, firstObjectInTopLevelBelowListContainer))
 					{
 						result = false;
@@ -107,9 +103,6 @@ bool CSgenerateObjectOrientedCodeClass::generateCPPclassesRecurse(CSfileContaine
 bool CSgenerateObjectOrientedCodeClass::generateCPPclassesFile(CSfile* currentFileObject, const CSfileContainer* firstObjectInTopLevelBelowListContainer)
 {
 	bool result = true;
-	#ifdef CS_DEBUG_GENERATE_OBJECT_ORIENTED_CODE
-	cout << "generateCPPclassesFile{}: currentFileObject->name = " << currentFileObject->name << endl;
-	#endif
 
 	string className = this->generateClassName(currentFileObject->name);
 	ReferencedClass* firstReferencedClassInList = new ReferencedClass();
@@ -189,9 +182,6 @@ bool CSgenerateObjectOrientedCodeClass::generateCPPclassesFile(CSfile* currentFi
 						{
 							functionReferenceNameUpdated = this->generateClassObjectName(classHoldingFunction) + CS_GENERATE_CPP_CLASSES_TEXT_FUNCTION_REFERENCE_CONTEXT_DELIMITER + functionReferenceName;
 
-							#ifdef CS_DEBUG
-							//cout << "classHoldingFunction = " << classHoldingFunction << endl;
-							#endif
 							bool foundReferencedClass = this->findReferencedClassInList(firstReferencedClassInList, classHoldingFunction);
 							if(!foundReferencedClass)
 							{
@@ -201,10 +191,6 @@ bool CSgenerateObjectOrientedCodeClass::generateCPPclassesFile(CSfile* currentFi
 							}
 						}
 					}
-					#ifdef CS_DEBUG_GENERATE_OBJECT_ORIENTED_CODE
-					//cout << "functionReferenceName = " << functionReferenceName << endl;
-					//cout << "functionReferenceNameUpdated = " << functionReferenceNameUpdated << endl;
-					#endif
 
 					//must search and replace a more specific "functionName(" instead of "functionName" incase there exists a variable called functionNameSomeArbitraryVariable
 					functionReferenceName = functionReferenceName + CHAR_OPEN_BRACKET;
@@ -230,9 +216,6 @@ bool CSgenerateObjectOrientedCodeClass::generateCPPclassesFile(CSfile* currentFi
 							}
 							currentFileObject->sourceFileText = currentFileObject->sourceFileText.substr(0, posOfFunctionText) + currentFunctionObject->functionTextRaw + currentFileObject->sourceFileText.substr((posOfFunctionText+functionTextOrigLength), currentFileObject->sourceFileText.length()-(posOfFunctionText+functionTextOrigLength));
 
-							#ifdef CS_DEBUG
-							//cout << "currentFunctionObject->functionTextRaw = " << currentFunctionObject->functionTextRaw << endl;
-							#endif
 						}
 						else
 						{
@@ -251,10 +234,6 @@ bool CSgenerateObjectOrientedCodeClass::generateCPPclassesFile(CSfile* currentFi
 					exit(EXIT_ERROR);
 				}
 
-				#ifdef CS_DEBUG_GENERATE_OBJECT_ORIENTED_CODE
-				//cout << "generateCPPclassesFile{}: currentFunctionObject->name = " << currentFunctionObject->name << endl;
-				//cout << "generateCPPclassesFile{}: currentFunctionObject->nameFull = " << currentFunctionObject->nameFull << endl;
-				#endif
 				currentFunctionReference = currentFunctionReference->next;
 			//}
 		}
@@ -315,10 +294,6 @@ bool CSgenerateObjectOrientedCodeClass::generateCPPclassesFile(CSfile* currentFi
 	}
 
 	#ifndef CS_GENERATE_CPP_CLASSES_DISABLE_OUTPUT
-	#ifdef CS_DEBUG_GENERATE_OBJECT_ORIENTED_CODE
-	cout << "currentFileObject->headerFileText = \n" << currentFileObject->headerFileText << endl;
-	cout << "currentFileObject->sourceFileText = \n" << currentFileObject->sourceFileText << endl;
-	#endif
 	SHAREDvars.writeStringToFile(currentFileObject->headerFileName, &(currentFileObject->headerFileText));
 	SHAREDvars.writeStringToFile(currentFileObject->sourceFileName, &(currentFileObject->sourceFileText));
 	#else
@@ -383,9 +358,6 @@ void CSgenerateObjectOrientedCodeClass::isFunctionBeingReferencedPublicallyRecur
 					if(currentFunctionReference->name == functionName)
 					{
 						*foundPublicReference = true;
-						#ifdef CS_DEBUG_GENERATE_OBJECT_ORIENTED_CODE
-						//cout << "foundPublicReference" << endl;
-						#endif
 					}
 					currentFunctionReference = currentFunctionReference->next;
 				}
@@ -411,9 +383,6 @@ string CSgenerateObjectOrientedCodeClass::generateClassName(const string headerF
 	if(positionOfExtension != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 	{
 		className = headerFileName.substr(0, positionOfExtension);
-		#ifdef CS_DEBUG
-		//cout << "className = " << className << endl;
-		#endif
 	}
 	return className;
 }
@@ -482,15 +451,8 @@ string CSgenerateObjectOrientedCodeClass::convertFunctionNameToClassFunctionName
 			classFullFunctionName = fullFunctionNamePart1 + this->generateClassDeclarationName(className) + string(CS_GENERATE_CPP_CLASSES_TEXT_CLASS_PERMISSIONS_IDENTIFIER) + fullFunctionNamePart2;
 		}
 
-		#ifdef CS_DEBUG_GENERATE_OBJECT_ORIENTED_CODE
-		//cout << "fullFunctionNamePart1 = " << fullFunctionNamePart1 << endl;
-		//cout << "fullFunctionNamePart2 = " << fullFunctionNamePart2 << endl;
-		#endif
 	}
 
-	#ifdef CS_DEBUG_GENERATE_OBJECT_ORIENTED_CODE
-	//cout << "classFullFunctionName = " << classFullFunctionName << endl;
-	#endif
 
 	return classFullFunctionName;
 
@@ -519,9 +481,6 @@ string CSgenerateObjectOrientedCodeClass::generateReferencedClassesDeclarations(
 	while(currentReferencedClassInList->next != NULL)
 	{
 		referencedClassesDeclarations = referencedClassesDeclarations + CHAR_TAB + CS_GENERATE_CPP_CLASSES_TEXT_FUNCTION_PRIVATE + this->generateClassDeclarationName(currentReferencedClassInList->className) + CHAR_SPACE + this->generateClassObjectName(currentReferencedClassInList->className) + CHAR_SEMICOLON + CHAR_NEWLINE; 	//ie private: xClass x;
-		#ifdef CS_DEBUG
-		//cout << "referencedClassesDeclarations = " << referencedClassesDeclarations << endl;
-		#endif
 		currentReferencedClassInList = currentReferencedClassInList->next;
 	}
 	return referencedClassesDeclarations;
@@ -556,9 +515,6 @@ bool CSgenerateObjectOrientedCodeClass::moveIncludeFileStatementsToHeader(CSfile
 		int posEndOfLineHeader = CPP_STRING_FIND_RESULT_FAIL_VALUE;
 		if(positionOfIncludeStatementHeader != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 		{
-			#ifdef CS_DEBUG
-			//cout << "foundIncludeFileInHeader" << endl;
-			#endif
 
 			foundIncludeFileInHeader = true;
 			posStartOfLineHeader = firstReferenceInAboveLevelBelowList->headerFileText.rfind(CHAR_NEWLINE, positionOfIncludeStatementHeader);
@@ -566,9 +522,6 @@ bool CSgenerateObjectOrientedCodeClass::moveIncludeFileStatementsToHeader(CSfile
 			if((posStartOfLineHeader != CPP_STRING_FIND_RESULT_FAIL_VALUE) && (posEndOfLineHeader != CPP_STRING_FIND_RESULT_FAIL_VALUE))
 			{
 				includeStatementFullLineHeader = firstReferenceInAboveLevelBelowList->headerFileText.substr(posStartOfLineHeader, posEndOfLineHeader-posStartOfLineHeader);
-				#ifdef CS_DEBUG
-				//cout << "includeStatementFullLineHeader = " << includeStatementFullLineHeader << endl;
-				#endif
 
 				if(posEndOfLineHeader > positionOfLastIncludeStatementEndInHeader)
 				{
@@ -584,9 +537,6 @@ bool CSgenerateObjectOrientedCodeClass::moveIncludeFileStatementsToHeader(CSfile
 		int posEndOfLineSource = CPP_STRING_FIND_RESULT_FAIL_VALUE;
 		if(positionOfIncludeStatementSource != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 		{
-			#ifdef CS_DEBUG
-			//cout << "foundIncludeFileInSource" << endl;
-			#endif
 
 			foundIncludeFileInSource = true;
 			posStartOfLineSource = firstReferenceInAboveLevelBelowList->sourceFileText.rfind(CHAR_NEWLINE, positionOfIncludeStatementSource);
@@ -594,9 +544,6 @@ bool CSgenerateObjectOrientedCodeClass::moveIncludeFileStatementsToHeader(CSfile
 			if((posStartOfLineSource != CPP_STRING_FIND_RESULT_FAIL_VALUE) && (posEndOfLineSource != CPP_STRING_FIND_RESULT_FAIL_VALUE))
 			{
 				includeStatementFullLineSource = firstReferenceInAboveLevelBelowList->sourceFileText.substr(posStartOfLineSource, posEndOfLineSource-posStartOfLineSource);
-				#ifdef CS_DEBUG
-				//cout << "includeStatementFullLineSource = " << includeStatementFullLineSource << endl;
-				#endif
 
 				int lineStartOfLineSource = 0;
 				for(int i=0; i<posStartOfLineSource; i++)
@@ -619,9 +566,6 @@ bool CSgenerateObjectOrientedCodeClass::moveIncludeFileStatementsToHeader(CSfile
 
 		if(foundIncludeFileInSource)
 		{
-			#ifdef CS_DEBUG
-			//cout << "foundIncludeFileInSource = " << foundIncludeFileInSource << endl;
-			#endif
 			//remove from source;
 			firstReferenceInAboveLevelBelowList->sourceFileText = firstReferenceInAboveLevelBelowList->sourceFileText.substr(0, posStartOfLineSource) + firstReferenceInAboveLevelBelowList->sourceFileText.substr(posEndOfLineSource, firstReferenceInAboveLevelBelowList->sourceFileText.length()-posEndOfLineSource);
 			if(!foundIncludeFileInHeader)
@@ -636,9 +580,6 @@ bool CSgenerateObjectOrientedCodeClass::moveIncludeFileStatementsToHeader(CSfile
 	if(includeStatementsHeaderNew != "")
 	{
 		includeStatementsHeaderNew + includeStatementsHeaderNew + CHAR_NEWLINE;
-		#ifdef CS_DEBUG
-		//cout << "includeStatementsHeaderNew = " << endl;
-		#endif
 
 		int positionInHeader = 0;
 		if(positionOfLastIncludeStatementEndInHeader == CPP_STRING_FIND_RESULT_FAIL_VALUE)
@@ -668,9 +609,6 @@ bool CSgenerateObjectOrientedCodeClass::moveIncludeFileStatementsToHeader(CSfile
 		}
 		firstReferenceInAboveLevelBelowList->headerFileText = firstReferenceInAboveLevelBelowList->headerFileText.substr(0, positionInHeader) + includeStatementsHeaderNew + firstReferenceInAboveLevelBelowList->headerFileText.substr(positionInHeader, includeStatementsHeaderNew.length()-positionInHeader);
 
-		#ifdef CS_DEBUG
-		//cout << "firstReferenceInAboveLevelBelowList->headerFileText = " << firstReferenceInAboveLevelBelowList->headerFileText << endl;
-		#endif
 	}
 
 	return result;

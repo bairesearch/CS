@@ -25,7 +25,7 @@
  * File Name: CSexecflow.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3j2b 17-January-2017
+ * Project Version: 3k2a 21-March-2017
  *
  *******************************************************************************/
 
@@ -50,12 +50,6 @@ void CSexecflowClass::generateCodeStructure(const string topLevelFileName, int w
 
 	bool htmlDocumentationGenerationPreventsDisplay = false;
 
-	#ifdef CS_DEBUG_HTML_DOCUMENTATION
-	cout << "useOutputHTMLfile = " << int(useOutputHTMLfile) << endl;
-	cout << "outputHTMLfileName = " << outputHTMLfileName << endl;
-	cout << "generateHTMLdocumentationMode = " << generateHTMLdocumentationMode << endl;
-	cout << "traceFunctionUpwards = " << traceFunctionUpwards << endl;
-	#endif
 
 	if(display)
 	{

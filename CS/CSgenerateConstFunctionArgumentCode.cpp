@@ -25,7 +25,7 @@
  * File Name: CSgenerateConstFunctionArgumentCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3j2b 17-January-2017
+ * Project Version: 3k2a 21-March-2017
  *
  *******************************************************************************/
 
@@ -53,9 +53,6 @@ bool CSgenerateConstFunctionArgumentCodeClass::generateConstFunctionArgumentsRec
 {
 	bool result = true;
 
-	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
-	cout << "generateConstFunctionArgumentsRecurse{}" << endl;
-	#endif
 
 	CSfileContainer* currentFileObjectContainer = firstObjectInAboveLevelBelowListContainer;
 	while(currentFileObjectContainer->next != NULL)
@@ -85,10 +82,6 @@ bool CSgenerateConstFunctionArgumentCodeClass::generateConstFunctionArgumentsRec
 					}
 					if(headerExists || sourceExists)
 					{
-						#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
-						//cout << "generateConstFunctionArgumentsRecurse{}: currentFileObject->sourceFileName = " << currentFileObject->sourceFileName << endl;
-						//cout << "generateConstFunctionArgumentsRecurse{}: currentFileObject->headerFileName = " << currentFileObject->headerFileName << endl;
-						#endif
 						if(!this->generateConstFunctionArgumentsFile(currentFileObject))
 						{
 							result = false;
@@ -107,9 +100,6 @@ bool CSgenerateConstFunctionArgumentCodeClass::generateConstFunctionArgumentsRec
 		currentFileObjectContainer = currentFileObjectContainer->next;
 	}
 
-	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
-	cout << "end generateConstFunctionArgumentsRecurse{}" << endl;
-	#endif
 
 	return result;
 }
@@ -117,9 +107,6 @@ bool CSgenerateConstFunctionArgumentCodeClass::generateConstFunctionArgumentsRec
 bool CSgenerateConstFunctionArgumentCodeClass::generateConstFunctionArgumentsFile(CSfile* currentFileObject)
 {
 	bool result = true;
-	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
-	cout << "generateConstFunctionArgumentsFile{}: currentFileObject->name = " << currentFileObject->name << endl;
-	#endif
 
 	bool fileHasFunctions = false;
 
@@ -152,26 +139,15 @@ bool CSgenerateConstFunctionArgumentCodeClass::generateConstFunctionArgumentsFil
 
 					string argument = currentFunctionArgumentInFunction->argument + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_FUNCTION_ARGUMENT_DELIMITER;
 					string argumentWithConsts = constString + argument;
-					#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
-					cout << "argument = " << currentFunctionArgumentInFunction->argument << endl;
-					cout << "argumentWithConsts = " << argumentWithConsts << endl;
-					#endif
 					nameFullWithConsts = SHAREDvars.replaceAllOccurancesOfString(&(nameFullWithConsts), argument, argumentWithConsts);
 
 					argument = currentFunctionArgumentInFunction->argument + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_FUNCTION_CLOSE;
 					argumentWithConsts = constString + argument;
-					#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
-					cout << "argument = " << currentFunctionArgumentInFunction->argument << endl;
-					cout << "argumentWithConsts = " << argumentWithConsts << endl;
-					#endif
 					nameFullWithConsts = SHAREDvars.replaceAllOccurancesOfString(&(nameFullWithConsts), argument, argumentWithConsts);
 
 					//add const to function argument secondary assignements - CS3h5a
 					for(vector<string>::iterator argumentNameAliasListIter = currentFunctionArgumentInFunction->argumentNameAliasList.begin(); argumentNameAliasListIter < currentFunctionArgumentInFunction->argumentNameAliasList.end(); argumentNameAliasListIter++)
 					{
-						#ifdef CS_DEBUG
-						//cout << "argumentNameAliasListIter = " << *argumentNameAliasListIter << endl;
-						#endif
 						string functionArgumentSecondaryAssignmentName = *argumentNameAliasListIter;
 						int posOfFunctionText = currentFileObject->sourceFileText.find(currentFunctionObject->functionTextRaw);
 						int functionTextOrigLength = currentFunctionObject->functionTextRaw.length();
@@ -181,9 +157,6 @@ bool CSgenerateConstFunctionArgumentCodeClass::generateConstFunctionArgumentsFil
 							currentFunctionObject->functionTextRaw = this->addConstToAllOccurancesOfFunctionObjectFunctionArgumentSecondaryAssignmentDeclarationInFunction(&(currentFunctionObject->functionTextRaw), functionArgumentSecondaryAssignmentName, &foundAtLeastOneInstance, constString);
 							if(foundAtLeastOneInstance)
 							{
-								#ifdef CS_DEBUG
-								//cout << "foundAtLeastOneInstance" << endl;
-								#endif
 								currentFileObject->sourceFileText = currentFileObject->sourceFileText.substr(0, posOfFunctionText) + currentFunctionObject->functionTextRaw + currentFileObject->sourceFileText.substr((posOfFunctionText+functionTextOrigLength), currentFileObject->sourceFileText.length()-(posOfFunctionText+functionTextOrigLength));
 							}
 							/*
@@ -218,10 +191,6 @@ bool CSgenerateConstFunctionArgumentCodeClass::generateConstFunctionArgumentsFil
 	}
 
 	#ifndef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DISABLE_OUTPUT
-	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
-	cout << "currentFileObject->headerFileText = \n" << currentFileObject->headerFileText << endl;
-	cout << "currentFileObject->sourceFileText = \n" << currentFileObject->sourceFileText << endl;
-	#endif
 	if(currentFileObject->headerFileText != "")
 	{
 		SHAREDvars.writeStringToFile(currentFileObject->headerFileName, &(currentFileObject->headerFileText));
@@ -237,9 +206,6 @@ bool CSgenerateConstFunctionArgumentCodeClass::generateConstFunctionArgumentsFil
 	#endif
 	#endif
 
-	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
-	cout << "end generateConstFunctionArgumentsFile{}: currentFileObject->name = " << currentFileObject->name << endl;
-	#endif
 
 	return result;
 }
@@ -250,9 +216,6 @@ string CSgenerateConstFunctionArgumentCodeClass::addConstToAllOccurancesOfFuncti
 
 	string secondaryAssignmentDecarationHypotheticalExtract[3];
 	secondaryAssignmentDecarationHypotheticalExtract[0] = string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_POINTER_TYPE) + functionArgumentSecondaryAssignmentName + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET;	//* secondaryAssignmentName =
-	#ifdef CS_DEBUG
-	//cout << "secondaryAssignmentDecarationHypotheticalExtract = " << secondaryAssignmentDecarationHypotheticalExtract << endl;
-	#endif
 	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_PARSE_LISTS
 	secondaryAssignmentDecarationHypotheticalExtract[1] = string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_VECTOR_OR_MAP_ITERATOR) + functionArgumentSecondaryAssignmentName + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET;	//::iterator secondaryAssignmentName =
 	secondaryAssignmentDecarationHypotheticalExtract[2] = string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_VECTOR_OR_MAP_ITERATOR_REVERSE) + functionArgumentSecondaryAssignmentName + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET;	//::reverse_iterator secondaryAssignmentName =
@@ -312,16 +275,10 @@ bool CSgenerateConstFunctionArgumentCodeClass::generateConstFunctionArgumentsFun
 
 	if(!(currentFunctionObject->functionArgumentConstsIdentified))
 	{
-		#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
-		cout << "generateConstFunctionArgumentsFunction{}: currentFunctionObject->name = " << currentFunctionObject->name << endl;
-		#endif
 
 		currentFunctionObject->functionArgumentConstsIdentified = true;		//moved condition CS3h1d; ignore recursive function references
 
 		string functionNameFull = currentFunctionObject->nameFull;
-		#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
-		cout << "functionNameFull = " << functionNameFull << endl;
-		#endif
 		string functionNameFullUpdated = "";
 
 		CSfunctionArgument* currentFunctionArgumentInFunction;
@@ -375,9 +332,6 @@ bool CSgenerateConstFunctionArgumentCodeClass::generateConstFunctionArgumentsFun
 		}
 	}
 
-	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
-	cout << "end generateConstFunctionArgumentsFunction{}: currentFunctionObject->name = " << currentFunctionObject->name << endl;
-	#endif
 
 	return result;
 }
@@ -385,11 +339,6 @@ bool CSgenerateConstFunctionArgumentCodeClass::generateConstFunctionArgumentsFun
 //CS_GENERATE_CONST_FUNCTION_ARGUMENTS_PARSE_LISTS: limitation: trace secondary assignments of iterator (limitation: can only trace immediate secondary assignments of iterator variables)
 bool CSgenerateConstFunctionArgumentCodeClass::generateConstFunctionArgumentAndSearchForSecondaryReferences(CSfunction* currentFunctionObject, CSfunctionArgument* currentFunctionArgumentInFunction, string functionDeclarationArgument)
 {
-	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
-	cout << "generateConstFunctionArgumentAndSearchForSecondaryReferences{}: currentFunctionObject->name = " << currentFunctionObject->name << endl;
-	cout << "generateConstFunctionArgumentAndSearchForSecondaryReferences{}: currentFunctionArgumentInFunction->argumentName = " << currentFunctionArgumentInFunction->argumentName << endl;
-	cout << "generateConstFunctionArgumentAndSearchForSecondaryReferences{}: functionDeclarationArgument = " << functionDeclarationArgument << endl;
-	#endif
 
 	bool result = true;
 
@@ -441,12 +390,6 @@ bool CSgenerateConstFunctionArgumentCodeClass::generateConstFunctionArgumentAndS
 								if(functionText->substr(indexOfStartOfSecondaryAssignment-string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_POINTER_TYPE).length(), string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_POINTER_TYPE).length()) == CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_POINTER_TYPE)
 								{
 									foundGenericSecondaryAssignment = true;
-									#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
-									cout << "generateConstFunctionArgumentAndSearchForSecondaryReferences{}: foundGenericSecondaryAssignment" << endl;
-									cout << "generateConstFunctionArgumentAndSearchForSecondaryReferences{}: currentFunctionArgumentInFunction->argumentName = " << currentFunctionArgumentInFunction->argumentName << endl;
-									cout << "generateConstFunctionArgumentAndSearchForSecondaryReferences{}: functionDeclarationArgument = " << functionDeclarationArgument << endl;
-									cout << "generateConstFunctionArgumentAndSearchForSecondaryReferences{}: secondaryAssignmentName = " << secondaryAssignmentName << endl;
-									#endif
 
 									if(this->generateConstFunctionArgumentAndSearchForSecondaryReferences(currentFunctionObject, currentFunctionArgumentInFunction, secondaryAssignmentName))
 									{
@@ -515,10 +458,6 @@ bool CSgenerateConstFunctionArgumentCodeClass::generateConstFunctionArgumentAndS
 									{
 										string iteratorName = this->extractFullVariableName(functionText, indexOfIteratorType+iterType.length());
 
-										#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
-										cout << "generateConstFunctionArgumentAndSearchForSecondaryReferences{}: found for loop vector/map iterator" << endl;
-										cout << "iteratorName = " << iteratorName << endl;
-										#endif
 
 										if(this->generateConstFunctionArgumentAndSearchForSecondaryReferences(currentFunctionObject, currentFunctionArgumentInFunction, iteratorName))
 										{
@@ -542,9 +481,6 @@ bool CSgenerateConstFunctionArgumentCodeClass::generateConstFunctionArgumentAndS
 												int indexOfStartOfSecondaryAssignmentOfIterator;
 												string secondaryAssignmentOfIterator = this->extractFullVariableNameReverse(functionText, indexOfFollowingLineHypotheticalMatch-1, &indexOfStartOfSecondaryAssignmentOfIterator);
 
-												#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
-												cout << "found iterator secondary assignment" << endl;
-												#endif
 												if(this->generateConstFunctionArgumentAndSearchForSecondaryReferences(currentFunctionObject, currentFunctionArgumentInFunction, secondaryAssignmentOfIterator))
 												{
 
@@ -563,9 +499,6 @@ bool CSgenerateConstFunctionArgumentCodeClass::generateConstFunctionArgumentAndS
 		}
 	}
 
-	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
-	cout << "end generateConstFunctionArgumentAndSearchForSecondaryReferences{}: functionDeclarationArgument = " << functionDeclarationArgument << endl;
-	#endif
 
 	return result;
 }
@@ -573,12 +506,6 @@ bool CSgenerateConstFunctionArgumentCodeClass::generateConstFunctionArgumentAndS
 
 bool CSgenerateConstFunctionArgumentCodeClass::generateConstFunctionArgument(CSfunction* currentFunctionObject, CSfunctionArgument* currentFunctionArgumentInFunction, string functionDeclarationArgument)
 {
-	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
-	cout << "generateConstFunctionArgument{}:" << endl;
-	cout << "currentFunctionObject->name = " << currentFunctionObject->name << endl;
-	cout << "functionDeclarationArgument = " << functionDeclarationArgument << endl;
-	cout << "currentFunctionArgumentInFunction->argumentType/Name = " << currentFunctionArgumentInFunction->argumentType << " " << currentFunctionArgumentInFunction->argumentName << endl;
-	#endif
 
 	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_PERFORM_SEPARATE_PASSES_TO_SUPPORT_RECURSION
 	if(currentFunctionObject->parseSecondaryReferencesAndModificationsOnly)
@@ -677,17 +604,11 @@ bool CSgenerateConstFunctionArgumentCodeClass::generateConstFunctionArgument(CSf
 	}
 	#endif
 
-	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
-	cout << "end generateConstFunctionArgument{}: functionDeclarationArgument = " << functionDeclarationArgument << endl;
-	#endif
 }
 
 
 void CSgenerateConstFunctionArgumentCodeClass::checkIfVariableIsBeingModifiedInFunction(CSfunction* currentFunctionObject, CSfunctionArgument* currentFunctionArgumentInFunction, string functionDeclarationArgument, bool* isNotConst, bool* isConstEffective)
 {
-	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
-	cout << "checkIfVariableIsBeingModifiedInFunction{}: functionDeclarationArgument = " << functionDeclarationArgument << endl;
-	#endif
 
 	string* functionText = &(currentFunctionObject->functionText);
 
@@ -705,9 +626,6 @@ void CSgenerateConstFunctionArgumentCodeClass::checkIfVariableIsBeingModifiedInF
 		{
 			int indexOfReturnVar = indexOfReturn + string(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_RETURN).length();
 			returnVar = functionText->substr(indexOfReturnVar, indexOfEndOfCommand-indexOfReturnVar);
-			#ifdef CS_DEBUG
-			//cout << "returnVar = " << returnVar << endl;
-			#endif
 
 			//now see if the returnVar is functionDeclarationArgument
 			if(returnVar == functionDeclarationArgument)
@@ -732,9 +650,6 @@ void CSgenerateConstFunctionArgumentCodeClass::checkIfVariableIsBeingModifiedInF
 			{//added 3h2d
 
 				//find next occurance of ';' on same line
-				#ifdef CS_DEBUG
-				//cout << "indexOfFunctionArgument = " << indexOfFunctionArgument << endl;
-				#endif
 				int indexOfEndOfCommand = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_END_OF_COMMAND, indexOfFunctionArgument);
 				int indexOfEndOfLine = functionText->find(STRING_NEW_LINE, indexOfFunctionArgument);
 				int indexOfStartOfLine = functionText->rfind(STRING_NEW_LINE, indexOfFunctionArgument);
@@ -806,9 +721,6 @@ void CSgenerateConstFunctionArgumentCodeClass::checkIfVariableIsBeingModifiedInF
 												//preconditions: argumentNameAliasList has already been filled for all function arguments
 												for(vector<string>::iterator argumentNameAliasListIter = currentFunctionArgumentInFunctionTemp->argumentNameAliasList.begin(); argumentNameAliasListIter < currentFunctionArgumentInFunctionTemp->argumentNameAliasList.end(); argumentNameAliasListIter++)
 												{
-													#ifdef CS_DEBUG
-													//cout << "argumentNameAliasListIter = " << *argumentNameAliasListIter << endl;
-													#endif
 													string functionArgumentSecondaryAssignmentName = *argumentNameAliasListIter;
 													int indexOfFunctionArgumentSecondaryAssignment = indexOfObjectFunctionName+objectFunctionName.length();	//-1 not required because of '('
 													while((indexOfFunctionArgumentSecondaryAssignment = functionText->find(functionArgumentSecondaryAssignmentName, indexOfFunctionArgumentSecondaryAssignment+1)) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
@@ -843,9 +755,6 @@ void CSgenerateConstFunctionArgumentCodeClass::checkIfVariableIsBeingModifiedInF
 						{
 							*isNotConst = true;
 							//e.g. free(functionDeclarationArgument);
-							#ifdef CS_DEBUG
-							//cout << "stdLibNonObjectFunctionExecutionHypothetical = " << stdLibNonObjectFunctionExecutionHypothetical << endl;
-							#endif
 						}
 					}
 					#endif
@@ -892,9 +801,6 @@ void CSgenerateConstFunctionArgumentCodeClass::checkIfVariableIsBeingModifiedInF
 										{
 											//e.g. "*doublepointerfunctionArgument = functionArgument2" / "*doublepointerfunctionArgument = functionArgument2->q"
 											doublePointerAssignmentDetected = true;
-											#ifdef CS_DEBUG
-											//cout << "doublePointerAssignmentDetected" << endl;
-											#endif
 										}
 
 										#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_ASSIGNMENT_OF_ALIASES
@@ -909,9 +815,6 @@ void CSgenerateConstFunctionArgumentCodeClass::checkIfVariableIsBeingModifiedInF
 											{
 												//e.g. "*doublepointerfunctionArgument = functionArgument2secondaryAssignment" / "*doublepointerfunctionArgument = functionArgument2secondaryAssignment->q"
 												doublePointerAssignmentDetected = true;
-												#ifdef CS_DEBUG
-												//cout << "doublePointerAssignmentDetected" << endl;
-												#endif
 											}
 										}
 										#endif
@@ -983,9 +886,6 @@ void CSgenerateConstFunctionArgumentCodeClass::checkIfVariableIsBeingModifiedInF
 								//preconditions: argumentNameAliasList has already been filled for all function arguments
 								for(vector<string>::iterator argumentNameAliasListIter = currentFunctionArgumentInFunctionTemp->argumentNameAliasList.begin(); argumentNameAliasListIter < currentFunctionArgumentInFunctionTemp->argumentNameAliasList.end(); argumentNameAliasListIter++)
 								{
-									#ifdef CS_DEBUG
-									//cout << "argumentNameAliasListIter = " << *argumentNameAliasListIter << endl;
-									#endif
 									string functionArgumentSecondaryAssignmentName = *argumentNameAliasListIter;
 									if(!this->detectDoublePointer(currentFunctionArgumentInFunctionTemp->argument))	//added 3h13a
 									{
@@ -1024,16 +924,10 @@ void CSgenerateConstFunctionArgumentCodeClass::checkIfVariableIsBeingModifiedInF
 								#else
 								*isNotConst = true;
 								#endif
-								#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
-								cout << "checkIfVariableIsBeingModifiedInFunction{}: inverseNonConstAssignmentDetected: isNotConst = true" << endl;
-								#endif
 							}
 							if(inverseNonConstAssignmentDetectedAlias)
 							{
 								*isNotConst = true;
-								#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
-								cout << "checkIfVariableIsBeingModifiedInFunction{}: inverseNonConstAssignmentDetected: isNotConst = true" << endl;
-								#endif
 							}
 						}
 					}
@@ -1063,9 +957,6 @@ void CSgenerateConstFunctionArgumentCodeClass::checkIfVariableIsBeingModifiedInF
 						if(this->functionArgumentReferenceWholeWordCheck(functionText, returnVar, indexOfReturnVar))
 						{
 							*isNotConst = true;
-							#ifdef CS_DEBUG
-							//cout << "returnVarSetTextHypothetical = " << returnVarSetTextHypothetical << endl;
-							#endif
 						}
 					}
 				}
@@ -1078,9 +969,6 @@ void CSgenerateConstFunctionArgumentCodeClass::checkIfVariableIsBeingModifiedInF
 					if(functionText->find(nonConstGlobalAssignmentHypothetical) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 					{
 						*isNotConst = true;
-						#ifdef CS_DEBUG
-						//cout << "nonConstGlobalAssignmentHypothetical = " << nonConstGlobalAssignmentHypothetical << endl;
-						#endif
 					}
 				}
 				#endif
@@ -1173,9 +1061,6 @@ void CSgenerateConstFunctionArgumentCodeClass::checkIfVariableIsBeingModifiedInF
 									//preconditions: argumentNameAliasList has already been filled for all function arguments
 									for(vector<string>::iterator argumentNameAliasListIter = currentFunctionArgumentInFunctionTemp->argumentNameAliasList.begin(); argumentNameAliasListIter < currentFunctionArgumentInFunctionTemp->argumentNameAliasList.end(); argumentNameAliasListIter++)
 									{
-										#ifdef CS_DEBUG
-										//cout << "argumentNameAliasListIter = " << *argumentNameAliasListIter << endl;
-										#endif
 										string functionArgumentSecondaryAssignmentName = *argumentNameAliasListIter;
 										int indexOfFunctionArgumentSecondaryAssignment = indexOfObjectFunctionName+objectFunctionName.length();	//-1 not required because of '('
 										while((indexOfFunctionArgumentSecondaryAssignment = functionText->find(functionArgumentSecondaryAssignmentName, indexOfFunctionArgumentSecondaryAssignment+1)) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
@@ -1202,9 +1087,6 @@ void CSgenerateConstFunctionArgumentCodeClass::checkIfVariableIsBeingModifiedInF
 	}
 	#endif
 
-	#ifdef CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
-	cout << "end checkIfVariableIsBeingModifiedInFunction{}: functionDeclarationArgument = " << functionDeclarationArgument << endl;
-	#endif
 }
 
 bool CSgenerateConstFunctionArgumentCodeClass::verifyThatVariableIsNotDeclarationOrNextIteratorAssignmentOrArrayIndex(const CSfunction* currentFunctionObject, const string* functionText, const string textBeforeFunctionArgument, const string functionDeclarationArgument, const int indexOfFunctionArgument, const int indexOfSquareBracketOpen, const int indexOfSquareBracketClose, const int indexOfEndOfCommand, const int indexOfStartOfLine, const int indexOfEqualsSet)

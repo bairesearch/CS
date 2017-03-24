@@ -25,7 +25,7 @@
  * File Name: CSgenerateHTMLdocumentation.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3j2b 17-January-2017
+ * Project Version: 3k2a 21-March-2017
  *
  *******************************************************************************/
 
@@ -65,7 +65,7 @@ string CSgenerateHTMLdocumentationClass::generateHTMLdocumentationHeader(const s
 	string HTMLdocumentationHeader = "";
 	if(htmlHeader)
 	{
-		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (CS), Project Version: 3j2b 17-January-2017<p>\n";
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (CS), Project Version: 3k2a 21-March-2017<p>\n";
 	}
 	else
 	{
@@ -171,9 +171,6 @@ void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationForAllFunctions(
 							string HTMLdocumentationFunction = "";
 							this->generateHTMLdocumentationForFunction(currentReferenceInPrintList, firstObjectInTopLevelBelowListContainer, currentFunctionObject, fileNameHoldingFunction, &currentTagInSVGFileFunction, generateHTMLdocumentationMode, &HTMLdocumentationFunction, &outputSVGfileNameFunction, false, "", traceFunctionUpwards);
 							HTMLdocumentationFileBody = HTMLdocumentationFileBody + HTMLdocumentationFunction;
-							#ifdef CS_DEBUG_HTML_DOCUMENTATION
-							//cout << "HTMLdocumentationFunction = " << HTMLdocumentationFunction << endl;
-							#endif
 
 							if(traceFunctionUpwards)
 							{
@@ -220,9 +217,6 @@ void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationForAllFunctions(
 
 				if(!useOutputHTMLfile)
 				{//create multiple html files (ie, a single HTML file per parsed source file)
-					#ifdef CS_DEBUG_HTML_DOCUMENTATION
-					//cout << "HTMLdocumentationFile = " << HTMLdocumentationFile << endl;
-					#endif
 					string outputHTMLfileName = currentFileObject->name + HTML_EXTENSION;
 					ofstream writeFileObjectHTML(outputHTMLfileName.c_str());
 					this->writeStringPointerToFileObject(&HTMLdocumentationFile, &writeFileObjectHTML);
@@ -266,10 +260,6 @@ void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationForFunction(LDre
 
 	if(generateHTMLdocumentationMode == CS_GENERATE_HTML_DOCUMENTATION_MODE_ON)
 	{
-		#ifdef CS_DEBUG_HTML_DOCUMENTATION
-		//cout << "bottomLevelFunctionToTraceUpwards->name = " << bottomLevelFunctionToTraceUpwards->name << endl;
-		//cout << "bottomLevelFunctionToTraceUpwards->nameFull = " << bottomLevelFunctionToTraceUpwards->nameFull << endl;
-		#endif
 
 		string HTMLdocumentationFunctionTitle = "";
 		HTMLdocumentationFunctionTitle = HTMLdocumentationFunctionTitle + "<h4>" + (bottomLevelFunctionToTraceUpwards->name) + "()</h4>";
@@ -326,9 +316,6 @@ void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationFunctionSummary(
 	*HTMLdocumentationFunctionSummary = *HTMLdocumentationFunctionSummary + "\t\t<tr><td>" +* functionName + "</td><td>" + HTMLdocumentationFunctionReturnType + "</td><td>" + HTMLdocumentationFunctionDescription + "</td></tr>\n";
 	*HTMLdocumentationFunctionSummary = *HTMLdocumentationFunctionSummary + "\t</table>\n";
 	*HTMLdocumentationFunctionSummary = *HTMLdocumentationFunctionSummary + "\t</p>\n";
-	#ifdef CS_DEBUG_HTML_DOCUMENTATION
-	cout << "HTMLdocumentationFunctionSummary: " <<* HTMLdocumentationFunctionSummary << endl;
-	#endif
 }
 
 void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationFunctionInputArguments(const string* functionName, const string* functionNameFull, string* HTMLdocumentationFunctionInputArguments)
@@ -350,9 +337,6 @@ void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationFunctionInputArg
 	}
 	if(functionHasArguments)
 	{
-		#ifdef CS_DEBUG_HTML_DOCUMENTATION
-		cout << "functionHasArguments: functionNameFull = " <<* functionNameFull << endl;
-		#endif
 
 		int startPositionOfFunctionArguments = startPositionOfFunctionBrackets+1;
 		int endPositionOfFunctionArguments = endPositionOfFunctionBrackets;
@@ -381,26 +365,6 @@ void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationFunctionInputArg
 			string currentArgumentType = currentArgument.substr(0, startPositionOfArgumentName);
 			string currentArgumentDescription = this->createDescriptionFromCaseSensitiveMultiwordString(currentArgumentName);
 
-			#ifdef CS_DEBUG_HTML_DOCUMENTATION
-			cout << "generateHTMLdocumentationFunctionInputArguments{}: functionNameFull = " << *functionNameFull << endl;
-			cout << "generateHTMLdocumentationFunctionInputArguments{}: currentArgument = " << currentArgument << endl;
-			cout << "generateHTMLdocumentationFunctionInputArguments{}: currentArgumentName = " << currentArgumentName << endl;
-			cout << "generateHTMLdocumentationFunctionInputArguments{}: currentArgumentType = " << currentArgumentType << endl;
-			/*
-			if(*functionName == "...")
-			{
-				cout << "functionArgumentsRaw = " << functionArgumentsRaw << endl;
-				cout << "startPositionOfArgument = " << startPositionOfArgument << endl;
-				cout << "endPositionOfArgument = " << endPositionOfArgument << endl;
-				cout << "currentArgument = " << currentArgument << endl;
-				cout << "startPositionOfArgumentName = " << startPositionOfArgumentName << endl;
-				cout << "currentArgumentName = " << currentArgumentName << endl;
-				cout << "currentArgumentType = " << currentArgumentType << endl;
-				cout << "currentArgumentDescription = " << currentArgumentDescription << endl;
-				cout << "currentArgumentTypeLength = " << startPositionOfArgumentName << endl;
-			}
-			*/
-			#endif
 
 			currentArgumentName = this->ensureHTMLTagSafe(currentArgumentName);
 			currentArgumentType = this->ensureHTMLTagSafe(currentArgumentType);
@@ -411,26 +375,12 @@ void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationFunctionInputArg
 
 			startPositionOfArgument = endPositionOfArgument+1;
 		}
-		#ifdef CS_DEBUG_HTML_DOCUMENTATION
-		/*
-		if(*functionName == "...")
-		{
-			exit(EXIT_ERROR);
-		}
-		*/
-		#endif
 	}
 	else
 	{
-		#ifdef CS_DEBUG_HTML_DOCUMENTATION
-		cout << "!functionHasArguments: functionNameFull = " <<* functionNameFull << endl;
-		#endif
 	}
 
 	*HTMLdocumentationFunctionInputArguments = *HTMLdocumentationFunctionInputArguments + "\t</table>\n";
-	#ifdef CS_DEBUG_HTML_DOCUMENTATION
-	cout << "HTMLdocumentationFunctionInputArguments: " <<* HTMLdocumentationFunctionInputArguments << endl;
-	#endif
 }
 
 
@@ -533,10 +483,6 @@ void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationFunctionReferenc
 	*/
 	while(currentReferenceInFunctionReferenceListRepeats->next != NULL)
 	{
-		#ifdef CS_DEBUG
-		//cout << "foundReferences" << endl;
-		//cout << "currentReferenceInFunctionReferenceListRepeats->functionReferenceCharacterIndex = " << currentReferenceInFunctionReferenceListRepeats->functionReferenceCharacterIndex << endl;
-		#endif
 
 		foundReferences = true;
 
@@ -557,10 +503,6 @@ void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationFunctionReferenc
 		}
 		*/
 		this->addToHTMLdocumentationFileFunctionList(currentReferenceInFunctionReferenceList, &HTMLdocumentationFunctionObjectListBody, &previousIndentation, &previousIndentationFirst);
-		#ifdef CS_DEBUG
-		//cout << "currentReferenceInFunctionReferenceList->name = " << currentReferenceInFunctionReferenceList->name << endl;
-		//cout << "HTMLdocumentationFunctionReferenceList = " <<* HTMLdocumentationFunctionReferenceList << endl;
-		#endif
 	#else
 		#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST_WITH_INDENTATION
 		HTMLdocumentationFunctionObjectListBody = HTMLdocumentationFunctionObjectListBody + "\t\t<li>";
@@ -601,9 +543,6 @@ void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationFunctionReferenc
 	}
 	*HTMLdocumentationFunctionReferenceList = *HTMLdocumentationFunctionReferenceList + "</p>\n";
 
-	#ifdef CS_DEBUG_HTML_DOCUMENTATION
-	cout << "HTMLdocumentationFunctionReferenceList: " <<* HTMLdocumentationFunctionReferenceList << endl;
-	#endif
 }
 
 string CSgenerateHTMLdocumentationClass::generateHTMLdocumentationImagePlaceHolder(const string* traceImageFileName, const string imageTitle)
@@ -692,10 +631,6 @@ void CSgenerateHTMLdocumentationClass::generateFileDiagramFunctionsHeirachy(CSfi
 			if(currentTopLevelFunctionObject->printed)
 			{
 				cout << currentTopLevelFunctionObject->name << endl;
-				#ifdef CS_DEBUG
-				//cout << "currentTopLevelFunctionObject->name = " << currentTopLevelFunctionObject->name << endl;
-				//cout << "currentTopLevelFunctionObject->level = " << currentTopLevelFunctionObject->level << endl;
-				#endif
 				//print function box for top level functions (added 3d3b);
 				if(currentTopLevelFunctionObject->printYIndex == 0)
 				{
@@ -703,9 +638,6 @@ void CSgenerateHTMLdocumentationClass::generateFileDiagramFunctionsHeirachy(CSfi
 					currentTopLevelFunctionObject->printX = currentTopLevelFunctionObject->printX - currentFileObject->printX;
 					currentTopLevelFunctionObject->printY = currentTopLevelFunctionObject->printY - currentFileObject->printY;
 
-					#ifdef CS_DEBUG
-					//cout << "currentTopLevelFunctionObject->printYIndex = " << currentTopLevelFunctionObject->printYIndex << endl;
-					#endif
 					currentReferenceInPrintList = CSdraw.printFunctionBox(currentReferenceInPrintList, &currentTagInSVGFile, currentTopLevelFunctionObject, currentTopLevelFunctionObject->col);
 					currentReferenceInPrintList = CSdraw.printFunctionBoxText(currentReferenceInPrintList, &currentTagInSVGFile, currentTopLevelFunctionObject, currentTopLevelFunctionObject->col, true);
 
@@ -717,9 +649,6 @@ void CSgenerateHTMLdocumentationClass::generateFileDiagramFunctionsHeirachy(CSfi
 				currentTopLevelFunctionObject->printedFunctionConnections = false;
 				while(currentReferenceInFunctionReferenceList->next != NULL)
 				{
-					#ifdef CS_DEBUG
-					//cout << "currentReferenceInFunctionReferenceList->name = " << currentReferenceInFunctionReferenceList->name << endl;
-					#endif
 					currentReferenceInPrintList = CSdraw.createFunctionObjectListBoxesAndConnections(currentReferenceInPrintList, currentFileObject, currentTopLevelFunctionObject, firstObjectInTopLevelBelowListContainer, 0, currentReferenceInFunctionReferenceList, &currentTagInSVGFile, false, true, &(currentFileObject->name), usePredefinedGrid);
 
 					currentReferenceInFunctionReferenceList = currentReferenceInFunctionReferenceList->next;
@@ -783,9 +712,6 @@ void CSgenerateHTMLdocumentationClass::generateClassHTMLdocumentationFromCustomC
 
 					HTMLdocumentationFileBody = HTMLdocumentationFileBody + HTMLdocumentationClassTitle + HTMLdocumentationClassHeader + HTMLdocumentationClassParameters;
 
-					#ifdef CS_DEBUG
-					//cout << "HTMLdocumentationFileBody = " << HTMLdocumentationFileBody << endl;
-					#endif
 				}
 				else
 				{
@@ -811,9 +737,6 @@ void CSgenerateHTMLdocumentationClass::generateClassHTMLdocumentationFromCustomC
 
 string CSgenerateHTMLdocumentationClass::getFunctionNameFromFunctionNameFull(const string* functionNameFull)
 {
-	#ifdef CS_DEBUG
-	//cout << "functionNameFull = " <<* functionNameFull << endl;
-	#endif
 
 	int startPositionOfFunctionBrackets = functionNameFull->find(CHAR_OPEN_BRACKET);
 	string functionTypeAndName = functionNameFull->substr(0, startPositionOfFunctionBrackets);
@@ -829,9 +752,6 @@ string CSgenerateHTMLdocumentationClass::getFunctionNameFromFunctionNameFull(con
 	}
 	#endif
 
-	#ifdef CS_DEBUG
-	//cout << "functionName = " << functionName << endl;
-	#endif
 
 	return functionName;
 }
@@ -882,9 +802,6 @@ bool CSgenerateHTMLdocumentationClass::readIndentedListFile(const string indente
 			if(currentToken == CHAR_NEWLINE)
 			{
 				indentedListVector->push_back(currentEntry);
-				#ifdef CS_DEBUG
-				//cout << "1. currentEntry = " << currentEntry << endl;
-				#endif
 				currentEntry = "";
 				entryIndex++;
 			}
@@ -927,15 +844,8 @@ void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationIndentedList(vec
 			indentationLevel++;
 		}
 		currentEntry = currentEntry.substr(indentationLevel, currentEntryLengthOld-indentationLevel);
-		#ifdef CS_DEBUG
-		//cout << "2. currentEntry = " << currentEntry << endl;
-		//cout << "indentationLevel = " << indentationLevel << endl;
-		#endif
 
 		this->addToHTMLdocumentationIndentedList(currentEntry, indentationLevel, &HTMLdocumentationIndentationListBody, &previousIndentation, &previousIndentationFirst);
-		#ifdef CS_DEBUG
-		//cout << "HTMLdocumentationIndentationListBody = " << HTMLdocumentationIndentationListBody << endl;
-		#endif
 
 	}
 
@@ -956,8 +866,5 @@ void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationIndentedList(vec
 	}
 	*HTMLdocumentationIndentationList = *HTMLdocumentationIndentationList + "</p>\n";
 
-	#ifdef CS_DEBUG
-	//cout << "HTMLdocumentationIndentationList: " <<* HTMLdocumentationIndentationList << endl;
-	#endif
 }
 #endif
