@@ -25,7 +25,7 @@
  * File Name: CSglobalsDefs.hpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3k2b 21-March-2017
+ * Project Version: 3k2c 21-March-2017
  * Description: CS specific global definitions
  *
  *******************************************************************************/
@@ -228,15 +228,6 @@
 
 #define CS_DRAW_APPLY_EVEN_ODD_X_OFFSET
 
-//#define CS_DEBUG
-//#define CS_DEBUG_GENERATE_OBJECT_ORIENTED_CODE
-//#define CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS1
-//#define CS_DEBUG_GENERATE_CONST_FUNCTION_ARGUMENTS2
-#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DISABLE_OUTPUT
-	//#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DISABLE_OUTPUT_DISABLE_PRINT_DEBUG
-#endif
-//#define CS_DEBUG_VERBOSE
-//#define CS_DEBUG_HTML_DOCUMENTATION
 #define CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_SUMMARY
 
 //#define CS_USE_RAINBOW_COLOURS_FOR_FILE_BOXES		//optional
