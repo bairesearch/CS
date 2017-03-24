@@ -25,7 +25,7 @@
  * File Name: CSgenerateConstFunctionArgumentCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3j3e 17-January-2017
+ * Project Version: 3j2b 17-January-2017
  *
  *******************************************************************************/
 
@@ -193,7 +193,7 @@ bool CSgenerateConstFunctionArgumentCodeClass::generateConstFunctionArgumentsFil
 								cout << "currentFileObject->name = " << currentFileObject->name << endl;
 								cout << "currentFunctionObject->nameFull = " << currentFunctionObject->nameFull << endl;
 								cout << "currentFunctionObject->name = " << currentFunctionObject->name << endl;
-								exit(0);
+								exit(EXIT_ERROR);
 							}
 							*/
 						}
@@ -201,7 +201,7 @@ bool CSgenerateConstFunctionArgumentCodeClass::generateConstFunctionArgumentsFil
 						{
 							cout << "generateConstFunctionArgumentsFile{} error: currentFunctionObject->functionTextRaw not found in currentFileObject->sourceFileText" << endl;
 							cout << "currentFunctionObject->functionTextRaw = " <<  currentFunctionObject->functionTextRaw << endl;
-							exit(0);
+							exit(EXIT_ERROR);
 						}
 					}
 
@@ -281,7 +281,7 @@ string CSgenerateConstFunctionArgumentCodeClass::addConstToAllOccurancesOfFuncti
 					{
 						cout << "secondaryAssignmentDecaration = " << secondaryAssignmentDecaration << endl;
 						cout << "secondaryAssignmentDecarationWithConst = " << secondaryAssignmentDecarationWithConst << endl;
-						exit(0);
+						exit(EXIT_ERROR);
 					}
 
 					functionTextUpdated.replace(indexOfFunctionArgumentSecondaryAssignmentType, secondaryAssignmentDecaration.length(), secondaryAssignmentDecarationWithConst);
@@ -647,7 +647,7 @@ bool CSgenerateConstFunctionArgumentCodeClass::generateConstFunctionArgument(CSf
 								if(i != functionReferenceArgumentCount)
 								{
 									cout << "generateConstFunctionArgumentsFunction{} error: (i != functionReferenceArgumentCount)" << endl;
-									exit(0);
+									exit(EXIT_ERROR);
 								}
 
 								currentFunctionArgumentInFunctionReferenceTarget = functionReferenceTarget->firstFunctionArgumentInFunction;

@@ -25,7 +25,7 @@
  * File Name: CSexecflow.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3j3e 17-January-2017
+ * Project Version: 3j2b 17-January-2017
  *
  *******************************************************************************/
 
@@ -93,7 +93,7 @@ void CSexecflowClass::generateCodeStructure(const string topLevelFileName, int w
 	CSdraw.initiateMaxXatParticularY();
 	LDreference* firstReferenceInPrintList = new LDreference();
 
-	SHAREDvars.setCurrentDirectory(tempFolder);
+	SHAREDvars.setCurrentDirectory(outputFolder);
 
 	XMLparserTag* firstTagInSVGFile = new XMLparserTag();
 	XMLparserTag* currentTagInSVGFile = firstTagInSVGFile;
@@ -161,7 +161,7 @@ void CSexecflowClass::generateCodeStructure(const string topLevelFileName, int w
 			if(!(firstReferenceInTopLevelBelowList->printed))
 			{
 				cout << "error" << endl;
-				exit(0);
+				exit(EXIT_ERROR);
 			}
 
 			CSfunction* currentReferenceInFunctionReferenceList = topLevelFunctionObject->firstReferenceInFunctionReferenceList;
@@ -196,7 +196,7 @@ void CSexecflowClass::generateCodeStructure(const string topLevelFileName, int w
 				else
 				{
 					cout << "error: foundBottomLevelFunctionRef " << bottomLevelFunctionNameToTraceUpwards << " cannot be found" << endl;
-					exit(0);
+					exit(EXIT_ERROR);
 				}
 			}
 			else
@@ -211,7 +211,7 @@ void CSexecflowClass::generateCodeStructure(const string topLevelFileName, int w
 		else
 		{
 			cout << "error: !topLevelFunctionNameFound: " << topLevelFunctionName << endl;
-			exit(0);
+			exit(EXIT_ERROR);
 		}
 	}
 
@@ -262,7 +262,7 @@ void CSexecflowClass::generateCodeStructure(const string topLevelFileName, int w
 			if(!LDparser.parseFile(topLevelSceneFileName, initialReferenceInSceneFile, topLevelReferenceInSceneFile, true))
 			{//file does not exist
 				cout << "The file: " << topLevelSceneFileName << " does not exist in the directory" << endl;
-				exit(0);
+				exit(EXIT_ERROR);
 			}
 			LDreferenceManipulation.write2DreferenceListCollapsedTo1DtoFile(topLevelSceneFileNameCollapsed, initialReferenceInSceneFile);
 
@@ -278,7 +278,7 @@ void CSexecflowClass::generateCodeStructure(const string topLevelFileName, int w
 			if(!LDparser.parseFile(topLevelSceneFileNameCollapsed, initialReferenceInCollapsedSceneFile, topLevelReferenceInCollapsedSceneFile, true))
 			{//file does not exist
 				cout << "The file: " << topLevelSceneFileNameCollapsed << " does not exist in the directory" << endl;
-				exit(0);
+				exit(EXIT_ERROR);
 			}
 
 			LDopengl.drawPrimitivesReferenceListToOpenGLandCreateRGBmapBasic(initialReferenceInCollapsedSceneFile, width, height, rgbMap);

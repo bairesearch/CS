@@ -25,7 +25,7 @@
  * File Name: CSgenerateObjectOrientedCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3j3e 17-January-2017
+ * Project Version: 3j2b 17-January-2017
  *
  *******************************************************************************/
 
@@ -144,7 +144,7 @@ bool CSgenerateObjectOrientedCodeClass::generateCPPclassesFile(CSfile* currentFi
 				cout << "currentFileObject->name = " << currentFileObject->name << endl;
 				cout << "currentFunctionObject->nameFull = " << currentFunctionObject->nameFull << endl;
 				cout << "currentFunctionObject->name = " << currentFunctionObject->name << endl;
-				exit(0);
+				exit(EXIT_ERROR);
 			}
 			foundAtLeastOneInstance = false;
 			currentFileObject->sourceFileText = SHAREDvars.replaceAllOccurancesOfString(&(currentFileObject->sourceFileText), currentFunctionObject->nameFull, classFullFunctionNameSource, &foundAtLeastOneInstance);
@@ -154,7 +154,7 @@ bool CSgenerateObjectOrientedCodeClass::generateCPPclassesFile(CSfile* currentFi
 				cout << "currentFileObject->name = " << currentFileObject->name << endl;
 				cout << "currentFunctionObject->nameFull = " << currentFunctionObject->nameFull << endl;
 				cout << "currentFunctionObject->name = " << currentFunctionObject->name << endl;
-				exit(0);
+				exit(EXIT_ERROR);
 			}
 
 			//2. convert function references
@@ -226,7 +226,7 @@ bool CSgenerateObjectOrientedCodeClass::generateCPPclassesFile(CSfile* currentFi
 								cout << "currentFileObject->name = " << currentFileObject->name << endl;
 								cout << "currentFunctionObject->nameFull = " << currentFunctionObject->nameFull << endl;
 								cout << "currentFunctionObject->name = " << currentFunctionObject->name << endl;
-								exit(0);
+								exit(EXIT_ERROR);
 							}
 							currentFileObject->sourceFileText = currentFileObject->sourceFileText.substr(0, posOfFunctionText) + currentFunctionObject->functionTextRaw + currentFileObject->sourceFileText.substr((posOfFunctionText+functionTextOrigLength), currentFileObject->sourceFileText.length()-(posOfFunctionText+functionTextOrigLength));
 
@@ -238,7 +238,7 @@ bool CSgenerateObjectOrientedCodeClass::generateCPPclassesFile(CSfile* currentFi
 						{
 							cout << "generateCPPclassesFile{} error: currentFunctionObject->functionTextRaw not found in currentFileObject->sourceFileText" << endl;
 							cout << "currentFunctionObject->functionTextRaw = " <<  currentFunctionObject->functionTextRaw << endl;
-							exit(0);
+							exit(EXIT_ERROR);
 						}
 					}
 				}
@@ -248,7 +248,7 @@ bool CSgenerateObjectOrientedCodeClass::generateCPPclassesFile(CSfile* currentFi
 					cout << "currentFileObject->name = " << currentFileObject->name << endl;
 					cout << "currentFunctionObject->nameFull = " << currentFunctionObject->nameFull << endl;
 					cout << "currentFunctionObject->name = " << currentFunctionObject->name << endl;
-					exit(0);
+					exit(EXIT_ERROR);
 				}
 
 				#ifdef CS_DEBUG_GENERATE_OBJECT_ORIENTED_CODE
@@ -279,7 +279,7 @@ bool CSgenerateObjectOrientedCodeClass::generateCPPclassesFile(CSfile* currentFi
 		else
 		{
 			cout << "error: (positionOfFirstFunctionObjectInHeader == CPP_STRING_FIND_RESULT_FAIL_VALUE" << endl;
-			exit(0);
+			exit(EXIT_ERROR);
 		}
 
 
@@ -304,7 +304,7 @@ bool CSgenerateObjectOrientedCodeClass::generateCPPclassesFile(CSfile* currentFi
 		else
 		{
 			cout << "error: (positionOfFirstFunctionObjectInHeader == CPP_STRING_FIND_RESULT_FAIL_VALUE" << endl;
-			exit(0);
+			exit(EXIT_ERROR);
 		}
 
 		//6. add move source include file statements to header (required for referenced class declarations)

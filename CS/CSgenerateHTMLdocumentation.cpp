@@ -25,7 +25,7 @@
  * File Name: CSgenerateHTMLdocumentation.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3j3e 17-January-2017
+ * Project Version: 3j2b 17-January-2017
  *
  *******************************************************************************/
 
@@ -65,7 +65,7 @@ string CSgenerateHTMLdocumentationClass::generateHTMLdocumentationHeader(const s
 	string HTMLdocumentationHeader = "";
 	if(htmlHeader)
 	{
-		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (CS), Project Version: 3j3e 17-January-2017<p>\n";
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (CS), Project Version: 3j2b 17-January-2017<p>\n";
 	}
 	else
 	{
@@ -375,7 +375,7 @@ void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationFunctionInputArg
 			if(startPositionOfArgumentName == CPP_STRING_FIND_RESULT_FAIL_VALUE)
 			{
 				cout << "generateHTMLdocumentationFunctionInputArguments{} error: (startPositionOfArgumentName == CPP_STRING_FIND_RESULT_FAIL_VALUE)" << endl;
-				exit(0);
+				exit(EXIT_ERROR);
 			}
 			string currentArgumentName = currentArgument.substr(startPositionOfArgumentName, endPositionOfArgument-startPositionOfArgumentName);
 			string currentArgumentType = currentArgument.substr(0, startPositionOfArgumentName);
@@ -415,7 +415,7 @@ void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationFunctionInputArg
 		/*
 		if(*functionName == "...")
 		{
-			exit(0);
+			exit(EXIT_ERROR);
 		}
 		*/
 		#endif
@@ -578,7 +578,7 @@ void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationFunctionReferenc
 	/*
 	if(function->name == "createImage")
 	{
-		exit(0);
+		exit(EXIT_ERROR);
 	}
 	*/
 
@@ -676,7 +676,7 @@ void CSgenerateHTMLdocumentationClass::generateFileDiagramFunctionsHeirachy(CSfi
 		LDreference* firstReferenceInPrintList = new LDreference();
 		LDreference* currentReferenceInPrintList = firstReferenceInPrintList;
 
-		SHAREDvars.setCurrentDirectory(tempFolder);
+		SHAREDvars.setCurrentDirectory(outputFolder);
 
 		XMLparserTag* firstTagInSVGFile = new XMLparserTag();
 		XMLparserTag* currentTagInSVGFile = firstTagInSVGFile;

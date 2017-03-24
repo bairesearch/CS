@@ -25,7 +25,7 @@
  * File Name: CSdraw.hpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3j3e 17-January-2017
+ * Project Version: 3j2b 17-January-2017
  *
  *******************************************************************************/
 
@@ -209,7 +209,7 @@ class CSdrawClass
 	private: void writeFileOrFunctionSVGbox(XMLparserTag** currentTag, const vec* pos, const int textLength, const double scaleFactor, const double maxTextLength, const int col, const double boxOutlineWidth);
 	private: void writeFileOrFunctionSVGboxTransparent(XMLparserTag** currentTag, const vec* pos, const int textLength, const double scaleFactor, const double maxTextLength, const int col, const double boxOutlineWidth, const double fillOpacity);
 
-//void fillInCSrulesExternVariables(XMLrulesClass* firstReferenceInCSrulesDraw);
+	//void fillInCSrulesExternVariables(XMLrulesClass* firstReferenceInCSrulesDraw);
 	public: void fillInCSrulesExternVariables();
 
 	private: string createGroupID(const string objectName, const int printX, const int printY);

@@ -25,7 +25,7 @@
  * File Name: CSmain.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3j3e 17-January-2017
+ * Project Version: 3j2b 17-January-2017
  *
  *******************************************************************************/
 
@@ -60,15 +60,15 @@ static char errmessage[] = "Usage:  CS.exe [options]"
 "\n\t-tracefunction [string] : bottom level function name to trace upwards / document (eg, y for int y())"
 "\n\t-html                   : generate html documentation (user must specify tracefunction, else will document all functions)"
 #ifdef CS_GENERATE_CPP_CLASSES
-"\n\t-generateoo             : generate object oriented C++ code (must specify tempfolder else input files will be overwritten)"
+"\n\t-generateoo             : generate object oriented C++ code (must specify outputfolder else input files will be overwritten)"
 #endif
 #ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
-"\n\t-generateconst          : generate const function arguments code (must specify tempfolder else input files will be overwritten)"
+"\n\t-generateconst          : generate const function arguments code (must specify outputfolder else input files will be overwritten)"
 #endif
 "\n"
-"\n\t-workingfolder [string] : working directory name for input files (def: same as exe)"
+"\n\t-inputfolder [string]   : input directory name for input files (def: same as exe)"
 "\n\t-exefolder [string]     : exe directory name for executables; CS.exe (def: same as exe)"
-"\n\t-tempfolder [string]    : temp directory name for temporary and output files (def: same as exe)"
+"\n\t-outputfolder [string]  : output directory name for temporary and output files (def: same as exe)"
 "\n"
 "\n\t-version                : print version"
 "\n"
@@ -89,7 +89,7 @@ static char knownLimitationsMsg[] = "* CS is designed for non-object oriented C 
 "\n* CS may produce large SVG files (Eg when functions are enabled via enablefunctions) which must be viewed with a viewer capable of dynamic zoom, eg, inkscape"
 "\n* CS is not designed to operate with function pointers (and object orientated code)"
 "\n* the first include file in the top level source file (eg PROJECTmain.c) must declare the top level function name (eg main)"
-"\n* make sure the temp folder is clear of all output files (ie svg/html files of the same name as expected output files)"
+"\n* make sure the output folder is clear of all output files (ie svg/html files of the same name as expected output files)"
 "\n* function contents cannot include a reference to themselves in comments (required for HTML generation function reference list and generateoo)"
 "\n* function contents cannot include a reference to themselves in cout statements (e.g. cout << \"dothis()\")"
 "\n* function contents cannot include a reference to their name in cout statements followed by an equals sign, unless it is referenced at the start of the comment (e.g. cout << \"generateHTMLdocumentationMode = \" ...)"
@@ -277,13 +277,13 @@ int main(const int argc, const char** argv)
 
 	string currentFolder = SHAREDvarsClass().getCurrentDirectory();
 
-	if(SHAREDvarsClass().argumentExists(argc, argv, "-workingfolder"))
+	if(SHAREDvarsClass().argumentExists(argc, argv, "-inputfolder"))
 	{
-		workingFolder = SHAREDvarsClass().getStringArgument(argc, argv, "-workingfolder");
+		inputFolder = SHAREDvarsClass().getStringArgument(argc, argv, "-inputfolder");
 	}
 	else
 	{
-		workingFolder = currentFolder;
+		inputFolder = currentFolder;
 	}
 	if(SHAREDvarsClass().argumentExists(argc, argv, "-exefolder"))
 	{
@@ -293,21 +293,21 @@ int main(const int argc, const char** argv)
 	{
 		exeFolder = currentFolder;
 	}
-	if(SHAREDvarsClass().argumentExists(argc, argv, "-tempfolder"))
+	if(SHAREDvarsClass().argumentExists(argc, argv, "-outputfolder"))
 	{
-		tempFolder = SHAREDvarsClass().getStringArgument(argc, argv, "-tempfolder");
+		outputFolder = SHAREDvarsClass().getStringArgument(argc, argv, "-outputfolder");
 	}
 	else
 	{
-		tempFolder = currentFolder;
+		outputFolder = currentFolder;
 	}
 
-	SHAREDvarsClass().setCurrentDirectory(workingFolder);
+	SHAREDvarsClass().setCurrentDirectory(inputFolder);
 
 	if(SHAREDvarsClass().argumentExists(argc, argv, "-version"))
 	{
-		cout << "CS.exe - Project Version: 3j3e 17-January-2017" << endl;
-		exit(1);
+		cout << "CS.exe - Project Version: 3j2b 17-January-2017" << endl;
+		exit(EXIT_OK);
 	}
 
 	if(!passInputReq)
@@ -316,7 +316,7 @@ int main(const int argc, const char** argv)
 		cout << "**** Known Limitations: ****" << endl;
 		printf(knownLimitationsMsg);
 		cout << "****************************" << endl;
-		exit(0);
+		exit(EXIT_ERROR);
 	}
 
 
@@ -363,7 +363,7 @@ int main(const int argc, const char** argv)
 	if(!XMLrulesClassClass().parseCSrulesXMLfile())
 	{
 		cout << "error: no rules file detected" << endl;
-		exit(0);
+		exit(EXIT_ERROR);
 	}
 	LDspriteClass().fillInLDspriteExternVariables();
 	CSdrawClass().fillInCSrulesExternVariables();
@@ -375,17 +375,17 @@ int main(const int argc, const char** argv)
 	else if(mode == CS_MODE_OUTPUT_DATA_FLOW)
 	{
 		cout << "error: invalid operation mode" << endl;
-		exit(0);
+		exit(EXIT_ERROR);
 	}
 	else if(mode == CS_MODE_FILTER_CODE_USING_PREPROCESSOR_DEFINITIONS)
 	{
 		cout << "error: invalid operation mode" << endl;
-		exit(0);
+		exit(EXIT_ERROR);
 	}
 	else
 	{
 		cout << "error: invalid operation mode" << endl;
-		exit(0);
+		exit(EXIT_ERROR);
 	}
 #endif
 }

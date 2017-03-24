@@ -25,7 +25,7 @@
  * File Name: CSoperations.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3j3e 17-January-2017
+ * Project Version: 3j2b 17-January-2017
  *
  *******************************************************************************/
 
@@ -919,7 +919,7 @@ void CSoperationsClass::getFunctionObjectNamesFromFunctionsInCfile(const CSfile*
 						if(currentIndexInFunction > CS_MAX_NUM_CHARACTERS_PER_FUNCTION)
 						{
 							cout << "getFunctionObjectNamesFromFunctionsInCfile{} error: function definitions in .c files must end with a } without any leading white space" << endl;
-							exit(0);
+							exit(EXIT_ERROR);
 						}
 
 						currentIndexInFunction++;
@@ -963,7 +963,7 @@ void CSoperationsClass::getFunctionObjectNamesFromFunctionsInCfile(const CSfile*
 						if(currentIndexInFunction > CS_MAX_NUM_CHARACTERS_PER_FUNCTION)
 						{
 							cout << "getFunctionObjectNamesFromFunctionsInCfile{} error: function definitions in .c files must end with a } without any leading white space" << endl;
-							exit(0);
+							exit(EXIT_ERROR);
 						}
 
 						currentIndexInFunction++;
@@ -1076,7 +1076,7 @@ void CSoperationsClass::getFunctionObjectNamesFromFunctionsInCfile(const CSfile*
 					cout << "error: function not found in file:" << endl;
 					cout << "fullFunctionName = " << fullFunctionName << endl;
 					cout << "fileName = " << codeFileName << endl;
-					exit(0);
+					exit(EXIT_ERROR);
 				}
 				currentReference->hasHadFunctionReferencesParsed = true;	//not used
 			}
@@ -1267,7 +1267,7 @@ void CSoperationsClass::identifyFunctionReferenceArguments(CSfunction* currentRe
 	if(startPositionOfFunctionBrackets != indexToFunctionObject+functionName.length())
 	{
 		cout << "identifyFunctionReferenceArguments{} error: startPositionOfFunctionBrackets != indexToFunctionObject+functionName.length()" << endl;
-		exit(0);
+		exit(EXIT_ERROR);
 	}
 	bool functionHasArguments = false;
 	if(endPositionOfFunctionBracketsTemp != startPositionOfFunctionBrackets+1)
@@ -1403,7 +1403,7 @@ void CSoperationsClass::identifyFunctionDeclarationArguments(CSfunction* current
 			if(startPositionOfArgumentName == CPP_STRING_FIND_RESULT_FAIL_VALUE)
 			{
 				cout << "generateHTMLdocumentationFunctionInputArguments{} error: (startPositionOfArgumentName == CPP_STRING_FIND_RESULT_FAIL_VALUE)" << endl;
-				exit(0);
+				exit(EXIT_ERROR);
 			}
 			//string currentArgumentName = currentArgument.substr(startPositionOfArgumentName, endPositionOfArgument-startPositionOfArgumentName);
 			string currentArgumentName = this->extractFunctionArgumentName(&currentArgument, startPositionOfArgumentName);	//updated CS3h9b - this is required to support array arguments eg "typeX* arrayName[]"
@@ -1623,7 +1623,7 @@ string CSoperationsClass::extractFunctionArgumentName(string* argumentText, cons
 			foundValidChar = true;
 			#else
 			cout << "!CS_SUPPORT_POINTER_TYPE_DECLARATIONS_WITH_SPACE_BEFORE_RATHER_THAN_AFTER_ASTERIX: extractFunctionArgumentName{} error: * character found; pointer has been defined next to variable name instead of variable type" << endl;
-			exit(0);
+			exit(EXIT_ERROR);
 			#endif
 		}
 

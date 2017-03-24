@@ -25,7 +25,7 @@
  * File Name: CSoperations.hpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3j3e 17-January-2017
+ * Project Version: 3j2b 17-January-2017
  *
  *******************************************************************************/
 
@@ -45,9 +45,9 @@ class CSoperationsClass
 	private: LDreferenceManipulationClass LDreferenceManipulation;
 	private: CSreferenceContainerClassClass CSreferenceContainerClass;
 	public: bool getIncludeFileNamesFromCorHfile(CSfileContainer* firstReferenceInIncludeFileListContainer, constEffective CSfileContainer* topLevelReferenceContainer, CSfile* aboveLevelObject, const string topLevelReferenceName, const int level);
-	#ifdef CS_GENERATE_CODE_GENERIC
+		#ifdef CS_GENERATE_CODE_GENERIC
 		private: bool fileIsHeader(string parseFileName);
-	#endif
+		#endif
 		private: bool findFileObjectInFileObjectContainerList(constEffective CSfileContainer* firstReferenceContainerInLevel, const string fileReferenceName, constEffective CSfile** fileReferenceFound);
 		private: bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunction* firstFunctionInFunctionList, const string topLevelFileName, const int level);
 		private: void getFunctionObjectNamesFromFunctionsInCfile(const CSfile* firstFileInIncludeFileList, CSfunction* firstFunctionInFunctionList, const CSfile* aboveLevelObject, const string topLevelFileName, const int level);
@@ -55,9 +55,9 @@ class CSoperationsClass
 				private: bool searchFunctionStringForFunctionReferences(const CSfile* firstFileInIncludeFileList, const CSfile* fileNameContainingFunctionReferencesToSearchFor, CSfunction** currentReferenceInFunctionReferenceList, CSfunction** currentReferenceInFunctionReferenceListRepeats, string* functionContentsString);
 					private: void identifyFunctionReferenceArguments(CSfunction* currentReferenceInFunctionReferenceList, string* functionContentsString, int indexToFunctionObject);
 						private: string removePrependedWhiteSpace(const string argument);
-				#ifdef CS_IDENTIFY_FUNCTION_DECLARATION_ARGUMENTS
+					#ifdef CS_IDENTIFY_FUNCTION_DECLARATION_ARGUMENTS
 					private: void identifyFunctionDeclarationArguments(CSfunction* currentReferenceInFunctionReferenceList, const string* functionNameFull);
-				#endif
+					#endif
 
 /*
 CSfile* findReferenceInIncludeFileList(CSfile* firstReferenceInAboveLevelBelowList, string referenceName, CSfile* foundReference, bool* referenceFound);

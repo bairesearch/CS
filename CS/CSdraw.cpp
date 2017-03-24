@@ -25,7 +25,7 @@
  * File Name: CSdraw.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3j3e 17-January-2017
+ * Project Version: 3j2b 17-January-2017
  *
  *******************************************************************************/
 
@@ -739,7 +739,7 @@ LDreference* CSdrawClass::createFunctionObjectListBoxesAndConnections(LDreferenc
 			if(!(fileObject->printed))
 			{
 				cout << "createFunctionObjectListBoxesAndConnections{} error: (!(fileObject->printed))" << endl;
-				exit(0);
+				exit(EXIT_ERROR);
 			}
 
 			bool prepareForTrace = false;
@@ -1022,7 +1022,7 @@ LDreference* CSdrawClass::createFunctionObjectListBoxesAndConnections(LDreferenc
 						cout << "functionObject->name = " << functionObject->name << endl;
 						cout << "aboveLevelFunctionObject->name = " << aboveLevelFunctionObject->name << endl;
 						cout << "aboveLevelFileObject->name = " << aboveLevelFileObject->name << endl;
-						exit(0);
+						exit(EXIT_ERROR);
 					}
 					*/
 
@@ -1079,7 +1079,7 @@ LDreference* CSdrawClass::createFunctionObjectListBoxesAndConnections(LDreferenc
 				cout << "countArguments = " << countArguments << endl;
 				cout << "fileObject->name = " << fileObject->name << endl;
 				cout << "functionObject->name = " << functionObject->name << endl;
-				exit(0);
+				exit(EXIT_ERROR);
 			#ifdef CS_HTML_DOCUMENTATION_GENERATE_FILE_CODE_STRUCTURE_DIAGRAMS_UPDATES_MAY_NOT_BE_REQUIRED
 			}
 			#endif
@@ -1535,7 +1535,7 @@ int CSdrawClass::calculateCSBoxAndConnectionColourBasedUponLevel(const int yInde
 	{
 		cout << "invalid CS reference level for conversion to colour" << endl;
 		cout << "yIndex = " << yIndex << endl;
-		exit(0);
+		exit(EXIT_ERROR);
 	}
 
 	return colour;
@@ -1726,7 +1726,7 @@ LDreference* CSdrawClass::traceFunctionsUpwardsAndDrawOrHighLightThese(LDreferen
 			else
 			{
 				cout << "error: traceFunctionsUpwardsAndDrawOrHighLightThese{}: higherLevelFunctionFound " << currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionObjectList->functionObject->name << " cannot be found" << endl;
-				exit(0);
+				exit(EXIT_ERROR);
 			}
 
 			currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionObjectList = currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionObjectList->next;
@@ -1769,7 +1769,7 @@ void CSdrawClass::traceFunctionsUpwardsAndDrawOrHighLightTheseReset(const CSfile
 			else
 			{
 				cout << "error: traceFunctionsUpwardsAndDrawOrHighLightThese{}: higherLevelFunctionFound " << currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionObjectList->functionObject->name << " cannot be found" << endl;
-				exit(0);
+				exit(EXIT_ERROR);
 			}
 
 			currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionObjectList = currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionObjectList->next;
