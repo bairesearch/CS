@@ -25,7 +25,7 @@
  * File Name: CSoperations.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3l1b 02-June-2017
+ * Project Version: 3l1c 01-June-2017
  *
  *******************************************************************************/
 
@@ -850,7 +850,7 @@ void CSoperationsClass::getFunctionObjectNamesFromFunctionsInCfile(const CSfile*
 
 						if(currentIndexInFunction > CS_MAX_NUM_CHARACTERS_PER_FUNCTION)
 						{
-							cout << "getFunctionObjectNamesFromFunctionsInCfile{} error: function definitions in .c files must end with a } without any leading white space" << endl;
+							cerr << "getFunctionObjectNamesFromFunctionsInCfile{} error: function definitions in .c files must end with a } without any leading white space" << endl;
 							exit(EXIT_ERROR);
 						}
 
@@ -891,7 +891,7 @@ void CSoperationsClass::getFunctionObjectNamesFromFunctionsInCfile(const CSfile*
 
 						if(currentIndexInFunction > CS_MAX_NUM_CHARACTERS_PER_FUNCTION)
 						{
-							cout << "getFunctionObjectNamesFromFunctionsInCfile{} error: function definitions in .c files must end with a } without any leading white space" << endl;
+							cerr << "getFunctionObjectNamesFromFunctionsInCfile{} error: function definitions in .c files must end with a } without any leading white space" << endl;
 							exit(EXIT_ERROR);
 						}
 
@@ -940,9 +940,9 @@ void CSoperationsClass::getFunctionObjectNamesFromFunctionsInCfile(const CSfile*
 				}
 				else
 				{
-					cout << "error: function not found in file:" << endl;
-					cout << "fullFunctionName = " << fullFunctionName << endl;
-					cout << "fileName = " << codeFileName << endl;
+					cerr << "error: function not found in file:" << endl;
+					cerr << "fullFunctionName = " << fullFunctionName << endl;
+					cerr << "fileName = " << codeFileName << endl;
 					exit(EXIT_ERROR);
 				}
 				currentReference->hasHadFunctionReferencesParsed = true;	//not used
@@ -1091,7 +1091,7 @@ void CSoperationsClass::identifyFunctionReferenceArguments(CSfunction* currentRe
 	int endPositionOfFunctionBracketsTemp = functionContentsString->find(CHAR_CLOSE_BRACKET, indexToFunctionObject);
 	if(startPositionOfFunctionBrackets != indexToFunctionObject+functionName.length())
 	{
-		cout << "identifyFunctionReferenceArguments{} error: startPositionOfFunctionBrackets != indexToFunctionObject+functionName.length()" << endl;
+		cerr << "identifyFunctionReferenceArguments{} error: startPositionOfFunctionBrackets != indexToFunctionObject+functionName.length()" << endl;
 		exit(EXIT_ERROR);
 	}
 	bool functionHasArguments = false;
@@ -1217,7 +1217,7 @@ void CSoperationsClass::identifyFunctionDeclarationArguments(CSfunction* current
 			int startPositionOfArgumentName = currentArgument.rfind(CHAR_SPACE) + 1;	//last space
 			if(startPositionOfArgumentName == CPP_STRING_FIND_RESULT_FAIL_VALUE)
 			{
-				cout << "generateHTMLdocumentationFunctionInputArguments{} error: (startPositionOfArgumentName == CPP_STRING_FIND_RESULT_FAIL_VALUE)" << endl;
+				cerr << "generateHTMLdocumentationFunctionInputArguments{} error: (startPositionOfArgumentName == CPP_STRING_FIND_RESULT_FAIL_VALUE)" << endl;
 				exit(EXIT_ERROR);
 			}
 			//string currentArgumentName = currentArgument.substr(startPositionOfArgumentName, endPositionOfArgument-startPositionOfArgumentName);
@@ -1413,7 +1413,7 @@ string CSoperationsClass::extractFunctionArgumentName(string* argumentText, cons
 			#ifdef CS_SUPPORT_POINTER_TYPE_DECLARATIONS_WITH_SPACE_BEFORE_RATHER_THAN_AFTER_ASTERIX
 			foundValidChar = true;
 			#else
-			cout << "!CS_SUPPORT_POINTER_TYPE_DECLARATIONS_WITH_SPACE_BEFORE_RATHER_THAN_AFTER_ASTERIX: extractFunctionArgumentName{} error: * character found; pointer has been defined next to variable name instead of variable type" << endl;
+			cerr << "!CS_SUPPORT_POINTER_TYPE_DECLARATIONS_WITH_SPACE_BEFORE_RATHER_THAN_AFTER_ASTERIX: extractFunctionArgumentName{} error: * character found; pointer has been defined next to variable name instead of variable type" << endl;
 			exit(EXIT_ERROR);
 			#endif
 		}

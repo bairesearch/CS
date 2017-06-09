@@ -25,7 +25,7 @@
  * File Name: CSgenerateConstFunctionArgumentCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3l1b 02-June-2017
+ * Project Version: 3l1c 01-June-2017
  *
  *******************************************************************************/
 
@@ -162,18 +162,18 @@ bool CSgenerateConstFunctionArgumentCodeClass::generateConstFunctionArgumentsFil
 							/*
 							else
 							{
-								cout << "generateConstFunctionArgumentsFile{} error: !foundAtLeastOneInstance of " << functionArgumentSecondaryAssignmentName << " in currentFunctionObject->functionTextRaw" << endl;
-								cout << "currentFileObject->name = " << currentFileObject->name << endl;
-								cout << "currentFunctionObject->nameFull = " << currentFunctionObject->nameFull << endl;
-								cout << "currentFunctionObject->name = " << currentFunctionObject->name << endl;
+								cerr << "generateConstFunctionArgumentsFile{} error: !foundAtLeastOneInstance of " << functionArgumentSecondaryAssignmentName << " in currentFunctionObject->functionTextRaw" << endl;
+								cerr << "currentFileObject->name = " << currentFileObject->name << endl;
+								cerr << "currentFunctionObject->nameFull = " << currentFunctionObject->nameFull << endl;
+								cerr << "currentFunctionObject->name = " << currentFunctionObject->name << endl;
 								exit(EXIT_ERROR);
 							}
 							*/
 						}
 						else
 						{
-							cout << "generateConstFunctionArgumentsFile{} error: currentFunctionObject->functionTextRaw not found in currentFileObject->sourceFileText" << endl;
-							cout << "currentFunctionObject->functionTextRaw = " <<  currentFunctionObject->functionTextRaw << endl;
+							cerr << "generateConstFunctionArgumentsFile{} error: currentFunctionObject->functionTextRaw not found in currentFileObject->sourceFileText" << endl;
+							cerr << "currentFunctionObject->functionTextRaw = " <<  currentFunctionObject->functionTextRaw << endl;
 							exit(EXIT_ERROR);
 						}
 					}
@@ -242,8 +242,8 @@ string CSgenerateConstFunctionArgumentCodeClass::addConstToAllOccurancesOfFuncti
 					string secondaryAssignmentDecarationWithConst = constString + secondaryAssignmentDecaration;
 					if(i > 0)
 					{
-						cout << "secondaryAssignmentDecaration = " << secondaryAssignmentDecaration << endl;
-						cout << "secondaryAssignmentDecarationWithConst = " << secondaryAssignmentDecarationWithConst << endl;
+						cerr << "secondaryAssignmentDecaration = " << secondaryAssignmentDecaration << endl;
+						cerr << "secondaryAssignmentDecarationWithConst = " << secondaryAssignmentDecarationWithConst << endl;
 						exit(EXIT_ERROR);
 					}
 
@@ -573,7 +573,7 @@ bool CSgenerateConstFunctionArgumentCodeClass::generateConstFunctionArgument(CSf
 								}
 								if(i != functionReferenceArgumentCount)
 								{
-									cout << "generateConstFunctionArgumentsFunction{} error: (i != functionReferenceArgumentCount)" << endl;
+									cerr << "generateConstFunctionArgumentsFunction{} error: (i != functionReferenceArgumentCount)" << endl;
 									exit(EXIT_ERROR);
 								}
 

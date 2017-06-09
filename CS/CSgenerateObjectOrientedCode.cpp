@@ -25,7 +25,7 @@
  * File Name: CSgenerateObjectOrientedCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3l1b 02-June-2017
+ * Project Version: 3l1c 01-June-2017
  *
  *******************************************************************************/
 
@@ -133,20 +133,20 @@ bool CSgenerateObjectOrientedCodeClass::generateCPPclassesFile(CSfile* currentFi
 			currentFileObject->headerFileText = SHAREDvars.replaceAllOccurancesOfString(&(currentFileObject->headerFileText), currentFunctionObject->nameFull, classFullFunctionNameHeader, &foundAtLeastOneInstance);
 			if(!foundAtLeastOneInstance)
 			{
-				cout << "generateCPPclassesFile{} error: !foundAtLeastOneInstance of " << currentFunctionObject->nameFull << " in currentFileObject->headerFileText" << endl;
-				cout << "currentFileObject->name = " << currentFileObject->name << endl;
-				cout << "currentFunctionObject->nameFull = " << currentFunctionObject->nameFull << endl;
-				cout << "currentFunctionObject->name = " << currentFunctionObject->name << endl;
+				cerr << "generateCPPclassesFile{} error: !foundAtLeastOneInstance of " << currentFunctionObject->nameFull << " in currentFileObject->headerFileText" << endl;
+				cerr << "currentFileObject->name = " << currentFileObject->name << endl;
+				cerr << "currentFunctionObject->nameFull = " << currentFunctionObject->nameFull << endl;
+				cerr << "currentFunctionObject->name = " << currentFunctionObject->name << endl;
 				exit(EXIT_ERROR);
 			}
 			foundAtLeastOneInstance = false;
 			currentFileObject->sourceFileText = SHAREDvars.replaceAllOccurancesOfString(&(currentFileObject->sourceFileText), currentFunctionObject->nameFull, classFullFunctionNameSource, &foundAtLeastOneInstance);
 			if(!foundAtLeastOneInstance)
 			{
-				cout << "generateCPPclassesFile{} error: !foundAtLeastOneInstance of " << currentFunctionObject->nameFull << " in currentFileObject->sourceFileText" << endl;
-				cout << "currentFileObject->name = " << currentFileObject->name << endl;
-				cout << "currentFunctionObject->nameFull = " << currentFunctionObject->nameFull << endl;
-				cout << "currentFunctionObject->name = " << currentFunctionObject->name << endl;
+				cerr << "generateCPPclassesFile{} error: !foundAtLeastOneInstance of " << currentFunctionObject->nameFull << " in currentFileObject->sourceFileText" << endl;
+				cerr << "currentFileObject->name = " << currentFileObject->name << endl;
+				cerr << "currentFunctionObject->nameFull = " << currentFunctionObject->nameFull << endl;
+				cerr << "currentFunctionObject->name = " << currentFunctionObject->name << endl;
 				exit(EXIT_ERROR);
 			}
 
@@ -208,10 +208,10 @@ bool CSgenerateObjectOrientedCodeClass::generateCPPclassesFile(CSfile* currentFi
 							currentFunctionObject->functionTextRaw = this->replaceAllOccurancesOfFunctionObjectReferenceNameInFunction(&(currentFunctionObject->functionTextRaw), functionReferenceName, functionReferenceNameUpdated, &foundAtLeastOneInstance);
 							if(!foundAtLeastOneInstance)
 							{
-								cout << "generateCPPclassesFile{} error: !foundAtLeastOneInstance of " << functionReferenceName << " in currentFunctionObject->functionTextRaw" << endl;
-								cout << "currentFileObject->name = " << currentFileObject->name << endl;
-								cout << "currentFunctionObject->nameFull = " << currentFunctionObject->nameFull << endl;
-								cout << "currentFunctionObject->name = " << currentFunctionObject->name << endl;
+								cerr << "generateCPPclassesFile{} error: !foundAtLeastOneInstance of " << functionReferenceName << " in currentFunctionObject->functionTextRaw" << endl;
+								cerr << "currentFileObject->name = " << currentFileObject->name << endl;
+								cerr << "currentFunctionObject->nameFull = " << currentFunctionObject->nameFull << endl;
+								cerr << "currentFunctionObject->name = " << currentFunctionObject->name << endl;
 								exit(EXIT_ERROR);
 							}
 							currentFileObject->sourceFileText = currentFileObject->sourceFileText.substr(0, posOfFunctionText) + currentFunctionObject->functionTextRaw + currentFileObject->sourceFileText.substr((posOfFunctionText+functionTextOrigLength), currentFileObject->sourceFileText.length()-(posOfFunctionText+functionTextOrigLength));
@@ -219,18 +219,18 @@ bool CSgenerateObjectOrientedCodeClass::generateCPPclassesFile(CSfile* currentFi
 						}
 						else
 						{
-							cout << "generateCPPclassesFile{} error: currentFunctionObject->functionTextRaw not found in currentFileObject->sourceFileText" << endl;
-							cout << "currentFunctionObject->functionTextRaw = " <<  currentFunctionObject->functionTextRaw << endl;
+							cerr << "generateCPPclassesFile{} error: currentFunctionObject->functionTextRaw not found in currentFileObject->sourceFileText" << endl;
+							cerr << "currentFunctionObject->functionTextRaw = " <<  currentFunctionObject->functionTextRaw << endl;
 							exit(EXIT_ERROR);
 						}
 					}
 				}
 				else
 				{
-					cout << "generateCPPclassesFile{} error: !referencedFunctionFound, functionReferenceName = " << functionReferenceName << endl;
-					cout << "currentFileObject->name = " << currentFileObject->name << endl;
-					cout << "currentFunctionObject->nameFull = " << currentFunctionObject->nameFull << endl;
-					cout << "currentFunctionObject->name = " << currentFunctionObject->name << endl;
+					cerr << "generateCPPclassesFile{} error: !referencedFunctionFound, functionReferenceName = " << functionReferenceName << endl;
+					cerr << "currentFileObject->name = " << currentFileObject->name << endl;
+					cerr << "currentFunctionObject->nameFull = " << currentFunctionObject->nameFull << endl;
+					cerr << "currentFunctionObject->name = " << currentFunctionObject->name << endl;
 					exit(EXIT_ERROR);
 				}
 
@@ -257,7 +257,7 @@ bool CSgenerateObjectOrientedCodeClass::generateCPPclassesFile(CSfile* currentFi
 		}
 		else
 		{
-			cout << "error: (positionOfFirstFunctionObjectInHeader == CPP_STRING_FIND_RESULT_FAIL_VALUE" << endl;
+			cerr << "error: (positionOfFirstFunctionObjectInHeader == CPP_STRING_FIND_RESULT_FAIL_VALUE" << endl;
 			exit(EXIT_ERROR);
 		}
 
@@ -282,7 +282,7 @@ bool CSgenerateObjectOrientedCodeClass::generateCPPclassesFile(CSfile* currentFi
 		}
 		else
 		{
-			cout << "error: (positionOfFirstFunctionObjectInHeader == CPP_STRING_FIND_RESULT_FAIL_VALUE" << endl;
+			cerr << "error: (positionOfFirstFunctionObjectInHeader == CPP_STRING_FIND_RESULT_FAIL_VALUE" << endl;
 			exit(EXIT_ERROR);
 		}
 

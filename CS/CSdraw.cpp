@@ -25,7 +25,7 @@
  * File Name: CSdraw.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3l1b 02-June-2017
+ * Project Version: 3l1c 01-June-2017
  *
  *******************************************************************************/
 
@@ -720,7 +720,7 @@ LDreference* CSdrawClass::createFunctionObjectListBoxesAndConnections(LDreferenc
 
 			if(!(fileObject->printed))
 			{
-				cout << "createFunctionObjectListBoxesAndConnections{} error: (!(fileObject->printed))" << endl;
+				cerr << "createFunctionObjectListBoxesAndConnections{} error: (!(fileObject->printed))" << endl;
 				exit(EXIT_ERROR);
 			}
 
@@ -975,11 +975,11 @@ LDreference* CSdrawClass::createFunctionObjectListBoxesAndConnections(LDreferenc
 					/*
 					if(functionObject->printX > 3000)
 					{
-						cout << "functionReferenceNameToFind = " << functionReferenceNameToFind << endl;
-						cout << "fileObject->name = " << fileObject->name << endl;
-						cout << "functionObject->name = " << functionObject->name << endl;
-						cout << "aboveLevelFunctionObject->name = " << aboveLevelFunctionObject->name << endl;
-						cout << "aboveLevelFileObject->name = " << aboveLevelFileObject->name << endl;
+						cerr << "functionReferenceNameToFind = " << functionReferenceNameToFind << endl;
+						cerr << "fileObject->name = " << fileObject->name << endl;
+						cerr << "functionObject->name = " << functionObject->name << endl;
+						cerr << "aboveLevelFunctionObject->name = " << aboveLevelFunctionObject->name << endl;
+						cerr << "aboveLevelFileObject->name = " << aboveLevelFileObject->name << endl;
 						exit(EXIT_ERROR);
 					}
 					*/
@@ -1029,14 +1029,14 @@ LDreference* CSdrawClass::createFunctionObjectListBoxesAndConnections(LDreferenc
 			if(!useSingleFileOnly)
 			{
 			#endif
-				cout << "error; function reference not found in file or include files" << endl;
-				cout << "\createFunctionObjectListBoxesAndConnections{}:" << endl;
-				cout << "functionReferenceNameToFind functionReference->name = " << functionReference->name << endl;
-				cout << "aboveLevelFileObject->name = " << aboveLevelFileObject->name << endl;
-				cout << "aboveLevelFunctionObject->name = " << aboveLevelFunctionObject->name << endl;
-				cout << "countArguments = " << countArguments << endl;
-				cout << "fileObject->name = " << fileObject->name << endl;
-				cout << "functionObject->name = " << functionObject->name << endl;
+				cerr << "error; function reference not found in file or include files" << endl;
+				cerr << "\createFunctionObjectListBoxesAndConnections{}:" << endl;
+				cerr << "functionReferenceNameToFind functionReference->name = " << functionReference->name << endl;
+				cerr << "aboveLevelFileObject->name = " << aboveLevelFileObject->name << endl;
+				cerr << "aboveLevelFunctionObject->name = " << aboveLevelFunctionObject->name << endl;
+				cerr << "countArguments = " << countArguments << endl;
+				cerr << "fileObject->name = " << fileObject->name << endl;
+				cerr << "functionObject->name = " << functionObject->name << endl;
 				exit(EXIT_ERROR);
 			#ifdef CS_HTML_DOCUMENTATION_GENERATE_FILE_CODE_STRUCTURE_DIAGRAMS_UPDATES_MAY_NOT_BE_REQUIRED
 			}
@@ -1485,8 +1485,8 @@ int CSdrawClass::calculateCSBoxAndConnectionColourBasedUponLevel(const int yInde
 	}
 	else
 	{
-		cout << "invalid CS reference level for conversion to colour" << endl;
-		cout << "yIndex = " << yIndex << endl;
+		cerr << "invalid CS reference level for conversion to colour" << endl;
+		cerr << "yIndex = " << yIndex << endl;
 		exit(EXIT_ERROR);
 	}
 
@@ -1670,7 +1670,7 @@ LDreference* CSdrawClass::traceFunctionsUpwardsAndDrawOrHighLightThese(LDreferen
 			}
 			else
 			{
-				cout << "error: traceFunctionsUpwardsAndDrawOrHighLightThese{}: higherLevelFunctionFound " << currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionObjectList->functionObject->name << " cannot be found" << endl;
+				cerr << "error: traceFunctionsUpwardsAndDrawOrHighLightThese{}: higherLevelFunctionFound " << currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionObjectList->functionObject->name << " cannot be found" << endl;
 				exit(EXIT_ERROR);
 			}
 
@@ -1710,7 +1710,7 @@ void CSdrawClass::traceFunctionsUpwardsAndDrawOrHighLightTheseReset(const CSfile
 			}
 			else
 			{
-				cout << "error: traceFunctionsUpwardsAndDrawOrHighLightThese{}: higherLevelFunctionFound " << currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionObjectList->functionObject->name << " cannot be found" << endl;
+				cerr << "error: traceFunctionsUpwardsAndDrawOrHighLightThese{}: higherLevelFunctionFound " << currentReferenceContainerInCurrentFunctionBeingTracedAboveFunctionObjectList->functionObject->name << " cannot be found" << endl;
 				exit(EXIT_ERROR);
 			}
 

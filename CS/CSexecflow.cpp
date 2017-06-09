@@ -25,7 +25,7 @@
  * File Name: CSexecflow.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3l1b 02-June-2017
+ * Project Version: 3l1c 01-June-2017
  *
  *******************************************************************************/
 
@@ -154,7 +154,7 @@ void CSexecflowClass::generateCodeStructure(const string topLevelFileName, int w
 			topLevelFunctionObject->printed = true;
 			if(!(firstReferenceInTopLevelBelowList->printed))
 			{
-				cout << "error" << endl;
+				cerr << "error" << endl;
 				exit(EXIT_ERROR);
 			}
 
@@ -189,7 +189,7 @@ void CSexecflowClass::generateCodeStructure(const string topLevelFileName, int w
 				}
 				else
 				{
-					cout << "error: foundBottomLevelFunctionRef " << bottomLevelFunctionNameToTraceUpwards << " cannot be found" << endl;
+					cerr << "error: foundBottomLevelFunctionRef " << bottomLevelFunctionNameToTraceUpwards << " cannot be found" << endl;
 					exit(EXIT_ERROR);
 				}
 			}
@@ -204,7 +204,7 @@ void CSexecflowClass::generateCodeStructure(const string topLevelFileName, int w
 		}
 		else
 		{
-			cout << "error: !topLevelFunctionNameFound: " << topLevelFunctionName << endl;
+			cerr << "error: !topLevelFunctionNameFound: " << topLevelFunctionName << endl;
 			exit(EXIT_ERROR);
 		}
 	}
@@ -255,7 +255,7 @@ void CSexecflowClass::generateCodeStructure(const string topLevelFileName, int w
 			LDreference* topLevelReferenceInSceneFile = new LDreference(topLevelSceneFileName, 1, true);	//The information in this object is not required or meaningful, but needs to be passed into the parseFile/parseReferenceList recursive function
 			if(!LDparser.parseFile(topLevelSceneFileName, initialReferenceInSceneFile, topLevelReferenceInSceneFile, true))
 			{//file does not exist
-				cout << "The file: " << topLevelSceneFileName << " does not exist in the directory" << endl;
+				cerr << "The file: " << topLevelSceneFileName << " does not exist in the directory" << endl;
 				exit(EXIT_ERROR);
 			}
 			LDreferenceManipulation.write2DreferenceListCollapsedTo1DtoFile(topLevelSceneFileNameCollapsed, initialReferenceInSceneFile);
@@ -271,7 +271,7 @@ void CSexecflowClass::generateCodeStructure(const string topLevelFileName, int w
 			LDreference* topLevelReferenceInCollapsedSceneFile = new LDreference(topLevelSceneFileNameCollapsed, 1, true);	//The information in this object is not required or meaningful, but needs to be passed into the parseFile/parseReferenceList recursive function
 			if(!LDparser.parseFile(topLevelSceneFileNameCollapsed, initialReferenceInCollapsedSceneFile, topLevelReferenceInCollapsedSceneFile, true))
 			{//file does not exist
-				cout << "The file: " << topLevelSceneFileNameCollapsed << " does not exist in the directory" << endl;
+				cerr << "The file: " << topLevelSceneFileNameCollapsed << " does not exist in the directory" << endl;
 				exit(EXIT_ERROR);
 			}
 
