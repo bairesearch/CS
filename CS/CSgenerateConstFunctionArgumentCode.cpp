@@ -25,7 +25,7 @@
  * File Name: CSgenerateConstFunctionArgumentCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3l1f 01-June-2017
+ * Project Version: 3l2a 12-June-2017
  *
  *******************************************************************************/
 
@@ -369,8 +369,8 @@ bool CSgenerateConstFunctionArgumentCodeClass::generateConstFunctionArgumentAndS
 		{
 			//find next occurance of ';' on same line
 			int indexOfEndOfCommand = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_END_OF_COMMAND, indexOfFunctionArgument);
-			int indexOfEndOfLine = functionText->find(STRING_NEW_LINE, indexOfFunctionArgument);
-			int indexOfStartOfLine = functionText->rfind(STRING_NEW_LINE, indexOfFunctionArgument);
+			int indexOfEndOfLine = functionText->find(STRING_NEWLINE, indexOfFunctionArgument);
+			int indexOfStartOfLine = functionText->rfind(STRING_NEWLINE, indexOfFunctionArgument);
 			if(indexOfEndOfCommand < indexOfEndOfLine)
 			{
 				int indexOfEqualsSetPrevious = CPP_STRING_FIND_RESULT_FAIL_VALUE;
@@ -619,8 +619,8 @@ void CSgenerateConstFunctionArgumentCodeClass::checkIfVariableIsBeingModifiedInF
 	string returnVar = "";
 	if(indexOfReturn != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 	{
-		int indexOfStartOfLine = functionText->rfind(STRING_NEW_LINE, indexOfReturn);
-		int indexOfEndOfLine = functionText->find(STRING_NEW_LINE, indexOfReturn);
+		int indexOfStartOfLine = functionText->rfind(STRING_NEWLINE, indexOfReturn);
+		int indexOfEndOfLine = functionText->find(STRING_NEWLINE, indexOfReturn);
 		int indexOfEndOfCommand = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_END_OF_COMMAND, indexOfReturn);
 		if(indexOfEndOfCommand < indexOfEndOfLine)
 		{
@@ -651,8 +651,8 @@ void CSgenerateConstFunctionArgumentCodeClass::checkIfVariableIsBeingModifiedInF
 
 				//find next occurance of ';' on same line
 				int indexOfEndOfCommand = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_END_OF_COMMAND, indexOfFunctionArgument);
-				int indexOfEndOfLine = functionText->find(STRING_NEW_LINE, indexOfFunctionArgument);
-				int indexOfStartOfLine = functionText->rfind(STRING_NEW_LINE, indexOfFunctionArgument);
+				int indexOfEndOfLine = functionText->find(STRING_NEWLINE, indexOfFunctionArgument);
+				int indexOfStartOfLine = functionText->rfind(STRING_NEWLINE, indexOfFunctionArgument);
 				int indexOfEqualsSet = functionText->find(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET, indexOfFunctionArgument);
 				int indexOfEqualsSetPrevious = functionText->rfind(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_EQUALS_SET, indexOfFunctionArgument);
 				int indexOfSquareBracketOpen = functionText->rfind(CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_ARRAY_INDEX_OPEN, indexOfFunctionArgument);
@@ -1001,7 +1001,7 @@ void CSgenerateConstFunctionArgumentCodeClass::checkIfVariableIsBeingModifiedInF
 	//limitation; doesnt support cases with enclosing brackets, e.g. "if(!(newParseFileObject->get(functionArgumentName))"; but such cases should never be used anyway
 	int indexOfNewLine = -1;
 	int indexOfEndOfLine = -1;
-	while((indexOfNewLine = functionText->find(STRING_NEW_LINE, indexOfNewLine+1)) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+	while((indexOfNewLine = functionText->find(STRING_NEWLINE, indexOfNewLine+1)) != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 	{
 		int indexOfStartOfLine = indexOfEndOfLine+1;
 		indexOfEndOfLine = indexOfNewLine;
