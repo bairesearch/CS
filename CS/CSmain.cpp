@@ -25,7 +25,7 @@
  * File Name: CSmain.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3l2a 12-June-2017
+ * Project Version: 3m2a 10-July-2017
  *
  *******************************************************************************/
 
@@ -50,7 +50,7 @@ static char errmessage[] = "Usage:  CS.exe [options]"
 "\n\t-oall [string]          : code structure display .svg/.ldr/.ppm default generic output filename (def: codeStructureNet)"
 "\n\t-file [string]          : top level source file name (eg, main.c) [compulsory]"
 "\n\t-function [string]      : top level function name referenced within file {recommended: not defined in file, declared within include h file} (eg, x for int x()) [compulsory]"
-"\n\t-notshow                : do not display output in opengl"
+"\n\t-show                   : display output in opengl"
 "\n\t-width [int]            : raster graphics width in pixels (def: 1600)"
 "\n\t-height [int]           : raster graphics height in pixels (def: 1000)"
 "\n\t-enablefunctions        : output function connectivity on top of file connectivity"
@@ -132,7 +132,7 @@ int main(const int argc, const char** argv)
 	string bottomLevelFunctionNameToTraceUpwards = "";
 
 	bool printOutput = false;
-	bool displayInOpenGLAndOutputScreenshot = true;
+	bool displayInOpenGLAndOutputScreenshot = false;
 
 	int mode = CS_MODE_OUTPUT_EXECUTION_FLOW;	//1. output execution flow, 2. output data flow, 3. filter code based upon preprocessor definitions
 
@@ -213,9 +213,9 @@ int main(const int argc, const char** argv)
 
 
 
-	if(SHAREDvarsClass().argumentExists(argc, argv, "-notshow"))
+	if(SHAREDvarsClass().argumentExists(argc, argv, "-show"))
 	{
-		displayInOpenGLAndOutputScreenshot = false;
+		displayInOpenGLAndOutputScreenshot = true;
 	}
 
 	if(SHAREDvarsClass().argumentExists(argc, argv, "-width"))
@@ -306,7 +306,7 @@ int main(const int argc, const char** argv)
 
 	if(SHAREDvarsClass().argumentExists(argc, argv, "-version"))
 	{
-		cout << "CS.exe - Project Version: 3l2a 12-June-2017" << endl;
+		cout << "CS.exe - Project Version: 3m2a 10-July-2017" << endl;
 		exit(EXIT_OK);
 	}
 

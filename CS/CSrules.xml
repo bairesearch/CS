@@ -2,6 +2,7 @@
 	<sprite>
 		<miscellaneousItem name="SPRITE_SUBMODEL_RANGE_SCALE_FACTOR" stringValue="" fractionalValue="1.0" />
 		
+		<miscellaneousItem name="SPRITE_LINE_SPACING_RATIO_BASE" stringValue="" fractionalValue="1.5" />
 		<miscellaneousItem name="SPRITE_TEXT_SCALE_FACTOR" stringValue="" fractionalValue="0.5" />
 		<miscellaneousItem name="SPRITE_WIDTH_OF_CHARS_IN_LDRAW_UNITS" stringValue="" fractionalValue="10" />
 		<miscellaneousItem name="SPRITE_HEIGHT_OF_CHARS_IN_LDRAW_UNITS" stringValue="" fractionalValue="15" />
