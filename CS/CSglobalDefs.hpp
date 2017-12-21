@@ -25,7 +25,7 @@
  * File Name: CSglobalsDefs.hpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2017 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3m5a 07-December-2017
+ * Project Version: 3m6a 10-December-2017
  * Description: CS specific global definitions
  *
  *******************************************************************************/
