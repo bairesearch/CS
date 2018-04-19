@@ -26,7 +26,7 @@
  * File Name: CSmain.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2018 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3m13a 22-February-2018
+ * Project Version: 3m13b 22-February-2018
  * /
  *******************************************************************************/
 
@@ -305,7 +305,7 @@ int main(const int argc, const char** argv)
 
 	if(SHAREDvarsClass().argumentExists(argc, argv, "-version"))
 	{
-		cout << "CS.exe - Project Version: 3m13a 22-February-2018" << endl;
+		cout << "CS.exe - Project Version: 3m13b 22-February-2018" << endl;
 		exit(EXIT_OK);
 	}
 
