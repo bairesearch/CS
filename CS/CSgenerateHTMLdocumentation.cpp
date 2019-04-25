@@ -24,9 +24,9 @@
 /*******************************************************************************
  *
  * File Name: CSgenerateHTMLdocumentation.cpp
- * Author: Richard Bruce Baxter - Copyright (c) 2005-2018 Baxter AI (baxterai.com)
+ * Author: Richard Bruce Baxter - Copyright (c) 2005-2019 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3m15a 24-April-2018
+ * Project Version: 3m16a 24-April-2019
  * /
  *******************************************************************************/
 
@@ -66,7 +66,7 @@ string CSgenerateHTMLdocumentationClass::generateHTMLdocumentationHeader(const s
 	string HTMLdocumentationHeader = "";
 	if(htmlHeader)
 	{
-		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (CS), Project Version: 3m15a 24-April-2018<p>\n";
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (CS), Project Version: 3m16a 24-April-2019<p>\n";
 	}
 	else
 	{
