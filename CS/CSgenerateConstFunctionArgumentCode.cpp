@@ -26,7 +26,7 @@
  * File Name: CSgenerateConstFunctionArgumentCode.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3o2a 08-November-2020
+ * Project Version: 3o3a 16-November-2020
  * /
  *******************************************************************************/
 
@@ -67,6 +67,7 @@ bool CSgenerateConstFunctionArgumentCodeClass::generateConstFunctionArgumentsRec
 				if(currentFileObject->printed)	//now redundant
 				{//only create new code for printed boxes
 
+					#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_REQUIRE_MODIFIABLE_FILES_TO_BE_COPIED_TO_OUTPUT_FOLDER
 					bool headerExists = false;
 					bool sourceExists = false;
 					if(SHAREDvars.fileExists(currentFileObject->name))
@@ -83,11 +84,14 @@ bool CSgenerateConstFunctionArgumentCodeClass::generateConstFunctionArgumentsRec
 					}
 					if(headerExists || sourceExists)
 					{
+					#endif
 						if(!generateConstFunctionArgumentsFile(currentFileObject))
 						{
 							result = false;
 						}
+					#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_REQUIRE_MODIFIABLE_FILES_TO_BE_COPIED_TO_OUTPUT_FOLDER
 					}
+					#endif
 					currentFileObject->printedCodeGeneric = true;
 				}
 
@@ -118,6 +122,11 @@ bool CSgenerateConstFunctionArgumentCodeClass::generateConstFunctionArgumentsFil
 
 		//replace function source/header fullName with modified version (with Consts)
 		string nameFullWithConsts = currentFunctionObject->nameFull;
+		#ifdef CS_SUPPORT_GENERATED_CPP_CODE
+		string nameFullWithConstsHeader = currentFunctionObject->nameFullHeader;
+		#endif
+		cout << "nameFullWithConstsHeader = " << nameFullWithConstsHeader << endl;
+		
 		CSfunctionArgument* currentFunctionArgumentInFunction = currentFunctionObject->firstFunctionArgumentInFunction;
 		while(currentFunctionArgumentInFunction->next != NULL)
 		{
@@ -141,10 +150,16 @@ bool CSgenerateConstFunctionArgumentCodeClass::generateConstFunctionArgumentsFil
 					string argument = currentFunctionArgumentInFunction->argument + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_FUNCTION_ARGUMENT_DELIMITER;
 					string argumentWithConsts = constString + argument;
 					nameFullWithConsts = SHAREDvars.replaceAllOccurancesOfString(&(nameFullWithConsts), argument, argumentWithConsts);
-
+					#ifdef CS_SUPPORT_GENERATED_CPP_CODE
+					nameFullWithConstsHeader = SHAREDvars.replaceAllOccurancesOfString(&(nameFullWithConstsHeader), argument, argumentWithConsts);
+					#endif
+					
 					argument = currentFunctionArgumentInFunction->argument + CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_FUNCTION_CLOSE;
 					argumentWithConsts = constString + argument;
 					nameFullWithConsts = SHAREDvars.replaceAllOccurancesOfString(&(nameFullWithConsts), argument, argumentWithConsts);
+					#ifdef CS_SUPPORT_GENERATED_CPP_CODE
+					nameFullWithConstsHeader = SHAREDvars.replaceAllOccurancesOfString(&(nameFullWithConstsHeader), argument, argumentWithConsts);
+					#endif
 
 					//add const to function argument secondary assignements - CS3h5a
 					for(vector<string>::iterator argumentNameAliasListIter = currentFunctionArgumentInFunction->argumentNameAliasList.begin(); argumentNameAliasListIter < currentFunctionArgumentInFunction->argumentNameAliasList.end(); argumentNameAliasListIter++)
@@ -185,9 +200,16 @@ bool CSgenerateConstFunctionArgumentCodeClass::generateConstFunctionArgumentsFil
 			}
 			currentFunctionArgumentInFunction = currentFunctionArgumentInFunction->next;
 		}
+		//cout << "currentFunctionObject->nameFull = " << currentFunctionObject->nameFull << end;
+		//cout << "nameFullWithConsts = " << nameFullWithConsts << end;
+		
 		currentFileObject->sourceFileText = SHAREDvars.replaceAllOccurancesOfString(&(currentFileObject->sourceFileText), currentFunctionObject->nameFull, nameFullWithConsts);
+		#ifdef CS_SUPPORT_GENERATED_CPP_CODE
+		currentFileObject->headerFileText = SHAREDvars.replaceAllOccurancesOfString(&(currentFileObject->headerFileText), currentFunctionObject->nameFullHeader, nameFullWithConstsHeader);
+		#else
 		currentFileObject->headerFileText = SHAREDvars.replaceAllOccurancesOfString(&(currentFileObject->headerFileText), currentFunctionObject->nameFull, nameFullWithConsts);
-
+		#endif
+		
 		currentFunctionObject = currentFunctionObject->next;
 	}
 

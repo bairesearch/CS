@@ -26,7 +26,7 @@
  * File Name: CSglobalsDefs.hpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3o2a 08-November-2020
+ * Project Version: 3o3a 16-November-2020
  * Description: CS specific global definitions
  * /
  *******************************************************************************/
@@ -79,11 +79,13 @@
 #define CS_GENERATE_CODE_GENERIC
 #ifdef CS_GENERATE_CODE_GENERIC
 
-	//#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS	//added 3h1a/14-November-2014	//requires CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST
+	#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS	//added 3h1a/14-November-2014	//requires CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST
 	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
 
-		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DISABLE_OUTPUT	//safe for debug (no source/header file overwrites)
+		//#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DISABLE_OUTPUT	//safe for debug (no source/header file overwrites)
 
+		//#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_REQUIRE_MODIFIABLE_FILES_TO_BE_COPIED_TO_OUTPUT_FOLDER	//disabled CS3o3a
+		
 		#define CS_IDENTIFY_FUNCTION_DECLARATION_ARGUMENTS	//changed requirements CS3i17a
 
 		#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_SUPPORT_PSEUDO_CONSTS	//CS2h13a		//relies on "#define constEffective" being defined in target code	//OLD: user must manually replace all instances of "constEffective " with "" before compiling code

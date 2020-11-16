@@ -26,7 +26,7 @@
  * File Name: CSoperations.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3o2a 08-November-2020
+ * Project Version: 3o3a 16-November-2020
  * /
  *******************************************************************************/
 
@@ -788,12 +788,14 @@ bool CSoperationsClass::getFunctionNamesFromFunctionDeclarationsInHfile(CSfuncti
 								currentReferenceInFunctionList->name = functionName;	//CHECKTHIS
 								currentReferenceInFunctionList->nameFull = functionType + STRING_SPACE + className + CS_CLASS_DELIMITER + functionName + functionArguments;	//full function name to search for in cpp files
 								//cout << "parsingClassContents: currentReferenceInFunctionList->nameFull = " << currentReferenceInFunctionList->nameFull << endl;	
+								currentReferenceInFunctionList->nameFullHeader = functionNameFull;
 							}
 							else
 							{
 								currentReferenceInFunctionList->name = functionName;
 								currentReferenceInFunctionList->nameFull = functionNameFull;	
-								//cout << "!parsingClassContents: currentReferenceInFunctionList->nameFull = " << currentReferenceInFunctionList->nameFull << endl;					
+								//cout << "!parsingClassContents: currentReferenceInFunctionList->nameFull = " << currentReferenceInFunctionList->nameFull << endl;	
+								currentReferenceInFunctionList->nameFullHeader = functionNameFull;				
 							}
 							#else
 							currentReferenceInFunctionList->name = functionName;
