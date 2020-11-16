@@ -26,7 +26,7 @@
  * File Name: CSreferenceContainerClass.hpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3o1a 05-November-2020
+ * Project Version: 3o2a 08-November-2020
  * /
  *******************************************************************************/
 
@@ -75,6 +75,10 @@ class CSreferenceContainerClassClass
 	public: bool findFunctionReferenceTarget(const CSfunction* functionReference, constEffective CSfile* currentFileObject, constEffective CSfile** fileObjectHoldingFunction, constEffective CSfunction** functionReferenceTarget, const bool countArguments);
 		private: bool findFunctionReferenceTargetRecurse(const CSfunction* functionReference, constEffective CSfileContainer* firstObjectInAboveLevelBelowListContainer, constEffective CSfile** fileObjectHoldingFunction, constEffective CSfunction** functionReferenceTarget, const bool countArguments);
 			private: int countArgumentList(const CSfunctionArgument* firstFunctionArgumentInFunction);
+		#ifdef CS_OPTIMISE_FUNCTION_REFERENCE_TARGET_SEARCH
+		private: void findFunctionReferenceTargetRecurseReset(constEffective CSfileContainer* firstObjectInAboveLevelBelowListContainer);
+		#endif
+
 };
 
 #endif

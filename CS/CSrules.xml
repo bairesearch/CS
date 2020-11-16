@@ -2,7 +2,6 @@
 	<sprite>
 		<miscellaneousItem name="SPRITE_SUBMODEL_RANGE_SCALE_FACTOR" stringValue="" fractionalValue="1.0" />
 		
-		<miscellaneousItem name="SPRITE_LINE_SPACING_RATIO_BASE" stringValue="" fractionalValue="1.5" />
 		<miscellaneousItem name="SPRITE_TEXT_SCALE_FACTOR" stringValue="" fractionalValue="0.5" />
 		<miscellaneousItem name="SPRITE_WIDTH_OF_CHARS_IN_LDRAW_UNITS" stringValue="" fractionalValue="10" />
 		<miscellaneousItem name="SPRITE_HEIGHT_OF_CHARS_IN_LDRAW_UNITS" stringValue="" fractionalValue="15" />
@@ -57,162 +56,149 @@
 		<miscellaneousItem name="CS_FUNCTION_CONNECTOR_STROKE_WIDTH_SVG" stringValue="" fractionalValue="0.2" />
 		
 		<miscellaneousItem name="CS_LAYER_0_COLOUR" stringValue="SHARED" fractionalValue="6" />
-		<miscellaneousItem name="CS_LAYER_1_COLOUR" stringValue="OR" fractionalValue="1" />
+		<miscellaneousItem name="CS_LAYER_1_COLOUR" stringValue="ATOR" fractionalValue="1" />
 		<miscellaneousItem name="CS_LAYER_2_COLOUR" stringValue="ANN" fractionalValue="2" />
 		<miscellaneousItem name="CS_LAYER_3_COLOUR" stringValue="GIA" fractionalValue="3" />
 		<miscellaneousItem name="CS_LAYER_4_COLOUR" stringValue="RT" fractionalValue="4" />
 		<miscellaneousItem name="CS_LAYER_5_COLOUR" stringValue="CS" fractionalValue="22" />
 		<miscellaneousItem name="CS_LAYER_6_COLOUR" stringValue="XML" fractionalValue="25" />
 		<miscellaneousItem name="CS_LAYER_7_COLOUR" stringValue="LD" fractionalValue="14" />
-		<miscellaneousItem name="CS_LAYER_8_COLOUR" stringValue="LRRC" fractionalValue="5" />
-		<miscellaneousItem name="CS_LAYER_9_COLOUR" stringValue="OLC" fractionalValue="7" />
+		<miscellaneousItem name="CS_LAYER_8_COLOUR" stringValue="LRRC" fractionalValue="0" />
+		<miscellaneousItem name="CS_LAYER_9_COLOUR" stringValue="NLC" fractionalValue="5" />
 		<miscellaneousItem name="CS_LAYER_10_COLOUR" stringValue="PRD" fractionalValue="8" />
-		<miscellaneousItem name="CS_LAYER_11_COLOUR" stringValue="NLC" fractionalValue="11" />
-		<miscellaneousItem name="CS_LAYER_12_COLOUR" stringValue="" fractionalValue="15" />
+		<miscellaneousItem name="CS_LAYER_11_COLOUR" stringValue="SANI" fractionalValue="7" />
+		<miscellaneousItem name="CS_LAYER_12_COLOUR" stringValue="LRP" fractionalValue="15" />
 		
 		<miscellaneousItem name="CS_FUNCTION_CONNECTION_HIGHLIGHT_COLOUR" stringValue="" fractionalValue="5" />
 		<miscellaneousItem name="CS_FUNCTION_BOX_HIGHLIGHT_COLOUR" stringValue="" fractionalValue="5" />
 		
 	</draw>
 	<grid>
-		<file name="NLCmain.h" x="4" y="1" />
-		<file name="NLCpreprocessor.h" x="2" y="2" />
-		<file name="NLCpreprocessorMath.h" x="2" y="3" />
-		<file name="NLCpreprocessorMathLogicalConditions.h" x="2" y="4" />
-		<file name="NLCpreprocessorSentenceClass.h" x="2" y="5" />
-		<file name="NLCtranslator.h" x="4" y="2" />
-		<file name="NLCapi.h" x="6" y="2" />
-		<file name="NLCprint.h" x="8" y="2" />
-		<file name="NLCtranslatorCodeBlocks.h" x="4" y="3" />
-		<file name="NLCtranslatorCodeBlocksLogicalConditions.h" x="4" y="4" />
-		<file name="NLCtranslatorCodeBlocksLogicalConditionsAdvanced.h" x="5" y="4" />
-		<file name="NLCtranslatorCodeBlocksOperations.h" x="4" y="5" />
-		<file name="NLCtranslatorClassDefinitions.h" x="5" y="3" />
-		<file name="NLCprintCodeBlocks.h" x="8" y="3" />
-		<file name="NLCprintCodeBlocksFunctions.h" x="8" y="4" />
-		<file name="NLCprintClassDefinitions.h" x="9" y="3" />
-		<file name="NLCcodeBlockClass.h" x="6" y="6" />
-		<file name="NLCclassDefinitionClass.h" x="7" y="6" />
-		<file name="NLCitemClass.h" x="7" y="7" />
-		<file name="NLCglobalDefs.h" x="7" y="8" />
-		<file name="NLCprintDefs.h" x="8" y="7" />
+		<file name="NLCmain.hpp" x="" y="" />
+		<file name="NLCtranslator.hpp" x="" y="" />
+		<file name="NLCprint.hpp" x="" y="" />
+		<file name="NLCtranslatorCodeBlocks.hpp" x="" y="" />
+		<file name="NLCtranslatorClassDefinitions.hpp" x="" y="" />
+		<file name="NLCprintCodeBlocks.hpp" x="" y="" />
+		<file name="NLCprintClassDefinitions.hpp" x="" y="" />
+		<file name="NLCcodeBlockClass.hpp" x="" y="" />
+		<file name="NLCclassDefinitionClass.hpp" x="" y="" />
+		<file name="NLCitemClass.hpp" x="" y="" />
+		<file name="NLCglobalDefs.hpp" x="" y="" />
+		<file name="NLCprintDefs.hpp" x="" y="" />
 
-		<file name="GIAbot.h" x="5" y="12" />
-		<file name="GIAconditionNodeClass.h" x="3" y="18" />
-		<file name="GIAcxlConversion.h" x="13" y="10" />
-		<file name="GIAdatabase.h" x="6" y="15" />
-		<file name="GIAdraw.h" x="11" y="10" />
-		<file name="GIAentityConnectionClass.h" x="4" y="17" />
-		<file name="GIAentityNodeClass.h" x="3" y="17" />
-		<file name="GIAglobalDefs.h" x="3" y="19" />
-		<file name="GIAlrp.h" x="1" y="10" />
-		<file name="GIAmain.h" x="4" y="9" />
-		<file name="GIAnlg.h" x="10" y="10" />
-		<file name="GIAnlp.h" x="2" y="10" />
-		<file name="GIAnlpParser.h" x="2" y="11" />
-		<file name="GIAquery.h" x="9" y="10" />
-		<file name="GIAsentenceClass.h" x="3" y="16" />
-		<file name="GIAtranslator.h" x="5" y="10" />
-		<file name="GIAtranslatorDefineGrammar.h" x="3" y="11" />
-		<file name="GIAtranslatorRedistributeRelations.h" x="4" y="11" />
-		<file name="GIAtranslatorRedistributeRelationsStanford.h" x="4" y="12" />
-		<file name="GIAtranslatorRedistributeRelationsRelex.h" x="4" y="13" />
-		<file name="GIAtranslatorDefineReferencing.h" x="5" y="11" />
-		<file name="GIAtranslatorDefineSubstances.h" x="6" y="11" />
-		<file name="GIAtranslatorLinkEntities.h" x="7" y="11" />
-		<file name="GIAtranslatorLinkEntitiesDynamic.h" x="7" y="12" />
-		<file name="GIAtranslatorApplyAdvancedFeatures.h" x="8" y="11" />
-		<file name="GIAtranslatorRules.h" x="3" y="12" />
-		<file name="GIAtranslatorGeneric.h" x="3" y="13" />
-		<file name="GIAtranslatorOperations.h" x="3" y="14" />
-		<file name="GIAtranslatorDefs.h" x="4" y="15" />
-		<file name="GIAwordnet.h" x="9" y="11" />
-		<file name="GIAxmlConversion.h" x="12" y="10" />
+		<file name="GIAbot.hpp" x="" y="" />
+		<file name="GIAconditionNodeClass.hpp" x="" y="" />
+		<file name="GIAcxlConversion.hpp" x="" y="" />
+		<file name="GIAdatabase.hpp" x="" y="" />
+		<file name="GIAdraw.hpp" x="" y="" />
+		<file name="GIAentityConnectionClass.hpp" x="" y="" />
+		<file name="GIAentityNodeClass.hpp" x="" y="" />
+		<file name="GIAglobalDefs.hpp" x="" y="" />
+		<file name="GIAlrp.hpp" x="" y="" />
+		<file name="GIAmain.hpp" x="" y="" />
+		<file name="GIAnlg.hpp" x="" y="" />
+		<file name="GIAnlp.hpp" x="" y="" />
+		<file name="GIAnlpParser.hpp" x="" y="" />
+		<file name="GIAquery.hpp" x="" y="" />
+		<file name="GIAsentenceClass.hpp" x="" y="" />
+		<file name="GIAtranslatorApplyAdvancedFeatures.hpp" x="" y="" />
+		<file name="GIAtranslatorDefineGrammar.hpp" x="" y="" />
+		<file name="GIAtranslatorDefineReferencing.hpp" x="" y="" />
+		<file name="GIAtranslatorDefineSubstances.hpp" x="" y="" />
+		<file name="GIAtranslator.hpp" x="" y="" />
+		<file name="GIAtranslatorLinkEntities.hpp" x="" y="" />
+		<file name="GIAtranslatorOperations.hpp" x="" y="" />
+		<file name="GIAtranslatorDefs.hpp" x="" y="" />
+		<file name="GIAtranslatorRedistributeRelexRelations.hpp" x="" y="" />
+		<file name="GIAtranslatorRedistributeStanfordRelations.hpp" x="" y="" />
+		<file name="GIAwordnet.hpp" x="" y="" />
+		<file name="GIAxmlConversion.hpp" x="" y="" />
 
-		<file name="GIAsemanticParser.h" x="8" y="13" />
-		<file name="GIAsemanticParserTranslator.h" x="8" y="14" />
-		<file name="GIAsemanticParserOperations.h" x="8" y="15" />
-		<file name="GIAsemanticParserDatabase.h" x="8" y="16" />
+		<file name="GIAsemanticParser.hpp" x="" y="" />
+		<file name="GIAsemanticParserTranslator.hpp" x="" y="" />
+		<file name="GIAsemanticParserOperations.hpp" x="" y="" />
+		<file name="GIAsemanticParserDatabase.hpp" x="" y="" />
 
-		<file name="wn.h" x="4" y="19" />
-		<file name="math.h" x="5" y="19" />
-		<file name="CECodeextensionClass.h" x="6" y="19" />
-		<file name="jpeglib.h" x="" y="" />
-		<file name="jmemsys.h" x="" y="" />
-		<file name="float.h" x="" y="" />
+		<file name="wn.hpp" x="" y="" />
+		<file name="math.hpp" x="" y="" />
+		<file name="CECodeextensionClass.hpp" x="" y="" />
+		<file name="jpeglib.hpp" x="" y="" />
+		<file name="jmemsys.hpp" x="" y="" />
+		<file name="float.hpp" x="" y="" />
 
-		<file name="RTglobalDefs.h" x="14" y="16" />
-		<file name="RTmain.h" x="" y="" />
-		<file name="RToperations.h" x="" y="" />
-		<file name="RTparser.h" x="" y="" />
-		<file name="RTpixelMaps.h" x="14" y="13" />
-		<file name="RTppm.h" x="14" y="14" />
-		<file name="RTraytracer.h" x="" y="" />
-		<file name="RTreferenceManipulation.h" x="" y="" />
-		<file name="RTscene.h" x="" y="" />
-		<file name="RTviewinfo.h" x="14" y="15" />
+		<file name="RTglobalDefs.hpp" x="4" y="6" />
+		<file name="RTmain.hpp" x="3" y="1" />
+		<file name="RToperations.hpp" x="4" y="4" />
+		<file name="RTparser.hpp" x="3" y="4" />
+		<file name="RTpixelMaps.hpp" x="5" y="4" />
+		<file name="RTppm.hpp" x="5" y="5" />
+		<file name="RTraytracer.hpp" x="4" y="3" />
+		<file name="RTreferenceManipulation.hpp" x="2" y="2" />
+		<file name="RTscene.hpp" x="4" y="2" />
+		<file name="RTviewinfo.hpp" x="3" y="5" />
 
-		<file name="SHAREDglobalDefs.h" x="11" y="18" />
-		<file name="SHAREDvars.h" x="11" y="17" />
-		<file name="SHAREDvector.h" x="11" y="16" />
+		<file name="SHAREDglobalDefs.hpp" x="2" y="7" />
+		<file name="SHAREDvars.hpp" x="2" y="6" />
+		<file name="SHAREDvector.hpp" x="2" y="5" />
 
-		<file name="LDjpeg.h" x="" y="" />
-		<file name="LDmysql.h" x="" y="" />
-		<file name="LDopengl.h" x="13" y="13" />
-		<file name="LDparser.h" x="12" y="13" />
-		<file name="LDreferenceClass.h" x="11" y="15" />
-		<file name="LDreferenceManipulation.h" x="11" y="14" />
-		<file name="LDsprite.h" x="11" y="13" />
-		<file name="LDsvg.h" x="10" y="13" />
+		<file name="LDjpeg.hpp" x="" y="" />
+		<file name="LDmysql.hpp" x="" y="" />
+		<file name="LDopengl.hpp" x="" y="" />
+		<file name="LDparser.hpp" x="1" y="2" />
+		<file name="LDreferenceClass.hpp" x="2" y="4" />
+		<file name="LDreferenceManipulation.hpp" x="2" y="3" />
+		<file name="LDsprite.hpp" x="" y="" />
+		<file name="LDsvg.hpp" x="" y="" />
 
-		<file name="XMLparserClass.h" x="14" y="11" />
-		<file name="XMLrulesClass.h" x="14" y="10" />
+		<file name="XMLparserClass.hpp" x="" y="" />
+		<file name="XMLrulesClass.hpp" x="" y="" />
 
-		<file name="ORcomparison.h" x="" y="" />
-		<file name="ORdatabaseDecisionTree.h" x="" y="" />
-		<file name="ORdatabaseFileIO.h" x="" y="" />
-		<file name="ORdatabaseSQL.h" x="" y="" />
-		<file name="ORfeature.h" x="" y="" />
-		<file name="ORglobalDefs.h" x="" y="" />
-		<file name="ORimagecomparison.h" x="" y="" />
-		<file name="ORmain.h" x="" y="" />
-		<file name="ORmethod2DOD.h" x="" y="" />
-		<file name="ORmethod3DOD.h" x="" y="" />
-		<file name="ORmethod.h" x="" y="" />
-		<file name="ORoperations.h" x="" y="" />
-		<file name="ORpixelMaps.h" x="" y="" />
-		<file name="ORpolygonList.h" x="" y="" />
-		<file name="ORquadraticFit.h" x="" y="" />
-		<file name="ORrules.h" x="" y="" />
-		<file name="ORTHimageCategorisationNN.h" x="" y="" />
-		<file name="ORTHmain.h" x="" y="" />
+		<file name="ORcomparison.hpp" x="" y="" />
+		<file name="ORdatabaseDecisionTree.hpp" x="" y="" />
+		<file name="ORdatabaseFileIO.hpp" x="" y="" />
+		<file name="ORdatabaseSQL.hpp" x="" y="" />
+		<file name="ORfeature.hpp" x="" y="" />
+		<file name="ORglobalDefs.hpp" x="" y="" />
+		<file name="ORimagecomparison.hpp" x="" y="" />
+		<file name="ORmain.hpp" x="" y="" />
+		<file name="ORmethod2DOD.hpp" x="" y="" />
+		<file name="ORmethod3DOD.hpp" x="" y="" />
+		<file name="ORmethod.hpp" x="" y="" />
+		<file name="ORoperations.hpp" x="" y="" />
+		<file name="ORpixelMaps.hpp" x="" y="" />
+		<file name="ORpolygonList.hpp" x="" y="" />
+		<file name="ORquadraticFit.hpp" x="" y="" />
+		<file name="ORrules.hpp" x="" y="" />
+		<file name="ORTHimageCategorisationNN.hpp" x="" y="" />
+		<file name="ORTHmain.hpp" x="" y="" />
 
-		<file name="ANNbiologicalConstructs.h" x="" y="" />
-		<file name="ANNdata.h" x="" y="" />
-		<file name="ANNdisplay.h" x="" y="" />
-		<file name="ANNexperienceClass.h" x="" y="" />
-		<file name="ANNformation.h" x="" y="" />
-		<file name="ANNglobalDefs.h" x="" y="" />
-		<file name="ANNmain.h" x="" y="" />
-		<file name="ANNneuronClass.h" x="" y="" />
-		<file name="ANNneuronConnectionClass.h" x="" y="" />
-		<file name="ANNparser.h" x="" y="" />
-		<file name="ANNsprite.h" x="" y="" />
-		<file name="ANNtraining.h" x="" y="" />
-		<file name="ANNupdateAlgorithm.h" x="" y="" />
-		<file name="ANNxmlConversion.h" x="" y="" />
+		<file name="ANNbiologicalConstructs.hpp" x="" y="" />
+		<file name="ANNdata.hpp" x="" y="" />
+		<file name="ANNdisplay.hpp" x="" y="" />
+		<file name="ANNexperienceClass.hpp" x="" y="" />
+		<file name="ANNformation.hpp" x="" y="" />
+		<file name="ANNglobalDefs.hpp" x="" y="" />
+		<file name="ANNmain.hpp" x="" y="" />
+		<file name="ANNneuronClass.hpp" x="" y="" />
+		<file name="ANNneuronConnectionClass.hpp" x="" y="" />
+		<file name="ANNparser.hpp" x="" y="" />
+		<file name="ANNsprite.hpp" x="" y="" />
+		<file name="ANNtraining.hpp" x="" y="" />
+		<file name="ANNupdateAlgorithm.hpp" x="" y="" />
+		<file name="ANNxmlConversion.hpp" x="" y="" />
 
-		<file name="CSdataflow.h" x="" y="" />
-		<file name="CSdraw.h" x="" y="" />
-		<file name="CSexecflow.h" x="" y="" />
-		<file name="CSglobalDefs.h" x="" y="" />
-		<file name="CSmain.h" x="" y="" />
-		<file name="CSoperations.h" x="" y="" />
-		<file name="CSpreprocessorFilter.h" x="" y="" />
-		<file name="CSreferenceClass.h" x="" y="" />
-		<file name="CSreferenceContainerClass.h" x="" y="" />
+		<file name="CSdataflow.hpp" x="" y="" />
+		<file name="CSdraw.hpp" x="" y="" />
+		<file name="CSexecflow.hpp" x="" y="" />
+		<file name="CSglobalDefs.hpp" x="" y="" />
+		<file name="CSmain.hpp" x="" y="" />
+		<file name="CSoperations.hpp" x="" y="" />
+		<file name="CSpreprocessorFilter.hpp" x="" y="" />
+		<file name="CSreferenceClass.hpp" x="" y="" />
+		<file name="CSreferenceContainerClass.hpp" x="" y="" />
 
-		<file name="OLC.h" x="" y="" />
-		<file name="OLCoperations.h" x="" y="" />
+		<file name="OLC.hpp" x="" y="" />
+		<file name="OLCoperations.hpp" x="" y="" />
 	</grid>
 </rules>

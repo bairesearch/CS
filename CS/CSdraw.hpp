@@ -26,7 +26,7 @@
  * File Name: CSdraw.hpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3o1a 05-November-2020
+ * Project Version: 3o2a 08-November-2020
  * /
  *******************************************************************************/
 
@@ -186,6 +186,10 @@ class CSdrawClass
 	public: void initiateMaxXatParticularY();
 
 	public: LDreference* createFileObjectListBoxes(LDreference* currentReferenceInPrintList, CSfileContainer* firstObjectInAboveLevelBelowListContainer, CSfileContainer* firstObjectInTopLevelBelowListContainer, XMLparserTag** currentTag, bool outputFunctionsConnectivity, bool traceFunctionUpwards, XMLparserTag* firstTagInGridTag, bool usePredefinedGrid);
+		private: bool hasPreviousReferenceWithThisNameHasBeenPrinted(string name, CSfileContainer* firstObjectInTopLevelBelowListContainer, int *maxYPos);
+		#ifdef CS_OPTIMISE_CS_DRAW_YMAXPOS_SEARCH
+		private: void hasPreviousReferenceWithThisNameHasBeenPrintedReset(CSfileContainer* firstObjectInTopLevelBelowListContainer);
+		#endif
 
 	public: LDreference* createFileObjectListConnections(LDreference* currentReferenceInPrintList, CSfileContainer* firstObjectInAboveLevelBelowListContainer, CSfile* aboveLevelObject, XMLparserTag** currentTag, bool traceFunctionUpwards);
 		private: LDreference* createFileObjectConnection(LDreference* currentReferenceInPrintList, CSfile* reference, CSfile* currentReferenceInAboveList, int colour, const bool traceAFunctionUpwardsAndNotCurrentlyTracing, XMLparserTag** currentTag);

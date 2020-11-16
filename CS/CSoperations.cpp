@@ -26,7 +26,7 @@
  * File Name: CSoperations.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3o1a 05-November-2020
+ * Project Version: 3o2a 08-November-2020
  * /
  *******************************************************************************/
 
@@ -36,7 +36,7 @@
 
 
 
-bool CSoperationsClass::getIncludeFileNamesFromCorHfile(CSfileContainer* firstReferenceInIncludeFileListContainer, constEffective CSfileContainer* topLevelReferenceContainer, CSfile* aboveLevelObject, const string topLevelReferenceName, const int level)
+bool CSoperationsClass::getIncludeFileNamesFromCorHfile(CSfileContainer* firstReferenceInIncludeFileListContainer, constEffective CSfileContainer* topLevelReferenceContainer, CSfile* aboveLevelObject, const string topLevelReferenceName, const int level, const bool parsingCorHfile)
 {
 	bool fileFound = false;
 
@@ -44,7 +44,6 @@ bool CSoperationsClass::getIncludeFileNamesFromCorHfile(CSfileContainer* firstRe
 
 	ifstream parseFileObject(parseFileName.c_str());
 	CSfileContainer* currentReferenceInIncludeFileListContainer = firstReferenceInIncludeFileListContainer;
-
 
 	if(!parseFileObject.rdbuf()->is_open())
 	{
@@ -69,7 +68,6 @@ bool CSoperationsClass::getIncludeFileNamesFromCorHfile(CSfileContainer* firstRe
 
 		while(parseFileObject.get(c))
 		{
-
 			charCount++;
 
 			if(readingLargeComment)
@@ -84,6 +82,7 @@ bool CSoperationsClass::getIncludeFileNamesFromCorHfile(CSfileContainer* firstRe
 					while(c == '*')
 					{
 						parseFileObject.get(c);
+						charCount++;
 						if(c == '/')
 						{
 							readingLargeComment = false;
@@ -101,6 +100,7 @@ bool CSoperationsClass::getIncludeFileNamesFromCorHfile(CSfileContainer* firstRe
 			{
 				char tempChar;
 				parseFileObject.get(tempChar);
+				charCount++;
 				if(tempChar == '*')
 				{
 					readingLargeComment = true;
@@ -173,6 +173,7 @@ bool CSoperationsClass::getIncludeFileNamesFromCorHfile(CSfileContainer* firstRe
 
 						char tempChar;
 						parseFileObject.get(tempChar);
+						charCount++;
 						if(tempChar == '\"')
 						{
 							readingHashInclude = false;
@@ -250,25 +251,19 @@ bool CSoperationsClass::getIncludeFileNamesFromCorHfile(CSfileContainer* firstRe
 
 							#ifdef CS_DISPLAY_INCLUDE_FILE_PARSING
 							//parse into .h file;
-							for(int i= 0; i<level; i++)
-							{
-								cout << "\t";
-							}
+							printLevelIndentation(level);
 							cout << hashIncludeFileName << endl;
 							//parse into .c file;
-							for(int i= 0; i<level; i++)
-							{
-								cout << "\t";
-							}
+							printLevelIndentation(level);
 							cout << hashIncludeFileNameCFile << endl;
 							#endif
 
 							//parse into .h file;
 							string referenceName = hashIncludeFileName;	//hashIncludeFileName is the current filename being parsed by this instance of getIncludeFileNamesFromCorHfile, ie "x.h" in "#include x.h" [and will recurse]
 							//getIncludeFileNamesFromCorHfile{}: this will add the include file references (filenames) within the .h file in "#include x.h" to currentReferenceInIncludeFileList->firstFileInBelowListContainer
-							bool hFileFound = getIncludeFileNamesFromCorHfile(currentReferenceInIncludeFileList->firstFileInBelowListContainer, topLevelReferenceContainer, currentReferenceInIncludeFileList, referenceName, level+1);
+							bool hFileFound = getIncludeFileNamesFromCorHfile(currentReferenceInIncludeFileList->firstFileInBelowListContainer, topLevelReferenceContainer, currentReferenceInIncludeFileList, referenceName, level+1, false);
 
-
+							#ifndef CS_DEBUG_DISABLE_FUNCTION_PARSING
 							if(hFileFound)
 							{
 								//parse into .c file;
@@ -279,7 +274,7 @@ bool CSoperationsClass::getIncludeFileNamesFromCorHfile(CSfileContainer* firstRe
 								}
 								string referenceNameCFile = hashIncludeFileNameCFile;
 								//getIncludeFileNamesFromCorHfile{}: this will add (append) the include file references (filenames) within the .c equivalent (ie x.c) of the .h file in "#include x.h" to currentReferenceInIncludeFileList->firstFileInBelowListContainer [and will recurse]
-								bool cFileFound = getIncludeFileNamesFromCorHfile(lastReferenceInBelowListContainer, topLevelReferenceContainer, currentReferenceInIncludeFileList, referenceNameCFile, level+1);
+								bool cFileFound = getIncludeFileNamesFromCorHfile(lastReferenceInBelowListContainer, topLevelReferenceContainer, currentReferenceInIncludeFileList, referenceNameCFile, level+1, true);
 
 								if(cFileFound)
 								{
@@ -294,6 +289,7 @@ bool CSoperationsClass::getIncludeFileNamesFromCorHfile(CSfileContainer* firstRe
 									if(hFileFound2)
 									{
 										//getFunctionObjectNamesFromFunctionsInCfile{}: this opens the .c file (hashIncludeFileName equivalent) and locates all the functions corresponding to those declared in its .h file
+										//it also locates all function references within those functions
 										getFunctionObjectNamesFromFunctionsInCfile(firstReferenceInIncludeFileListContainer->fileObject, currentReferenceInIncludeFileList->firstFunctionInFunctionList, currentReferenceInIncludeFileList, referenceNameCFile, level);
 									}
 									else
@@ -311,11 +307,10 @@ bool CSoperationsClass::getIncludeFileNamesFromCorHfile(CSfileContainer* firstRe
 								CSfunction* newfirstReferenceInFunctionList = new CSfunction();
 								currentReferenceInIncludeFileList->firstFunctionInFunctionList = newfirstReferenceInFunctionList;
 							}
+							#endif
 						}
 
 						currentReferenceInIncludeFileListContainer = currentReferenceInIncludeFileListContainer->next;
-
-
 					}
 					else
 					{
@@ -401,13 +396,13 @@ bool CSoperationsClass::findFileObjectInFileObjectContainerList(constEffective C
 bool CSoperationsClass::getFunctionNamesFromFunctionDeclarationsInHfile(CSfunction* firstFunctionInFunctionList, const string topLevelFileName, const int level)
 {
 	bool fileFound = false;
-
+	
 	string parseFileName = topLevelFileName;
 
 	ifstream parseFileObject(parseFileName.c_str());
 	CSfunction* currentReferenceInFunctionList = firstFunctionInFunctionList;
 	CSfunction* currentReferenceInFunctionReferenceList = NULL;
-
+	
 	if(!parseFileObject.rdbuf()->is_open())
 	{
 		//cout << "CS error - file not found, " << parseFileName << endl;
@@ -420,284 +415,445 @@ bool CSoperationsClass::getFunctionNamesFromFunctionDeclarationsInHfile(CSfuncti
 		int id = 0;
 		int charCount = 0;
 		int lineCount = 0;
-		bool readingBeforeSpaceBetweenFunctionTypeAndNamePreceedingWhiteSpace = true;
+		bool readingWhitespace = true;
 		#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION
 		int functionReferenceIndentationInHfileTemp = 0;
 		#endif
-		bool readingBeforeSpaceBetweenFunctionTypeAndName = false;
-		bool readingBeforeOpeningBracket = false;
-		bool readingBeforeClosingBracket = false;
+		#ifdef CS_SUPPORT_GENERATED_CPP_CODE
+		bool readingFunctionAccessSpecifier = false;
+		string functionAccessSpecifier = "";
+		#ifdef CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIERS
+		int functionAccessSpecifierType = CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIER_UNKNOWN;
+		#endif
+		bool readingClassType = false;
+		bool readingClassName = false;
+		string classType = "";
+		string className = "";
+		bool parsingClassContents = false;
+		bool firstCharacterOfLine = true;
+		bool validClassType = false;
+		#endif
+		bool readingFunctionType = false;
+		bool readingFunctionName = false;
+		bool readingFunctionArguments = false;
 		bool waitingForNewLine = false;
 		bool readingLargeComment = false;
-
+		bool prepareNewLine = false;
+		
+		string functionType = "";
 		string functionName = "";
+		string functionArguments = "";
 		string functionNameFull = "";
 
-		while(parseFileObject.get(c))
+		while(prepareNewLine || parseFileObject.get(c))
 		{
-			charCount++;
-
-			if(readingLargeComment)
+			if(prepareNewLine)
 			{
-
-				if(c == '\n')
-				{
-					lineCount++;
-				}
-				else
-				{
-					while(c == '*')
-					{
-						parseFileObject.get(c);
-						if(c == '/')
-						{
-							readingLargeComment = false;
-							waitingForNewLine = true;
-						}
-						else if(c == '\n')
-						{
-							lineCount++;
-						}
-					}
-				}
-
-			}
-			else if(c == '/')
-			{
-				char tempChar;
-				parseFileObject.get(tempChar);
-				if(tempChar == '*')
-				{
-					readingLargeComment = true;
-				}
-				else if(tempChar == '/')
-				{
-					//single line comment found
-					waitingForNewLine = true;
-
-				}
-				else if(tempChar == '\n')
-				{
-					lineCount++;
-					waitingForNewLine = false;
-					readingBeforeSpaceBetweenFunctionTypeAndNamePreceedingWhiteSpace = true;
-					#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION
-					functionReferenceIndentationInHfileTemp = 0;
-					#endif
-					readingBeforeSpaceBetweenFunctionTypeAndName = false;
-					readingBeforeOpeningBracket = false;
-					readingBeforeClosingBracket = false;
-					functionName = "";
-					functionNameFull = "";
-				}
-				else
-				{
-					//CS does not support / values in function names
-					waitingForNewLine = true;
-				}
-			}
-			else if(waitingForNewLine)
-			{
-				if(c == '\n')
-				{
-					lineCount++;
-					waitingForNewLine = false;
-					readingBeforeSpaceBetweenFunctionTypeAndNamePreceedingWhiteSpace = true;
-					#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION
-					functionReferenceIndentationInHfileTemp = 0;
-					#endif
-					readingBeforeSpaceBetweenFunctionTypeAndName = false;
-					readingBeforeOpeningBracket = false;
-					readingBeforeClosingBracket = false;
-					functionName = "";
-					functionNameFull = "";
-				}
-				else
-				{
-					//do nothing, still waiting for new line
-				}
-			}
-			else if(readingBeforeSpaceBetweenFunctionTypeAndNamePreceedingWhiteSpace)
-			{
-				if((c == ' ') || (c == '\t'))
-				{
-					#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION
-					if(c == CS_SOURCE_FILE_INDENTATION_CHARACTER)
-					{
-						functionReferenceIndentationInHfileTemp++;
-					}
-					#endif
-					//ignore preceeding white space
-				}
-				else if(c == '\n')
-				{
-					lineCount++;
-					waitingForNewLine = false;
-					readingBeforeSpaceBetweenFunctionTypeAndNamePreceedingWhiteSpace = true;
-					#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION
-					functionReferenceIndentationInHfileTemp = 0;
-					#endif
-					readingBeforeSpaceBetweenFunctionTypeAndName = false;
-					readingBeforeOpeningBracket = false;
-					readingBeforeClosingBracket = false;
-					functionName = "" ;
-					functionNameFull = "";
-				}
-				else
-				{
-					//found start of function declaration
-					readingBeforeSpaceBetweenFunctionTypeAndNamePreceedingWhiteSpace = false;
-					readingBeforeSpaceBetweenFunctionTypeAndName = true;
-
-					functionNameFull = functionNameFull + c;
-				}
-			}
-			else if(readingBeforeSpaceBetweenFunctionTypeAndName)
-			{
-				if(c == ' ')
-				{
-					readingBeforeSpaceBetweenFunctionTypeAndName = false;
-
-					functionNameFull = functionNameFull + c;
-
-					//restart function name fill;
-					functionName = "";
-					readingBeforeOpeningBracket = true;
-				}
-				else if(c == '\n')
-				{
-					lineCount++;
-					waitingForNewLine = false;
-					readingBeforeSpaceBetweenFunctionTypeAndNamePreceedingWhiteSpace = true;
-					#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION
-					functionReferenceIndentationInHfileTemp = 0;
-					#endif
-					readingBeforeSpaceBetweenFunctionTypeAndName = false;
-					readingBeforeOpeningBracket = false;
-					readingBeforeClosingBracket = false;
-					functionName = "";
-					functionNameFull = "";
-				}
-				else
-				{
-					functionNameFull = functionNameFull + c;
-				}
-
-			}
-			else if(readingBeforeOpeningBracket)
-			{
-				if(c == ' ')
-				{
-					functionNameFull = functionNameFull + c;
-
-					//not a function, restart function name fill;
-					functionName = "";
-				}
-				else if(c == '(')
-				{
-					functionNameFull = functionNameFull + c;
-
-					readingBeforeOpeningBracket = false;
-					readingBeforeClosingBracket = true;
-				}
-				else if(c == '\n')
-				{
-					lineCount++;
-					waitingForNewLine = false;
-					readingBeforeSpaceBetweenFunctionTypeAndNamePreceedingWhiteSpace = true;
-					#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION
-					functionReferenceIndentationInHfileTemp = 0;
-					#endif
-					readingBeforeSpaceBetweenFunctionTypeAndName = false;
-					readingBeforeOpeningBracket = false;
-					readingBeforeClosingBracket = false;
-					functionName = "";
-					functionNameFull = "";
-				}
-				else
-				{
-					functionName = functionName + c;
-					functionNameFull = functionNameFull + c;
-				}
-			}
-			else if(readingBeforeClosingBracket)
-			{
-				if(c == ')')
-				{
-					functionNameFull = functionNameFull + c;
-
-					char newC;
-					parseFileObject.get(newC);
-					if(newC == ';')
-					{//function reference found
-
-						#ifdef CS_SUPPORT_FUNCTION_RETURN_POINTERS
-						if(functionName[0] == '*')
-						{
-							int functionNameLength = functionName.length();
-							functionName = functionName.substr(1, functionNameLength-1);
-						}
-						#endif
-
-
-						/*
-						if(topLevelFileName == "LDreferenceManipulation.h")
-						{
-							cout << "functionName = " << functionName << endl;
-						}
-						*/
-
-						currentReferenceInFunctionList->isFunction = true;
-						currentReferenceInFunctionList->name = functionName;
-						currentReferenceInFunctionList->nameFull = functionNameFull;
-						#ifdef CS_IDENTIFY_FUNCTION_DECLARATION_ARGUMENTS
-						identifyFunctionDeclarationArguments(currentReferenceInFunctionList, &functionNameFull);
-						#endif
-						#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION
-						currentReferenceInFunctionList->functionReferenceIndentation = functionReferenceIndentationInHfileTemp;
-						#endif
-						CSfunction* newCSReference = new CSfunction();
-						currentReferenceInFunctionList->next = newCSReference;
-
-						currentReferenceInFunctionList = currentReferenceInFunctionList->next;
-
-					}
-					else
-					{
-					}
-
-					readingBeforeClosingBracket = false;
-					readingBeforeSpaceBetweenFunctionTypeAndNamePreceedingWhiteSpace = true;
-					#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION
-					functionReferenceIndentationInHfileTemp = 0;
-					#endif
-					functionNameFull = "";
-				}
-				else if(c == '\n')
-				{
-					lineCount++;
-					waitingForNewLine = false;
-					readingBeforeSpaceBetweenFunctionTypeAndNamePreceedingWhiteSpace = true;
-					#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION
-					functionReferenceIndentationInHfileTemp = 0;
-					#endif
-					readingBeforeSpaceBetweenFunctionTypeAndName = false;
-					readingBeforeOpeningBracket = false;
-					readingBeforeClosingBracket = false;
-					functionName = "";
-					functionNameFull = "";
-				}
-				else
-				{
-					functionNameFull = functionNameFull + c;
-				}
+				lineCount++;
+				waitingForNewLine = false;
+				readingWhitespace = true;
+				#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION
+				functionReferenceIndentationInHfileTemp = 0;
+				#endif
+				#ifdef CS_SUPPORT_GENERATED_CPP_CODE
+				functionAccessSpecifier = "";
+				#ifdef CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIERS
+				functionAccessSpecifierType = CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIER_UNKNOWN;
+				#endif
+				readingClassType = false;
+				readingClassName = false;
+				classType = "";
+				//className = "";
+				firstCharacterOfLine = true;
+				validClassType = false;
+				#endif
+				readingFunctionType = false;
+				readingFunctionName = false;
+				readingFunctionArguments = false;
+				functionType = "";
+				functionName = "";
+				functionArguments = "";
+				functionNameFull = "";
+				
+				prepareNewLine = false;
 			}
 			else
 			{
-				cout << "getFunctionNamesFromFunctionDeclarationsInHfile: token error" << endl;
-				cout << "char = " << c << endl;
-				cout << "parseFileName = " << parseFileName << endl;
-				cout << "lineCount = " << lineCount << endl;
+				charCount++;
+
+				if(readingLargeComment)
+				{
+					if(c == '\n')
+					{
+						lineCount++;
+					}
+					else
+					{
+						while(c == '*')
+						{
+							parseFileObject.get(c);
+							charCount++;
+							if(c == '/')
+							{
+								readingLargeComment = false;
+								waitingForNewLine = true;
+							}
+							else if(c == '\n')
+							{
+								lineCount++;
+							}
+						}
+					}
+
+				}
+				else if(c == '/')
+				{
+					char tempChar;
+					parseFileObject.get(tempChar);
+					charCount++;
+					if(tempChar == '*')
+					{
+						readingLargeComment = true;
+					}
+					else if(tempChar == '/')
+					{
+						//single line comment found
+						waitingForNewLine = true;
+
+					}
+					else if(tempChar == '\n')
+					{
+						prepareNewLine = true;
+					}
+					else
+					{
+						//CS does not support / values in function names
+						waitingForNewLine = true;
+					}
+				}
+				else if(waitingForNewLine)
+				{
+					if(c == '\n')
+					{
+						prepareNewLine = true;
+					}
+					else
+					{
+						//do nothing, still waiting for new line
+					}
+				}	
+				else if(readingWhitespace)
+				{
+					#ifdef CS_SUPPORT_GENERATED_CPP_CODE
+					if(parsingClassContents && firstCharacterOfLine && (c == '}'))	
+					{
+						//detect end of class
+						char tempChar;
+						parseFileObject.get(tempChar);
+						charCount++;
+						if(tempChar == ';')
+						{
+							className = "";
+							parsingClassContents = false;
+							className = "";
+						}
+					} else
+					#endif
+					if((c == ' ') || (c == '\t'))
+					{
+						#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION
+						if(c == CS_SOURCE_FILE_INDENTATION_CHARACTER)
+						{
+							functionReferenceIndentationInHfileTemp++;
+						}
+						#endif
+						
+						//ignore preceeding white space
+						
+						#ifdef CS_SUPPORT_GENERATED_CPP_CODE
+						firstCharacterOfLine = false;
+						#endif
+					}
+					else if(c == '\n')
+					{
+						prepareNewLine = true;
+					}
+					else
+					{
+						//found start of function declaration
+						readingWhitespace = false;
+						
+						#ifdef CS_SUPPORT_GENERATED_CPP_CODE
+						readingFunctionAccessSpecifier = true;
+						#else
+						readingFunctionType = true;
+						#endif
+
+						#ifdef CS_SUPPORT_GENERATED_CPP_CODE
+						functionAccessSpecifier = functionAccessSpecifier + c;
+						#else
+						functionNameFull = functionNameFull + c;
+						#endif
+					}
+				}
+				#ifdef CS_SUPPORT_GENERATED_CPP_CODE
+				else if(readingFunctionAccessSpecifier)
+				{
+					if(c == ' ')
+					{
+						readingFunctionAccessSpecifier = false;
+						if(validClassType && (functionAccessSpecifier == CS_CLASS_TYPE))
+						{
+							functionAccessSpecifier = "";
+							readingClassName = true;
+						}
+						#ifdef CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIERS
+						else if(SHAREDvars.textInTextArray(functionAccessSpecifier, functionAccessSpecifierNameArray, CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIER_NUMBER_OF_TYPES, &functionAccessSpecifierType))
+						{
+							//cout << "functionAccessSpecifierType = " << functionAccessSpecifierType << endl;
+							readingFunctionType = true;
+							//functionNameFull = functionNameFull + c;	//do not add functionAccessSpecifier to functionNameFull
+						}
+						#endif
+						else
+						{
+							//no inline function access specifier found (as function type)
+							functionType = functionAccessSpecifier;
+							functionAccessSpecifier = "";
+							functionNameFull = functionNameFull + functionType + c;
+
+							//restart function name fill;
+							functionName = "";
+							readingFunctionName = true;
+						}
+					}
+					else if(c == '\n')
+					{
+						prepareNewLine = true;
+					}
+					else
+					{
+						if(firstCharacterOfLine)
+						{
+							validClassType = true;
+						}
+						
+						functionAccessSpecifier = functionAccessSpecifier + c;
+					}
+
+				}
+				#endif
+				#ifdef CS_SUPPORT_GENERATED_CPP_CODE
+				else if(readingClassName)
+				{
+					//only support "class className\n{" and "class className{\n" class definition headers:
+					if(c == '\n')
+					{
+						char tempChar;
+						parseFileObject.get(tempChar);
+						charCount++;
+						if(tempChar == '{')
+						{
+							parsingClassContents = true;
+							//cout << "CS_SUPPORT_GENERATED_CPP_CODE: className = " << className << endl;
+						}
+						else
+						{
+							//class declaration detected (not definition)
+							className = "";
+							/*
+							cerr << "CS_SUPPORT_GENERATED_CPP_CODE: CSoperationsClass::getFunctionNamesFromFunctionDeclarationsInHfile error; class className\\n not followed by { character" << endl;
+							cerr << "topLevelFileName = " << topLevelFileName << endl;
+							exit(EXIT_ERROR);
+							*/
+						}
+						prepareNewLine = true;
+					}
+					else if(c == '{')
+					{
+						char tempChar;
+						parseFileObject.get(tempChar);
+						charCount++;
+						if(tempChar == '\n')
+						{
+							parsingClassContents = true;
+							//cout << "CS_SUPPORT_GENERATED_CPP_CODE: className = " << className << endl;
+						}
+						else
+						{
+							//class declaration detected (not definition)
+							className = "";
+							/*
+							cerr << "CS_SUPPORT_GENERATED_CPP_CODE: CSoperationsClass::getFunctionNamesFromFunctionDeclarationsInHfile error; class className{ not followed by \\n character" << endl;
+							cerr << "topLevelFileName = " << topLevelFileName << endl;
+							exit(EXIT_ERROR);
+							*/
+						}
+						prepareNewLine = true;
+					}
+					else if(c == ':')
+					{
+						//ignore class inheritance
+						parsingClassContents = true;
+						waitingForNewLine = true;
+						//cout << "CS_SUPPORT_GENERATED_CPP_CODE: className = " << className << endl;
+					}
+					else
+					{
+						className = className + c;
+					}
+				}
+				#endif
+				else if(readingFunctionType)
+				{
+					if(c == ' ')
+					{
+						readingFunctionType = false;
+
+						functionNameFull = functionNameFull + c;
+
+						//restart function name fill;
+						functionName = "";
+						readingFunctionName = true;
+					}
+					else if(c == '\n')
+					{
+						prepareNewLine = true;
+					}
+					else
+					{
+						functionType = functionType + c;
+						functionNameFull = functionNameFull + c;
+					}
+				}
+				else if(readingFunctionName)
+				{
+					if(c == ' ')
+					{
+						functionNameFull = functionNameFull + c;
+
+						//not a function, restart function name fill;
+						functionName = "";
+					}
+					else if(c == '(')
+					{
+						functionArguments = functionArguments + c;
+						functionNameFull = functionNameFull + c;
+
+						readingFunctionName = false;
+						readingFunctionArguments = true;
+					}
+					else if(c == '\n')
+					{
+						prepareNewLine = true;
+					}
+					else
+					{
+						functionName = functionName + c;
+						functionNameFull = functionNameFull + c;
+					}
+				}
+				else if(readingFunctionArguments)
+				{
+					if(c == ')')
+					{
+						functionArguments = functionArguments + c;
+						functionNameFull = functionNameFull + c;
+
+						char newC;
+						parseFileObject.get(newC);
+						charCount++;
+						if(newC == ';')
+						{//function reference found
+
+							#ifdef CS_SUPPORT_FUNCTION_RETURN_POINTERS
+							if(functionName[0] == '*')
+							{
+								int functionNameLength = functionName.length();
+								functionName = functionName.substr(1, functionNameLength-1);
+							}
+							#endif
+
+							/*
+							if(topLevelFileName == "LDreferenceManipulation.h")
+							{
+								cout << "functionName = " << functionName << endl;
+							}
+							*/
+
+							currentReferenceInFunctionList->isFunction = true;
+							#ifdef CS_SUPPORT_GENERATED_CPP_CODE
+							if(parsingClassContents)
+							{
+								currentReferenceInFunctionList->name = functionName;	//CHECKTHIS
+								currentReferenceInFunctionList->nameFull = functionType + STRING_SPACE + className + CS_CLASS_DELIMITER + functionName + functionArguments;	//full function name to search for in cpp files
+								//cout << "parsingClassContents: currentReferenceInFunctionList->nameFull = " << currentReferenceInFunctionList->nameFull << endl;	
+							}
+							else
+							{
+								currentReferenceInFunctionList->name = functionName;
+								currentReferenceInFunctionList->nameFull = functionNameFull;	
+								//cout << "!parsingClassContents: currentReferenceInFunctionList->nameFull = " << currentReferenceInFunctionList->nameFull << endl;					
+							}
+							#else
+							currentReferenceInFunctionList->name = functionName;
+							currentReferenceInFunctionList->nameFull = functionNameFull;
+							#endif
+							currentReferenceInFunctionList->functionType = functionType;	//not used
+							currentReferenceInFunctionList->functionArguments = functionArguments;	//not used
+							#ifdef CS_SUPPORT_GENERATED_CPP_CODE
+							currentReferenceInFunctionList->className = className;
+							#endif
+							#ifdef CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIERS
+							currentReferenceInFunctionList->functionAccessSpecifierType = functionAccessSpecifierType;
+							#endif
+							#ifdef CS_IDENTIFY_FUNCTION_DECLARATION_ARGUMENTS
+							identifyFunctionDeclarationArguments(currentReferenceInFunctionList, &functionNameFull);
+							#endif
+							#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION
+							currentReferenceInFunctionList->functionReferenceIndentation = functionReferenceIndentationInHfileTemp;
+							#endif
+							CSfunction* newCSReference = new CSfunction();
+							currentReferenceInFunctionList->next = newCSReference;
+
+							currentReferenceInFunctionList = currentReferenceInFunctionList->next;
+						}
+						else
+						{
+						}
+						
+						prepareNewLine = true;
+						lineCount--;	//to account for prepareNewLine expecting new line already detected
+						/*
+						readingFunctionArguments = false;
+						readingWhitespace = true;
+						#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION
+						functionReferenceIndentationInHfileTemp = 0;
+						#endif
+						#ifdef CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIERS
+						functionAccessSpecifier = "";
+						functionAccessSpecifierType = CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIER_UNKNOWN;
+						#endif
+						functionNameFull = "";
+						*/
+					}
+					else if(c == '\n')
+					{
+						prepareNewLine = true;
+					}
+					else
+					{
+						functionArguments = functionArguments + c;
+						functionNameFull = functionNameFull + c;
+					}
+				}
+				else
+				{
+					cout << "getFunctionNamesFromFunctionDeclarationsInHfile: token error" << endl;
+					cout << "char = " << c << endl;
+					cout << "parseFileName = " << parseFileName << endl;
+					cout << "lineCount = " << lineCount << endl;
+				}
 			}
 		}
 		parseFileObject.close();
@@ -913,7 +1069,6 @@ void CSoperationsClass::getFunctionObjectNamesFromFunctionsInCfile(const CSfile*
 					currentReference->functionText = functionContentsString;
 					#endif
 
-
 					//3. search the functionContentsString for any of the function (not full function names) across all include/header files
 					CSfunction* newfirstReferenceInFunctionObjectList = new CSfunction();
 					currentReference->firstReferenceInFunctionReferenceList = newfirstReferenceInFunctionObjectList;
@@ -924,20 +1079,31 @@ void CSoperationsClass::getFunctionObjectNamesFromFunctionsInCfile(const CSfile*
 					CSfunction* currentReferenceInFunctionReferenceListRepeats = currentReference->firstReferenceInFunctionReferenceListRepeats;
 					#endif
 
-
-					//search current file for function references;
-					if(!searchFunctionStringForFunctionReferences(firstFileInIncludeFileList, aboveLevelObject, &currentReferenceInFunctionReferenceList, &currentReferenceInFunctionReferenceListRepeats, &functionContentsString))
+					//search current file for function references within functionContentsString;
+					#ifdef CS_DEBUG_FUNCTION_REFERENCE_SEARCH
+					cout << "searchFunctionStringForFunctionReferences: currentReference->nameFull = " << currentReference->nameFull << endl;
+					#endif
+					if(searchFunctionStringForFunctionReferences(firstFileInIncludeFileList, aboveLevelObject, &currentReferenceInFunctionReferenceList, &currentReferenceInFunctionReferenceListRepeats, &functionContentsString, true))
 					{
 
 					}
-
-
-
-					//search include files for function references;
-					if(!searchFunctionStringForFunctionReferencesRecursive(firstFileInIncludeFileList, aboveLevelObject->firstFileInBelowListContainer, &currentReferenceInFunctionReferenceList, &currentReferenceInFunctionReferenceListRepeats, &functionContentsString))
+					
+					#ifdef CS_DEBUG_IDENTIFY_INFINITE_INCLUDE_RECURSION_OLD
+					cout << "searchFunctionStringForFunctionReferencesRecursive start: topLevelFileName = " << topLevelFileName << endl;
+					#endif
+					
+					//search include files for function references within functionContentsString;
+					if(searchFunctionStringForFunctionReferencesRecursive(firstFileInIncludeFileList, aboveLevelObject->firstFileInBelowListContainer, &currentReferenceInFunctionReferenceList, &currentReferenceInFunctionReferenceListRepeats, &functionContentsString))
 					{
 
 					}
+					#ifdef CS_OPTIMISE_PREVENT_DUPLICATE_FUNCTION_CONNECTIONS
+					searchFunctionStringForFunctionReferencesRecursiveReset(aboveLevelObject->firstFileInBelowListContainer);
+					#endif
+					
+					#ifdef CS_DEBUG_IDENTIFY_INFINITE_INCLUDE_RECURSION_OLD
+					cout << "searchFunctionStringForFunctionReferencesRecursive end\n\n\n" << endl;
+					#endif
 				}
 				else
 				{
@@ -946,7 +1112,7 @@ void CSoperationsClass::getFunctionObjectNamesFromFunctionsInCfile(const CSfile*
 					cerr << "fileName = " << codeFileName << endl;
 					exit(EXIT_ERROR);
 				}
-				currentReference->hasHadFunctionReferencesParsed = true;	//not used
+				currentReference->hasHadFunctionReferencesParsed = true;
 			}
 			currentReference = currentReference->next;
 		}
@@ -961,26 +1127,35 @@ void CSoperationsClass::getFunctionObjectNamesFromFunctionsInCfile(const CSfile*
 
 bool CSoperationsClass::searchFunctionStringForFunctionReferencesRecursive(const CSfile* firstFileInIncludeFileList, const CSfileContainer* firstFileNameInLayerContainingFunctionReferencesToSearchFor, CSfunction** currentReferenceInFunctionReferenceList, CSfunction** currentReferenceInFunctionReferenceListRepeats, string* functionContentsString)
 {
-	bool result = true;
+	bool result = false;
 
 	const CSfileContainer* currentReferenceContainer = firstFileNameInLayerContainingFunctionReferencesToSearchFor;
 	//cout << "firstFileNameInLayerContainingFunctionReferencesToSearchFor->fileObject->name = " << firstFileNameInLayerContainingFunctionReferencesToSearchFor->fileObject->name << endl;
 
 	while(currentReferenceContainer->next != NULL)
 	{
-		const CSfile* currentReference = currentReferenceContainer->fileObject;
-
-		searchFunctionStringForFunctionReferences(firstFileInIncludeFileList, currentReference, currentReferenceInFunctionReferenceList, currentReferenceInFunctionReferenceListRepeats, functionContentsString);
-
-
-		if(currentReference->firstFileInBelowListContainer != NULL)
+		CSfile* currentReference = currentReferenceContainer->fileObject;
+		
+		#ifdef CS_OPTIMISE_PREVENT_DUPLICATE_FUNCTION_CONNECTIONS
+		if(!(currentReference->identifiedFunctionReferences))
 		{
-
-			if(!searchFunctionStringForFunctionReferencesRecursive(firstFileInIncludeFileList, currentReference->firstFileInBelowListContainer, currentReferenceInFunctionReferenceList, currentReferenceInFunctionReferenceListRepeats, functionContentsString))
+			currentReference->identifiedFunctionReferences = true;
+		#endif
+			if(searchFunctionStringForFunctionReferences(firstFileInIncludeFileList, currentReference, currentReferenceInFunctionReferenceList, currentReferenceInFunctionReferenceListRepeats, functionContentsString, false))
 			{
-				result = false;
+				result = true;
 			}
+
+			if(currentReference->firstFileInBelowListContainer != NULL)
+			{
+				if(searchFunctionStringForFunctionReferencesRecursive(firstFileInIncludeFileList, currentReference->firstFileInBelowListContainer, currentReferenceInFunctionReferenceList, currentReferenceInFunctionReferenceListRepeats, functionContentsString))
+				{
+					result = true;
+				}
+			}
+		#ifdef CS_OPTIMISE_PREVENT_DUPLICATE_FUNCTION_CONNECTIONS
 		}
+		#endif
 
 		currentReferenceContainer = currentReferenceContainer->next;
 	}
@@ -989,110 +1164,246 @@ bool CSoperationsClass::searchFunctionStringForFunctionReferencesRecursive(const
 
 }
 
-bool CSoperationsClass::searchFunctionStringForFunctionReferences(const CSfile* firstFileInIncludeFileList, const CSfile* fileNameContainingFunctionReferencesToSearchFor, CSfunction** currentReferenceInFunctionReferenceList, CSfunction** currentReferenceInFunctionReferenceListRepeats, string* functionContentsString)
+#ifdef CS_OPTIMISE_PREVENT_DUPLICATE_FUNCTION_CONNECTIONS
+void CSoperationsClass::searchFunctionStringForFunctionReferencesRecursiveReset(const CSfileContainer* firstFileNameInLayerContainingFunctionReferencesToSearchFor)
 {
-	bool result = true;
+	const CSfileContainer* currentReferenceContainer = firstFileNameInLayerContainingFunctionReferencesToSearchFor;
+	while(currentReferenceContainer->next != NULL)
+	{
+		CSfile* currentReference = currentReferenceContainer->fileObject;
+		
+		if(currentReference->identifiedFunctionReferences)
+		{
+			currentReference->identifiedFunctionReferences = false;
+
+			if(currentReference->firstFileInBelowListContainer != NULL)
+			{
+				searchFunctionStringForFunctionReferencesRecursiveReset(currentReference->firstFileInBelowListContainer);
+			}
+		}
+		
+		currentReferenceContainer = currentReferenceContainer->next;
+	}
+}
+#endif
+
+
+bool CSoperationsClass::searchFunctionStringForFunctionReferences(const CSfile* firstFileInIncludeFileList, const CSfile* fileNameContainingFunctionReferencesToSearchFor, CSfunction** currentReferenceInFunctionReferenceList, CSfunction** currentReferenceInFunctionReferenceListRepeats, string* functionContentsString, const bool currentFile)
+{
+	bool result = false;
 
 	//only search those file names which include aboveLevelObject.h
 
 	//find reference to this file
 
-
+	//cout << "CSoperationsClass::searchFunctionStringForFunctionReferences: " << endl;
+	
 	//now search function string for all functions within referenceFound;
 	//const CSfunction* currentFunction = foundReference->firstFunctionInFunctionList;
-	//if(fileNameContainingFunctionReferencesToSearchFor->firstFunctionInFunctionList != NULL)	//added 3i16b
-	//{
+	if(fileNameContainingFunctionReferencesToSearchFor->firstFunctionInFunctionList == NULL)	//added CS3i16b, removed _?, check readded 3o2a
+	{
+		cerr << "CSoperationsClass::searchFunctionStringForFunctionReferences error: (fileNameContainingFunctionReferencesToSearchFor->firstFunctionInFunctionList == NULL) - potential infinite include loop detected" << endl;
+		exit(EXIT_ERROR);
+	}
+	else
+	{
 		CSfunction* currentFunction = fileNameContainingFunctionReferencesToSearchFor->firstFunctionInFunctionList;
-
+		
+		#ifdef CS_DEBUG_IDENTIFY_INFINITE_INCLUDE_RECURSION_OLD
+		cout << "currentFunction->nameFull = " << currentFunction->nameFull << endl;
+		#endif
+		
 		while(currentFunction->next != NULL)
 		{
-
 			//now search the function string for this function reference;
 
-			int startPosOfFunctionReferenceInFunction = 0;
+			//cout << "currentFunction->functionText = " << currentFunction->functionText << endl;
+
 			bool firstTimeFound = true;
-			//cout << "function->functionText = " << function->functionText << endl;
-			while(CPP_STRING_FIND_RESULT_FAIL_VALUE != (startPosOfFunctionReferenceInFunction = functionContentsString->find((currentFunction->name + CHAR_OPEN_BRACKET), startPosOfFunctionReferenceInFunction)))
+			
+			#ifdef CS_SUPPORT_GENERATED_CPP_CODE_NO_BACKWARD_COMPATIBILITY
+			if(currentFile)
 			{
-				//added condition CS 3f1b - ensure previous character is not a letter (this ensures that ABCfunctionName is not found when searching for functionName)
-				if((startPosOfFunctionReferenceInFunction == 0) || !SHAREDvars.charInCharArray((*functionContentsString)[startPosOfFunctionReferenceInFunction-1], functionOrVariableNameCharacters, CS_FUNCTION_OR_VARIABLE_NAME_CHARACTERS_NUMBER_OF_TYPES))
+				//search for private (within class) function executions:			
+			#endif
+				string functionReferenceToFind = currentFunction->name + CHAR_OPEN_BRACKET;
+				if(searchFunctionStringForFunctionReference(firstFileInIncludeFileList, currentFunction, functionReferenceToFind, &firstTimeFound, currentReferenceInFunctionReferenceList, currentReferenceInFunctionReferenceListRepeats, functionContentsString))
 				{
-
-					//function reference found, add it to the function reference list of the funciton;
-
-					if(firstTimeFound)
-					{
-						(*currentReferenceInFunctionReferenceList)->name = currentFunction->name;
-						(*currentReferenceInFunctionReferenceList)->isFunctionReference = true;
-						#ifdef CS_MATCH_FUNCTION_REFERENCES_WITH_CORRECT_NUMBER_OF_ARGUMENTS
-						identifyFunctionReferenceArguments((*currentReferenceInFunctionReferenceList), functionContentsString, startPosOfFunctionReferenceInFunction);
-						#endif
-
-						CSfunction* newReferenceInFunctionReferenceList = new CSfunction();
-						(*currentReferenceInFunctionReferenceList)->next = newReferenceInFunctionReferenceList;
-						(*currentReferenceInFunctionReferenceList) = (*currentReferenceInFunctionReferenceList)->next;
-
-						firstTimeFound = false;
-					}
-
-					#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST
-					(*currentReferenceInFunctionReferenceListRepeats)->name = currentFunction->name;
-					(*currentReferenceInFunctionReferenceListRepeats)->isFunctionReference = true;
-
-					int indexToFunctionReference = startPosOfFunctionReferenceInFunction;
-					int indexOfFunctionReferenceStartOfLine = functionContentsString->rfind("\n", indexToFunctionReference);
-					string functionReferenceStartLine = functionContentsString->substr(indexOfFunctionReferenceStartOfLine, indexToFunctionReference-indexOfFunctionReferenceStartOfLine);
-					int functionReferenceIndentationInCfileTemp = 0;
-					for(int i=0; i<functionReferenceStartLine.length(); i++)
-					{
-						if(functionReferenceStartLine[i] == CS_SOURCE_FILE_INDENTATION_CHARACTER)
-						{
-							functionReferenceIndentationInCfileTemp++;
-						}
-					}
-					(*currentReferenceInFunctionReferenceListRepeats)->functionReferenceIndentation = functionReferenceIndentationInCfileTemp;
-					(*currentReferenceInFunctionReferenceListRepeats)->functionReferenceCharacterIndex = indexToFunctionReference;
-
-					#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
-					identifyFunctionReferenceArguments((*currentReferenceInFunctionReferenceListRepeats), functionContentsString, startPosOfFunctionReferenceInFunction);
+					#ifdef CS_DEBUG_FUNCTION_REFERENCE_SEARCH
+					cout << "CSoperationsClass::searchFunctionStringForFunctionReferences: currentFile: local function found; functionReferenceToFind = " << functionReferenceToFind << endl;
 					#endif
-
-					CSfunction* newReferenceInFunctionReferenceListRepeats = new CSfunction();
-					(*currentReferenceInFunctionReferenceListRepeats)->next = newReferenceInFunctionReferenceListRepeats;
-					(*currentReferenceInFunctionReferenceListRepeats) = (*currentReferenceInFunctionReferenceListRepeats)->next;
-					#endif
-
-					startPosOfFunctionReferenceInFunction++;
+					result = true;
 				}
-				else
+			#ifdef CS_SUPPORT_GENERATED_CPP_CODE_NO_BACKWARD_COMPATIBILITY
+			}
+			#endif
+			#ifdef CS_SUPPORT_GENERATED_CPP_CODE
+			if(!currentFile)
+			{
+				//search for public (out of class) function executions:
+				if(currentFunction->className != "")
 				{
-					startPosOfFunctionReferenceInFunction++;
+					int classNameLength = (currentFunction->className).length();
+					string classNameAppendDetected = (currentFunction->className).substr(classNameLength-CS_CLASS_NAME_APPEND.length(),CS_CLASS_NAME_APPEND.length());
+					if(classNameAppendDetected == CS_CLASS_NAME_APPEND)
+					{
+						//function class name ends with "Class" (function is expected to have been referenced via a default class object of name format: variant1/variant2)
+
+						string classObjectNameBase = (currentFunction->className).substr(0, classNameLength-CS_CLASS_NAME_APPEND.length());
+
+						//variant 1; class object declaration: [fileName]Class [fileName], functionNameToFind = [classNameMinusClass].functionName(
+						string functionReferenceToFind = classObjectNameBase + CS_OBJECT_DELIMITER + currentFunction->name + CHAR_OPEN_BRACKET;
+						//cout << "CSoperationsClass::searchFunctionStringForFunctionReferences: !currentFile: variant 1 search; functionReferenceToFind = " << functionReferenceToFind << endl;
+						if(searchFunctionStringForFunctionReference(firstFileInIncludeFileList, currentFunction, functionReferenceToFind, &firstTimeFound, currentReferenceInFunctionReferenceList, currentReferenceInFunctionReferenceListRepeats, functionContentsString))
+						{
+							#ifdef CS_DEBUG_FUNCTION_REFERENCE_SEARCH
+							cout << "CSoperationsClass::searchFunctionStringForFunctionReferences: !currentFile: variant 1 found; functionReferenceToFind = " << functionReferenceToFind << endl;
+							#endif
+							result = true;
+						}
+
+						//variant 2; class object declaration: [fileNameThatEndsWithClass]Class [fileNameThatEndsWithClass]Object, functionNameToFind = [classNameMinusClass]Object.functionName(
+						functionReferenceToFind = classObjectNameBase + CS_CLASS_OBJECT_NAME_APPEND + CS_OBJECT_DELIMITER + currentFunction->name + CHAR_OPEN_BRACKET;
+						//cout << "CSoperationsClass::searchFunctionStringForFunctionReferences: !currentFile: variant 2 search; functionReferenceToFind = " << functionReferenceToFind << endl;
+						if(searchFunctionStringForFunctionReference(firstFileInIncludeFileList, currentFunction, functionReferenceToFind, &firstTimeFound, currentReferenceInFunctionReferenceList, currentReferenceInFunctionReferenceListRepeats, functionContentsString))
+						{
+							#ifdef CS_DEBUG_FUNCTION_REFERENCE_SEARCH
+							cout << "CSoperationsClass::searchFunctionStringForFunctionReferences: !currentFile: variant 2 found; functionReferenceToFind = " << functionReferenceToFind << endl;
+							#endif
+							result = true;
+						}
+						
+						#ifdef CS_SUPPORT_GENERATED_CPP_CODE_SUPPORT_INLINE_CLASS_OBJECT_DECLARATION
+						//variant 3; class object declaration inline: [fileName]Class(), functionNameToFind = [classNameMinusClass]().functionName(
+						functionReferenceToFind = currentFunction->className + CS_CLASS_OBJECT_INLINE_DECLARATION_APPEND + CS_OBJECT_DELIMITER + currentFunction->name + CHAR_OPEN_BRACKET;
+						//cout << "CSoperationsClass::searchFunctionStringForFunctionReferences: !currentFile: variant 3 search; functionReferenceToFind = " << functionReferenceToFind << endl;
+						if(searchFunctionStringForFunctionReference(firstFileInIncludeFileList, currentFunction, functionReferenceToFind, &firstTimeFound, currentReferenceInFunctionReferenceList, currentReferenceInFunctionReferenceListRepeats, functionContentsString))
+						{
+							#ifdef CS_DEBUG_FUNCTION_REFERENCE_SEARCH
+							cout << "CSoperationsClass::searchFunctionStringForFunctionReferences: !currentFile: variant 3 found; functionReferenceToFind = " << functionReferenceToFind << endl;
+							#endif
+							result = true;
+						}
+						#endif
+					}
+					else
+					{
+						//class name does not end with Class (no default class object declared)
+					}
 				}
 			}
-
+			#endif
+			
 			currentFunction = currentFunction->next;
 		}
-	//}
+	}
+
+	return result;
+}
+
+bool CSoperationsClass::searchFunctionStringForFunctionReference(const CSfile* firstFileInIncludeFileList, const CSfunction* currentFunction, const string functionReferenceToFind, bool* firstTimeFound, CSfunction** currentReferenceInFunctionReferenceList, CSfunction** currentReferenceInFunctionReferenceListRepeats, string* functionContentsString)
+{
+	bool result = false;
+
+	int startPosOfFunctionReferenceInFunction = 0;
+
+	while(CPP_STRING_FIND_RESULT_FAIL_VALUE != (startPosOfFunctionReferenceInFunction = functionContentsString->find(functionReferenceToFind, startPosOfFunctionReferenceInFunction)))
+	{
+		//added condition CS 3f1b - ensure previous character is not a letter (this ensures that ABCfunctionName is not found when searching for functionName)
+		if((startPosOfFunctionReferenceInFunction == 0) || !SHAREDvars.charInCharArray((*functionContentsString)[startPosOfFunctionReferenceInFunction-1], functionOrVariableNameCharacters, CS_FUNCTION_OR_VARIABLE_NAME_CHARACTERS_NUMBER_OF_TYPES))
+		{
+			result = true;
+			
+			//function reference found, add it to the function reference list of the funciton;
+			
+			#ifdef CS_OPTIMISE_PREVENT_DUPLICATE_FUNCTION_CONNECTIONS
+			if(firstTimeFound)
+			{
+			#endif
+				#ifdef CS_DEBUG_IDENTIFY_CRASH_BAD_FUNCTION_REFERENCE_IN_COMMENTS
+				cout << "currentFunction->nameFull = " << currentFunction->nameFull << endl;
+				#endif
+				
+				(*currentReferenceInFunctionReferenceList)->name = currentFunction->name;
+				(*currentReferenceInFunctionReferenceList)->isFunctionReference = true;
+				#ifdef CS_SUPPORT_GENERATED_CPP_CODE
+				(*currentReferenceInFunctionReferenceList)->className = currentFunction->className;
+				#endif
+				#ifdef CS_MATCH_FUNCTION_REFERENCES_WITH_CORRECT_NUMBER_OF_ARGUMENTS
+				identifyFunctionReferenceArguments((*currentReferenceInFunctionReferenceList), functionContentsString, startPosOfFunctionReferenceInFunction, functionReferenceToFind);
+				#endif
+
+				CSfunction* newReferenceInFunctionReferenceList = new CSfunction();
+				(*currentReferenceInFunctionReferenceList)->next = newReferenceInFunctionReferenceList;
+				(*currentReferenceInFunctionReferenceList) = (*currentReferenceInFunctionReferenceList)->next;
+
+				*firstTimeFound = false;
+			#ifdef CS_OPTIMISE_PREVENT_DUPLICATE_FUNCTION_CONNECTIONS
+			}
+			#endif
+	
+			#ifdef CS_DEBUG_IDENTIFY_INFINITE_INCLUDE_RECURSION_OLD
+			cout << "found function reference in functionContents: functionReferenceToFind = " << functionReferenceToFind << endl;
+			#endif
+			
+			#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST
+			(*currentReferenceInFunctionReferenceListRepeats)->name = currentFunction->name;
+			(*currentReferenceInFunctionReferenceListRepeats)->isFunctionReference = true;
+			#ifdef CS_SUPPORT_GENERATED_CPP_CODE
+			(*currentReferenceInFunctionReferenceListRepeats)->className = currentFunction->className;
+			#endif
+				
+			int indexToFunctionReference = startPosOfFunctionReferenceInFunction;
+			int indexOfFunctionReferenceStartOfLine = functionContentsString->rfind("\n", indexToFunctionReference);
+			string functionReferenceStartLine = functionContentsString->substr(indexOfFunctionReferenceStartOfLine, indexToFunctionReference-indexOfFunctionReferenceStartOfLine);
+			int functionReferenceIndentationInCfileTemp = 0;
+			for(int i=0; i<functionReferenceStartLine.length(); i++)
+			{
+				if(functionReferenceStartLine[i] == CS_SOURCE_FILE_INDENTATION_CHARACTER)
+				{
+					functionReferenceIndentationInCfileTemp++;
+				}
+			}
+			(*currentReferenceInFunctionReferenceListRepeats)->functionReferenceIndentation = functionReferenceIndentationInCfileTemp;
+			(*currentReferenceInFunctionReferenceListRepeats)->functionReferenceCharacterIndex = indexToFunctionReference;
+
+			#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
+			identifyFunctionReferenceArguments((*currentReferenceInFunctionReferenceListRepeats), functionContentsString, startPosOfFunctionReferenceInFunction, functionReferenceToFind);
+			#endif
+
+			CSfunction* newReferenceInFunctionReferenceListRepeats = new CSfunction();
+			(*currentReferenceInFunctionReferenceListRepeats)->next = newReferenceInFunctionReferenceListRepeats;
+			(*currentReferenceInFunctionReferenceListRepeats) = (*currentReferenceInFunctionReferenceListRepeats)->next;
+			#endif
+
+			startPosOfFunctionReferenceInFunction++;
+		}
+		else
+		{
+			startPosOfFunctionReferenceInFunction++;
+		}
+	}
 
 	return result;
 }
 
 
 //limitations; doesn't support couts containing function references, e.g. "cout << "Error: getFloatArgument(" << keystr << ")" << endl;" (NB '<' is interpreted as CLASS_TYPE_OPEN_TAG)
-void CSoperationsClass::identifyFunctionReferenceArguments(CSfunction* currentReferenceInFunctionReferenceList, string* functionContentsString, int indexToFunctionObject)
+void CSoperationsClass::identifyFunctionReferenceArguments(CSfunction* currentReferenceInFunctionReferenceList, string* functionContentsString, int indexToFunctionObject, const string functionReferenceToFind)
 {
 	//designed to support embedded function references (although this is not currently used by CSgenerateConstFunctionArgumentCode)
-
 
 	CSfunctionArgument* currentFunctionArgumentInFunctionReference = currentReferenceInFunctionReferenceList->firstFunctionArgumentInFunction;
 
 	string functionName = currentReferenceInFunctionReferenceList->name;
 
-	int startPositionOfFunctionBrackets = functionContentsString->find(CHAR_OPEN_BRACKET, indexToFunctionObject);
-	int endPositionOfFunctionBracketsTemp = functionContentsString->find(CHAR_CLOSE_BRACKET, indexToFunctionObject);
-	if(startPositionOfFunctionBrackets != indexToFunctionObject+functionName.length())
+	int startPositionOfFunctionBrackets = functionContentsString->find(CHAR_OPEN_BRACKET, indexToFunctionObject+functionReferenceToFind.length()-1);
+	int endPositionOfFunctionBracketsTemp = functionContentsString->find(CHAR_CLOSE_BRACKET, indexToFunctionObject+functionReferenceToFind.length()-1);
+	if(startPositionOfFunctionBrackets != indexToFunctionObject+functionReferenceToFind.length()-1)
 	{
 		cerr << "identifyFunctionReferenceArguments{} error: startPositionOfFunctionBrackets != indexToFunctionObject+functionName.length()" << endl;
+		cerr << "functionContentsString = " << *functionContentsString << endl;
+		cerr << "functionReferenceToFind = " << functionReferenceToFind << endl;
 		exit(EXIT_ERROR);
 	}
 	bool functionHasArguments = false;
@@ -1336,7 +1647,7 @@ string CSoperationsClass::generateSourceFileNameFromHeaderFileName(const string 
 
 
 
-void CSoperationsClass::attachFunctionReferenceTargets(CSfileContainer* firstObjectInAboveLevelBelowListContainer)
+void CSoperationsClass::attachFunctionReferenceTargets(CSfileContainer* firstObjectInAboveLevelBelowListContainer, int level)
 {
 	CSfileContainer* currentFileObjectContainer = firstObjectInAboveLevelBelowListContainer;
 	//cout << "attachFunctionReferenceTargets{}:" << endl;
@@ -1344,49 +1655,67 @@ void CSoperationsClass::attachFunctionReferenceTargets(CSfileContainer* firstObj
 	while(currentFileObjectContainer->next != NULL)
 	{
 		CSfile* currentFileObject = currentFileObjectContainer->fileObject;
-		//cout << "currentFileObject = " << currentFileObject->name << endl;
-
-		CSfunction* currentFunctionObject = currentFileObject->firstFunctionInFunctionList;
-		while(currentFunctionObject->next != NULL)
+		
+		#ifdef CS_OPTIMISE_FUNCTION_REFERENCE_TARGET_SEARCH
+		if(!(currentFileObject->attachedReferenceTargets))
 		{
-			//cout << "currentFunctionObject = " << currentFunctionObject->name << endl;
-			CSfunction* currentFunctionReference = currentFunctionObject->firstReferenceInFunctionReferenceList;
-			while(currentFunctionReference->next != NULL)
-			{
-				//cout << "1 currentFunctionReference = " << currentFunctionReference->name << endl;
-				CSfile* fileObjectHoldingFunction = NULL;
-				CSfunction* functionReferenceTarget = NULL;		//function pertaining to currentFunctionReference
-				if(CSreferenceContainerClass.findFunctionReferenceTarget(currentFunctionReference, currentFileObject, &fileObjectHoldingFunction, &functionReferenceTarget, true))
-				{
-					currentFunctionReference->functionReferenceTarget = functionReferenceTarget;
-					currentFunctionReference->functionReferenceTargetFileOwner = fileObjectHoldingFunction;
-				}
-				currentFunctionReference = currentFunctionReference->next;
-			}
-
-			#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST
-			currentFunctionReference = currentFunctionObject->firstReferenceInFunctionReferenceListRepeats;
-			while(currentFunctionReference->next != NULL)
-			{
-				//cout << "2 currentFunctionReference = " << currentFunctionReference->name << endl;
-				CSfile* fileObjectHoldingFunction = NULL;
-				CSfunction* functionReferenceTarget = NULL;		//function pertaining to currentFunctionReference
-				if(CSreferenceContainerClass.findFunctionReferenceTarget(currentFunctionReference, currentFileObject, &fileObjectHoldingFunction, &functionReferenceTarget, true))
-				{
-					currentFunctionReference->functionReferenceTarget = functionReferenceTarget;
-					currentFunctionReference->functionReferenceTargetFileOwner = fileObjectHoldingFunction;
-				}
-				currentFunctionReference = currentFunctionReference->next;
-			}
+			currentFileObject->attachedReferenceTargets = true;
+		#endif
+		
+			#ifdef CS_DISPLAY_INCLUDE_FUNCTION_PARSING
+			printLevelIndentation(level);
+			cout << "CSoperationsClass::attachFunctionReferenceTargets: currentFileObject = " << currentFileObject->name << endl;
 			#endif
+			
+			CSfunction* currentFunctionObject = currentFileObject->firstFunctionInFunctionList;
+			while(currentFunctionObject->next != NULL)
+			{
+				//cout << "currentFunctionObject = " << currentFunctionObject->name << endl;
+				
+				CSfunction* currentFunctionReference = currentFunctionObject->firstReferenceInFunctionReferenceList;
+				while(currentFunctionReference->next != NULL)
+				{
+					//printLevelIndentation(level+1);
+					//cout << "\t1 currentFunctionReference = " << currentFunctionReference->nameFull << endl;
+					
+					CSfile* fileObjectHoldingFunction = NULL;
+					CSfunction* functionReferenceTarget = NULL;		//function pertaining to currentFunctionReference
+					if(CSreferenceContainerClass.findFunctionReferenceTarget(currentFunctionReference, currentFileObject, &fileObjectHoldingFunction, &functionReferenceTarget, true))
+					{
+						currentFunctionReference->functionReferenceTarget = functionReferenceTarget;
+						currentFunctionReference->functionReferenceTargetFileOwner = fileObjectHoldingFunction;
+					}
+					currentFunctionReference = currentFunctionReference->next;
+				}
 
-			currentFunctionObject = currentFunctionObject->next;
-		}
+				#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST
+				currentFunctionReference = currentFunctionObject->firstReferenceInFunctionReferenceListRepeats;
+				while(currentFunctionReference->next != NULL)
+				{
+					//printLevelIndentation(level+1);
+					//cout << "\t2 currentFunctionReference = " << currentFunctionReference->nameFull << endl;
+					
+					CSfile* fileObjectHoldingFunction = NULL;
+					CSfunction* functionReferenceTarget = NULL;		//function pertaining to currentFunctionReference
+					if(CSreferenceContainerClass.findFunctionReferenceTarget(currentFunctionReference, currentFileObject, &fileObjectHoldingFunction, &functionReferenceTarget, true))
+					{
+						currentFunctionReference->functionReferenceTarget = functionReferenceTarget;
+						currentFunctionReference->functionReferenceTargetFileOwner = fileObjectHoldingFunction;
+					}
+					currentFunctionReference = currentFunctionReference->next;
+				}
+				#endif
 
-		if(currentFileObject->firstFileInBelowListContainer != NULL)
-		{
-			attachFunctionReferenceTargets(currentFileObject->firstFileInBelowListContainer);
+				currentFunctionObject = currentFunctionObject->next;
+			}
+
+			if(currentFileObject->firstFileInBelowListContainer != NULL)
+			{
+				attachFunctionReferenceTargets(currentFileObject->firstFileInBelowListContainer, level+1);
+			}
+		#ifdef CS_OPTIMISE_FUNCTION_REFERENCE_TARGET_SEARCH
 		}
+		#endif
 
 		currentFileObjectContainer = currentFileObjectContainer->next;
 	}
@@ -1435,3 +1764,13 @@ string CSoperationsClass::extractFunctionArgumentName(string* argumentText, cons
 	}
 	return fullVariableName;
 }
+
+void CSoperationsClass::printLevelIndentation(int level)
+{
+	for(int i= 0; i<level; i++)
+	{
+		cout << "\t";
+	}
+}
+			
+			

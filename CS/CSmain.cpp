@@ -26,7 +26,7 @@
  * File Name: CSmain.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3o1a 05-November-2020
+ * Project Version: 3o2a 08-November-2020
  * /
  *******************************************************************************/
 
@@ -47,8 +47,13 @@ static char errmessage[] = "Usage:  CS.exe [options]"
 "\n\t-oppm [string]          : code structure display .ppm output filename (def: codeStructureNet.ppm)"
 "\n\t-ohtml [string]         : code structure display .html output filename (def: codeStructureNet.html) (use single file, else HTML file names are auto generated on a per C file basis)"
 "\n\t-oall [string]          : code structure display .svg/.ldr/.ppm default generic output filename (def: codeStructureNet)"
+#ifdef CS_SUPPORT_GENERATED_CPP_CODE
+"\n\t-file [string]          : top level source file name (eg, main.cpp) [compulsory]"
+"\n\t-function [string]      : top level function name referenced within file {recommended: not defined in cpp file, declared within include hpp file} (eg, executePROJ for bool PROJmainClass::executePROJ) [compulsory]"
+#else
 "\n\t-file [string]          : top level source file name (eg, main.c) [compulsory]"
-"\n\t-function [string]      : top level function name referenced within file {recommended: not defined in file, declared within include h file} (eg, x for int x()) [compulsory]"
+"\n\t-function [string]      : top level function name referenced within file {recommended: not defined in c file, declared within include h file} (eg, x for int x()) [compulsory]"
+#endif
 "\n\t-show                   : display output in opengl"
 "\n\t-width [int]            : raster graphics width in pixels (def: 1600)"
 "\n\t-height [int]           : raster graphics height in pixels (def: 1000)"
@@ -75,7 +80,37 @@ static char errmessage[] = "Usage:  CS.exe [options]"
 "\n"
 "\n";
 
-static char knownLimitationsMsg[] = "* CS is designed for non-object oriented C (it does not support C++ classes)"
+#ifdef CS_SUPPORT_GENERATED_CPP_CODE
+static char knownLimitationsMsg[] = "CS_SUPPORT_GENERATED_CPP_CODE:"
+"\n* CS is designed for non-object oriented CPP (it supports C++ classes, but will not track object data flow, only function execution flow)"
+"\n* all .cpp and .hpp files that wish to be parsed/added to tree must be contained in the same directory"
+"\n* if the CS program does not stop, there might be loops in the include file structure (eg a.cpp includes b.cpp, b.cpp includes a.cpp)"
+"\n* CS supports c/c++ style commenting"
+"\n* CS_SUPPORT_GENERATED_CPP_CODE: functions in .hpp files can be contained within a class owner (e.g. class PROJfileClass\\n{...\\n};)"
+"\n* CS_SUPPORT_GENERATED_CPP_CODE: functions in .cpp files can be defined with respect to their class owner: e.g. bool PROJfileClass::functionName()"
+"\n* function definitions in .cpp files must not have leading white space, and should be contained on a single line"
+"\n* function definitions in .cpp files must end with a } without any leading white space"
+#ifdef CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIERS
+"\n* CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIERS: function declarations for functions that wish to be parsed/added to tree must be contained in .hpp files within their respective class (e.g. class PROJfileClass), can have preceding white space and access specifiers (public:/private:/protected:), but must be contained on a single line: e.g. private: bool functionName();"
+#else
+"\n* !CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIERS: function declarations for functions that wish to be parsed/added to tree must be contained in .hpp files within their respective class (e.g. class PROJfileClass), can have preceding white space, but must be contained on a single line: e.g. bool functionName();"
+#endif
+"\n* CS does not support relative paths in #include"
+"\n* CS requires include/header files that wish to be parsed/added to tree to be delimited with \" \" rather than < >"
+"\n* CS requires a single space between #include and \"this.hpp\""
+"\n* CS may produce large SVG files (Eg when functions are enabled via enablefunctions) which must be viewed with a viewer capable of dynamic zoom, eg, inkscape"
+"\n* CS is not designed to operate with function pointers (and object orientated code)"
+"\n* the first include file in the top level source file (eg PROJECTmain.c) must declare the top level function name (eg main)"
+"\n* make sure the output folder is clear of all output files (ie svg/html files of the same name as expected output files)"
+"\n* function contents cannot include a reference to themselves in comments (required for HTML generation function reference list and generateoo)"
+"\n* function contents cannot include a reference to themselves in cout statements (e.g. cout << \"dothis()\")"
+"\n* function contents cannot include a reference to their name in cout statements followed by an equals sign, unless it is referenced at the start of the comment (e.g. cout << \"generateHTMLdocumentationMode = \" ...)"
+"\n* CS does not support 2 identical function declarations (with identical arguments) for a single function in a header file (separated by preprocessor definitions)"
+"\n* CS does not support 2 function declarations with different arguments for a single function in a header file (separated by preprocessor definitions)"
+"\n* CS does not support overloaded functions with the same number of arguments (required for precise referencing)";
+#else
+static char knownLimitationsMsg[] = "!CS_SUPPORT_GENERATED_CPP_CODE:"
+"\n* CS is designed for non-object oriented C (it does not support C++ classes)"
 "\n* all .c and .h files that wish to be parsed/added to tree must be contained in the same directory"
 "\n* if the CS program does not stop, there might be loops in the include file structure (eg a.c includes b.c, b.c includes a.c)"
 "\n* CS supports c/c++ style commenting"
@@ -93,9 +128,9 @@ static char knownLimitationsMsg[] = "* CS is designed for non-object oriented C 
 "\n* function contents cannot include a reference to themselves in cout statements (e.g. cout << \"dothis()\")"
 "\n* function contents cannot include a reference to their name in cout statements followed by an equals sign, unless it is referenced at the start of the comment (e.g. cout << \"generateHTMLdocumentationMode = \" ...)"
 "\n* CS does not support 2 identical function declarations (with identical arguments) for a single function in a header file (separated by preprocessor definitions)"
-"\n* CS does not support 2 function declarations with different arguments for a single function in a header file (separated by preprocessor defintions)"
+"\n* CS does not support 2 function declarations with different arguments for a single function in a header file (separated by preprocessor definitions)"
 "\n* CS does not support overloaded functions with the same number of arguments (required for precise referencing)";
-
+#endif
 
 
 int main(const int argc, const char** argv)
@@ -305,7 +340,7 @@ int main(const int argc, const char** argv)
 
 	if(SHAREDvarsClass().argumentExists(argc, argv, "-version"))
 	{
-		cout << "CS.exe - Project Version: 3o1a 05-November-2020" << endl;
+		cout << "CS.exe - Project Version: 3o2a 08-November-2020" << endl;
 		exit(EXIT_OK);
 	}
 

@@ -26,7 +26,7 @@
  * File Name: CSfunctionClass.hpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3o1a 05-November-2020
+ * Project Version: 3o2a 08-November-2020
  * /
  *******************************************************************************/
 
@@ -38,6 +38,21 @@
 
 #define MAX_INCLUDE_DEPTH_FUNCTION (20)	//for a function within a file
 
+
+#ifdef CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIERS
+	#define CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIER_UNKNOWN 0
+	#define CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIER_PUBLIC 1
+	#define CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIER_PRIVATE 2
+	#define CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIER_PROTECTED 3
+	#define CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIER_UNKNOWN_NAME "unknown:"
+	#define CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIER_PUBLIC_NAME "public:"
+	#define CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIER_PRIVATE_NAME "private:"
+	#define CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIER_PROTECTED_NAME "protected:"
+	#define CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIER_NUMBER_OF_TYPES (4)
+	static string functionAccessSpecifierNameArray[CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIER_NUMBER_OF_TYPES] = {CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIER_UNKNOWN_NAME, CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIER_PUBLIC_NAME, CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIER_PRIVATE_NAME, CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIER_PROTECTED_NAME};
+#endif
+	
+	
 class CSfunctionArgument
 {
 public:
@@ -98,7 +113,7 @@ public:
 	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS
 	bool functionArgumentConstsIdentified;
 	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_DETECT_ASSIGNMENT_OF_ALIASES
-	bool parseSecondaryReferencesOnly;	//added 3h6a
+	bool parseSecondaryReferencesOnly;	//added CS3h6a
 	#endif
 	#ifdef CS_GENERATE_CONST_FUNCTION_ARGUMENTS_PERFORM_SEPARATE_PASSES_TO_SUPPORT_RECURSION
 	bool parseSecondaryReferencesAndModificationsOnly;
@@ -128,8 +143,17 @@ public:
 	#ifdef CS_HTML_DOCUMENTATION_RECORD_FUNCTION_INDENTATION
 	int functionReferenceIndentation;
 	#endif
-	CSfunction* functionReferenceTarget;	//added 3h1a
-	CSfile* functionReferenceTargetFileOwner;	//added 3h1a
+	CSfunction* functionReferenceTarget;	//added CS3h1a
+	CSfile* functionReferenceTargetFileOwner;	//added CS3h1a
+	
+	string functionType;	//added CS3o2a - not used
+	string functionArguments;	//added CS3o2a - not used
+	#ifdef CS_SUPPORT_GENERATED_CPP_CODE
+	string className;
+	#ifdef CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIERS
+	int functionAccessSpecifierType;
+	#endif
+	#endif
 };
 
 

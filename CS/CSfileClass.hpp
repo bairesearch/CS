@@ -26,7 +26,7 @@
  * File Name: CSfileClass.hpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3o1a 05-November-2020
+ * Project Version: 3o2a 08-November-2020
  * /
  *******************************************************************************/
 
@@ -64,6 +64,7 @@ public:
 	bool HTMLgenerated;	//file/function HTML generated
 
 	CSfileContainer* firstReferenceContainerInAboveReferenceList;
+	bool attachedReferenceTargets;
 	bool printedTrace;
 	bool printedTraceReset;		//used for html generation
 	int maxFunctionPrintXAtAParticularY[MAX_INCLUDE_DEPTH_FILE];
@@ -81,6 +82,16 @@ public:
 	string sourceFileName;	//eg "x.c"
 	string sourceFileText;
 	string headerFileText;
+	#endif
+	
+	#ifdef CS_OPTIMISE_PREVENT_DUPLICATE_FUNCTION_CONNECTIONS
+	bool identifiedFunctionReferences;
+	#endif
+	#ifdef CS_OPTIMISE_CS_DRAW_YMAXPOS_SEARCH
+	bool drawSearched;
+	#endif
+	#ifdef CS_OPTIMISE_FUNCTION_REFERENCE_TARGET_SEARCH
+	bool functionReferenceTargetSearched;
 	#endif
 };
 

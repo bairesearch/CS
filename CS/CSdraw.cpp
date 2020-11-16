@@ -26,7 +26,7 @@
  * File Name: CSdraw.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3o1a 05-November-2020
+ * Project Version: 3o2a 08-November-2020
  * /
  *******************************************************************************/
 
@@ -399,24 +399,26 @@ LDreference* CSdrawClass::createFileObjectListBoxes(LDreference* currentReferenc
 	{
 		CSfile* currentFileObject = currentFileObjectContainer->fileObject;
 
-		/*
-		if(currentFileObjectContainer->name != "")
-		{
-			for(int i= 0; i<currentFileObject->level; i++)
-			{
-				cout << "\t";
-			}
-			cout << "currentFileObject->name = " << currentFileObject->name << endl;
-		}
-		*/
-
-
 		int maxYPos = 0;	//always print boxes with max Y pos...
+		#ifndef CS_SUPPORT_PREDEFINED_GRID
+		bool aPreviousReferenceWithThisNameHasbeenPrinted = hasPreviousReferenceWithThisNameHasBeenPrinted(currentFileObject->name, firstObjectInTopLevelBelowListContainer, &maxYPos);
+		#ifdef CS_OPTIMISE_CS_DRAW_YMAXPOS_SEARCH
+		hasPreviousReferenceWithThisNameHasBeenPrintedReset(firstObjectInTopLevelBelowListContainer);
+		#endif
+		#endif
 		int xPos = maxXAtAParticularY[maxYPos];
 
 		if(!(currentFileObject->printed))
 		{//add box and connections
 
+			#ifdef CS_DRAW_PARSING
+			for(int i= 0; i<currentFileObject->level; i++)
+			{
+				cout << "\t";
+			}
+			cout << "CSdrawClass::createFileObjectListBoxes: currentFileObject->name = " << currentFileObject->name << endl;
+			#endif
+			
 			#ifdef CS_SUPPORT_PREDEFINED_GRID
 			if(usePredefinedGrid)
 			{
@@ -455,7 +457,10 @@ LDreference* CSdrawClass::createFileObjectListBoxes(LDreference* currentReferenc
 
 			currentFileObject->printXIndex = xPos;
 			currentFileObject->printYIndex = maxYPos;
-
+			
+			//cout << "currentFileObject->printXIndex  = " << currentFileObject->printXIndex << endl;
+			//cout << "currentFileObject->printYIndex  = " << currentFileObject->printYIndex << endl;
+			
 			double vectorObjectsScaleFactor;
 			if(outputFunctionsConnectivity)
 			{
@@ -608,9 +613,74 @@ LDreference* CSdrawClass::createFileObjectListBoxes(LDreference* currentReferenc
 	return newCurrentReferenceInPrintList;
 }
 
+bool CSdrawClass::hasPreviousReferenceWithThisNameHasBeenPrinted(string name, CSfileContainer* firstObjectInTopLevelBelowListContainer, int *maxYPos)
+{
+	bool aPreviousReferenceWithThisNameHasbeenPrinted = false;
 
+	CSfileContainer* currentObject = firstObjectInTopLevelBelowListContainer;
 
+	while(currentObject->next != NULL)
+	{
+		CSfile* currentReference = currentObject->fileObject;
+		
+		#ifdef CS_OPTIMISE_CS_DRAW_YMAXPOS_SEARCH
+		if(!(currentReference->drawSearched))
+		{
+			currentReference->drawSearched = true;
+		#endif
+			if(currentReference->name == name)
+			{
+				if(currentReference->printed)
+				{
+					aPreviousReferenceWithThisNameHasbeenPrinted = true;
+				}
 
+				if(currentReference->level > *maxYPos)
+				{
+					*maxYPos = currentReference->level;
+				}
+			}
+
+			if(currentReference->firstFileInBelowListContainer != NULL)
+			{
+				if(hasPreviousReferenceWithThisNameHasBeenPrinted(name, currentReference->firstFileInBelowListContainer, maxYPos))
+				{
+					aPreviousReferenceWithThisNameHasbeenPrinted = true;
+				}
+			}
+		#ifdef CS_OPTIMISE_CS_DRAW_YMAXPOS_SEARCH
+		}
+		#endif
+
+		currentObject = currentObject->next;
+	}
+
+	return aPreviousReferenceWithThisNameHasbeenPrinted;
+}
+
+#ifdef CS_OPTIMISE_CS_DRAW_YMAXPOS_SEARCH
+void CSdrawClass::hasPreviousReferenceWithThisNameHasBeenPrintedReset(CSfileContainer* firstObjectInTopLevelBelowListContainer)
+{
+	CSfileContainer* currentObject = firstObjectInTopLevelBelowListContainer;
+
+	while(currentObject->next != NULL)
+	{
+		CSfile* currentReference = currentObject->fileObject;
+		
+		if(currentReference->drawSearched)
+		{
+			currentReference->drawSearched = false;
+			
+			if(currentReference->firstFileInBelowListContainer != NULL)
+			{
+				hasPreviousReferenceWithThisNameHasBeenPrintedReset(currentReference->firstFileInBelowListContainer);
+			}
+		}
+		
+		currentObject = currentObject->next;
+	}
+}
+#endif
 
 
 
@@ -707,8 +777,8 @@ LDreference* CSdrawClass::createFunctionObjectListBoxesAndConnections(LDreferenc
 
 	LDreference* newCurrentReferenceInPrintList = currentReferenceInPrintList;
 
-	if(!(aboveLevelFunctionObject->printedFunctionConnections))	//added CS 3d2g
-	{
+	//if(!(aboveLevelFunctionObject->printedFunctionConnections))	//added CS 3d2g
+	//{
 		int newFunctionLevel = functionLevel;
 
 		CSfunction* functionObject = NULL;
@@ -727,7 +797,6 @@ LDreference* CSdrawClass::createFunctionObjectListBoxesAndConnections(LDreferenc
 			bool printedPassSingleFileOnly = false;
 			if(useSingleFileOnly)
 			{
-
 				if(fileObject->name == *singleFileName)
 				{
 					if(functionObject->printed)
@@ -1041,7 +1110,7 @@ LDreference* CSdrawClass::createFunctionObjectListBoxesAndConnections(LDreferenc
 			}
 			#endif
 		}
-	}
+	//}
 
 	return newCurrentReferenceInPrintList;
 }

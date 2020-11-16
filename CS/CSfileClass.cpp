@@ -26,7 +26,7 @@
  * File Name: CSfileClass.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3o1a 05-November-2020
+ * Project Version: 3o2a 08-November-2020
  * /
  *******************************************************************************/
 
@@ -52,6 +52,7 @@ CSfile::CSfile(void)
 	HTMLgenerated = false;
 
 	firstReferenceContainerInAboveReferenceList = NULL;	//new CSfileContainer()  - no longer possible with forward declaration of CSfileContainer
+	attachedReferenceTargets = false;
 	printedTrace = false;
 	printedTraceReset = false;
 	for(int i=0; i<MAX_INCLUDE_DEPTH_FILE; i++)
@@ -72,6 +73,16 @@ CSfile::CSfile(void)
 	sourceFileName = "";
 	sourceFileText = "";
 	headerFileText = "";
+	#endif
+	
+	#ifdef CS_OPTIMISE_PREVENT_DUPLICATE_FUNCTION_CONNECTIONS
+	identifiedFunctionReferences = false;
+	#endif
+	#ifdef CS_OPTIMISE_CS_DRAW_YMAXPOS_SEARCH
+	drawSearched = false;
+	#endif
+	#ifdef CS_OPTIMISE_FUNCTION_REFERENCE_TARGET_SEARCH
+	functionReferenceTargetSearched = false;
 	#endif
 }
 

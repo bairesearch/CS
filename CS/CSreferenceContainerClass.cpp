@@ -26,7 +26,7 @@
  * File Name: CSreferenceContainerClass.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3o1a 05-November-2020
+ * Project Version: 3o2a 08-November-2020
  * /
  *******************************************************************************/
 
@@ -230,6 +230,9 @@ bool CSreferenceContainerClassClass::findFunctionReferenceTarget(const CSfunctio
 		{
 			foundPrintedReferenceWithName = true;
 		}
+		#ifdef CS_OPTIMISE_FUNCTION_REFERENCE_TARGET_SEARCH
+		findFunctionReferenceTargetRecurseReset(currentFileObject->firstFileInBelowListContainer);
+		#endif
 	}
 
 	//cout << "end findFunctionReferenceTarget{}:" << endl;
@@ -242,6 +245,14 @@ bool CSreferenceContainerClassClass::findFunctionReferenceTargetRecurse(const CS
 	bool foundPrintedReferenceWithName = false;
 
 	string name = functionReference->name;
+	#ifdef CS_SUPPORT_GENERATED_CPP_CODE
+	bool detectClass = false;
+	string className = functionReference->className;
+	if(className != "")
+	{
+		detectClass = true; 
+	}
+	#endif
 	int numArguments = countArgumentList(functionReference->firstFunctionArgumentInFunction);
 
 	constEffective CSfileContainer* currentFileObjectContainer = firstObjectInAboveLevelBelowListContainer;
@@ -249,47 +260,88 @@ bool CSreferenceContainerClassClass::findFunctionReferenceTargetRecurse(const CS
 	while(currentFileObjectContainer->next != NULL)
 	{
 		constEffective CSfile* currentFileObject = currentFileObjectContainer->fileObject;
-
-		constEffective CSfunction* currentFunctionObject = currentFileObject->firstFunctionInFunctionList;
-		while(currentFunctionObject->next != NULL)
+		
+		#ifdef CS_OPTIMISE_FUNCTION_REFERENCE_TARGET_SEARCH
+		if(!(currentFileObject->functionReferenceTargetSearched))
 		{
-			bool conditions = false;
-			if(currentFunctionObject->name == name)
+			currentFileObject->functionReferenceTargetSearched = true;
+		#endif
+			constEffective CSfunction* currentFunctionObject = currentFileObject->firstFunctionInFunctionList;
+			while(currentFunctionObject->next != NULL)
 			{
-				if(countArguments)
-				{
-					if(countArgumentList(currentFunctionObject->firstFunctionArgumentInFunction) == numArguments)
-					{
-						conditions = true;
-					}
-				}
-				else
+				bool conditions = false;
+				if(currentFunctionObject->name == name)
 				{
 					conditions = true;
+					#ifdef CS_SUPPORT_GENERATED_CPP_CODE
+					if(detectClass)
+					{
+						conditions = false;
+						if(currentFunctionObject->className == className)
+						{
+							conditions = true;
+						}
+					}
+					#endif
+					if(countArguments)
+					{
+						conditions = false;
+						if(countArgumentList(currentFunctionObject->firstFunctionArgumentInFunction) == numArguments)
+						{
+							conditions = true;
+						}
+					}
+				}
+				if(conditions)
+				{
+					*functionReferenceTarget = currentFunctionObject;
+					foundPrintedReferenceWithName = true;
+					*fileObjectHoldingFunction = currentFileObject;
+				}
+				currentFunctionObject = currentFunctionObject->next;
+			}
+			
+			if(currentFileObject->firstFileInBelowListContainer != NULL)
+			{
+				if(findFunctionReferenceTargetRecurse(functionReference, currentFileObject->firstFileInBelowListContainer, fileObjectHoldingFunction, functionReferenceTarget, countArguments))
+				{
+					foundPrintedReferenceWithName = true;
 				}
 			}
-			if(conditions)
-			{
-				*functionReferenceTarget = currentFunctionObject;
-				foundPrintedReferenceWithName = true;
-				*fileObjectHoldingFunction = currentFileObject;
-			}
-			currentFunctionObject = currentFunctionObject->next;
-		}
 
-		if(currentFileObject->firstFileInBelowListContainer != NULL)
-		{
-			if(findFunctionReferenceTargetRecurse(functionReference, currentFileObject->firstFileInBelowListContainer, fileObjectHoldingFunction, functionReferenceTarget, countArguments))
-			{
-				foundPrintedReferenceWithName = true;
-			}
+		#ifdef CS_OPTIMISE_FUNCTION_REFERENCE_TARGET_SEARCH
 		}
-
+		#endif
+		
 		currentFileObjectContainer = currentFileObjectContainer->next;
 	}
 
 	return foundPrintedReferenceWithName;
 }
+#ifdef CS_OPTIMISE_FUNCTION_REFERENCE_TARGET_SEARCH
+void CSreferenceContainerClassClass::findFunctionReferenceTargetRecurseReset(constEffective CSfileContainer* firstObjectInAboveLevelBelowListContainer)
+{
+	constEffective CSfileContainer* currentFileObjectContainer = firstObjectInAboveLevelBelowListContainer;
+	while(currentFileObjectContainer->next != NULL)
+	{
+		constEffective CSfile* currentFileObject = currentFileObjectContainer->fileObject;
+
+		if(currentFileObject->functionReferenceTargetSearched)
+		{
+			currentFileObject->functionReferenceTargetSearched = false;
+			
+			if(currentFileObject->firstFileInBelowListContainer != NULL)
+			{
+				findFunctionReferenceTargetRecurseReset(currentFileObject->firstFileInBelowListContainer);
+			}
+		}
+
+		currentFileObjectContainer = currentFileObjectContainer->next;
+	}
+}
+#endif
+
+
 
 int CSreferenceContainerClassClass::countArgumentList(const CSfunctionArgument* firstFunctionArgumentInFunction)
 {

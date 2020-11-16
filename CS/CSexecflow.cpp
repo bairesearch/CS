@@ -26,7 +26,7 @@
  * File Name: CSexecflow.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3o1a 05-November-2020
+ * Project Version: 3o2a 08-November-2020
  * /
  *******************************************************************************/
 
@@ -60,30 +60,32 @@ void CSexecflowClass::generateCodeStructure(const string topLevelFileName, int w
 	char* displayFileNamePPMcharstar = const_cast<char*>(outputPPMfileName.c_str());
 	char* outputFileNameSVGcharstar = const_cast<char*>(outputSVGfileName.c_str());
 
-	//1. for every f
-		//2. for every include f listed
+	//1. for every file
+		//2. for every include file listed
 			//3. add to ref list
 	//for every reference
 		//for every reference, and merge all
 
-	CSfileContainer* topLevelReferenceInListContainer = new CSfileContainer();
+	CSfileContainer* topLevelReferenceInListContainer = new CSfileContainer();	//cFile (eg, main.c)
 	CSfile* topLevelReferenceInList = new CSfile();
 	topLevelReferenceInList->name = topLevelFileName;
 	topLevelReferenceInListContainer->fileObject = topLevelReferenceInList;
-	CSfileContainer* firstObjectInTopLevelBelowListContainer = new CSfileContainer();
+	CSfileContainer* firstObjectInTopLevelBelowListContainer = new CSfileContainer();	//hFile (eg, main.h)
 	topLevelReferenceInList->firstFileInBelowListContainer = firstObjectInTopLevelBelowListContainer;
 
-	bool hFileFound = CSoperations.getIncludeFileNamesFromCorHfile(firstObjectInTopLevelBelowListContainer, topLevelReferenceInListContainer, topLevelReferenceInList, topLevelFileName, 0);
+	bool hFileFound = CSoperations.getIncludeFileNamesFromCorHfile(firstObjectInTopLevelBelowListContainer, topLevelReferenceInListContainer, topLevelReferenceInList, topLevelFileName, 0, true);
 	if(!hFileFound)
 	{
 		cout << "generateCodeStructure{} error: !hFileFound: " << topLevelFileName << endl;
 	}
-	//cout << "done getIncludeFileNamesFromCorHfile" << endl;
 
 	CSfile* firstReferenceInTopLevelBelowList = firstObjectInTopLevelBelowListContainer->fileObject;
 
-	CSoperations.attachFunctionReferenceTargets(firstObjectInTopLevelBelowListContainer);	//added 3h1a
-
+	#ifndef CS_DEBUG_DISABLE_FUNCTION_PARSING
+	CSoperations.attachFunctionReferenceTargets(firstObjectInTopLevelBelowListContainer, 0);	//added 3h1a
+	cout << "end attachFunctionReferenceTargets" << endl;
+	#endif
+	
 	CSdraw.initiateMaxXatParticularY();
 	LDreference* firstReferenceInPrintList = new LDreference();
 
@@ -92,13 +94,11 @@ void CSexecflowClass::generateCodeStructure(const string topLevelFileName, int w
 	XMLparserTag* firstTagInSVGFile = new XMLparserTag();
 	XMLparserTag* currentTagInSVGFile = firstTagInSVGFile;
 
-	//cout << "qt0" << endl;
-
-	#ifdef CS_SUPPORT_PREDEFINED_GRID
 	bool usePredefinedGrid = false;
+	XMLparserTag* firstTagInGridTag = NULL;
+	#ifdef CS_SUPPORT_PREDEFINED_GRID
 	bool tempResult = true;
 	XMLparserTag* firstTagInRulesTag = XMLparserClass.parseTagDownALevel(CSfirstTagInXMLfile, RULES_XML_TAG_rules, &tempResult);
-	XMLparserTag* firstTagInGridTag = NULL;
 	if(tempResult)
 	{
 		XMLparserTag* currentTag = firstTagInRulesTag;
@@ -121,21 +121,19 @@ void CSexecflowClass::generateCodeStructure(const string topLevelFileName, int w
 	}
 	#endif
 
-	//cout << "qt1" << endl;
-
 	LDreference* currentReferenceInPrintList = CSdraw.createFileObjectListBoxes(firstReferenceInPrintList, firstObjectInTopLevelBelowListContainer, firstObjectInTopLevelBelowListContainer, &currentTagInSVGFile, outputFunctionsConnectivity, traceFunctionUpwards, firstTagInGridTag, usePredefinedGrid);
 	if(outputFileConnections)
 	{
 		currentReferenceInPrintList = CSdraw.createFileObjectListConnections(currentReferenceInPrintList, firstObjectInTopLevelBelowListContainer, NULL, &currentTagInSVGFile, traceFunctionUpwards);
 	}
-	//cout << "qt2" << endl;
+	#ifndef CS_DEBUG_DISABLE_FUNCTION_PARSING
 	if(outputFunctionsConnectivity)
 	{
 		CSfunction* currentObjectInTopLevelBelowList = firstReferenceInTopLevelBelowList->firstFunctionInFunctionList;
 		bool topLevelFunctionNameFound = false;
 		CSfunction* topLevelFunctionObject = NULL;
 		while(currentObjectInTopLevelBelowList->next != NULL)
-		{
+		{			
 			if(currentObjectInTopLevelBelowList->name == topLevelFunctionName)
 			{
 				topLevelFunctionObject = currentObjectInTopLevelBelowList;
@@ -145,6 +143,8 @@ void CSexecflowClass::generateCodeStructure(const string topLevelFileName, int w
 		}
 		if(topLevelFunctionNameFound)
 		{
+			//cout << "topLevelFunctionNameFound" << endl;
+			
 			//CSfunction* topLevelFunctionObject = firstReferenceInTopLevelBelowList->firstFunctionInFunctionList;
 			topLevelFunctionObject->printX = firstReferenceInTopLevelBelowList->printX;
 			topLevelFunctionObject->printY = firstReferenceInTopLevelBelowList->printY;
@@ -161,6 +161,7 @@ void CSexecflowClass::generateCodeStructure(const string topLevelFileName, int w
 			CSfunction* currentReferenceInFunctionReferenceList = topLevelFunctionObject->firstReferenceInFunctionReferenceList;
 			while(currentReferenceInFunctionReferenceList->next != NULL)
 			{
+				//cout << "topLevelFunctionObject->firstReferenceInFunctionReferenceList" << endl;
 				currentReferenceInPrintList = CSdraw.createFunctionObjectListBoxesAndConnections(currentReferenceInPrintList, firstReferenceInTopLevelBelowList, topLevelFunctionObject, firstObjectInTopLevelBelowListContainer, 0, currentReferenceInFunctionReferenceList, &currentTagInSVGFile, traceFunctionUpwards, false, NULL, usePredefinedGrid);
 				currentReferenceInFunctionReferenceList = currentReferenceInFunctionReferenceList->next;
 			}
@@ -209,8 +210,6 @@ void CSexecflowClass::generateCodeStructure(const string topLevelFileName, int w
 		}
 	}
 
-	//cout << "qt3" << endl;
-
 	#ifdef CS_GENERATE_CPP_CLASSES
 	if(generateOOcode)
 	{
@@ -229,7 +228,8 @@ void CSexecflowClass::generateCodeStructure(const string topLevelFileName, int w
 		}
 	}
 	#endif
-
+	
+	#endif
 
 	if(!htmlDocumentationGenerationPreventsDisplay)
 	{//do not display if generating html (unless tracing single file)
@@ -260,8 +260,7 @@ void CSexecflowClass::generateCodeStructure(const string topLevelFileName, int w
 			}
 			LDreferenceManipulation.write2DreferenceListCollapsedTo1DtoFile(topLevelSceneFileNameCollapsed, initialReferenceInSceneFile);
 
-
-			unsigned char* rgbMap = new unsigned char[width*height*RGB_NUM];
+			uchar* rgbMap = new uchar[width*height*RGB_NUM];
 
 			//setViewPort2Dortho(-100.0, 2000.0, -100.0, 2000.0);
 			LDopengl.setViewPort3Dortho(-100.0, 2000, 2000.0, -100.0, 1.0, -1.0);
@@ -292,7 +291,6 @@ void CSexecflowClass::generateCodeStructure(const string topLevelFileName, int w
 			//must use an external program to view the .ldr file (Eg LDView)
 		}
 	}
-	//cout << "qt4" << endl;
 
 	if(display)
 	{
