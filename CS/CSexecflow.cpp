@@ -26,7 +26,7 @@
  * File Name: CSexecflow.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3o4b 17-November-2020
+ * Project Version: 3o4c 17-November-2020
  * /
  *******************************************************************************/
 
@@ -48,17 +48,26 @@ void CSexecflowClass::generateCodeStructure(const string topLevelFileName, int w
 {
 	bool result = true;
 
-	bool htmlDocumentationGenerationPreventsDisplay = false;
-
-
+	//bool htmlDocumentationGenerationPreventsDisplay = false;
+	bool generateHTMLdocumentationModeCombined = false;
+	if(generateHTMLdocumentationMode == CS_GENERATE_HTML_DOCUMENTATION_MODE_ON)
+	{
+		if(traceFunctionUpwards && (bottomLevelFunctionNameToTraceUpwards != ""))
+		{
+			generateHTMLdocumentationModeCombined = false;	//separate
+		}
+		else
+		{
+			generateHTMLdocumentationModeCombined = true;
+			//htmlDocumentationGenerationPreventsDisplay = true;
+		}
+	}
+				
+					
 	if(display)
 	{
 		LDopengl.initiateOpenGL(width, height, 0, 0, false);
 	}
-
-	char* outputFileNameLDRcharstar = const_cast<char*>(outputLDRfileName.c_str());
-	char* displayFileNamePPMcharstar = const_cast<char*>(outputPPMfileName.c_str());
-	char* outputFileNameSVGcharstar = const_cast<char*>(outputSVGfileName.c_str());
 
 	//1. for every file
 		//2. for every include file listed
@@ -99,11 +108,40 @@ void CSexecflowClass::generateCodeStructure(const string topLevelFileName, int w
 	usePredefinedGrid = initialiseGrid(&firstTagInGridTag);
 	#endif
 
+	#ifdef CS_GENERATE_HTML_DOCUMENTATION_PRINT_PROJECT_CODE_STRUCTURE_HIERARCHY
+	if(generateHTMLdocumentationModeCombined)
+	{
+		//create independent file hierarchy
+		bool outputFunctionsConnectivityTemp = false;
+		bool traceFunctionUpwardsTemp = false;	//should already be false
+		LDreference* currentReferenceInPrintListTemp = CSdraw.createFileObjectListBoxes(firstReferenceInPrintList, firstObjectInTopLevelBelowListContainer, firstObjectInTopLevelBelowListContainer, &currentTagInSVGFile, outputFunctionsConnectivityTemp, traceFunctionUpwardsTemp, firstTagInGridTag, usePredefinedGrid);
+		if(outputFileConnections)
+		{
+			currentReferenceInPrintListTemp = CSdraw.createFileObjectListConnections(currentReferenceInPrintListTemp, firstObjectInTopLevelBelowListContainer, NULL, &currentTagInSVGFile, traceFunctionUpwards);
+		}
+		CSdraw.createFileObjectListBoxesPrintedReset(firstObjectInTopLevelBelowListContainer);
+	
+		string codeStructureFilesSVGfileName = CS_GENERATE_HTML_DOCUMENTATION_PRINT_PROJECT_CODE_STRUCTURE_HIERARCHY_FILES_FILE_NAME;
+		if(!LDsvg.writeSVGfile(codeStructureFilesSVGfileName, firstTagInSVGFile, CS_CODE_STRUCTURE_FUNCTION_DIAGRAM_MINX, CS_CODE_STRUCTURE_FUNCTION_DIAGRAM_MAXX, CS_CODE_STRUCTURE_FUNCTION_DIAGRAM_MINY, CS_CODE_STRUCTURE_FUNCTION_DIAGRAM_MAXY))
+		{
+			result = false;
+		}
+		
+		delete firstTagInSVGFile;
+		firstTagInSVGFile = new XMLparserTag();
+		currentTagInSVGFile = firstTagInSVGFile;
+		
+		delete firstReferenceInPrintList;
+		firstReferenceInPrintList = new LDreference();
+	}
+	#endif
+	
 	LDreference* currentReferenceInPrintList = CSdraw.createFileObjectListBoxes(firstReferenceInPrintList, firstObjectInTopLevelBelowListContainer, firstObjectInTopLevelBelowListContainer, &currentTagInSVGFile, outputFunctionsConnectivity, traceFunctionUpwards, firstTagInGridTag, usePredefinedGrid);
 	if(outputFileConnections)
 	{
 		currentReferenceInPrintList = CSdraw.createFileObjectListConnections(currentReferenceInPrintList, firstObjectInTopLevelBelowListContainer, NULL, &currentTagInSVGFile, traceFunctionUpwards);
 	}
+	
 	#ifndef CS_DEBUG_DISABLE_FUNCTION_PARSING
 	if(outputFunctionsConnectivity)
 	{
@@ -155,9 +193,19 @@ void CSexecflowClass::generateCodeStructure(const string topLevelFileName, int w
 				currentReferenceInFunctionReferenceList = currentReferenceInFunctionReferenceList->next;
 			}
 			#endif
-
 			CSdraw.resetPrintedFunctionConnections(firstReferenceInTopLevelBelowList, topLevelFunctionObject, false, NULL);
 
+			#ifdef CS_GENERATE_HTML_DOCUMENTATION_PRINT_PROJECT_CODE_STRUCTURE_HIERARCHY
+			if(generateHTMLdocumentationModeCombined)
+			{
+				string codeStructureFunctionsSVGfileName = CS_GENERATE_HTML_DOCUMENTATION_PRINT_PROJECT_CODE_STRUCTURE_HIERARCHY_FUNCTIONS_FILE_NAME;
+				if(!LDsvg.writeSVGfile(codeStructureFunctionsSVGfileName, firstTagInSVGFile, CS_CODE_STRUCTURE_FUNCTION_DIAGRAM_MINX, CS_CODE_STRUCTURE_FUNCTION_DIAGRAM_MAXX, CS_CODE_STRUCTURE_FUNCTION_DIAGRAM_MINY, CS_CODE_STRUCTURE_FUNCTION_DIAGRAM_MAXY))
+				{
+					result = false;
+				}
+			}
+			#endif
+	
 			if(traceFunctionUpwards && (bottomLevelFunctionNameToTraceUpwards != ""))
 			{
 				CSfile* fileObjectHoldingFunction = NULL;
@@ -187,10 +235,11 @@ void CSexecflowClass::generateCodeStructure(const string topLevelFileName, int w
 			}
 			else
 			{
-				if(generateHTMLdocumentationMode == CS_GENERATE_HTML_DOCUMENTATION_MODE_ON)
+				if(generateHTMLdocumentationMode == CS_GENERATE_HTML_DOCUMENTATION_MODE_ON)	//generateHTMLdocumentationModeCombined
 				{//generate documentation for all functions...
 					CSgenerateHTMLdocumentation.generateHTMLdocumentationFunctions(firstTagInSVGFile, firstObjectInTopLevelBelowListContainer, generateHTMLdocumentationMode, useOutputHTMLfile, traceFunctionUpwards, usePredefinedGrid, outputHTMLfileName);
-					htmlDocumentationGenerationPreventsDisplay = true;	//cannot display in OpenGL/save to file, as LD vector graphics references have been deleted
+					//cannot display in OpenGL, as LD vector graphics references have been deleted (already saved to file)
+					//htmlDocumentationGenerationPreventsDisplay = true;
 				}
 			}
 			
@@ -226,26 +275,26 @@ void CSexecflowClass::generateCodeStructure(const string topLevelFileName, int w
 	
 	#endif
 
-	if(!htmlDocumentationGenerationPreventsDisplay)
+	if(!generateHTMLdocumentationModeCombined)
 	{//do not display if generating html (unless tracing single file)
 
-		if(!LDsvg.writeSVGfile(outputFileNameSVGcharstar, firstTagInSVGFile, CS_CODE_STRUCTURE_FUNCTION_DIAGRAM_MINX, CS_CODE_STRUCTURE_FUNCTION_DIAGRAM_MAXX, CS_CODE_STRUCTURE_FUNCTION_DIAGRAM_MINY, CS_CODE_STRUCTURE_FUNCTION_DIAGRAM_MAXY))
+		if(!LDsvg.writeSVGfile(outputSVGfileName, firstTagInSVGFile, CS_CODE_STRUCTURE_FUNCTION_DIAGRAM_MINX, CS_CODE_STRUCTURE_FUNCTION_DIAGRAM_MAXX, CS_CODE_STRUCTURE_FUNCTION_DIAGRAM_MINY, CS_CODE_STRUCTURE_FUNCTION_DIAGRAM_MAXY))
 		{
 			result = false;
 		}
 		delete firstTagInSVGFile;
-
+		
 		if(useOutputLDRfile || display)
 		{
-			LDreferenceManipulation.writeReferencesToFile(outputFileNameLDRcharstar, firstReferenceInPrintList);
+			LDreferenceManipulation.writeReferencesToFile(outputLDRfileName, firstReferenceInPrintList);
 		}
 
 		if(display)
 		{
 			//re-parse, then re-write to create a collapsed referencelist file...
 			//method1:
-			char* topLevelSceneFileName = outputFileNameLDRcharstar;
-			char* topLevelSceneFileNameCollapsed = "sceneCollapsedForRaytracing.ldr";
+			string topLevelSceneFileName = outputLDRfileName;
+			string topLevelSceneFileNameCollapsed = "sceneCollapsedForRaytracing.ldr";
 			LDreference* initialReferenceInSceneFile = new LDreference();
 			LDreference* topLevelReferenceInSceneFile = new LDreference(topLevelSceneFileName, 1, true);	//The information in this object is not required or meaningful, but needs to be passed into the parseFile/parseReferenceList recursive function
 			if(!LDparser.parseFile(topLevelSceneFileName, initialReferenceInSceneFile, topLevelReferenceInSceneFile, true))
@@ -275,7 +324,7 @@ void CSexecflowClass::generateCodeStructure(const string topLevelFileName, int w
 
 			if(useOutputPPMfile)
 			{
-				RTpixelMaps.generatePixmapFromRGBmap(displayFileNamePPMcharstar, width, height, rgbMap);
+				RTpixelMaps.generatePixmapFromRGBmap(outputPPMfileName, width, height, rgbMap);
 			}
 
 			delete rgbMap;

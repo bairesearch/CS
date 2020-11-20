@@ -26,7 +26,7 @@
  * File Name: CSgenerateHTMLdocumentation.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3o4b 17-November-2020
+ * Project Version: 3o4c 17-November-2020
  * /
  *******************************************************************************/
 
@@ -53,9 +53,23 @@ void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationFunctions(XMLpar
 
 	if(useOutputHTMLfile)
 	{//use single html file for project (rather than unique html file per file in project)
+	
 		string HTMLdocumentationHeader = generateHTMLdocumentationHeader("Software Project", true, false);
 		string HTMLdocumentationFooter = generateHTMLdocumentationFooter(true);
+		
+		#ifdef CS_GENERATE_HTML_DOCUMENTATION_PRINT_PROJECT_CODE_STRUCTURE_HIERARCHY
+		string HTMLdocumentationProjectCodeStructureDiagrams = "";
+		string codeStructureFilesSVGfileName = CS_GENERATE_HTML_DOCUMENTATION_PRINT_PROJECT_CODE_STRUCTURE_HIERARCHY_FILES_FILE_NAME;
+		string HTMLdocumentationFileImagePlaceHolder = generateHTMLdocumentationImagePlaceHolder(&codeStructureFilesSVGfileName, "Software Project Code Structure - Files");	//Software Project Code Structure Diagram
+		HTMLdocumentationProjectCodeStructureDiagrams = HTMLdocumentationProjectCodeStructureDiagrams + HTMLdocumentationFileImagePlaceHolder;
+		string codeStructureFunctionsSVGfileName = CS_GENERATE_HTML_DOCUMENTATION_PRINT_PROJECT_CODE_STRUCTURE_HIERARCHY_FUNCTIONS_FILE_NAME;
+		HTMLdocumentationFileImagePlaceHolder = generateHTMLdocumentationImagePlaceHolder(&codeStructureFunctionsSVGfileName, "Software Project Code Structure - Functions");	//Software Project Code Structure Diagram (with Functions)
+		HTMLdocumentationProjectCodeStructureDiagrams = HTMLdocumentationProjectCodeStructureDiagrams + HTMLdocumentationFileImagePlaceHolder;					
+		HTMLdocumentationHeader = HTMLdocumentationHeader + HTMLdocumentationProjectCodeStructureDiagrams;
+		#endif
+		
 		string HTMLdocumentation = HTMLdocumentationHeader + HTMLdocumentationBody + HTMLdocumentationFooter;
+		
 		ofstream writeFileObjectHTML(outputHTMLfileName.c_str());
 		writeStringPointerToFileObject(&HTMLdocumentation, &writeFileObjectHTML);
 	}
@@ -71,7 +85,7 @@ string CSgenerateHTMLdocumentationClass::generateHTMLdocumentationHeader(const s
 		
 	if(htmlHeader)
 	{
-		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + titleName + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + titleName + " Documentation</h3><p>Automatically generated with Code Structure Viewer (CS), Project Version: 3o4b 17-November-2020<p>\n";
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + titleName + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + titleName + " Documentation</h3><p>Automatically generated with Code Structure Viewer (CS), Project Version: 3o4c 17-November-2020<p>\n";
 	}
 	else
 	{
@@ -484,11 +498,11 @@ void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationFunctionOrClassA
 	
 	if(classDataOrFunctionArguments)
 	{
-		*HTMLdocumentationParameterList = *HTMLdocumentationParameterList + "\t<b>Class Data</b><br />";
+		*HTMLdocumentationParameterList = *HTMLdocumentationParameterList + "\t<h5>Class Data</h5>";
 	}
 	else
 	{
-		*HTMLdocumentationParameterList = *HTMLdocumentationParameterList + "\t<b>Function Arguments</b><br />";
+		*HTMLdocumentationParameterList = *HTMLdocumentationParameterList + "\t<h5>Function Arguments</h5>";
 	}
 	#ifdef CS_GENERATE_CLASS_HTML_DOCUMENTATION_AUTOMATICALLY_CLASS_PARAMETER_FUNCTIONS
 	*HTMLdocumentationParameterList = *HTMLdocumentationParameterList + "<table border=\"1\">\n\t\t<tr><th>" + "name" + "</th><th>" + "type" + "</th><th>" + "description" + "</th><th>" + "functionArguments" + "</th></tr>\n";
@@ -638,7 +652,7 @@ void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationFunctionReferenc
 	//generate list
 
 	*HTMLdocumentationFunctionReferenceList = "";
-	*HTMLdocumentationFunctionReferenceList = *HTMLdocumentationFunctionReferenceList + "\t<p><h5>Function reference List</h5>\n";
+	*HTMLdocumentationFunctionReferenceList = *HTMLdocumentationFunctionReferenceList + "\t<p><h5>Function Reference List</h5>\n";
 	CSfunction* currentReferenceInFunctionReferenceListRepeats = function->firstReferenceInFunctionReferenceListRepeats;
 	string HTMLdocumentationFunctionObjectListBody = "\t<ul>\n";
 	#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST_WITH_INDENTATION_ADVANCED

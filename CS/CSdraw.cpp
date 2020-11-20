@@ -26,7 +26,7 @@
  * File Name: CSdraw.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3o4b 17-November-2020
+ * Project Version: 3o4c 17-November-2020
  * /
  *******************************************************************************/
 
@@ -612,6 +612,29 @@ LDreference* CSdrawClass::createFileObjectListBoxes(LDreference* currentReferenc
 
 	return newCurrentReferenceInPrintList;
 }
+
+void CSdrawClass::createFileObjectListBoxesPrintedReset(CSfileContainer* firstObjectInAboveLevelBelowListContainer)
+{
+	CSfileContainer* currentFileObjectContainer = firstObjectInAboveLevelBelowListContainer;
+	while(currentFileObjectContainer->next != NULL)
+	{
+		CSfile* currentFileObject = currentFileObjectContainer->fileObject;
+		
+		if(currentFileObject->printed)
+		{
+			currentFileObject->printed = false;
+		}
+
+		if(currentFileObject->firstFileInBelowListContainer != NULL)
+		{
+			createFileObjectListBoxesPrintedReset(currentFileObject->firstFileInBelowListContainer);
+		}
+
+		currentFileObjectContainer = currentFileObjectContainer->next;
+	}
+}
+
+
 
 bool CSdrawClass::hasPreviousReferenceWithThisNameHasBeenPrinted(string name, CSfileContainer* firstObjectInTopLevelBelowListContainer, int *maxYPos)
 {

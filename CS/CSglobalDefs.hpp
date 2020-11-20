@@ -26,7 +26,7 @@
  * File Name: CSglobalsDefs.hpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3o4b 17-November-2020
+ * Project Version: 3o4c 17-November-2020
  * Description: CS specific global definitions
  * /
  *******************************************************************************/
@@ -53,9 +53,14 @@
 	#define CS_SUPPORT_PREDEFINED_GRID_VERIFY_INTEGRITY	//added CS3o4a - verify that all xml grid coordinates are unique
 #endif
 
-#define CS_GENERATE_HTML_DOCUMENTATION_PRINT_FILE_NAME_BASE_TITLE	//added CS3o4a
+#define CS_GENERATE_HTML_DOCUMENTATION_PRINT_PROJECT_CODE_STRUCTURE_HIERARCHY //CS3o4c
+#ifdef CS_GENERATE_HTML_DOCUMENTATION_PRINT_PROJECT_CODE_STRUCTURE_HIERARCHY
+	#define CS_GENERATE_HTML_DOCUMENTATION_PRINT_PROJECT_CODE_STRUCTURE_HIERARCHY_FILES_FILE_NAME "SoftwareProject-codeStructure.svg"
+	#define CS_GENERATE_HTML_DOCUMENTATION_PRINT_PROJECT_CODE_STRUCTURE_HIERARCHY_FUNCTIONS_FILE_NAME "SoftwareProject-codeStructure-withFunctions.svg"
+#endif
+
+#define CS_GENERATE_HTML_DOCUMENTATION_PRINT_FILE_NAME_BASE_TITLE	//CS3o4a
 #ifdef CS_GENERATE_HTML_DOCUMENTATION_PRINT_FILE_NAME_BASE_TITLE
-	
 	//#ifdef CS_SUPPORT_GENERATED_CPP_CODE_NO_BACKWARD_COMPATIBILITY	//not yet defined:
 		#define CS_GENERATE_HTML_DOCUMENTATION_PRINT_FILE_NAME_SOURCE_AND_HEADER
 		#ifndef CS_GENERATE_HTML_DOCUMENTATION_PRINT_FILE_NAME_SOURCE_AND_HEADER
@@ -64,6 +69,7 @@
 		#endif
 	//#endif
 #endif
+
 #define CS_DRAW_PRINT_TOP_LEVEL_FUNCTION	//CS3o4a	//draw main function
 #define CS_GENERATE_CODE_GENERIC_ONLY_LINK_AVAILABLE_HEADER_FILES	//CS3o4a	//only link header files available in input folder (as aopposed to all include files referenced)
 
@@ -141,6 +147,8 @@
 	#define CS_OPTIMISE_CS_DRAW_YMAXPOS_SEARCH	//CS3o2a
 #endif
 #define CS_OPTIMISE_FUNCTION_REFERENCE_TARGET_SEARCH	//CS3o2a
+
+
 
 
 #define CS_MATCH_FUNCTION_REFERENCES_WITH_CORRECT_NUMBER_OF_ARGUMENTS		//added CS3h1e
