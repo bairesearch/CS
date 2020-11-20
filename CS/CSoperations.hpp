@@ -26,7 +26,7 @@
  * File Name: CSoperations.hpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3o4c 17-November-2020
+ * Project Version: 3o4d 17-November-2020
  * /
  *******************************************************************************/
 
@@ -37,6 +37,7 @@
 #include "LDreferenceClass.hpp"
 #include "CSglobalDefs.hpp"
 #include "CSreferenceContainerClass.hpp"
+#include "CSclassClass.hpp"
 #include "LDsprite.hpp"
 #include "LDreferenceManipulation.hpp"
 
@@ -45,6 +46,8 @@ class CSoperationsClass
 	private: SHAREDvarsClass SHAREDvars;
 	private: LDreferenceManipulationClass LDreferenceManipulation;
 	private: CSreferenceContainerClassClass CSreferenceContainerClass;
+	private: CSclassClass CSclassClassObject;
+	
 	public: bool getIncludeFileNamesFromCorHfile(CSfileContainer* firstReferenceInIncludeFileListContainer, constEffective CSfileContainer* topLevelReferenceContainer, CSfile* aboveLevelObject, const string topLevelReferenceName, const int level, const bool parsingCorHfile);
 		#ifdef CS_GENERATE_CODE_GENERIC
 		private: bool fileIsHeader(string parseFileName);
@@ -82,10 +85,6 @@ CSfile* findReferenceInIncludeFileList(CSfile* firstReferenceInAboveLevelBelowLi
 	#endif
 	
 	private: vector<CSparameter*> createParameterList(const string* functionArgumentsRaw);
-
-	#ifdef CS_SUPPORT_GENERATED_CPP_CODE
-	private: bool getClassNameBase(const string className, string* classNameBase);
-	#endif
 
 };
 

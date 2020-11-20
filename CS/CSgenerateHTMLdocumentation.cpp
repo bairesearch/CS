@@ -26,7 +26,7 @@
  * File Name: CSgenerateHTMLdocumentation.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3o4c 17-November-2020
+ * Project Version: 3o4d 17-November-2020
  * /
  *******************************************************************************/
 
@@ -85,7 +85,10 @@ string CSgenerateHTMLdocumentationClass::generateHTMLdocumentationHeader(const s
 		
 	if(htmlHeader)
 	{
-		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + titleName + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + titleName + " Documentation</h3><p>Automatically generated with Code Structure Viewer (CS), Project Version: 3o4c 17-November-2020<p>\n";
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + titleName + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + titleName + " Documentation</h3><p>Automatically generated with Code Structure Viewer (CS), Project Version: 3o4d 17-November-2020</p>\n";
+		#ifdef CS_GENERATE_CLASS_HTML_DOCUMENTATION_ADD_COPYRIGHT
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<p>Copyright &copy; 2020, BAI Research. All Rights Reserved.</p>\n";
+		#endif
 	}
 	else
 	{
@@ -150,8 +153,13 @@ void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationForAllFunctions(
 		CSfile* currentFileObject = currentFileObjectContainer->fileObject;
 
 		string fileNameHoldingFunction = currentFileObject->name;
+		
+		#ifdef CS_GENERATE_HTML_DOCUMENTATION_PRINT_FILE_NAME_BASE_TITLE
+		string outputHTMLfileName = currentFileObject->nameBase + HTML_EXTENSION;
+		#else
 		string outputHTMLfileName = currentFileObject->name + HTML_EXTENSION;
-
+		#endif
+		
 		ifstream tempFileStream(outputHTMLfileName.c_str());
 
 		bool passed = false;
@@ -202,6 +210,13 @@ void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationForAllFunctions(
 							if(traceFunctionUpwards)
 							{
 								outputSVGfileNameFunction = currentFunctionObject->name + SVG_EXTENSION;
+								#ifdef CS_GENERATE_HTML_DOCUMENTATION_OUTPUT_FILENAMES_WITH_CLASS
+								string classObjectNameBase = currentFunctionObject->className;
+								if(CSclassClassObject.getClassNameBase(currentFunctionObject->className, &classObjectNameBase))
+								{									
+									outputSVGfileNameFunction = classObjectNameBase + STRING_FULLSTOP + currentFunctionObject->name + SVG_EXTENSION;
+								}
+								#endif
 							}
 
 							string HTMLdocumentationFunction = "";
@@ -245,7 +260,11 @@ void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationForAllFunctions(
 				#endif
 				
 				#ifdef CS_HTML_DOCUMENTATION_GENERATE_FILE_CODE_STRUCTURE_DIAGRAMS
+				#ifdef CS_GENERATE_HTML_DOCUMENTATION_PRINT_FILE_NAME_BASE_TITLE
+				string outputSVGFileNameFile = currentFileObject->nameBase + SVG_EXTENSION;
+				#else
 				string outputSVGFileNameFile = currentFileObject->name + SVG_EXTENSION;
+				#endif
 				generateFileDiagramFunctionsHeirachy(currentFileObject, outputSVGFileNameFile, firstObjectInTopLevelBelowListContainer, usePredefinedGrid);
 				string HTMLdocumentationFileImagePlaceHolder = generateHTMLdocumentationImagePlaceHolder(&outputSVGFileNameFile, "File Diagram (functions hierarchy)");
 				HTMLdocumentationFileIntroduction = HTMLdocumentationFileIntroduction + HTMLdocumentationFileImagePlaceHolder;
@@ -293,7 +312,11 @@ void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationForAllFunctions(
 
 				if(!useOutputHTMLfile)
 				{//create multiple html files (ie, a single HTML file per parsed source file)
+					#ifdef CS_GENERATE_HTML_DOCUMENTATION_PRINT_FILE_NAME_BASE_TITLE
+					string outputHTMLfileName = currentFileObject->nameBase + HTML_EXTENSION;
+					#else
 					string outputHTMLfileName = currentFileObject->name + HTML_EXTENSION;
+					#endif
 					ofstream writeFileObjectHTML(outputHTMLfileName.c_str());
 					writeStringPointerToFileObject(&HTMLdocumentationFile, &writeFileObjectHTML);
 				}

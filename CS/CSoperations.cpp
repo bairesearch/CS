@@ -26,7 +26,7 @@
  * File Name: CSoperations.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3o4c 17-November-2020
+ * Project Version: 3o4d 17-November-2020
  * /
  *******************************************************************************/
 
@@ -752,7 +752,7 @@ bool CSoperationsClass::getFunctionNamesFromFunctionDeclarationsInHfile(CSfile* 
 						currentClass->name = className;
 						#ifdef CS_SUPPORT_GENERATED_CPP_CODE_IDENTIFY_CLASS_PARAMETERS_FUNCTIONS_IGNORE_PRIMARY_FILE_CLASS
 						string classNameBase = "";
-						if(getClassNameBase(currentClass->name, &classNameBase))
+						if(CSclassClassObject.getClassNameBase(currentClass->name, &classNameBase))
 						{
 							if(classNameBase == fileObject->nameBase)
 							{
@@ -1349,7 +1349,7 @@ bool CSoperationsClass::searchFunctionStringForFunctionReferences(const CSfile* 
 				if(currentFunction->className != "")
 				{
 					string classObjectNameBase = "";
-					if(getClassNameBase(currentFunction->className, &classObjectNameBase))
+					if(CSclassClassObject.getClassNameBase(currentFunction->className, &classObjectNameBase))
 					{
 						//function class name ends with "Class" (function is expected to have been referenced via a default class object of name format: variant1/variant2)
 
@@ -1957,23 +1957,3 @@ vector<CSparameter*> CSoperationsClass::createParameterList(const string* functi
 	
 	return parameterList;
 }
-
-#ifdef CS_SUPPORT_GENERATED_CPP_CODE
-bool CSoperationsClass::getClassNameBase(const string className, string* classNameBase)
-{
-	bool result = false;
-	*classNameBase = "";
-	
-	int classNameLength = className.length();
-	string classNameAppendDetected = className.substr(classNameLength-CS_CLASS_NAME_APPEND.length(),CS_CLASS_NAME_APPEND.length());
-	if(classNameAppendDetected == CS_CLASS_NAME_APPEND)
-	{
-		//class name ends with "Class"
-
-		*classNameBase = className.substr(0, classNameLength-CS_CLASS_NAME_APPEND.length());
-		result = true;
-	}		
-	
-	return result;				
-}
-#endif								

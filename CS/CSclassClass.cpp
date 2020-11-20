@@ -26,7 +26,7 @@
  * File Name: CSclassClass.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3o4c 17-November-2020
+ * Project Version: 3o4d 17-November-2020
  * /
  *******************************************************************************/
 
@@ -45,3 +45,26 @@ CSclass::CSclass(void)
 CSclass::~CSclass(void)
 {
 }
+
+#ifdef CS_SUPPORT_GENERATED_CPP_CODE
+bool CSclassClass::getClassNameBase(const string className, string* classNameBase)
+{
+	bool result = false;
+	*classNameBase = "";
+	
+	int classNameLength = className.length();
+	if(classNameLength > CS_CLASS_NAME_APPEND.length())
+	{
+		string classNameAppendDetected = className.substr(classNameLength-CS_CLASS_NAME_APPEND.length(),CS_CLASS_NAME_APPEND.length());
+		if(classNameAppendDetected == CS_CLASS_NAME_APPEND)
+		{
+			//class name ends with "Class"
+
+			*classNameBase = className.substr(0, classNameLength-CS_CLASS_NAME_APPEND.length());
+			result = true;
+		}		
+	}
+	
+	return result;				
+}
+#endif	

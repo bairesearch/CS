@@ -26,7 +26,7 @@
  * File Name: CSgenerateHTMLdocumentation.hpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3o4c 17-November-2020
+ * Project Version: 3o4d 17-November-2020
  * /
  *******************************************************************************/
 
@@ -36,9 +36,10 @@
 
 #include "CSglobalDefs.hpp"
 #include "CSreferenceContainerClass.hpp"
+#include "CSdraw.hpp"
+#include "CSclassClass.hpp"
 #include "LDreferenceManipulation.hpp"
 #include "XMLparserClass.hpp"
-#include "CSdraw.hpp"
 #include "LDsvg.hpp"
 #include "XMLrulesClass.hpp"
 
@@ -57,7 +58,9 @@ class CSgenerateHTMLdocumentationClass
 	private: LDsvgClass LDsvg;
 	private: CSdrawClass CSdraw;
 	private: CSreferenceContainerClassClass CSreferenceContainerClass;
+	private: CSclassClass CSclassClassObject;
 	private: SHAREDvarsClass SHAREDvars;
+	
 	public: void generateHTMLdocumentationFunctions(XMLparserTag* firstTagInSVGFile, CSfileContainer* firstObjectInTopLevelBelowListContainer, int generateHTMLdocumentationMode, const bool useOutputHTMLfile, const bool traceFunctionUpwards, bool usePredefinedGrid, const string outputHTMLfileName);
 		private: string generateHTMLdocumentationHeader(const string name, const bool htmlHeader, const bool isFile);
 			private: string generateHTMLdocumentationHeader(const string titleName, const string fileName, const bool htmlHeader, const bool isFile);

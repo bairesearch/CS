@@ -26,7 +26,7 @@
  * File Name: CSglobalsDefs.hpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3o4c 17-November-2020
+ * Project Version: 3o4d 17-November-2020
  * Description: CS specific global definitions
  * /
  *******************************************************************************/
@@ -53,6 +53,8 @@
 	#define CS_SUPPORT_PREDEFINED_GRID_VERIFY_INTEGRITY	//added CS3o4a - verify that all xml grid coordinates are unique
 #endif
 
+#define CS_GENERATE_CLASS_HTML_DOCUMENTATION_ADD_COPYRIGHT	//CS3o4d
+
 #define CS_GENERATE_HTML_DOCUMENTATION_PRINT_PROJECT_CODE_STRUCTURE_HIERARCHY //CS3o4c
 #ifdef CS_GENERATE_HTML_DOCUMENTATION_PRINT_PROJECT_CODE_STRUCTURE_HIERARCHY
 	#define CS_GENERATE_HTML_DOCUMENTATION_PRINT_PROJECT_CODE_STRUCTURE_HIERARCHY_FILES_FILE_NAME "SoftwareProject-codeStructure.svg"
@@ -75,6 +77,8 @@
 
 #define CS_SUPPORT_GENERATED_CPP_CODE	//added CS3o2a (assume CS_GENERATE_CPP_CLASSES:generateOO has already been executed on input code)
 #ifdef CS_SUPPORT_GENERATED_CPP_CODE
+
+	#define CS_GENERATE_HTML_DOCUMENTATION_OUTPUT_FILENAMES_WITH_CLASS	//CS3o4d
 
 	//#define CS_USE_FUNCTION_ARGUMENTS_PARAMETER_LIST	//CS3o4b	//requires testing
 	#ifndef CS_USE_FUNCTION_ARGUMENTS_PARAMETER_LIST
