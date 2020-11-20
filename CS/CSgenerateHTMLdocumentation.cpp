@@ -26,7 +26,7 @@
  * File Name: CSgenerateHTMLdocumentation.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3o3a 16-November-2020
+ * Project Version: 3o4a 17-November-2020
  * /
  *******************************************************************************/
 
@@ -66,16 +66,32 @@ string CSgenerateHTMLdocumentationClass::generateHTMLdocumentationHeader(const s
 	string HTMLdocumentationHeader = "";
 	if(htmlHeader)
 	{
-		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (CS), Project Version: 3o3a 16-November-2020<p>\n";
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (CS), Project Version: 3o4a 17-November-2020<p>\n";
 	}
 	else
 	{
 		HTMLdocumentationHeader = HTMLdocumentationHeader + "<h3>" + name + " Documentation</h3>\n";
 	}
 	if(isFile)
-	{
-		int indexOfFileExtension = name.find(".");
-		string fileNameWithoutExtension = name.substr(0, indexOfFileExtension);
+	{		
+		#ifdef CS_GENERATE_HTML_DOCUMENTATION_PRINT_FILE_NAME_BASE_TITLE
+		#ifdef CS_GENERATE_HTML_DOCUMENTATION_PRINT_FILE_NAME_SOURCE_AND_HEADER
+		string HTMLdocumentationFileNameSource = name + CS_FILE_EXTENSION_DELIMITER + CS_GENERATE_CODE_GENERIC_SOURCE_FILE_EXTENSION + "/" + CS_FILE_EXTENSION_DELIMITER + CS_GENERATE_CODE_GENERIC_HEADER_FILE_EXTENSION;
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<p><b>File Name:</b> " + HTMLdocumentationFileNameSource + "</p>";
+		#endif
+		#ifdef CS_GENERATE_HTML_DOCUMENTATION_PRINT_FILE_NAME_SOURCE
+		string HTMLdocumentationFileNameSource = name + CS_FILE_EXTENSION_DELIMITER + CS_GENERATE_CODE_GENERIC_SOURCE_FILE_EXTENSION;
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<p><b>Source File Name :</b> " + HTMLdocumentationFileNameSource + "</p>";
+		#endif
+		#ifdef CS_GENERATE_HTML_DOCUMENTATION_PRINT_FILE_NAME_HEADER
+		string HTMLdocumentationFileNameHeader = name + CS_FILE_EXTENSION_DELIMITER + CS_GENERATE_CODE_GENERIC_HEADER_FILE_EXTENSION;
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<p><b>Header File Name :</b> " + HTMLdocumentationFileNameHeader + "</p>";
+		#endif
+		string fileNameWithoutExtension = name;
+		#else
+		int indexOfFileExtension = name.find(CS_FILE_EXTENSION_DELIMITER);
+		string fileNameWithoutExtension = name.substr(0, indexOfFileExtension);	//CSoperationsClass::generateFileNameBaseFromHeaderFileName
+		#endif
 		string HTMLdocumentationFileDescription = createDescriptionFromCaseSensitiveMultiwordString(fileNameWithoutExtension);
 		HTMLdocumentationHeader = HTMLdocumentationHeader + "<p><b>File description:</b> " + HTMLdocumentationFileDescription + "</p>";
 	}
@@ -185,7 +201,12 @@ void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationForAllFunctions(
 							}
 
 							#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION
-							addToHTMLdocumentationFileFunctionList(currentFunctionObject, &HTMLdocumentationFileFunctionList, &previousIndentation, &previousIndentationFirst);
+							#ifdef CS_GENERATE_HTML_DOCUMENTATION_PRINT_FUNCTION_LIST_WITH_CLASS
+							bool externalFunction = true;
+							#else
+							bool externalFunction = false;
+							#endif
+							addToHTMLdocumentationFileFunctionList(currentFunctionObject, &HTMLdocumentationFileFunctionList, &previousIndentation, &previousIndentationFirst, true, externalFunction);
 							#endif
 						}
 					}
@@ -205,12 +226,17 @@ void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationForAllFunctions(
 				#ifdef CS_HTML_DOCUMENTATION_GENERATE_FILE_CODE_STRUCTURE_DIAGRAMS
 				string outputSVGFileNameFile = currentFileObject->name + SVG_EXTENSION;
 				generateFileDiagramFunctionsHeirachy(currentFileObject, outputSVGFileNameFile, firstObjectInTopLevelBelowListContainer, usePredefinedGrid);
-				string HTMLdocumentationFileImagePlaceHolder = generateHTMLdocumentationImagePlaceHolder(&outputSVGFileNameFile, "File Diagram (functions heirachy)");
+				string HTMLdocumentationFileImagePlaceHolder = generateHTMLdocumentationImagePlaceHolder(&outputSVGFileNameFile, "File Diagram (functions hierarchy)");
 				HTMLdocumentationFileIntroduction = HTMLdocumentationFileIntroduction + HTMLdocumentationFileImagePlaceHolder;
 				#endif
 				HTMLdocumentationFileBody = HTMLdocumentationFileIntroduction + HTMLdocumentationFileBody;
 
-				string HTMLdocumentationFileHeader = generateHTMLdocumentationHeader(currentFileObject->name, !useOutputHTMLfile, true);
+				#ifdef CS_GENERATE_HTML_DOCUMENTATION_PRINT_FILE_NAME_BASE_TITLE
+				string fileNameTitleToPrint = currentFileObject->nameBase;
+				#else
+				string fileNameTitleToPrint = currentFileObject->name;
+				#endif
+				string HTMLdocumentationFileHeader = generateHTMLdocumentationHeader(fileNameTitleToPrint, !useOutputHTMLfile, true);
 				string HTMLdocumentationFileFooter = generateHTMLdocumentationFooter(!useOutputHTMLfile);
 				string HTMLdocumentationFile = "";
 				HTMLdocumentationFile = HTMLdocumentationFile + HTMLdocumentationFileHeader + HTMLdocumentationFileBody + HTMLdocumentationFileFooter;
@@ -263,14 +289,19 @@ void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationForFunction(LDre
 	{
 
 		string HTMLdocumentationFunctionTitle = "";
-		HTMLdocumentationFunctionTitle = HTMLdocumentationFunctionTitle + "<h4>" + (bottomLevelFunctionToTraceUpwards->name) + "()</h4>";
+		#ifdef CS_GENERATE_HTML_DOCUMENTATION_PRINT_FUNCTION_NAME_WITH_CLASS
+		string functionNameTitleToPrint = generateFunctionString(bottomLevelFunctionToTraceUpwards, true, true); 
+		#else
+		string functionNameTitleToPrint = bottomLevelFunctionToTraceUpwards->name;
+		#endif
+		HTMLdocumentationFunctionTitle = HTMLdocumentationFunctionTitle + "<h4>" + functionNameTitleToPrint + "()</h4>";
 		string HTMLdocumentationFunctionSummary = "";
 		#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_SUMMARY
-		generateHTMLdocumentationFunctionSummary(&(bottomLevelFunctionToTraceUpwards->name), &(bottomLevelFunctionToTraceUpwards->nameFull), &HTMLdocumentationFunctionSummary);
+		generateHTMLdocumentationFunctionSummary(bottomLevelFunctionToTraceUpwards, &HTMLdocumentationFunctionSummary);
 		#endif
 
 		string HTMLdocumentationFunctionInputArguments = "";
-		generateHTMLdocumentationFunctionInputArguments(&(bottomLevelFunctionToTraceUpwards->name), &(bottomLevelFunctionToTraceUpwards->nameFull), &HTMLdocumentationFunctionInputArguments);
+		generateHTMLdocumentationFunctionInputArguments(bottomLevelFunctionToTraceUpwards, &HTMLdocumentationFunctionInputArguments);
 
 		string HTMLdocumentationFunctionReferenceList = "";
 		#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST
@@ -294,7 +325,7 @@ void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationForFunction(LDre
 
 		if(useOutputHTMLfile)
 		{//use single html file for function
-			string HTMLdocumentationFunctionHeader = generateHTMLdocumentationHeader(bottomLevelFunctionToTraceUpwards->name, true, false);
+			string HTMLdocumentationFunctionHeader = generateHTMLdocumentationHeader(functionNameTitleToPrint, true, false);
 			string HTMLdocumentationFunctionFooter = generateHTMLdocumentationFooter(true);
 			string HTMLdocumentationFunction = HTMLdocumentationFunctionHeader +* HTMLdocumentationFunctionBody + HTMLdocumentationFunctionFooter;
 
@@ -306,19 +337,30 @@ void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationForFunction(LDre
 
 }
 
-void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationFunctionSummary(string* functionName, const string* functionNameFull, string* HTMLdocumentationFunctionSummary)
+void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationFunctionSummary(const CSfunction* currentFunction, string* HTMLdocumentationFunctionSummary)
 {
+	string functionName = currentFunction->name;
+	string functionNameFull = currentFunction->nameFull;
+	
 	*HTMLdocumentationFunctionSummary = "";
 	*HTMLdocumentationFunctionSummary = *HTMLdocumentationFunctionSummary + "\t<p><b>Function Summary</b><br /><table border=\"1\">\n\t\t<tr><th>" + "name" + "</th><th>" + "return type" + "</th><th>" + "description" + "</th></tr>\n";
-	string HTMLdocumentationFunctionDescription = createDescriptionFromCaseSensitiveMultiwordString(*functionName);
-	int endPositionOfReturnType = functionNameFull->find(*functionName);
+	string HTMLdocumentationFunctionDescription = createDescriptionFromCaseSensitiveMultiwordString(functionName);
+	int endPositionOfReturnType = functionNameFull.find(functionName);
 	int startPositionOfReturnType = 0;
-	string HTMLdocumentationFunctionReturnType = functionNameFull->substr(startPositionOfReturnType, endPositionOfReturnType-startPositionOfReturnType);
-	*HTMLdocumentationFunctionSummary = *HTMLdocumentationFunctionSummary + "\t\t<tr><td>" +* functionName + "</td><td>" + HTMLdocumentationFunctionReturnType + "</td><td>" + HTMLdocumentationFunctionDescription + "</td></tr>\n";
+	#ifdef CS_SUPPORT_GENERATED_CPP_CODE
+	string HTMLdocumentationFunctionReturnType = currentFunction->functionType;
+	#else
+	string HTMLdocumentationFunctionReturnType = functionNameFull.substr(startPositionOfReturnType, endPositionOfReturnType-startPositionOfReturnType);
+	#endif
+	*HTMLdocumentationFunctionSummary = *HTMLdocumentationFunctionSummary + "\t\t<tr><td>" + functionName + "</td><td>" + HTMLdocumentationFunctionReturnType + "</td><td>" + HTMLdocumentationFunctionDescription + "</td></tr>\n";
 	*HTMLdocumentationFunctionSummary = *HTMLdocumentationFunctionSummary + "\t</table>\n";
 	*HTMLdocumentationFunctionSummary = *HTMLdocumentationFunctionSummary + "\t</p>\n";
 }
 
+void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationFunctionInputArguments(const CSfunction* currentFunction, string* HTMLdocumentationFunctionInputArguments)
+{
+	return generateHTMLdocumentationFunctionInputArguments(&(currentFunction->name), &(currentFunction->nameFull), HTMLdocumentationFunctionInputArguments);
+}
 void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationFunctionInputArguments(const string* functionName, const string* functionNameFull, string* HTMLdocumentationFunctionInputArguments)
 {
 	*HTMLdocumentationFunctionInputArguments = "";
@@ -496,6 +538,14 @@ void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationFunctionReferenc
 	{
 		CSfunction* currentReferenceInFunctionReferenceList = CSfunctionReferenceListOrderedIter->second;
 
+		bool externalFunction = true;
+		#ifdef CS_GENERATE_HTML_DOCUMENTATION_PRINT_FUNCTION_NAME_WITH_CLASS
+		if(function->className == currentReferenceInFunctionReferenceList->className)
+		{
+			externalFunction = false;
+		}
+		#endif
+		
 	#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST_WITH_INDENTATION_ADVANCED
 		/*
 		if(function->name == "createImage")
@@ -503,17 +553,23 @@ void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationFunctionReferenc
 			cout << "currentReferenceInFunctionReferenceList; " << currentReferenceInFunctionReferenceList->name << ", = " << currentReferenceInFunctionReferenceList->functionReferenceIndentation << endl;
 		}
 		*/
-		addToHTMLdocumentationFileFunctionList(currentReferenceInFunctionReferenceList, &HTMLdocumentationFunctionObjectListBody, &previousIndentation, &previousIndentationFirst);
+		addToHTMLdocumentationFileFunctionList(currentReferenceInFunctionReferenceList, &HTMLdocumentationFunctionObjectListBody, &previousIndentation, &previousIndentationFirst, false, externalFunction);
 	#else
+		
+		string functionReferenceName = currentReferenceInFunctionReferenceList->name;
+		#ifdef CS_GENERATE_HTML_DOCUMENTATION_PRINT_FUNCTION_NAME_WITH_CLASS
+		functionReferenceName = generateFunctionString(currentReferenceInFunctionReferenceList, false, externalFunction);
+		#endif
+		
 		#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST_WITH_INDENTATION
 		HTMLdocumentationFunctionObjectListBody = HTMLdocumentationFunctionObjectListBody + "\t\t<li>";
 		for(int i=0; i<currentReferenceInFunctionReferenceList->functionReferenceIndentation; i++)
 		{
 			HTMLdocumentationFunctionObjectListBody = HTMLdocumentationFunctionObjectListBody + "&#160&#160&#160&#160&#160";
 		}
-		HTMLdocumentationFunctionObjectListBody = HTMLdocumentationFunctionObjectListBody + currentReferenceInFunctionReferenceList->name + "</li>\n";
+		HTMLdocumentationFunctionObjectListBody = HTMLdocumentationFunctionObjectListBody + functionReferenceName + "</li>\n";
 		#else
-		HTMLdocumentationFunctionObjectListBody = HTMLdocumentationFunctionObjectListBody + "\t\t<li>" + currentReferenceInFunctionReferenceList->name + "</li>\n";
+		HTMLdocumentationFunctionObjectListBody = HTMLdocumentationFunctionObjectListBody + "\t\t<li>" + functionReferenceName + "</li>\n";
 		#endif
 	#endif
 	}
@@ -596,9 +652,14 @@ void CSgenerateHTMLdocumentationClass::addToHTMLdocumentationIndentedList(const 
 	*previousIndentation = currentFunctionObjectIndentation;
 }
 
-void CSgenerateHTMLdocumentationClass::addToHTMLdocumentationFileFunctionList(CSfunction* currentFunctionObject, string* HTMLdocumentationFileFunctionList, int* previousIndentation, bool* previousIndentationFirst)
+void CSgenerateHTMLdocumentationClass::addToHTMLdocumentationFileFunctionList(CSfunction* currentFunctionObject, string* HTMLdocumentationFileFunctionList, int* previousIndentation, bool* previousIndentationFirst, const bool isFunctionOrFunctionReferenceList, const bool externalFunction)
 {
-	addToHTMLdocumentationIndentedList(currentFunctionObject->name, currentFunctionObject->functionReferenceIndentation, HTMLdocumentationFileFunctionList, previousIndentation, previousIndentationFirst);
+	string functionReferenceName = currentFunctionObject->name;
+	#ifdef CS_GENERATE_HTML_DOCUMENTATION_PRINT_FUNCTION_NAME_WITH_CLASS
+	functionReferenceName = generateFunctionString(currentFunctionObject, isFunctionOrFunctionReferenceList, externalFunction);
+	#endif
+	
+	addToHTMLdocumentationIndentedList(functionReferenceName, currentFunctionObject->functionReferenceIndentation, HTMLdocumentationFileFunctionList, previousIndentation, previousIndentationFirst);
 }
 
 
@@ -631,7 +692,10 @@ void CSgenerateHTMLdocumentationClass::generateFileDiagramFunctionsHeirachy(CSfi
 		{
 			if(currentTopLevelFunctionObject->printed)
 			{
+				#ifdef CS_DISPLAY_FUNCTION_WHILE_GENERATING_DOCUMENTATION
 				cout << currentTopLevelFunctionObject->name << endl;
+				#endif
+				
 				//print function box for top level functions (added 3d3b);
 				if(currentTopLevelFunctionObject->printYIndex == 0)
 				{
@@ -650,7 +714,7 @@ void CSgenerateHTMLdocumentationClass::generateFileDiagramFunctionsHeirachy(CSfi
 				currentTopLevelFunctionObject->printedFunctionConnections = false;
 				while(currentReferenceInFunctionReferenceList->next != NULL)
 				{
-					currentReferenceInPrintList = CSdraw.createFunctionObjectListBoxesAndConnections(currentReferenceInPrintList, currentFileObject, currentTopLevelFunctionObject, firstObjectInTopLevelBelowListContainer, 0, currentReferenceInFunctionReferenceList, &currentTagInSVGFile, false, true, &(currentFileObject->name), usePredefinedGrid);
+					currentReferenceInPrintList = CSdraw.createFunctionObjectListBoxesAndConnections(currentReferenceInPrintList, currentFileObject, currentTopLevelFunctionObject, firstObjectInTopLevelBelowListContainer, 0, currentReferenceInFunctionReferenceList, &currentTagInSVGFile, false, true, &(currentFileObject->name), usePredefinedGrid, false);
 
 					currentReferenceInFunctionReferenceList = currentReferenceInFunctionReferenceList->next;
 				}
@@ -869,3 +933,50 @@ void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationIndentedList(vec
 
 }
 #endif
+
+
+#ifdef CS_GENERATE_HTML_DOCUMENTATION_PRINT_FUNCTION_NAME_WITH_CLASS
+string CSgenerateHTMLdocumentationClass::generateFunctionString(const CSfunction* currentFunction, const bool isFunctionOrFunctionReferenceList, const bool externalFunction)
+{
+	string functionName = "";
+	
+	if(isFunctionOrFunctionReferenceList)
+	{
+		//function list
+		if(externalFunction)
+		{
+			functionName = currentFunction->className + CS_CLASS_DELIMITER + currentFunction->name;
+		}
+		else
+		{
+			functionName = currentFunction->name;
+		}
+	}
+	else
+	{
+		//cout << "!isFunctionOrFunctionReferenceList" << endl;
+		
+		//function reference list
+		#ifdef CS_GENERATE_HTML_DOCUMENTATION_PRINT_FUNCTION_REFERENCES_WITH_CLASS
+		#ifdef CS_GENERATE_HTML_DOCUMENTATION_PRINT_FUNCTION_REFERENCES_WITH_CLASS_EXTERNAL_ONLY
+		if(externalFunction)
+		{
+		#endif
+			functionName = currentFunction->className + CS_CLASS_DELIMITER + currentFunction->name;
+		#ifdef CS_GENERATE_HTML_DOCUMENTATION_PRINT_FUNCTION_REFERENCES_WITH_CLASS_EXTERNAL_ONLY
+		}
+		else
+		{
+			functionName = currentFunction->name;
+		}
+		#endif
+		#else
+		functionName = currentFunction->name;
+		#endif
+	}
+	
+	return functionName;
+}
+#endif
+
+

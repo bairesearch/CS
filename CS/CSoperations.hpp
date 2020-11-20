@@ -26,7 +26,7 @@
  * File Name: CSoperations.hpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3o3a 16-November-2020
+ * Project Version: 3o4a 17-November-2020
  * /
  *******************************************************************************/
 
@@ -57,7 +57,7 @@ class CSoperationsClass
 			private: void searchFunctionStringForFunctionReferencesRecursiveReset(const CSfileContainer* firstFileNameInLayerContainingFunctionReferencesToSearchFor);
 			#endif
 				private: bool searchFunctionStringForFunctionReferences(const CSfile* firstFileInIncludeFileList, const CSfile* fileNameContainingFunctionReferencesToSearchFor, CSfunction** currentReferenceInFunctionReferenceList, CSfunction** currentReferenceInFunctionReferenceListRepeats, string* functionContentsString, const bool currentFile);
-					private: bool searchFunctionStringForFunctionReference(const CSfile* firstFileInIncludeFileList, const CSfunction* currentFunction, const string functionReferenceToFind, bool* firstTimeFound, CSfunction** currentReferenceInFunctionReferenceList, CSfunction** currentReferenceInFunctionReferenceListRepeats, string* functionContentsString);
+					private: bool searchFunctionStringForFunctionReference(const CSfile* firstFileInIncludeFileList, const CSfunction* currentFunction, const string functionReferenceToFind, bool* firstTimeFound, CSfunction** currentReferenceInFunctionReferenceList, CSfunction** currentReferenceInFunctionReferenceListRepeats, string* functionContentsString, const bool externalFunction);
 						private: void identifyFunctionReferenceArguments(CSfunction* currentReferenceInFunctionReferenceList, string* functionContentsString, int indexToFunctionObject, const string functionReferenceToFind);
 							private: string removePrependedWhiteSpace(const string argument);
 			#ifdef CS_IDENTIFY_FUNCTION_DECLARATION_ARGUMENTS
@@ -69,12 +69,17 @@ CSfile* findReferenceInIncludeFileList(CSfile* firstReferenceInAboveLevelBelowLi
 */
 
 	private: string generateSourceFileNameFromHeaderFileName(const string headerFileName, const string sourceFileNameExtension);
+	private: string generateFileNameBaseFromHeaderFileName(const string headerFileName);
 
 	public: void attachFunctionReferenceTargets(CSfileContainer* firstObjectInAboveLevelBelowListContainer, int level);
 
 	private: string extractFunctionArgumentName(string* argumentText, const int indexOfStartOfVariableName);
 	
 	private: void printLevelIndentation(int level);
+	
+	#ifdef CS_GENERATE_HTML_DOCUMENTATION_PRINT_FUNCTION_REFERENCES_WITH_CLASS
+	private: string generateFunctionString(const CSfunction* currentFunction, const bool externalFunction);
+	#endif
 
 };
 

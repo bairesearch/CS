@@ -26,7 +26,7 @@
  * File Name: CSgenerateHTMLdocumentation.hpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3o3a 16-November-2020
+ * Project Version: 3o4a 17-November-2020
  * /
  *******************************************************************************/
 
@@ -63,15 +63,16 @@ class CSgenerateHTMLdocumentationClass
 		private: string generateHTMLdocumentationFooter(const bool htmlFileFooter);
 		private: void generateHTMLdocumentationForAllFunctions(CSfileContainer* firstObjectInAboveLevelBelowListContainer, LDreference* currentReferenceInPrintList, CSfileContainer* firstObjectInTopLevelBelowListContainer, int generateHTMLdocumentationMode, const bool useOutputHTMLfile, string* HTMLdocumentationBody, const XMLparserTag* firstTagInSVGFile, XMLparserTag* lastTagInSVGFile, const bool traceFunctionUpwards, bool usePredefinedGrid);
 			public: void generateHTMLdocumentationForFunction(LDreference* currentReferenceInPrintList, CSfileContainer* firstObjectInTopLevelBelowListContainer, CSfunction* bottomLevelFunctionToTraceUpwards, const string fileNameHoldingFunction, XMLparserTag** currentTag, int generateHTMLdocumentationMode, string* HTMLdocumentationFunctionBody, const string* outputSVGfileNameFunction, const bool useOutputHTMLfile, const string outputHTMLfileName, const bool traceFunctionUpwards);
-				private: void generateHTMLdocumentationFunctionSummary(string* functionName, const string* functionNameFull, string* HTMLdocumentationFunctionSummary);
-				private: void generateHTMLdocumentationFunctionInputArguments(const string* functionName, const string* functionNameFull, string* HTMLdocumentationFunctionInputArguments);
+				private: void generateHTMLdocumentationFunctionSummary(const CSfunction* currentFunction, string* HTMLdocumentationFunctionSummary);
+				private: void generateHTMLdocumentationFunctionInputArguments(const CSfunction* currentFunction, string* HTMLdocumentationFunctionInputArguments);
+					private: void generateHTMLdocumentationFunctionInputArguments(const string* functionName, const string* functionNameFull, string* HTMLdocumentationFunctionInputArguments);
 					private: string ensureHTMLTagSafe(const string str);
 					private: string createDescriptionFromCaseSensitiveMultiwordString(string str);
 				private: void generateHTMLdocumentationFunctionReferenceList(CSfunction* function, string* HTMLdocumentationFunctionReferenceList);
 				private: string generateHTMLdocumentationImagePlaceHolder(const string* traceImageFileName, const string imageTitle);
 			private: void generateFileDiagramFunctionsHeirachy(CSfile* currentFileObject, const string outputSVGFileNameFile, CSfileContainer* firstObjectInTopLevelBelowListContainer, bool usePredefinedGrid);
 		private: void writeStringPointerToFileObject(string* s, ofstream* writeFileObject);
-		private: void addToHTMLdocumentationFileFunctionList(CSfunction* currentFunctionObject, string* HTMLdocumentationFileFunctionList, int* previousIndentation, bool* previousIndentationFirst);
+		private: void addToHTMLdocumentationFileFunctionList(CSfunction* currentFunctionObject, string* HTMLdocumentationFileFunctionList, int* previousIndentation, bool* previousIndentationFirst, const bool isFunctionOrFunctionReferenceList, const bool externalFunction);
 
 
 	#ifdef CS_GENERATE_CLASS_HTML_DOCUMENTATION_FROM_CUSTOM_CSCLASS_FORMAT
@@ -86,6 +87,10 @@ class CSgenerateHTMLdocumentationClass
 	#endif
 
 	private: void addToHTMLdocumentationIndentedList(const string currentFunctionObjectName, int currentFunctionObjectIndentation, string* HTMLdocumentationFileFunctionList, int* previousIndentation, bool* previousIndentationFirst);
+	
+	#ifdef CS_GENERATE_HTML_DOCUMENTATION_PRINT_FUNCTION_NAME_WITH_CLASS
+	private: string generateFunctionString(const CSfunction* currentFunction, const bool isFunctionOrFunctionReferenceList, const bool externalFunction);
+	#endif
 };
 
 #endif

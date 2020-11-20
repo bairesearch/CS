@@ -26,7 +26,7 @@
  * File Name: CSexecflow.hpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3o3a 16-November-2020
+ * Project Version: 3o4a 17-November-2020
  * /
  *******************************************************************************/
 
@@ -75,6 +75,9 @@ class CSexecflowClass
 	private: CSgenerateConstFunctionArgumentCodeClass CSgenerateConstFunctionArgumentCode;
 	#endif
 	public: void generateCodeStructure(const string topLevelFileName, int width, const int height, const string outputLDRfileName, const string outputSVGfileName, const string outputPPMfileName, string outputHTMLfileName, const bool useOutputLDRfile, const bool useOutputPPMfile, bool useOutputHTMLfile, int generateHTMLdocumentationMode, const bool display, bool outputFunctionsConnectivity, bool traceFunctionUpwards, string bottomLevelFunctionNameToTraceUpwards, const bool outputFileConnections, const string topLevelFunctionName, const bool generateOOcode, const bool generateConstFunctionArgumentsCode);
+	#ifdef CS_SUPPORT_PREDEFINED_GRID
+	private: bool initialiseGrid(XMLparserTag** firstTagInGridTag);
+	#endif
 };
 
 

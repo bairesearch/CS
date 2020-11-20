@@ -26,7 +26,7 @@
  * File Name: CSoperations.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3o3a 16-November-2020
+ * Project Version: 3o4a 17-November-2020
  * /
  *******************************************************************************/
 
@@ -210,107 +210,123 @@ bool CSoperationsClass::getIncludeFileNamesFromCorHfile(CSfileContainer* firstRe
 				{
 					if(hashIncludeFileName != aboveLevelObject->name)	//this is added so that do not parse method.h from within method.c!
 					{
-						bool alreadyParsedFile = false;
-						CSfile* currentReferenceInIncludeFileList = NULL;
-						if(findFileObjectInFileObjectContainerList(topLevelReferenceContainer->fileObject->firstFileInBelowListContainer, hashIncludeFileName, &currentReferenceInIncludeFileList))
+						#ifdef CS_GENERATE_CODE_GENERIC_RESTRICT_HEADER_FILE_TYPE_STRICT
+						if(fileIsHeader(hashIncludeFileName))
 						{
-							currentReferenceInIncludeFileListContainer->fileObject = currentReferenceInIncludeFileList;
-
-							CSfileContainer* newCSReferenceContainer = new CSfileContainer();
-							newCSReferenceContainer->previous = currentReferenceInIncludeFileListContainer;
-							currentReferenceInIncludeFileListContainer->next = newCSReferenceContainer;
-						}
-						else
-						{
-							currentReferenceInIncludeFileList = new CSfile();
-							currentReferenceInIncludeFileListContainer->fileObject = currentReferenceInIncludeFileList;
-							currentReferenceInIncludeFileList->name = hashIncludeFileName;
-							string hashIncludeFileNameCFile = generateSourceFileNameFromHeaderFileName(hashIncludeFileName, CS_GENERATE_CODE_GENERIC_SOURCE_FILE_EXTENSION);
-							#ifdef CS_GENERATE_CODE_GENERIC
-							currentReferenceInIncludeFileList->sourceFileNameOrig = hashIncludeFileNameCFile;
-							currentReferenceInIncludeFileList->headerFileName = generateSourceFileNameFromHeaderFileName(currentReferenceInIncludeFileList->name, CS_GENERATE_CODE_GENERIC_HEADER_FILE_EXTENSION);
-							currentReferenceInIncludeFileList->sourceFileName = generateSourceFileNameFromHeaderFileName(currentReferenceInIncludeFileList->sourceFileNameOrig, CS_GENERATE_CODE_GENERIC_SOURCE_FILE_EXTENSION);
-							currentReferenceInIncludeFileList->headerFileTextOrig = SHAREDvars.getFileContents(currentReferenceInIncludeFileList->name);	//headerFileNameOrig
-							currentReferenceInIncludeFileList->sourceFileTextOrig = SHAREDvars.getFileContents(currentReferenceInIncludeFileList->sourceFileNameOrig);
-							currentReferenceInIncludeFileList->headerFileText = currentReferenceInIncludeFileList->headerFileTextOrig;	//initialise with same source code as original file
-							currentReferenceInIncludeFileList->sourceFileText = currentReferenceInIncludeFileList->sourceFileTextOrig;	//initialise with same source code as original file
-							//cout << "getIncludeFileNamesFromCorHfile{}: currentReferenceInIncludeFileList->name = " << currentReferenceInIncludeFileList->name << endl;
-							//cout << "getIncludeFileNamesFromCorHfile{}: currentReferenceInIncludeFileList->sourceFileNameOrig = " << currentReferenceInIncludeFileList->sourceFileNameOrig << endl;
-							#endif
-							currentReferenceInIncludeFileList->id = id;
-							currentReferenceInIncludeFileList->level = level;
-							currentReferenceInIncludeFileListContainer->aboveLevelObject = aboveLevelObject;
-							id++;
-
-							CSfileContainer* newCSReferenceContainer = new CSfileContainer();
-							newCSReferenceContainer->previous = currentReferenceInIncludeFileListContainer;
-							currentReferenceInIncludeFileListContainer->next = newCSReferenceContainer;
-
-							CSfileContainer* newfirstReferenceInBelowListContainer = new CSfileContainer();
-							currentReferenceInIncludeFileList->firstFileInBelowListContainer = newfirstReferenceInBelowListContainer;
-
-							#ifdef CS_DISPLAY_INCLUDE_FILE_PARSING
-							//parse into .h file;
-							printLevelIndentation(level);
-							cout << hashIncludeFileName << endl;
-							//parse into .c file;
-							printLevelIndentation(level);
-							cout << hashIncludeFileNameCFile << endl;
-							#endif
-
-							//parse into .h file;
-							string referenceName = hashIncludeFileName;	//hashIncludeFileName is the current filename being parsed by this instance of getIncludeFileNamesFromCorHfile, ie "x.h" in "#include x.h" [and will recurse]
-							//getIncludeFileNamesFromCorHfile{}: this will add the include file references (filenames) within the .h file in "#include x.h" to currentReferenceInIncludeFileList->firstFileInBelowListContainer
-							bool hFileFound = getIncludeFileNamesFromCorHfile(currentReferenceInIncludeFileList->firstFileInBelowListContainer, topLevelReferenceContainer, currentReferenceInIncludeFileList, referenceName, level+1, false);
-
-							#ifndef CS_DEBUG_DISABLE_FUNCTION_PARSING
-							if(hFileFound)
+						#endif
+							#ifdef CS_GENERATE_CODE_GENERIC_ONLY_LINK_AVAILABLE_HEADER_FILES
+							if(SHAREDvars.fileExists(hashIncludeFileName))
 							{
-								//parse into .c file;
-								CSfileContainer* lastReferenceInBelowListContainer = currentReferenceInIncludeFileList->firstFileInBelowListContainer;
-								while(lastReferenceInBelowListContainer->next != NULL)
+							#endif
+								bool alreadyParsedFile = false;
+								CSfile* currentReferenceInIncludeFileList = NULL;
+								if(findFileObjectInFileObjectContainerList(topLevelReferenceContainer->fileObject->firstFileInBelowListContainer, hashIncludeFileName, &currentReferenceInIncludeFileList))
 								{
-									lastReferenceInBelowListContainer = lastReferenceInBelowListContainer->next;
-								}
-								string referenceNameCFile = hashIncludeFileNameCFile;
-								//getIncludeFileNamesFromCorHfile{}: this will add (append) the include file references (filenames) within the .c equivalent (ie x.c) of the .h file in "#include x.h" to currentReferenceInIncludeFileList->firstFileInBelowListContainer [and will recurse]
-								bool cFileFound = getIncludeFileNamesFromCorHfile(lastReferenceInBelowListContainer, topLevelReferenceContainer, currentReferenceInIncludeFileList, referenceNameCFile, level+1, true);
+									currentReferenceInIncludeFileListContainer->fileObject = currentReferenceInIncludeFileList;
 
-								if(cFileFound)
-								{
-									//parse the new file reference only if both its ".h" and ".c" file are found
-
-									//fill function and function reference list using .h file;
-									CSfunction* newfirstReferenceInFunctionList = new CSfunction();
-									currentReferenceInIncludeFileList->firstFunctionInFunctionList = newfirstReferenceInFunctionList;
-
-									//getFunctionNamesFromFunctionDeclarationsInHfile{}: this opens the .h file hashIncludeFileName and extracts its function declarations (hashIncludeFileName is the current filename being parsed by this instance of getIncludeFileNamesFromCorHfile, ie "x.h" in "#include x.h")
-									bool hFileFound2 = getFunctionNamesFromFunctionDeclarationsInHfile(currentReferenceInIncludeFileList->firstFunctionInFunctionList, referenceName, level);
-									if(hFileFound2)
-									{
-										//getFunctionObjectNamesFromFunctionsInCfile{}: this opens the .c file (hashIncludeFileName equivalent) and locates all the functions corresponding to those declared in its .h file
-										//it also locates all function references within those functions
-										getFunctionObjectNamesFromFunctionsInCfile(firstReferenceInIncludeFileListContainer->fileObject, currentReferenceInIncludeFileList->firstFunctionInFunctionList, currentReferenceInIncludeFileList, referenceNameCFile, level);
-									}
-									else
-									{
-									}
+									CSfileContainer* newCSReferenceContainer = new CSfileContainer();
+									newCSReferenceContainer->previous = currentReferenceInIncludeFileListContainer;
+									currentReferenceInIncludeFileListContainer->next = newCSReferenceContainer;
 								}
 								else
 								{
-									CSfunction* newfirstReferenceInFunctionList = new CSfunction();
-									currentReferenceInIncludeFileList->firstFunctionInFunctionList = newfirstReferenceInFunctionList;
+									currentReferenceInIncludeFileList = new CSfile();
+									currentReferenceInIncludeFileListContainer->fileObject = currentReferenceInIncludeFileList;
+									currentReferenceInIncludeFileList->name = hashIncludeFileName;
+									string hashIncludeFileNameCFile = generateSourceFileNameFromHeaderFileName(hashIncludeFileName, CS_GENERATE_CODE_GENERIC_SOURCE_FILE_EXTENSION);
+									#ifdef CS_GENERATE_CODE_GENERIC
+									currentReferenceInIncludeFileList->sourceFileNameOrig = hashIncludeFileNameCFile;
+									currentReferenceInIncludeFileList->headerFileName = generateSourceFileNameFromHeaderFileName(currentReferenceInIncludeFileList->name, CS_GENERATE_CODE_GENERIC_HEADER_FILE_EXTENSION);
+									currentReferenceInIncludeFileList->sourceFileName = generateSourceFileNameFromHeaderFileName(currentReferenceInIncludeFileList->sourceFileNameOrig, CS_GENERATE_CODE_GENERIC_SOURCE_FILE_EXTENSION);
+									currentReferenceInIncludeFileList->headerFileTextOrig = SHAREDvars.getFileContents(currentReferenceInIncludeFileList->name);	//headerFileNameOrig
+									currentReferenceInIncludeFileList->sourceFileTextOrig = SHAREDvars.getFileContents(currentReferenceInIncludeFileList->sourceFileNameOrig);
+									currentReferenceInIncludeFileList->headerFileText = currentReferenceInIncludeFileList->headerFileTextOrig;	//initialise with same source code as original file
+									currentReferenceInIncludeFileList->sourceFileText = currentReferenceInIncludeFileList->sourceFileTextOrig;	//initialise with same source code as original file
+									//cout << "getIncludeFileNamesFromCorHfile{}: currentReferenceInIncludeFileList->name = " << currentReferenceInIncludeFileList->name << endl;
+									//cout << "getIncludeFileNamesFromCorHfile{}: currentReferenceInIncludeFileList->sourceFileNameOrig = " << currentReferenceInIncludeFileList->sourceFileNameOrig << endl;
+									#endif
+									currentReferenceInIncludeFileList->nameBase = generateFileNameBaseFromHeaderFileName(currentReferenceInIncludeFileList->name);
+									currentReferenceInIncludeFileList->id = id;
+									currentReferenceInIncludeFileList->level = level;
+									currentReferenceInIncludeFileListContainer->aboveLevelObject = aboveLevelObject;
+									id++;
+
+									CSfileContainer* newCSReferenceContainer = new CSfileContainer();
+									newCSReferenceContainer->previous = currentReferenceInIncludeFileListContainer;
+									currentReferenceInIncludeFileListContainer->next = newCSReferenceContainer;
+
+									CSfileContainer* newfirstReferenceInBelowListContainer = new CSfileContainer();
+									currentReferenceInIncludeFileList->firstFileInBelowListContainer = newfirstReferenceInBelowListContainer;
+
+									#ifdef CS_DISPLAY_INCLUDE_FILE_PARSING
+									//parse into .h file;
+									printLevelIndentation(level);
+									cout << hashIncludeFileName << endl;
+									//parse into .c file;
+									printLevelIndentation(level);
+									cout << hashIncludeFileNameCFile << endl;
+									#endif
+
+									//parse into .h file;
+									string referenceName = hashIncludeFileName;	//hashIncludeFileName is the current filename being parsed by this instance of getIncludeFileNamesFromCorHfile, ie "x.h" in "#include x.h" [and will recurse]
+									//getIncludeFileNamesFromCorHfile{}: this will add the include file references (filenames) within the .h file in "#include x.h" to currentReferenceInIncludeFileList->firstFileInBelowListContainer
+									bool hFileFound = getIncludeFileNamesFromCorHfile(currentReferenceInIncludeFileList->firstFileInBelowListContainer, topLevelReferenceContainer, currentReferenceInIncludeFileList, referenceName, level+1, false);
+
+									#ifndef CS_DEBUG_DISABLE_FUNCTION_PARSING
+									if(hFileFound)
+									{
+										//parse into .c file;
+										CSfileContainer* lastReferenceInBelowListContainer = currentReferenceInIncludeFileList->firstFileInBelowListContainer;
+										while(lastReferenceInBelowListContainer->next != NULL)
+										{
+											lastReferenceInBelowListContainer = lastReferenceInBelowListContainer->next;
+										}
+										string referenceNameCFile = hashIncludeFileNameCFile;
+										//getIncludeFileNamesFromCorHfile{}: this will add (append) the include file references (filenames) within the .c equivalent (ie x.c) of the .h file in "#include x.h" to currentReferenceInIncludeFileList->firstFileInBelowListContainer [and will recurse]
+										bool cFileFound = getIncludeFileNamesFromCorHfile(lastReferenceInBelowListContainer, topLevelReferenceContainer, currentReferenceInIncludeFileList, referenceNameCFile, level+1, true);
+
+										if(cFileFound)
+										{
+											//parse the new file reference only if both its ".h" and ".c" file are found
+
+											//fill function and function reference list using .h file;
+											CSfunction* newfirstReferenceInFunctionList = new CSfunction();
+											currentReferenceInIncludeFileList->firstFunctionInFunctionList = newfirstReferenceInFunctionList;
+
+											//getFunctionNamesFromFunctionDeclarationsInHfile{}: this opens the .h file hashIncludeFileName and extracts its function declarations (hashIncludeFileName is the current filename being parsed by this instance of getIncludeFileNamesFromCorHfile, ie "x.h" in "#include x.h")
+											bool hFileFound2 = getFunctionNamesFromFunctionDeclarationsInHfile(currentReferenceInIncludeFileList->firstFunctionInFunctionList, referenceName, level);
+											if(hFileFound2)
+											{
+												//getFunctionObjectNamesFromFunctionsInCfile{}: this opens the .c file (hashIncludeFileName equivalent) and locates all the functions corresponding to those declared in its .h file
+												//it also locates all function references within those functions
+												getFunctionObjectNamesFromFunctionsInCfile(firstReferenceInIncludeFileListContainer->fileObject, currentReferenceInIncludeFileList->firstFunctionInFunctionList, currentReferenceInIncludeFileList, referenceNameCFile, level);
+											}
+											else
+											{
+											}
+										}
+										else
+										{
+											CSfunction* newfirstReferenceInFunctionList = new CSfunction();
+											currentReferenceInIncludeFileList->firstFunctionInFunctionList = newfirstReferenceInFunctionList;
+										}
+									}
+									else
+									{
+										CSfunction* newfirstReferenceInFunctionList = new CSfunction();
+										currentReferenceInIncludeFileList->firstFunctionInFunctionList = newfirstReferenceInFunctionList;
+									}
+									#endif
 								}
-							}
-							else
-							{
-								CSfunction* newfirstReferenceInFunctionList = new CSfunction();
-								currentReferenceInIncludeFileList->firstFunctionInFunctionList = newfirstReferenceInFunctionList;
+
+								currentReferenceInIncludeFileListContainer = currentReferenceInIncludeFileListContainer->next;
+							
+							#ifdef CS_GENERATE_CODE_GENERIC_ONLY_LINK_AVAILABLE_HEADER_FILES
 							}
 							#endif
+						#ifdef CS_GENERATE_CODE_GENERIC_RESTRICT_HEADER_FILE_TYPE_STRICT
 						}
-
-						currentReferenceInIncludeFileListContainer = currentReferenceInIncludeFileListContainer->next;
+						#endif
 					}
 					else
 					{
@@ -359,7 +375,7 @@ bool CSoperationsClass::fileIsHeader(string parseFileName)
 	}
 	else
 	{
-		cout << "fileIsHeader{} error: parseFileName is not CS_GENERATE_CODE_GENERIC_HEADER_FILE_EXTENSION or CS_GENERATE_CODE_GENERIC_SOURCE_FILE_EXTENSION" << endl;
+		//cout << "fileIsHeader{} error: parseFileName is not CS_GENERATE_CODE_GENERIC_HEADER_FILE_EXTENSION or CS_GENERATE_CODE_GENERIC_SOURCE_FILE_EXTENSION" << endl;
 	}
 	
 	return isHeader;
@@ -789,13 +805,15 @@ bool CSoperationsClass::getFunctionNamesFromFunctionDeclarationsInHfile(CSfuncti
 								currentReferenceInFunctionList->nameFull = functionType + STRING_SPACE + className + CS_CLASS_DELIMITER + functionName + functionArguments;	//full function name to search for in cpp files
 								//cout << "parsingClassContents: currentReferenceInFunctionList->nameFull = " << currentReferenceInFunctionList->nameFull << endl;	
 								currentReferenceInFunctionList->nameFullHeader = functionNameFull;
+								//currentReferenceInFunctionList->nameWithClass = className + CS_CLASS_DELIMITER + functionName;
 							}
 							else
 							{
 								currentReferenceInFunctionList->name = functionName;
 								currentReferenceInFunctionList->nameFull = functionNameFull;	
 								//cout << "!parsingClassContents: currentReferenceInFunctionList->nameFull = " << currentReferenceInFunctionList->nameFull << endl;	
-								currentReferenceInFunctionList->nameFullHeader = functionNameFull;				
+								currentReferenceInFunctionList->nameFullHeader = functionNameFull;	
+								//currentReferenceInFunctionList->nameWithClass = functionName;			
 							}
 							#else
 							currentReferenceInFunctionList->name = functionName;
@@ -1223,20 +1241,20 @@ bool CSoperationsClass::searchFunctionStringForFunctionReferences(const CSfile* 
 
 			bool firstTimeFound = true;
 			
-			#ifdef CS_SUPPORT_GENERATED_CPP_CODE_NO_BACKWARD_COMPATIBILITY
+			#ifdef CS_SUPPORT_GENERATED_CPP_CODE_NO_BACKWARD_COMPATIBILITY_FUNCTIONS
 			if(currentFile)
 			{
 				//search for private (within class) function executions:			
 			#endif
 				string functionReferenceToFind = currentFunction->name + CHAR_OPEN_BRACKET;
-				if(searchFunctionStringForFunctionReference(firstFileInIncludeFileList, currentFunction, functionReferenceToFind, &firstTimeFound, currentReferenceInFunctionReferenceList, currentReferenceInFunctionReferenceListRepeats, functionContentsString))
+				if(searchFunctionStringForFunctionReference(firstFileInIncludeFileList, currentFunction, functionReferenceToFind, &firstTimeFound, currentReferenceInFunctionReferenceList, currentReferenceInFunctionReferenceListRepeats, functionContentsString, false))
 				{
 					#ifdef CS_DEBUG_FUNCTION_REFERENCE_SEARCH
 					cout << "CSoperationsClass::searchFunctionStringForFunctionReferences: currentFile: local function found; functionReferenceToFind = " << functionReferenceToFind << endl;
 					#endif
 					result = true;
 				}
-			#ifdef CS_SUPPORT_GENERATED_CPP_CODE_NO_BACKWARD_COMPATIBILITY
+			#ifdef CS_SUPPORT_GENERATED_CPP_CODE_NO_BACKWARD_COMPATIBILITY_FUNCTIONS
 			}
 			#endif
 			#ifdef CS_SUPPORT_GENERATED_CPP_CODE
@@ -1256,7 +1274,7 @@ bool CSoperationsClass::searchFunctionStringForFunctionReferences(const CSfile* 
 						//variant 1; class object declaration: [fileName]Class [fileName], functionNameToFind = [classNameMinusClass].functionName(
 						string functionReferenceToFind = classObjectNameBase + CS_OBJECT_DELIMITER + currentFunction->name + CHAR_OPEN_BRACKET;
 						//cout << "CSoperationsClass::searchFunctionStringForFunctionReferences: !currentFile: variant 1 search; functionReferenceToFind = " << functionReferenceToFind << endl;
-						if(searchFunctionStringForFunctionReference(firstFileInIncludeFileList, currentFunction, functionReferenceToFind, &firstTimeFound, currentReferenceInFunctionReferenceList, currentReferenceInFunctionReferenceListRepeats, functionContentsString))
+						if(searchFunctionStringForFunctionReference(firstFileInIncludeFileList, currentFunction, functionReferenceToFind, &firstTimeFound, currentReferenceInFunctionReferenceList, currentReferenceInFunctionReferenceListRepeats, functionContentsString, true))
 						{
 							#ifdef CS_DEBUG_FUNCTION_REFERENCE_SEARCH
 							cout << "CSoperationsClass::searchFunctionStringForFunctionReferences: !currentFile: variant 1 found; functionReferenceToFind = " << functionReferenceToFind << endl;
@@ -1267,7 +1285,7 @@ bool CSoperationsClass::searchFunctionStringForFunctionReferences(const CSfile* 
 						//variant 2; class object declaration: [fileNameThatEndsWithClass]Class [fileNameThatEndsWithClass]Object, functionNameToFind = [classNameMinusClass]Object.functionName(
 						functionReferenceToFind = classObjectNameBase + CS_CLASS_OBJECT_NAME_APPEND + CS_OBJECT_DELIMITER + currentFunction->name + CHAR_OPEN_BRACKET;
 						//cout << "CSoperationsClass::searchFunctionStringForFunctionReferences: !currentFile: variant 2 search; functionReferenceToFind = " << functionReferenceToFind << endl;
-						if(searchFunctionStringForFunctionReference(firstFileInIncludeFileList, currentFunction, functionReferenceToFind, &firstTimeFound, currentReferenceInFunctionReferenceList, currentReferenceInFunctionReferenceListRepeats, functionContentsString))
+						if(searchFunctionStringForFunctionReference(firstFileInIncludeFileList, currentFunction, functionReferenceToFind, &firstTimeFound, currentReferenceInFunctionReferenceList, currentReferenceInFunctionReferenceListRepeats, functionContentsString, true))
 						{
 							#ifdef CS_DEBUG_FUNCTION_REFERENCE_SEARCH
 							cout << "CSoperationsClass::searchFunctionStringForFunctionReferences: !currentFile: variant 2 found; functionReferenceToFind = " << functionReferenceToFind << endl;
@@ -1279,7 +1297,7 @@ bool CSoperationsClass::searchFunctionStringForFunctionReferences(const CSfile* 
 						//variant 3; class object declaration inline: [fileName]Class(), functionNameToFind = [classNameMinusClass]().functionName(
 						functionReferenceToFind = currentFunction->className + CS_CLASS_OBJECT_INLINE_DECLARATION_APPEND + CS_OBJECT_DELIMITER + currentFunction->name + CHAR_OPEN_BRACKET;
 						//cout << "CSoperationsClass::searchFunctionStringForFunctionReferences: !currentFile: variant 3 search; functionReferenceToFind = " << functionReferenceToFind << endl;
-						if(searchFunctionStringForFunctionReference(firstFileInIncludeFileList, currentFunction, functionReferenceToFind, &firstTimeFound, currentReferenceInFunctionReferenceList, currentReferenceInFunctionReferenceListRepeats, functionContentsString))
+						if(searchFunctionStringForFunctionReference(firstFileInIncludeFileList, currentFunction, functionReferenceToFind, &firstTimeFound, currentReferenceInFunctionReferenceList, currentReferenceInFunctionReferenceListRepeats, functionContentsString, true))
 						{
 							#ifdef CS_DEBUG_FUNCTION_REFERENCE_SEARCH
 							cout << "CSoperationsClass::searchFunctionStringForFunctionReferences: !currentFile: variant 3 found; functionReferenceToFind = " << functionReferenceToFind << endl;
@@ -1303,7 +1321,7 @@ bool CSoperationsClass::searchFunctionStringForFunctionReferences(const CSfile* 
 	return result;
 }
 
-bool CSoperationsClass::searchFunctionStringForFunctionReference(const CSfile* firstFileInIncludeFileList, const CSfunction* currentFunction, const string functionReferenceToFind, bool* firstTimeFound, CSfunction** currentReferenceInFunctionReferenceList, CSfunction** currentReferenceInFunctionReferenceListRepeats, string* functionContentsString)
+bool CSoperationsClass::searchFunctionStringForFunctionReference(const CSfile* firstFileInIncludeFileList, const CSfunction* currentFunction, const string functionReferenceToFind, bool* firstTimeFound, CSfunction** currentReferenceInFunctionReferenceList, CSfunction** currentReferenceInFunctionReferenceListRepeats, string* functionContentsString, const bool externalFunction)
 {
 	bool result = false;
 
@@ -1330,6 +1348,11 @@ bool CSoperationsClass::searchFunctionStringForFunctionReference(const CSfile* f
 				(*currentReferenceInFunctionReferenceList)->isFunctionReference = true;
 				#ifdef CS_SUPPORT_GENERATED_CPP_CODE
 				(*currentReferenceInFunctionReferenceList)->className = currentFunction->className;
+				/*
+				#ifdef CS_GENERATE_HTML_DOCUMENTATION_PRINT_FUNCTION_REFERENCES_WITH_CLASS
+				(*currentReferenceInFunctionReferenceList)->nameWithClass = generateFunctionString(currentFunction, externalFunction);
+				#endif
+				*/
 				#endif
 				#ifdef CS_MATCH_FUNCTION_REFERENCES_WITH_CORRECT_NUMBER_OF_ARGUMENTS
 				identifyFunctionReferenceArguments((*currentReferenceInFunctionReferenceList), functionContentsString, startPosOfFunctionReferenceInFunction, functionReferenceToFind);
@@ -1353,6 +1376,11 @@ bool CSoperationsClass::searchFunctionStringForFunctionReference(const CSfile* f
 			(*currentReferenceInFunctionReferenceListRepeats)->isFunctionReference = true;
 			#ifdef CS_SUPPORT_GENERATED_CPP_CODE
 			(*currentReferenceInFunctionReferenceListRepeats)->className = currentFunction->className;
+			/*
+			#ifdef CS_GENERATE_HTML_DOCUMENTATION_PRINT_FUNCTION_REFERENCES_WITH_CLASS
+			(*currentReferenceInFunctionReferenceListRepeats)->nameWithClass = generateFunctionString(currentFunction, externalFunction);
+			#endif
+			*/
 			#endif
 				
 			int indexToFunctionReference = startPosOfFunctionReferenceInFunction;
@@ -1388,7 +1416,6 @@ bool CSoperationsClass::searchFunctionStringForFunctionReference(const CSfile* f
 
 	return result;
 }
-
 
 //limitations; doesn't support couts containing function references, e.g. "cout << "Error: getFloatArgument(" << keystr << ")" << endl;" (NB '<' is interpreted as CLASS_TYPE_OPEN_TAG)
 void CSoperationsClass::identifyFunctionReferenceArguments(CSfunction* currentReferenceInFunctionReferenceList, string* functionContentsString, int indexToFunctionObject, const string functionReferenceToFind)
@@ -1637,13 +1664,26 @@ CSfile* findReferenceInIncludeFileList(CSfile* firstReferenceInAboveLevelBelowLi
 string CSoperationsClass::generateSourceFileNameFromHeaderFileName(const string headerFileName, const string sourceFileNameExtension)
 {
 	string sourceFileName = "";
-	int positionOfExtension = headerFileName.rfind(CHAR_FULLSTOP);
+	int positionOfExtension = headerFileName.rfind(CS_FILE_EXTENSION_DELIMITER);
 	if(positionOfExtension != CPP_STRING_FIND_RESULT_FAIL_VALUE)
 	{
 		sourceFileName = headerFileName.substr(0, positionOfExtension+1) + sourceFileNameExtension;
 	}
 	return sourceFileName;
 }
+
+string CSoperationsClass::generateFileNameBaseFromHeaderFileName(const string headerFileName)
+{
+	string sourceFileNameBase = "";
+	int positionOfExtension = headerFileName.rfind(CS_FILE_EXTENSION_DELIMITER);
+	if(positionOfExtension != CPP_STRING_FIND_RESULT_FAIL_VALUE)
+	{
+		sourceFileNameBase = headerFileName.substr(0, positionOfExtension);
+	}
+	return sourceFileNameBase;
+}
+
+
 
 
 
@@ -1774,5 +1814,27 @@ void CSoperationsClass::printLevelIndentation(int level)
 		cout << "\t";
 	}
 }
-			
+	
+#ifdef CS_GENERATE_HTML_DOCUMENTATION_PRINT_FUNCTION_REFERENCES_WITH_CLASS
+string CSoperationsClass::generateFunctionString(const CSfunction* currentFunction, const bool externalFunction)
+{
+	string functionReferenceName = "";
+	
+	#ifdef CS_GENERATE_HTML_DOCUMENTATION_PRINT_FUNCTION_REFERENCES_WITH_CLASS_EXTERNAL_ONLY
+	if(externalFunction)
+	{
+	#endif
+		functionReferenceName = currentFunction->className + CS_CLASS_DELIMITER + currentFunction->name;
+	#ifdef CS_GENERATE_HTML_DOCUMENTATION_PRINT_FUNCTION_REFERENCES_WITH_CLASS_EXTERNAL_ONLY
+	}
+	else
+	{
+		functionReferenceName = currentFunction->name;
+	}
+	#endif
+	
+	return functionReferenceName;
+}
+#endif
+		
 			

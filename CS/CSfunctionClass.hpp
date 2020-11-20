@@ -26,7 +26,7 @@
  * File Name: CSfunctionClass.hpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3o3a 16-November-2020
+ * Project Version: 3o4a 17-November-2020
  * /
  *******************************************************************************/
 
@@ -149,13 +149,14 @@ public:
 	CSfunction* functionReferenceTarget;	//added CS3h1a
 	CSfile* functionReferenceTargetFileOwner;	//added CS3h1a
 	
-	string functionType;	//added CS3o2a - not used
+	string functionType;	//added CS3o2a
 	string functionArguments;	//added CS3o2a - not used
 	#ifdef CS_SUPPORT_GENERATED_CPP_CODE
 	string className;
 	#ifdef CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIERS
 	int functionAccessSpecifierType;
 	#endif
+	//string nameWithClass;	//added CS3o2a
 	#endif
 };
 

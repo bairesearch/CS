@@ -26,7 +26,7 @@
  * File Name: CSfileClass.hpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3o3a 16-November-2020
+ * Project Version: 3o4a 17-November-2020
  * /
  *******************************************************************************/
 
@@ -83,6 +83,7 @@ public:
 	string sourceFileText;
 	string headerFileText;
 	#endif
+	string nameBase;	//added CS3o2a	- name without extension
 	
 	#ifdef CS_OPTIMISE_PREVENT_DUPLICATE_FUNCTION_CONNECTIONS
 	bool identifiedFunctionReferences;

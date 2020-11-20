@@ -26,7 +26,7 @@
  * File Name: CSexecflow.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3o3a 16-November-2020
+ * Project Version: 3o4a 17-November-2020
  * /
  *******************************************************************************/
 
@@ -83,7 +83,6 @@ void CSexecflowClass::generateCodeStructure(const string topLevelFileName, int w
 
 	#ifndef CS_DEBUG_DISABLE_FUNCTION_PARSING
 	CSoperations.attachFunctionReferenceTargets(firstObjectInTopLevelBelowListContainer, 0);	//added 3h1a
-	cout << "end attachFunctionReferenceTargets" << endl;
 	#endif
 	
 	CSdraw.initiateMaxXatParticularY();
@@ -97,28 +96,7 @@ void CSexecflowClass::generateCodeStructure(const string topLevelFileName, int w
 	bool usePredefinedGrid = false;
 	XMLparserTag* firstTagInGridTag = NULL;
 	#ifdef CS_SUPPORT_PREDEFINED_GRID
-	bool tempResult = true;
-	XMLparserTag* firstTagInRulesTag = XMLparserClass.parseTagDownALevel(CSfirstTagInXMLfile, RULES_XML_TAG_rules, &tempResult);
-	if(tempResult)
-	{
-		XMLparserTag* currentTag = firstTagInRulesTag;
-		while(currentTag->nextTag != NULL)
-		{
-			if(currentTag->name == RULES_XML_TAG_grid)
-			{
-				firstTagInGridTag = XMLparserClass.parseTagDownALevel(currentTag, RULES_XML_TAG_grid, &tempResult);
-				if(tempResult)
-				{
-					usePredefinedGrid = true;
-				}
-			}
-			currentTag = currentTag->nextTag;
-		}
-		if(!usePredefinedGrid)
-		{
-			cout << "error: CS_SUPPORT_PREDEFINED_GRID: !foundGridTag - check CSrules.xml" << endl;
-		}
-	}
+	usePredefinedGrid = initialiseGrid(&firstTagInGridTag);
 	#endif
 
 	LDreference* currentReferenceInPrintList = CSdraw.createFileObjectListBoxes(firstReferenceInPrintList, firstObjectInTopLevelBelowListContainer, firstObjectInTopLevelBelowListContainer, &currentTagInSVGFile, outputFunctionsConnectivity, traceFunctionUpwards, firstTagInGridTag, usePredefinedGrid);
@@ -143,28 +121,41 @@ void CSexecflowClass::generateCodeStructure(const string topLevelFileName, int w
 		}
 		if(topLevelFunctionNameFound)
 		{
-			//cout << "topLevelFunctionNameFound" << endl;
+			//cout << "topLevelFunctionName = " << topLevelFunctionName << endl;
 			
 			//CSfunction* topLevelFunctionObject = firstReferenceInTopLevelBelowList->firstFunctionInFunctionList;
-			topLevelFunctionObject->printX = firstReferenceInTopLevelBelowList->printX;
-			topLevelFunctionObject->printY = firstReferenceInTopLevelBelowList->printY;
-			topLevelFunctionObject->col = firstReferenceInTopLevelBelowList->col;
+			
+			#ifdef CS_DRAW_PRINT_TOP_LEVEL_FUNCTION
+			CSfunction* entryPointFunctionObjectArtificial = new CSfunction();
+			entryPointFunctionObjectArtificial->firstReferenceInFunctionReferenceList = topLevelFunctionObject;
+			#else
+			CSfunction* entryPointFunctionObjectArtificial = topLevelFunctionObject;
+			#endif
+			
+			entryPointFunctionObjectArtificial->printX = firstReferenceInTopLevelBelowList->printX;
+			entryPointFunctionObjectArtificial->printY = firstReferenceInTopLevelBelowList->printY;
+			entryPointFunctionObjectArtificial->col = firstReferenceInTopLevelBelowList->col;
 
 			firstReferenceInTopLevelBelowList->maxFunctionPrintXAtAParticularY[0] = firstReferenceInTopLevelBelowList->maxFunctionPrintXAtAParticularY[0] + 1;
-			topLevelFunctionObject->printed = true;
+			entryPointFunctionObjectArtificial->printed = true;
 			if(!(firstReferenceInTopLevelBelowList->printed))
 			{
 				cerr << "error" << endl;
 				exit(EXIT_ERROR);
 			}
 
-			CSfunction* currentReferenceInFunctionReferenceList = topLevelFunctionObject->firstReferenceInFunctionReferenceList;
+			#ifdef CS_DRAW_PRINT_TOP_LEVEL_FUNCTION
+			currentReferenceInPrintList = CSdraw.createFunctionObjectListBoxesAndConnections(currentReferenceInPrintList, firstReferenceInTopLevelBelowList, entryPointFunctionObjectArtificial, firstObjectInTopLevelBelowListContainer, 0, topLevelFunctionObject, &currentTagInSVGFile, traceFunctionUpwards, false, NULL, usePredefinedGrid, true);
+			#else
+			CSfunction* currentReferenceInFunctionReferenceList = topLevelFunctionObjectArtificial->firstReferenceInFunctionReferenceList;
 			while(currentReferenceInFunctionReferenceList->next != NULL)
 			{
 				//cout << "topLevelFunctionObject->firstReferenceInFunctionReferenceList" << endl;
-				currentReferenceInPrintList = CSdraw.createFunctionObjectListBoxesAndConnections(currentReferenceInPrintList, firstReferenceInTopLevelBelowList, topLevelFunctionObject, firstObjectInTopLevelBelowListContainer, 0, currentReferenceInFunctionReferenceList, &currentTagInSVGFile, traceFunctionUpwards, false, NULL, usePredefinedGrid);
+				currentReferenceInPrintList = CSdraw.createFunctionObjectListBoxesAndConnections(currentReferenceInPrintList, firstReferenceInTopLevelBelowList, topLevelFunctionObjectArtificial, firstObjectInTopLevelBelowListContainer, 0, currentReferenceInFunctionReferenceList, &currentTagInSVGFile, traceFunctionUpwards, false, NULL, usePredefinedGrid, false);
 				currentReferenceInFunctionReferenceList = currentReferenceInFunctionReferenceList->next;
 			}
+			#endif
+
 			CSdraw.resetPrintedFunctionConnections(firstReferenceInTopLevelBelowList, topLevelFunctionObject, false, NULL);
 
 			if(traceFunctionUpwards && (bottomLevelFunctionNameToTraceUpwards != ""))
@@ -202,6 +193,10 @@ void CSexecflowClass::generateCodeStructure(const string topLevelFileName, int w
 					htmlDocumentationGenerationPreventsDisplay = true;	//cannot display in OpenGL/save to file, as LD vector graphics references have been deleted
 				}
 			}
+			
+			#ifdef CS_DRAW_PRINT_TOP_LEVEL_FUNCTION
+			delete entryPointFunctionObjectArtificial;
+			#endif
 		}
 		else
 		{
@@ -296,6 +291,101 @@ void CSexecflowClass::generateCodeStructure(const string topLevelFileName, int w
 	{
 		LDopengl.exitOpenGL();
 	}
-
 }
 
+#ifdef CS_SUPPORT_PREDEFINED_GRID
+bool CSexecflowClass::initialiseGrid(XMLparserTag** firstTagInGridTag)
+{	
+	bool usePredefinedGrid = false;
+	
+	bool tempResult = true;
+	XMLparserTag* firstTagInRulesTag = XMLparserClass.parseTagDownALevel(CSfirstTagInXMLfile, RULES_XML_TAG_rules, &tempResult);
+	if(tempResult)
+	{
+		XMLparserTag* currentTag = firstTagInRulesTag;
+		while(currentTag->nextTag != NULL)
+		{
+			if(currentTag->name == RULES_XML_TAG_grid)
+			{
+				*firstTagInGridTag = XMLparserClass.parseTagDownALevel(currentTag, RULES_XML_TAG_grid, &tempResult);
+				if(tempResult)
+				{
+					usePredefinedGrid = true;
+				}
+			}
+			currentTag = currentTag->nextTag;
+		}
+		if(!usePredefinedGrid)
+		{
+			cout << "error: CS_SUPPORT_PREDEFINED_GRID: !foundGridTag - check CSrules.xml" << endl;
+		}
+	}
+	
+	#ifdef CS_SUPPORT_PREDEFINED_GRID_VERIFY_INTEGRITY
+	XMLparserTag* currentFileTag = *firstTagInGridTag;
+	while(currentFileTag->nextTag != NULL)
+	{
+		int xPos;
+		int yPos;
+		
+		if(currentFileTag->firstAttribute->name == RULES_XML_ATTRIBUTE_name)
+		{
+			XMLparserAttribute* currentAttributeTag = currentFileTag->firstAttribute;
+			while(currentAttributeTag->nextAttribute != NULL)
+			{
+				if(currentAttributeTag->name == RULES_XML_ATTRIBUTE_x)
+				{
+					xPos = SHAREDvars.convertStringToInt(currentAttributeTag->value);
+				}
+				if(currentAttributeTag->name == RULES_XML_ATTRIBUTE_y)
+				{
+					xPos = SHAREDvars.convertStringToInt(currentAttributeTag->value);
+				}
+				currentAttributeTag = currentAttributeTag->nextAttribute;
+			}
+		}
+
+		XMLparserTag* currentFileTag2 = *firstTagInGridTag;
+		while(currentFileTag2->nextTag != NULL)
+		{
+			if(currentFileTag2 != currentFileTag)
+			{
+				int xPos2;
+				int yPos2;
+				
+				if(currentFileTag2->firstAttribute->name == RULES_XML_ATTRIBUTE_name)
+				{
+					XMLparserAttribute* currentAttributeTag = currentFileTag2->firstAttribute;
+					while(currentAttributeTag->nextAttribute != NULL)
+					{
+						if(currentAttributeTag->name == RULES_XML_ATTRIBUTE_x)
+						{
+							xPos2 = SHAREDvars.convertStringToInt(currentAttributeTag->value);
+						}
+						if(currentAttributeTag->name == RULES_XML_ATTRIBUTE_y)
+						{
+							xPos2 = SHAREDvars.convertStringToInt(currentAttributeTag->value);
+						}
+						currentAttributeTag = currentAttributeTag->nextAttribute;
+					}
+				}
+				
+				if((xPos == xPos2) && (yPos == yPos2))
+				{
+					usePredefinedGrid = false;
+					cerr << "CS_SUPPORT_PREDEFINED_GRID: CSexecflowClass::initialiseGrid error: <grid> <file> tag found with identical x/y coordinates to another <file> tag" << endl;
+					exit(EXIT_ERROR);
+				}
+			}
+		
+			currentFileTag2 = currentFileTag2->nextTag;
+		}
+		
+		currentFileTag = currentFileTag->nextTag;
+	}				
+	#endif
+	
+	return usePredefinedGrid;
+}
+#endif
+	

@@ -33,7 +33,7 @@
 		<miscellaneousItem name="CS_FILE_OR_FUNCTION_TEXT_BOX_BOX_SCALE_FACTOR_Y_SPACING_FRACTION_SVG" stringValue="" fractionalValue="0.1" />
 		
 		<miscellaneousItem name="CS_FILE_FUNCTIONS_DISABLED_VECTOROBJECTS_SCALE_FACTOR" stringValue="" fractionalValue="500" />
-		<miscellaneousItem name="CS_FILE_FUNCTIONS_ENABLED_VECTOROBJECTS_SCALE_FACTOR" stringValue="" fractionalValue="500" />
+		<miscellaneousItem name="CS_FILE_FUNCTIONS_ENABLED_VECTOROBJECTS_SCALE_FACTOR" stringValue="" fractionalValue="200" />
 		<miscellaneousItem name="CS_FILE_MAX_TEXT_LENGTH" stringValue="" fractionalValue="20" />
 		<miscellaneousItem name="CS_FILE_TEXT_BOX_PADDING_FRACTION_OF_TEXT_LENGTH" stringValue="" fractionalValue="1.25" />
 		<miscellaneousItem name="CS_FILE_FUNCTIONS_DISABLED_TEXT_BOX_SCALE_FACTOR_X_SPACING_FRACTION" stringValue="" fractionalValue="0.9" />
@@ -63,141 +63,214 @@
 		<miscellaneousItem name="CS_LAYER_5_COLOUR" stringValue="CS" fractionalValue="22" />
 		<miscellaneousItem name="CS_LAYER_6_COLOUR" stringValue="XML" fractionalValue="25" />
 		<miscellaneousItem name="CS_LAYER_7_COLOUR" stringValue="LD" fractionalValue="14" />
-		<miscellaneousItem name="CS_LAYER_8_COLOUR" stringValue="LRRC" fractionalValue="0" />
-		<miscellaneousItem name="CS_LAYER_9_COLOUR" stringValue="NLC" fractionalValue="5" />
-		<miscellaneousItem name="CS_LAYER_10_COLOUR" stringValue="PRD" fractionalValue="8" />
-		<miscellaneousItem name="CS_LAYER_11_COLOUR" stringValue="SANI" fractionalValue="7" />
-		<miscellaneousItem name="CS_LAYER_12_COLOUR" stringValue="LRP" fractionalValue="15" />
+		<miscellaneousItem name="CS_LAYER_8_COLOUR" stringValue="LRRC" fractionalValue="320" />
+		<miscellaneousItem name="CS_LAYER_9_COLOUR" stringValue="NLC" fractionalValue="272" />
+		<miscellaneousItem name="CS_LAYER_10_COLOUR" stringValue="PRD" fractionalValue="5" />
+		<miscellaneousItem name="CS_LAYER_11_COLOUR" stringValue="SANI" fractionalValue="288" />
+		<miscellaneousItem name="CS_LAYER_12_COLOUR" stringValue="LRP" fractionalValue="11" />
 		
 		<miscellaneousItem name="CS_FUNCTION_CONNECTION_HIGHLIGHT_COLOUR" stringValue="" fractionalValue="5" />
 		<miscellaneousItem name="CS_FUNCTION_BOX_HIGHLIGHT_COLOUR" stringValue="" fractionalValue="5" />
 		
 	</draw>
 	<grid>
-		<file name="NLCmain.hpp" x="" y="" />
-		<file name="NLCtranslator.hpp" x="" y="" />
-		<file name="NLCprint.hpp" x="" y="" />
-		<file name="NLCtranslatorCodeBlocks.hpp" x="" y="" />
-		<file name="NLCtranslatorClassDefinitions.hpp" x="" y="" />
-		<file name="NLCprintCodeBlocks.hpp" x="" y="" />
-		<file name="NLCprintClassDefinitions.hpp" x="" y="" />
-		<file name="NLCcodeBlockClass.hpp" x="" y="" />
-		<file name="NLCclassDefinitionClass.hpp" x="" y="" />
-		<file name="NLCitemClass.hpp" x="" y="" />
-		<file name="NLCglobalDefs.hpp" x="" y="" />
-		<file name="NLCprintDefs.hpp" x="" y="" />
+		<file name="SANIformation.hpp" x="4" y="29" />
+		<file name="SANIgenerateCompactContinuous.hpp" x="1" y="25" />
+		<file name="SANIgenerateCompact.hpp" x="2" y="24" />
+		<file name="SANIgenerateCompactIdentify.hpp" x="4" y="25" />
+		<file name="SANIgenerateCompactOperations.hpp" x="3" y="26" />
+		<file name="SANIgenerateCompactSectionedUnique.hpp" x="2" y="25" />
+		<file name="SANIgenerateCompactSectionedVariable.hpp" x="3" y="25" />
+		<file name="SANIglobalDefs.hpp" x="4" y="32" />
+		<file name="SANImain.hpp" x="5" y="21" />
+		<file name="SANIneuralNetworkOperations.hpp" x="7" y="22" />
+		<file name="SANInodesComponentClass.hpp" x="5" y="31" />
+		<file name="SANInodesGroupClass.hpp" x="4" y="31" />
+		<file name="SANInodes.hpp" x="5" y="30" />
+		<file name="SANIparser.hpp" x="10" y="25" />
+		<file name="SANIposRelTranslator.hpp" x="5" y="22" />
+		<file name="SANIposRelTranslatorPermutations.hpp" x="5" y="23" />
+		<file name="SANIposRelTranslatorVariables.hpp" x="8" y="30" />
+		<file name="SANIpropagateCompactGenerateOperations.hpp" x="5" y="27" />
+		<file name="SANIpropagateCompact.hpp" x="7" y="26" />
+		<file name="SANIpropagateCompactOperations.hpp" x="7" y="28" />
+		<file name="SANIpropagateHeavyOptimised.hpp" x="7" y="24" />
+		<file name="SANIpropagateHeavyUnoptimised.hpp" x="8" y="24" />
+		<file name="SANIpropagateInverse.hpp" x="6" y="14" />
+		<file name="SANIpropagateLightOptimised.hpp" x="9" y="24" />
+		<file name="SANIpropagateLightUnoptimised.hpp" x="10" y="24" />
+		<file name="SANIpropagateOperations.hpp" x="9" y="27" />
+		<file name="SANIpropagateOperationsParseTree.hpp" x="9" y="29" />
+		<file name="SANIrules.hpp" x="7" y="23" />
+		<file name="SANIspiked.hpp" x="" y="" />
+		
+		<file name="LRPglobalDefs.hpp" x="11" y="28" />
+		<file name="LRPmain.hpp" x="13" y="21" />
+		<file name="LRPpreprocessor.hpp" x="12" y="22" />
+		<file name="LRPpreprocessorPOStaggerDatabase.hpp" x="14" y="24" />
+		<file name="LRPpreprocessorPOStagger.hpp" x="14" y="23" />
+		<file name="LRPpreprocessorSentenceClass.hpp" x="13" y="26" />
+		<file name="LRPpreprocessorWordClass.hpp" x="13" y="27" />
+		<file name="LRPpreprocessorWordIdentification.hpp" x="12" y="24" />
+		<file name="LRPpreprocessorWordReduction.hpp" x="12" y="25" />
+		
+		<file name="NLCmain.hpp" x="4" y="1" />
+		<file name="NLCpreprocessor.hpp" x="2" y="2" />
+		<file name="NLCpreprocessorMath.hpp" x="2" y="3" />
+		<file name="NLCpreprocessorMathLogicalConditions.hpp" x="2" y="4" />
+		<file name="NLCpreprocessorSentenceClass.hpp" x="2" y="5" />
+		<file name="NLCtranslator.hpp" x="4" y="2" />
+		<file name="NLCapi.hpp" x="6" y="2" />
+		<file name="NLCprint.hpp" x="8" y="2" />
+		<file name="NLCtranslatorCodeBlocks.hpp" x="4" y="3" />
+		<file name="NLCtranslatorCodeBlocksLogicalConditions.hpp" x="4" y="4" />
+		<file name="NLCtranslatorCodeBlocksLogicalConditionsAdvanced.hpp" x="5" y="4" />
+		<file name="NLCtranslatorCodeBlocksOperations.hpp" x="4" y="5" />
+		<file name="NLCtranslatorClassDefinitions.hpp" x="5" y="3" />
+		<file name="NLCprintCodeBlocks.hpp" x="8" y="3" />
+		<file name="NLCprintCodeBlocksFunctions.hpp" x="8" y="4" />
+		<file name="NLCprintClassDefinitions.hpp" x="9" y="3" />
+		<file name="NLCcodeBlockClass.hpp" x="6" y="6" />
+		<file name="NLCclassDefinitionClass.hpp" x="7" y="6" />
+		<file name="NLCitemClass.hpp" x="7" y="7" />
+		<file name="NLCglobalDefs.hpp" x="7" y="8" />
+		<file name="NLCprintDefs.hpp" x="8" y="7" />
 
-		<file name="GIAbot.hpp" x="" y="" />
-		<file name="GIAconditionNodeClass.hpp" x="" y="" />
-		<file name="GIAcxlConversion.hpp" x="" y="" />
-		<file name="GIAdatabase.hpp" x="" y="" />
-		<file name="GIAdraw.hpp" x="" y="" />
-		<file name="GIAentityConnectionClass.hpp" x="" y="" />
-		<file name="GIAentityNodeClass.hpp" x="" y="" />
-		<file name="GIAglobalDefs.hpp" x="" y="" />
-		<file name="GIAlrp.hpp" x="" y="" />
-		<file name="GIAmain.hpp" x="" y="" />
-		<file name="GIAnlg.hpp" x="" y="" />
-		<file name="GIAnlp.hpp" x="" y="" />
-		<file name="GIAnlpParser.hpp" x="" y="" />
-		<file name="GIAquery.hpp" x="" y="" />
-		<file name="GIAsentenceClass.hpp" x="" y="" />
-		<file name="GIAtranslatorApplyAdvancedFeatures.hpp" x="" y="" />
-		<file name="GIAtranslatorDefineGrammar.hpp" x="" y="" />
-		<file name="GIAtranslatorDefineReferencing.hpp" x="" y="" />
-		<file name="GIAtranslatorDefineSubstances.hpp" x="" y="" />
-		<file name="GIAtranslator.hpp" x="" y="" />
-		<file name="GIAtranslatorLinkEntities.hpp" x="" y="" />
-		<file name="GIAtranslatorOperations.hpp" x="" y="" />
-		<file name="GIAtranslatorDefs.hpp" x="" y="" />
-		<file name="GIAtranslatorRedistributeRelexRelations.hpp" x="" y="" />
-		<file name="GIAtranslatorRedistributeStanfordRelations.hpp" x="" y="" />
-		<file name="GIAwordnet.hpp" x="" y="" />
-		<file name="GIAxmlConversion.hpp" x="" y="" />
+		<file name="GIAbot.hpp" x="6" y="14" />
+		<file name="GIAconditionNodeClass.hpp" x="3" y="20" />
+		<file name="GIAcxlConversion.hpp" x="13" y="12" />
+		<file name="GIAdatabase.hpp" x="6" y="17" />
+		<file name="GIAdraw.hpp" x="11" y="12" />
+		<file name="GIAentityConnectionClass.hpp" x="4" y="19" />
+		<file name="GIAentityNodeClass.hpp" x="3" y="19" />
+		<file name="GIAglobalDefs.hpp" x="3" y="21" />
+		<file name="GIAlrp.hpp" x="1" y="12" />
+		<file name="GIAmain.hpp" x="4" y="11" />
+		<file name="GIAnlg.hpp" x="10" y="12" />
+		<file name="GIAnlp.hpp" x="2" y="12" />
+		<file name="GIAnlpParser.hpp" x="2" y="13" />
+		<file name="GIAquery.hpp" x="9" y="12" />
+		<file name="GIAsentenceClass.hpp" x="3" y="18" />
+		<file name="GIAtranslator.hpp" x="5" y="12" />
+		<file name="GIAtranslatorGrammar.hpp" x="3" y="13" />
+		<file name="GIAsynRelTranslatorParser.hpp" x="5" y="13" />
+		<file name="GIAsynRelTranslatorRedistributeRelations.hpp" x="4" y="13" />
+		<file name="GIAsynRelTranslatorRedistributeRelationsStanford.hpp" x="4" y="14" />
+		<file name="GIAsynRelTranslatorRedistributeRelationsRelex.hpp" x="4" y="15" />
+		<file name="GIAtranslatorReferencing.hpp" x="5" y="14" />
+		<file name="GIAsynRelTranslatorDefineSubstances.hpp" x="6" y="13" />
+		<file name="GIAsynRelTranslatorLinkEntities.hpp" x="7" y="13" />
+		<file name="GIAsynRelTranslatorLinkEntitiesDynamic.hpp" x="7" y="14" />
+		<file name="GIAsynRelTranslatorApplyAdvancedFeatures.hpp" x="8" y="13" />
+		<file name="GIAsynRelTranslatorRules.hpp" x="3" y="14" />
+		<file name="GIAsynRelTranslatorGeneric.hpp" x="3" y="15" />
+		<file name="GIAtranslatorOperations.hpp" x="3" y="16" />
+		<file name="GIAsynRelTranslatorDefs.hpp" x="4" y="17" />
+		<file name="GIAwordnet.hpp" x="9" y="13" />
+		<file name="GIAxmlConversion.hpp" x="12" y="12" />
+		<file name="GIAsemRelTranslatorParser.hpp" x="8" y="15" />
+		<file name="GIAsemRelTranslator.hpp" x="8" y="16" />
+		<file name="GIAsemRelTranslatorOperations.hpp" x="8" y="17" />
+		<file name="GIAsemRelTranslatorDatabase.hpp" x="8" y="18" />
+		<file name="GIAsemRelTranslatorDefs.hpp" x="8" y="19" />
+		<file name="GIAneuralNetworkNonSemantic.hpp" x="10" y="13" />
+		<file name="GIAneuralNetworkOperations.hpp" x="10" y="14" />
+		<file name="GIAneuralNetworkSymbolicCore.hpp" x="11" y="13" />
+		<file name="GIAposRelTranslator.hpp" x="9" y="15" />
+		<file name="GIAposRelTranslatorHybrid.hpp" x="10" y="16" />
+		<file name="GIAposRelTranslatorHybridLogicReference.hpp" x="10" y="17" />
+		<file name="GIAposRelTranslatorHybridReferenceSet.hpp" x="10" y="18" />
+		<file name="GIAposRelTranslatorHybridSentenceClass.hpp" x="10" y="19" />
+		<file name="GIAposRelTranslatorParser.hpp" x="9" y="16" />
+		<file name="GIAposRelTranslatorParserOperations.hpp" x="9" y="17" />
 
-		<file name="GIAsemanticParser.hpp" x="" y="" />
-		<file name="GIAsemanticParserTranslator.hpp" x="" y="" />
-		<file name="GIAsemanticParserOperations.hpp" x="" y="" />
-		<file name="GIAsemanticParserDatabase.hpp" x="" y="" />
-
-		<file name="wn.hpp" x="" y="" />
-		<file name="math.hpp" x="" y="" />
-		<file name="CECodeextensionClass.hpp" x="" y="" />
+		<file name="wn.hpp" x="4" y="39" />
+		<file name="math.hpp" x="5" y="39" />
+		<file name="CECodeextensionClass.hpp" x="6" y="39" />
 		<file name="jpeglib.hpp" x="" y="" />
 		<file name="jmemsys.hpp" x="" y="" />
 		<file name="float.hpp" x="" y="" />
 
-		<file name="RTglobalDefs.hpp" x="4" y="6" />
-		<file name="RTmain.hpp" x="3" y="1" />
-		<file name="RToperations.hpp" x="4" y="4" />
-		<file name="RTparser.hpp" x="3" y="4" />
-		<file name="RTpixelMaps.hpp" x="5" y="4" />
-		<file name="RTppm.hpp" x="5" y="5" />
-		<file name="RTraytracer.hpp" x="4" y="3" />
-		<file name="RTreferenceManipulation.hpp" x="2" y="2" />
-		<file name="RTscene.hpp" x="4" y="2" />
-		<file name="RTviewinfo.hpp" x="3" y="5" />
+		<file name="RTglobalDefs.hpp" x="14" y="36" />
+		<file name="RTmain.hpp" x="" y="" />
+		<file name="RToperations.hpp" x="" y="" />
+		<file name="RTparser.hpp" x="" y="" />
+		<file name="RTpixelMaps.hpp" x="14" y="33" />
+		<file name="RTppm.hpp" x="14" y="34" />
+		<file name="RTraytracer.hpp" x="" y="" />
+		<file name="RTreferenceManipulation.hpp" x="" y="" />
+		<file name="RTscene.hpp" x="" y="" />
+		<file name="RTviewinfo.hpp" x="14" y="35" />
 
-		<file name="SHAREDglobalDefs.hpp" x="2" y="7" />
-		<file name="SHAREDvars.hpp" x="2" y="6" />
-		<file name="SHAREDvector.hpp" x="2" y="5" />
+		<file name="SHAREDglobalDefs.hpp" x="11" y="38" />
+		<file name="SHAREDvars.hpp" x="11" y="37" />
+		<file name="SHAREDvector.hpp" x="11" y="36" />
 
 		<file name="LDjpeg.hpp" x="" y="" />
 		<file name="LDmysql.hpp" x="" y="" />
-		<file name="LDopengl.hpp" x="" y="" />
-		<file name="LDparser.hpp" x="1" y="2" />
-		<file name="LDreferenceClass.hpp" x="2" y="4" />
-		<file name="LDreferenceManipulation.hpp" x="2" y="3" />
-		<file name="LDsprite.hpp" x="" y="" />
-		<file name="LDsvg.hpp" x="" y="" />
+		<file name="LDopengl.hpp" x="13" y="33" />
+		<file name="LDparser.hpp" x="12" y="33" />
+		<file name="LDreferenceClass.hpp" x="11" y="35" />
+		<file name="LDreferenceManipulation.hpp" x="11" y="34" />
+		<file name="LDsprite.hpp" x="11" y="33" />
+		<file name="LDsvg.hpp" x="10" y="33" />
 
-		<file name="XMLparserClass.hpp" x="" y="" />
-		<file name="XMLrulesClass.hpp" x="" y="" />
-
-		<file name="ORcomparison.hpp" x="" y="" />
-		<file name="ORdatabaseDecisionTree.hpp" x="" y="" />
-		<file name="ORdatabaseFileIO.hpp" x="" y="" />
-		<file name="ORdatabaseSQL.hpp" x="" y="" />
-		<file name="ORfeature.hpp" x="" y="" />
-		<file name="ORglobalDefs.hpp" x="" y="" />
-		<file name="ORimagecomparison.hpp" x="" y="" />
-		<file name="ORmain.hpp" x="" y="" />
-		<file name="ORmethod2DOD.hpp" x="" y="" />
-		<file name="ORmethod3DOD.hpp" x="" y="" />
-		<file name="ORmethod.hpp" x="" y="" />
-		<file name="ORoperations.hpp" x="" y="" />
-		<file name="ORpixelMaps.hpp" x="" y="" />
-		<file name="ORpolygonList.hpp" x="" y="" />
-		<file name="ORquadraticFit.hpp" x="" y="" />
-		<file name="ORrules.hpp" x="" y="" />
-		<file name="ORTHimageCategorisationNN.hpp" x="" y="" />
-		<file name="ORTHmain.hpp" x="" y="" />
-
+		<file name="XMLparserClass.hpp" x="14" y="31" />
+		<file name="XMLrulesClass.hpp" x="14" y="30" />
+		
 		<file name="ANNbiologicalConstructs.hpp" x="" y="" />
-		<file name="ANNdata.hpp" x="" y="" />
-		<file name="ANNdisplay.hpp" x="" y="" />
-		<file name="ANNexperienceClass.hpp" x="" y="" />
-		<file name="ANNformation.hpp" x="" y="" />
-		<file name="ANNglobalDefs.hpp" x="" y="" />
-		<file name="ANNmain.hpp" x="" y="" />
-		<file name="ANNneuronClass.hpp" x="" y="" />
-		<file name="ANNneuronConnectionClass.hpp" x="" y="" />
-		<file name="ANNparser.hpp" x="" y="" />
-		<file name="ANNsprite.hpp" x="" y="" />
-		<file name="ANNtraining.hpp" x="" y="" />
-		<file name="ANNupdateAlgorithm.hpp" x="" y="" />
-		<file name="ANNxmlConversion.hpp" x="" y="" />
-
-		<file name="CSdataflow.hpp" x="" y="" />
-		<file name="CSdraw.hpp" x="" y="" />
-		<file name="CSexecflow.hpp" x="" y="" />
-		<file name="CSglobalDefs.hpp" x="" y="" />
-		<file name="CSmain.hpp" x="" y="" />
-		<file name="CSoperations.hpp" x="" y="" />
-		<file name="CSpreprocessorFilter.hpp" x="" y="" />
-		<file name="CSreferenceClass.hpp" x="" y="" />
-		<file name="CSreferenceContainerClass.hpp" x="" y="" />
-
+		<file name="ANNdata.hpp" x="1" y="5" />
+		<file name="ANNdisplay.hpp" x="6" y="2" />
+		<file name="ANNdraw.hpp" x="6" y="3" />
+		<file name="ANNexperienceClass.hpp" x="1" y="4" />
+		<file name="ANNformation.hpp" x="2" y="2" />
+		<file name="ANNglobalDefs.hpp" x="2" y="8" />
+		<file name="ANNmain.hpp" x="3" y="1" />
+		<file name="ANNneuronClass.hpp" x="2" y="7" />
+		<file name="ANNneuronConnectionClass.hpp" x="3" y="7" />
+		<file name="ANNparser.hpp" x="1" y="2" />
+		<file name="ANNsprite.hpp" x="6" y="3" />
+		<file name="ANNalgorithmBackpropagation.hpp" x="3" y="3" />
+		<file name="ANNalgorithmBackpropagationUpdate.hpp" x="3" y="5" />
+		<file name="ANNalgorithmClassificationNetwork.hpp" x="4" y="3" />
+		<file name="ANNalgorithmBreakawayNetwork.hpp" x="4" y="2" />
+		<file name="ANNalgorithmMemoryNetwork.hpp" x="5" y="3" />
+		<file name="ANNalgorithmMemoryNetworkUpdate.hpp" x="5" y="4" />
+		<file name="ANNxmlConversion.hpp" x="7" y="2" />
+		
+		<file name="ATORcomparison.hpp" x="4" y="3" />
+		<file name="ATORdatabaseDecisionTree.hpp" x="4" y="6" />
+		<file name="ATORdatabaseFileIO.hpp" x="5" y="6" />
+		<file name="ATORdatabaseSQL.hpp" x="4" y="7" />
+		<file name="ATORfeatureGeneration.hpp" x="1" y="3" />
+		<file name="ATORglobalDefs.hpp" x="1" y="8" />
+		<file name="ATORimagecomparison.hpp" x="4" y="4" />
+		<file name="ATORmain.hpp" x="1" y="1" />
+		<file name="ATORmethod2DOD.hpp" x="2" y="3" />
+		<file name="ATORmethod3DOD.hpp" x="3" y="3" />
+		<file name="ATORmethod.hpp" x="1" y="2" />
+		<file name="ATORoperations.hpp" x="1" y="6" />
+		<file name="ATORpixelMaps.hpp" x="2" y="6" />
+		<file name="ATORpolygonList.hpp" x="1" y="7" />
+		<file name="ATORquadraticFit.hpp" x="1" y="4" />
+		<file name="ATORrules.hpp" x="5" y="2" />
+		<file name="ATORTHimageCategorisationNN.hpp" x="" y="" />
+		<file name="ATORTHmain.hpp" x="" y="" />
+		
+		<file name="CSdataflow.hpp" x="3" y="2" />
+		<file name="CSdraw.hpp" x="2" y="4" />
+		<file name="CSexecflow.hpp" x="1" y="2" />
+		<file name="CSglobalDefs.hpp" x="1" y="7" />
+		<file name="CSmain.hpp" x="2" y="1" />
+		<file name="CSoperations.hpp" x="1" y="3" />
+		<file name="CSpreprocessorFilter.hpp" x="4" y="2" />
+		<file name="CSreferenceContainerClass.hpp" x="1" y="5" />
+		<file name="CSfileClass.hpp" x="1" y="6" />
+		<file name="CSfunctionClass.hpp" x="2" y="6" />
+		<file name="CSgenerateHTMLdocumentation.hpp" x="2" y="3" />
+		<file name="CSgenerateObjectOrientedCode.hpp" x="3" y="3" />
+		<file name="CSgenerateConstFunctionArgumentCode.hpp" x="4" y="3" />
+		
 		<file name="OLC.hpp" x="" y="" />
 		<file name="OLCoperations.hpp" x="" y="" />
 	</grid>

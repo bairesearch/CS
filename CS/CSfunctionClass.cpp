@@ -26,7 +26,7 @@
  * File Name: CSfunctionClass.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3o3a 16-November-2020
+ * Project Version: 3o4a 17-November-2020
  * /
  *******************************************************************************/
 
@@ -131,6 +131,7 @@ CSfunction::CSfunction(void)
 	#ifdef CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIERS
 	functionAccessSpecifierType = CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIER_UNKNOWN;
 	#endif
+	//nameWithClass = "";
 	#endif
 }
 

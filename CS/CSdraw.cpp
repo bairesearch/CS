@@ -26,7 +26,7 @@
  * File Name: CSdraw.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3o3a 16-November-2020
+ * Project Version: 3o4a 17-November-2020
  * /
  *******************************************************************************/
 
@@ -389,7 +389,7 @@ void CSdrawClass::initiateMaxXatParticularY()
 
 
 
-LDreference* CSdrawClass::createFileObjectListBoxes(LDreference* currentReferenceInPrintList, CSfileContainer* firstObjectInAboveLevelBelowListContainer, CSfileContainer* firstObjectInTopLevelBelowListContainer, XMLparserTag** currentTag, bool outputFunctionsConnectivity, bool traceFunctionUpwards, XMLparserTag* firstTagInGridTag, bool usePredefinedGrid)
+LDreference* CSdrawClass::createFileObjectListBoxes(LDreference* currentReferenceInPrintList, CSfileContainer* firstObjectInAboveLevelBelowListContainer, CSfileContainer* firstObjectInTopLevelBelowListContainer, XMLparserTag** currentTag, const bool outputFunctionsConnectivity, const bool traceFunctionUpwards, XMLparserTag* firstTagInGridTag, const bool usePredefinedGrid)
 {
 	LDreference* newCurrentReferenceInPrintList = currentReferenceInPrintList;
 
@@ -411,7 +411,7 @@ LDreference* CSdrawClass::createFileObjectListBoxes(LDreference* currentReferenc
 		if(!(currentFileObject->printed))
 		{//add box and connections
 
-			#ifdef CS_DRAW_PARSING
+			#ifdef CS_DISPLAY_DRAW_PARSING
 			for(int i= 0; i<currentFileObject->level; i++)
 			{
 				cout << "\t";
@@ -691,7 +691,7 @@ void CSdrawClass::hasPreviousReferenceWithThisNameHasBeenPrintedReset(CSfileCont
 
 
 
-LDreference* CSdrawClass::createFileObjectListConnections(LDreference* currentReferenceInPrintList, CSfileContainer* firstObjectInAboveLevelBelowListContainer, CSfile* aboveLevelObject, XMLparserTag** currentTag, bool traceFunctionUpwards)
+LDreference* CSdrawClass::createFileObjectListConnections(LDreference* currentReferenceInPrintList, CSfileContainer* firstObjectInAboveLevelBelowListContainer, CSfile* aboveLevelObject, XMLparserTag** currentTag, const bool traceFunctionUpwards)
 {
 	LDreference* newCurrentReferenceInPrintList = currentReferenceInPrintList;
 	CSfileContainer* currentReferenceContainer = firstObjectInAboveLevelBelowListContainer;
@@ -766,7 +766,7 @@ LDreference* CSdrawClass::createFileObjectListConnections(LDreference* currentRe
 
 
 
-LDreference* CSdrawClass::createFunctionObjectListBoxesAndConnections(LDreference* currentReferenceInPrintList, CSfile* aboveLevelFileObject, CSfunction* aboveLevelFunctionObject, CSfileContainer* firstObjectInTopLevelBelowListContainer, const int functionLevel, const CSfunction* functionReference, XMLparserTag** currentTag, bool traceFunctionUpwards, bool useSingleFileOnly, string* singleFileName, bool usePredefinedGrid)
+LDreference* CSdrawClass::createFunctionObjectListBoxesAndConnections(LDreference* currentReferenceInPrintList, CSfile* aboveLevelFileObject, CSfunction* aboveLevelFunctionObject, CSfileContainer* firstObjectInTopLevelBelowListContainer, const int functionLevel, const CSfunction* functionReference, XMLparserTag** currentTag, const bool traceFunctionUpwards, const bool useSingleFileOnly, string* singleFileName, const bool usePredefinedGrid, const bool isTopLevelFunction)
 {
 	string functionReferenceNameToFind = functionReference->name;
 	#ifdef CS_MATCH_FUNCTION_REFERENCES_WITH_CORRECT_NUMBER_OF_ARGUMENTS
@@ -948,9 +948,15 @@ LDreference* CSdrawClass::createFunctionObjectListBoxesAndConnections(LDreferenc
 					}
 					*/
 
-					//print function connections;
-					newCurrentReferenceInPrintList = createFunctionObjectConnection(newCurrentReferenceInPrintList, functionObject, aboveLevelFunctionObject, aboveConnectionColour, traceFunctionUpwards, prepareForTrace, currentTag, fileObject, aboveLevelFileObject);
-
+					#ifdef CS_DRAW_PRINT_TOP_LEVEL_FUNCTION
+					if(!isTopLevelFunction)
+					{
+					#endif
+						//print function connections;
+						newCurrentReferenceInPrintList = createFunctionObjectConnection(newCurrentReferenceInPrintList, functionObject, aboveLevelFunctionObject, aboveConnectionColour, traceFunctionUpwards, prepareForTrace, currentTag, fileObject, aboveLevelFileObject);
+					#ifdef CS_DRAW_PRINT_TOP_LEVEL_FUNCTION
+					}
+					#endif
 
 					//apply hack
 					if(useSingleFileOnly)
@@ -1070,7 +1076,7 @@ LDreference* CSdrawClass::createFunctionObjectListBoxesAndConnections(LDreferenc
 						*/
 
 						//recurse
-						newCurrentReferenceInPrintList = createFunctionObjectListBoxesAndConnections(newCurrentReferenceInPrintList, fileObject, functionObject, firstObjectInTopLevelBelowListContainer, (newFunctionLevel+1), currentFunctionReference, currentTag, traceFunctionUpwards, useSingleFileOnly, singleFileName, usePredefinedGrid);
+						newCurrentReferenceInPrintList = createFunctionObjectListBoxesAndConnections(newCurrentReferenceInPrintList, fileObject, functionObject, firstObjectInTopLevelBelowListContainer, (newFunctionLevel+1), currentFunctionReference, currentTag, traceFunctionUpwards, useSingleFileOnly, singleFileName, usePredefinedGrid, false);
 
 						currentFunctionReference = currentFunctionReference->next;
 					}

@@ -26,7 +26,7 @@
  * File Name: CSglobalsDefs.hpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3o3a 16-November-2020
+ * Project Version: 3o4a 17-November-2020
  * Description: CS specific global definitions
  * /
  *******************************************************************************/
@@ -37,19 +37,56 @@
 
 #include "SHAREDglobalDefs.hpp"
 
+//#define CS_DISPLAY_INCLUDE_FILE_PARSING	//default: on
+//#define CS_DISPLAY_FUNCTION_WHILE_GENERATING_DOCUMENTATION	//disabled CS3o4a
+//#define CS_DISPLAY_INCLUDE_FUNCTION_PARSING	//temp CS3o2a
+//#define CS_DISPLAY_DRAW_PARSING	//temp CS3o2a
+
 //#define CS_DEBUG_DISABLE_FUNCTION_PARSING	//temp CS3o2a
 //#define CS_DEBUG_IDENTIFY_INFINITE_INCLUDE_RECURSION_OLD	//temp CS3o2a
 //#define CS_DEBUG_IDENTIFY_CRASH_BAD_FUNCTION_REFERENCE_IN_COMMENTS	//temp CS3o2a
 //#define CS_DEBUG_FUNCTION_REFERENCE_SEARCH	//temp CS3o2a
 
-#define CS_DISPLAY_INCLUDE_FUNCTION_PARSING	//CS3o2a
-#define CS_DRAW_PARSING	//CS3o2a
 
-//#define CS_SUPPORT_PREDEFINED_GRID	//disabled until manually upgraded CSrules.xml <grid>
+#define CS_SUPPORT_PREDEFINED_GRID	//disabled until manually upgraded CSrules.xml <grid>
+#ifdef CS_SUPPORT_PREDEFINED_GRID
+	#define CS_SUPPORT_PREDEFINED_GRID_VERIFY_INTEGRITY	//added CS3o4a - verify that all xml grid coordinates are unique
+#endif
+
+#define CS_GENERATE_HTML_DOCUMENTATION_PRINT_FILE_NAME_BASE_TITLE	//added CS3o4a
+#ifdef CS_GENERATE_HTML_DOCUMENTATION_PRINT_FILE_NAME_BASE_TITLE
+	
+	//#ifdef CS_SUPPORT_GENERATED_CPP_CODE_NO_BACKWARD_COMPATIBILITY	//not yet defined:
+		#define CS_GENERATE_HTML_DOCUMENTATION_PRINT_FILE_NAME_SOURCE_AND_HEADER
+		#ifndef CS_GENERATE_HTML_DOCUMENTATION_PRINT_FILE_NAME_SOURCE_AND_HEADER
+			//#define CS_GENERATE_HTML_DOCUMENTATION_PRINT_FILE_NAME_SOURCE
+			//#define CS_GENERATE_HTML_DOCUMENTATION_PRINT_FILE_NAME_HEADER
+		#endif
+	//#endif
+#endif
+#define CS_DRAW_PRINT_TOP_LEVEL_FUNCTION	//CS3o4a	//draw main function
+#define CS_GENERATE_CODE_GENERIC_ONLY_LINK_AVAILABLE_HEADER_FILES	//CS3o4a	//only link header files available in input folder (as aopposed to all include files referenced)
 
 #define CS_SUPPORT_GENERATED_CPP_CODE	//added CS3o2a (assume CS_GENERATE_CPP_CLASSES:generateOO has already been executed on input code)
 #ifdef CS_SUPPORT_GENERATED_CPP_CODE
-	#define CS_SUPPORT_GENERATED_CPP_CODE_NO_BACKWARD_COMPATIBILITY	//do not also support c style functions for backwards compatibility
+
+	#define CS_GENERATE_HTML_DOCUMENTATION_PRINT_FUNCTION_NAME_WITH_CLASS	//CS3o4a
+	#ifdef CS_GENERATE_HTML_DOCUMENTATION_PRINT_FUNCTION_NAME_WITH_CLASS
+		//#define CS_GENERATE_HTML_DOCUMENTATION_PRINT_FUNCTION_LIST_WITH_CLASS
+		#define CS_GENERATE_HTML_DOCUMENTATION_PRINT_FUNCTION_REFERENCES_WITH_CLASS
+		#ifdef CS_GENERATE_HTML_DOCUMENTATION_PRINT_FUNCTION_REFERENCES_WITH_CLASS
+			#define CS_GENERATE_HTML_DOCUMENTATION_PRINT_FUNCTION_REFERENCES_WITH_CLASS_EXTERNAL_ONLY	
+		#endif
+	#endif
+	
+	#define CS_SUPPORT_GENERATED_CPP_CODE_NO_BACKWARD_COMPATIBILITY
+	#ifdef CS_SUPPORT_GENERATED_CPP_CODE_NO_BACKWARD_COMPATIBILITY
+		#define CS_SUPPORT_GENERATED_CPP_CODE_NO_BACKWARD_COMPATIBILITY_FUNCTIONS	//CS3o2a	//do not also support c style functions for backwards compatibility (no prepended class object)
+		#define CS_SUPPORT_GENERATED_CPP_CODE_NO_BACKWARD_COMPATIBILITY_FILES		//CS3o4a	//do not also support c style files for backwards compatibility (.c/.h)
+		#ifdef CS_SUPPORT_GENERATED_CPP_CODE_NO_BACKWARD_COMPATIBILITY_FILES
+			#define CS_GENERATE_CODE_GENERIC_RESTRICT_HEADER_FILE_TYPE_STRICT	//only support either .h or .hpp headers (depending on CS_SUPPORT_GENERATED_CPP_CODE)
+		#endif
+	#endif
 	#define CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIERS	//e.g. private: private: bool functionName();
 	#define CS_CLASS_TYPE "class"
 	#define CS_CLASS_DELIMITER "::"
@@ -61,6 +98,8 @@
 		#define CS_CLASS_OBJECT_INLINE_DECLARATION_APPEND string("()")	//variant 3; class object declaration inline: [fileName]Class()
 	#endif
 #endif
+
+#define CS_FILE_EXTENSION_DELIMITER (CHAR_FULLSTOP)	//CS3o4a
 
 #define CS_OPTIMISE_PREVENT_DUPLICATE_FUNCTION_CONNECTIONS	//CS3o2a
 #ifndef CS_SUPPORT_PREDEFINED_GRID
@@ -273,7 +312,6 @@
 
 //#define CS_USE_RAINBOW_COLOURS_FOR_FILE_BOXES		//optional
 //#define CS_USE_RAINBOW_COLOURS_FOR_FUNCTION_BOXES	//optional
-#define CS_DISPLAY_INCLUDE_FILE_PARSING
 #define CS_CENTRE_BOXES
 #define CS_DO_NOT_DRAW_ALL_FUNCTION_CONNECTIONS_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
 //#define CS_DO_NOT_DRAW_ALL_FUNCTION_BOXES_AND_TEXT_WHEN_TRACING_A_BOTTOM_LEVEL_FUNCTION_UPWARDS
