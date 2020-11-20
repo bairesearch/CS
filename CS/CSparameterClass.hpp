@@ -23,7 +23,7 @@
 
 /*******************************************************************************
  *
- * File Name: CSdataflow.cpp
+ * File Name: CSparameterClass.hpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
  * Project Version: 3o4b 17-November-2020
@@ -31,4 +31,26 @@
  *******************************************************************************/
 
 
-#include "CSdataflow.hpp"
+#ifndef HEADER_CS_PARAMETER_CLASS
+#define HEADER_CS_PARAMETER_CLASS
+
+#include "CSglobalDefs.hpp"
+
+class CSparameter{
+private:
+	/*There are currently no private attributes of this class*/
+public:
+
+	CSparameter(void); // constructor declaration
+	~CSparameter(void);	//  and destructor.
+	
+	string name;
+	string type;
+	bool isFunction;
+	int functionAccessSpecifierType;
+	vector<CSparameter*> functionArgumentsParameterList;
+};
+
+
+#endif
+

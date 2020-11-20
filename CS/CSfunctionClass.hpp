@@ -26,7 +26,7 @@
  * File Name: CSfunctionClass.hpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3o4a 17-November-2020
+ * Project Version: 3o4b 17-November-2020
  * /
  *******************************************************************************/
 
@@ -35,21 +35,22 @@
 #define HEADER_CS_FUNCTION_CLASS
 
 #include "CSglobalDefs.hpp"
+#include "CSparameterClass.hpp"
 
 #define MAX_INCLUDE_DEPTH_FUNCTION (20)	//for a function within a file
 
 
-#ifdef CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIERS
-	#define CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIER_UNKNOWN 0
-	#define CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIER_PUBLIC 1
-	#define CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIER_PRIVATE 2
-	#define CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIER_PROTECTED 3
-	#define CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIER_UNKNOWN_NAME "unknown:"
-	#define CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIER_PUBLIC_NAME "public:"
-	#define CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIER_PRIVATE_NAME "private:"
-	#define CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIER_PROTECTED_NAME "protected:"
-	#define CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIER_NUMBER_OF_TYPES (4)
-	static string functionAccessSpecifierNameArray[CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIER_NUMBER_OF_TYPES] = {CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIER_UNKNOWN_NAME, CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIER_PUBLIC_NAME, CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIER_PRIVATE_NAME, CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIER_PROTECTED_NAME};
+#ifdef CS_SUPPORT_FUNCTION_ACCESS_SPECIFIERS
+	//#define CS_SUPPORT_FUNCTION_ACCESS_SPECIFIER_UNKNOWN 0
+	#define CS_SUPPORT_FUNCTION_ACCESS_SPECIFIER_PUBLIC 1
+	#define CS_SUPPORT_FUNCTION_ACCESS_SPECIFIER_PRIVATE 2
+	#define CS_SUPPORT_FUNCTION_ACCESS_SPECIFIER_PROTECTED 3
+	#define CS_SUPPORT_FUNCTION_ACCESS_SPECIFIER_UNKNOWN_NAME "unknown:"
+	#define CS_SUPPORT_FUNCTION_ACCESS_SPECIFIER_PUBLIC_NAME "public:"
+	#define CS_SUPPORT_FUNCTION_ACCESS_SPECIFIER_PRIVATE_NAME "private:"
+	#define CS_SUPPORT_FUNCTION_ACCESS_SPECIFIER_PROTECTED_NAME "protected:"
+	#define CS_SUPPORT_FUNCTION_ACCESS_SPECIFIER_NUMBER_OF_TYPES (4)
+	static string functionAccessSpecifierNameArray[CS_SUPPORT_FUNCTION_ACCESS_SPECIFIER_NUMBER_OF_TYPES] = {CS_SUPPORT_FUNCTION_ACCESS_SPECIFIER_UNKNOWN_NAME, CS_SUPPORT_FUNCTION_ACCESS_SPECIFIER_PUBLIC_NAME, CS_SUPPORT_FUNCTION_ACCESS_SPECIFIER_PRIVATE_NAME, CS_SUPPORT_FUNCTION_ACCESS_SPECIFIER_PROTECTED_NAME};
 #endif
 	
 	
@@ -77,7 +78,7 @@ private:
 public:
 
 	CSfunction(void); // constructor declaration
-	~CSfunction();	//  and destructor.
+	~CSfunction(void);	//  and destructor.
 
 	//file/function [shared]
 	int id;			//file/function id
@@ -150,10 +151,15 @@ public:
 	CSfile* functionReferenceTargetFileOwner;	//added CS3h1a
 	
 	string functionType;	//added CS3o2a
-	string functionArguments;	//added CS3o2a - not used
+	#ifdef CS_USE_FUNCTION_ARGUMENTS_STRING
+	string functionArgumentsString;	//added CS3o2a
+	#endif
+	#ifdef CS_USE_FUNCTION_ARGUMENTS_PARAMETER_LIST
+	vector<CSparameter*> functionArgumentsParameterList;	//added CS3o4b
+	#endif
 	#ifdef CS_SUPPORT_GENERATED_CPP_CODE
 	string className;
-	#ifdef CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIERS
+	#ifdef CS_SUPPORT_FUNCTION_ACCESS_SPECIFIERS
 	int functionAccessSpecifierType;
 	#endif
 	//string nameWithClass;	//added CS3o2a

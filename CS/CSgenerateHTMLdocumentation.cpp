@@ -26,7 +26,7 @@
  * File Name: CSgenerateHTMLdocumentation.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3o4a 17-November-2020
+ * Project Version: 3o4b 17-November-2020
  * /
  *******************************************************************************/
 
@@ -63,37 +63,42 @@ void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationFunctions(XMLpar
 
 string CSgenerateHTMLdocumentationClass::generateHTMLdocumentationHeader(const string name, const bool htmlHeader, const bool isFile)
 {
+	return generateHTMLdocumentationHeader(name, name, htmlHeader, isFile);
+}
+string CSgenerateHTMLdocumentationClass::generateHTMLdocumentationHeader(const string titleName, const string fileName, const bool htmlHeader, const bool isFile)
+{
 	string HTMLdocumentationHeader = "";
+		
 	if(htmlHeader)
 	{
-		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + name + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + name + " Documentation</h3><p>Automatically generated with Code Structure Viewer (CS), Project Version: 3o4a 17-November-2020<p>\n";
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + titleName + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + titleName + " Documentation</h3><p>Automatically generated with Code Structure Viewer (CS), Project Version: 3o4b 17-November-2020<p>\n";
 	}
 	else
 	{
-		HTMLdocumentationHeader = HTMLdocumentationHeader + "<h3>" + name + " Documentation</h3>\n";
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<h3>" + titleName + " Documentation</h3>\n";
 	}
 	if(isFile)
 	{		
 		#ifdef CS_GENERATE_HTML_DOCUMENTATION_PRINT_FILE_NAME_BASE_TITLE
 		#ifdef CS_GENERATE_HTML_DOCUMENTATION_PRINT_FILE_NAME_SOURCE_AND_HEADER
-		string HTMLdocumentationFileNameSource = name + CS_FILE_EXTENSION_DELIMITER + CS_GENERATE_CODE_GENERIC_SOURCE_FILE_EXTENSION + "/" + CS_FILE_EXTENSION_DELIMITER + CS_GENERATE_CODE_GENERIC_HEADER_FILE_EXTENSION;
+		string HTMLdocumentationFileNameSource = fileName + CS_FILE_EXTENSION_DELIMITER + CS_GENERATE_CODE_GENERIC_SOURCE_FILE_EXTENSION + "/" + CS_FILE_EXTENSION_DELIMITER + CS_GENERATE_CODE_GENERIC_HEADER_FILE_EXTENSION;
 		HTMLdocumentationHeader = HTMLdocumentationHeader + "<p><b>File Name:</b> " + HTMLdocumentationFileNameSource + "</p>";
 		#endif
 		#ifdef CS_GENERATE_HTML_DOCUMENTATION_PRINT_FILE_NAME_SOURCE
-		string HTMLdocumentationFileNameSource = name + CS_FILE_EXTENSION_DELIMITER + CS_GENERATE_CODE_GENERIC_SOURCE_FILE_EXTENSION;
+		string HTMLdocumentationFileNameSource = fileName + CS_FILE_EXTENSION_DELIMITER + CS_GENERATE_CODE_GENERIC_SOURCE_FILE_EXTENSION;
 		HTMLdocumentationHeader = HTMLdocumentationHeader + "<p><b>Source File Name :</b> " + HTMLdocumentationFileNameSource + "</p>";
 		#endif
 		#ifdef CS_GENERATE_HTML_DOCUMENTATION_PRINT_FILE_NAME_HEADER
-		string HTMLdocumentationFileNameHeader = name + CS_FILE_EXTENSION_DELIMITER + CS_GENERATE_CODE_GENERIC_HEADER_FILE_EXTENSION;
+		string HTMLdocumentationFileNameHeader = fileName + CS_FILE_EXTENSION_DELIMITER + CS_GENERATE_CODE_GENERIC_HEADER_FILE_EXTENSION;
 		HTMLdocumentationHeader = HTMLdocumentationHeader + "<p><b>Header File Name :</b> " + HTMLdocumentationFileNameHeader + "</p>";
 		#endif
-		string fileNameWithoutExtension = name;
+		string fileNameWithoutExtension = fileName;
 		#else
-		int indexOfFileExtension = name.find(CS_FILE_EXTENSION_DELIMITER);
-		string fileNameWithoutExtension = name.substr(0, indexOfFileExtension);	//CSoperationsClass::generateFileNameBaseFromHeaderFileName
+		int indexOfFileExtension = fileName.find(CS_FILE_EXTENSION_DELIMITER);
+		string fileNameWithoutExtension = fileName.substr(0, indexOfFileExtension);	//CSoperationsClass::generateFileNameBaseFromHeaderFileName
 		#endif
 		string HTMLdocumentationFileDescription = createDescriptionFromCaseSensitiveMultiwordString(fileNameWithoutExtension);
-		HTMLdocumentationHeader = HTMLdocumentationHeader + "<p><b>File description:</b> " + HTMLdocumentationFileDescription + "</p>";
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<p><b>File Description:</b> " + HTMLdocumentationFileDescription + "</p>";
 	}
 	return HTMLdocumentationHeader;
 }
@@ -160,7 +165,7 @@ void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationForAllFunctions(
 				}
 				string HTMLdocumentationFileBody = "";
 				#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION
-				string HTMLdocumentationFileFunctionList = "<p>\n<b>File function List</b>\n<ul><li>";
+				string HTMLdocumentationFileFunctionList = "<p>\n<h4>File Function List</h4>\n<ul><li>";
 				int previousIndentation = 0;
 				bool previousIndentationFirst = true;
 				#endif
@@ -215,6 +220,7 @@ void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationForAllFunctions(
 				}
 
 				string HTMLdocumentationFileIntroduction = "";
+				
 				#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION
 				for(int i=0; i<previousIndentation; i++)
 				{
@@ -223,20 +229,49 @@ void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationForAllFunctions(
 				HTMLdocumentationFileFunctionList = HTMLdocumentationFileFunctionList + "</li></ul>\n";
 				HTMLdocumentationFileIntroduction = HTMLdocumentationFileIntroduction + HTMLdocumentationFileFunctionList;
 				#endif
+				
 				#ifdef CS_HTML_DOCUMENTATION_GENERATE_FILE_CODE_STRUCTURE_DIAGRAMS
 				string outputSVGFileNameFile = currentFileObject->name + SVG_EXTENSION;
 				generateFileDiagramFunctionsHeirachy(currentFileObject, outputSVGFileNameFile, firstObjectInTopLevelBelowListContainer, usePredefinedGrid);
 				string HTMLdocumentationFileImagePlaceHolder = generateHTMLdocumentationImagePlaceHolder(&outputSVGFileNameFile, "File Diagram (functions hierarchy)");
 				HTMLdocumentationFileIntroduction = HTMLdocumentationFileIntroduction + HTMLdocumentationFileImagePlaceHolder;
 				#endif
+				
+				#ifdef CS_GENERATE_CLASS_HTML_DOCUMENTATION_AUTOMATICALLY
+				string HTMLdocumentationFileClassList = "\n<p>\n";	//<h4>File Class List</h4>\n
+				for(int i=0; i<currentFileObject->classList.size(); i++)
+				{
+					CSclass* classObject = (currentFileObject->classList)[i];
+					
+					#ifdef CS_SUPPORT_GENERATED_CPP_CODE_IDENTIFY_CLASS_PARAMETERS_FUNCTIONS_IGNORE_PRIMARY_FILE_CLASS
+					if(!(classObject->primaryFileClass))
+					{
+					#endif
+						HTMLdocumentationFileClassList = HTMLdocumentationFileClassList + "<h4>" + CS_CLASS_NAME_APPEND + STRING_SPACE + classObject->name + "</h4>\n";
+
+						string HTMLdocumentationParameterList = "";
+						generateHTMLdocumentationFunctionOrClassArgumentsFromParameterList(true, &(classObject->parameterList), &HTMLdocumentationParameterList);
+
+						HTMLdocumentationFileClassList = HTMLdocumentationFileClassList + HTMLdocumentationParameterList + "\n";
+					#ifdef CS_SUPPORT_GENERATED_CPP_CODE_IDENTIFY_CLASS_PARAMETERS_FUNCTIONS_IGNORE_PRIMARY_FILE_CLASS
+					}
+					#endif	
+				}
+				HTMLdocumentationFileClassList = HTMLdocumentationFileClassList + "</p>\n";
+				//cout << "HTMLdocumentationFileClassList = " << HTMLdocumentationFileClassList << endl;
+				HTMLdocumentationFileIntroduction = HTMLdocumentationFileIntroduction + HTMLdocumentationFileClassList;
+				#endif
+				
 				HTMLdocumentationFileBody = HTMLdocumentationFileIntroduction + HTMLdocumentationFileBody;
 
 				#ifdef CS_GENERATE_HTML_DOCUMENTATION_PRINT_FILE_NAME_BASE_TITLE
-				string fileNameTitleToPrint = currentFileObject->nameBase;
+				string fileNameToPrint = currentFileObject->nameBase;
 				#else
-				string fileNameTitleToPrint = currentFileObject->name;
+				string fileNameToPrint = currentFileObject->name;
 				#endif
-				string HTMLdocumentationFileHeader = generateHTMLdocumentationHeader(fileNameTitleToPrint, !useOutputHTMLfile, true);
+				string fileNameTitleToPrint = string("File ") + fileNameToPrint;
+				
+				string HTMLdocumentationFileHeader = generateHTMLdocumentationHeader(fileNameTitleToPrint, fileNameToPrint, !useOutputHTMLfile, true);
 				string HTMLdocumentationFileFooter = generateHTMLdocumentationFooter(!useOutputHTMLfile);
 				string HTMLdocumentationFile = "";
 				HTMLdocumentationFile = HTMLdocumentationFile + HTMLdocumentationFileHeader + HTMLdocumentationFileBody + HTMLdocumentationFileFooter;
@@ -290,11 +325,16 @@ void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationForFunction(LDre
 
 		string HTMLdocumentationFunctionTitle = "";
 		#ifdef CS_GENERATE_HTML_DOCUMENTATION_PRINT_FUNCTION_NAME_WITH_CLASS
-		string functionNameTitleToPrint = generateFunctionString(bottomLevelFunctionToTraceUpwards, true, true); 
+		bool functionHasClass = true;
+		if(bottomLevelFunctionToTraceUpwards->className == "")
+		{
+			functionHasClass = false;
+		}
+		string functionNameTitleToPrint = string("Function ") + generateFunctionString(bottomLevelFunctionToTraceUpwards, true, functionHasClass) + CS_GENERATE_CLASS_HTML_DOCUMENTATION_FUNCTION_NAME_APPEND; 
 		#else
-		string functionNameTitleToPrint = bottomLevelFunctionToTraceUpwards->name;
+		string functionNameTitleToPrint = string("Function ") + bottomLevelFunctionToTraceUpwards->name + CS_GENERATE_CLASS_HTML_DOCUMENTATION_FUNCTION_NAME_APPEND;
 		#endif
-		HTMLdocumentationFunctionTitle = HTMLdocumentationFunctionTitle + "<h4>" + functionNameTitleToPrint + "()</h4>";
+		HTMLdocumentationFunctionTitle = HTMLdocumentationFunctionTitle + "<h4>" + functionNameTitleToPrint + "</h4>";
 		string HTMLdocumentationFunctionSummary = "";
 		#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_SUMMARY
 		generateHTMLdocumentationFunctionSummary(bottomLevelFunctionToTraceUpwards, &HTMLdocumentationFunctionSummary);
@@ -343,7 +383,7 @@ void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationFunctionSummary(
 	string functionNameFull = currentFunction->nameFull;
 	
 	*HTMLdocumentationFunctionSummary = "";
-	*HTMLdocumentationFunctionSummary = *HTMLdocumentationFunctionSummary + "\t<p><b>Function Summary</b><br /><table border=\"1\">\n\t\t<tr><th>" + "name" + "</th><th>" + "return type" + "</th><th>" + "description" + "</th></tr>\n";
+	*HTMLdocumentationFunctionSummary = *HTMLdocumentationFunctionSummary + "\t<p><h5>Function Summary</h5><table border=\"1\">\n\t\t<tr><th>" + "name" + "</th><th>" + "return type" + "</th><th>" + "description" + "</th></tr>\n";
 	string HTMLdocumentationFunctionDescription = createDescriptionFromCaseSensitiveMultiwordString(functionName);
 	int endPositionOfReturnType = functionNameFull.find(functionName);
 	int startPositionOfReturnType = 0;
@@ -359,18 +399,18 @@ void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationFunctionSummary(
 
 void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationFunctionInputArguments(const CSfunction* currentFunction, string* HTMLdocumentationFunctionInputArguments)
 {
-	return generateHTMLdocumentationFunctionInputArguments(&(currentFunction->name), &(currentFunction->nameFull), HTMLdocumentationFunctionInputArguments);
-}
-void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationFunctionInputArguments(const string* functionName, const string* functionNameFull, string* HTMLdocumentationFunctionInputArguments)
-{
-	*HTMLdocumentationFunctionInputArguments = "";
-	#ifdef CS_GENERATE_CLASS_HTML_DOCUMENTATION_FROM_CUSTOM_CSCLASS_FORMAT
-	*HTMLdocumentationFunctionInputArguments = *HTMLdocumentationFunctionInputArguments + "\t<b>Class Data</b><br />";
+	#ifdef CS_USE_FUNCTION_ARGUMENTS_PARAMETER_LIST
+	return generateHTMLdocumentationFunctionOrClassArgumentsFromParameterList(false, &(currentFunction->functionArgumentsParameterList), HTMLdocumentationFunctionInputArguments);
 	#else
-	*HTMLdocumentationFunctionInputArguments = *HTMLdocumentationFunctionInputArguments + "\t<b>Function Arguments</b><br />";
+	#ifdef CS_USE_FUNCTION_ARGUMENTS_STRING
+	return generateHTMLdocumentationFunctionOrClassArgumentsFromString(false, currentFunction->functionArguments, HTMLdocumentationFunctionInputArguments);
+	#else
+	return generateHTMLdocumentationFunctionOrClassArgumentsFromFunctionNameFull(false, &(currentFunction->nameFull), HTMLdocumentationFunctionInputArguments);
 	#endif
-	*HTMLdocumentationFunctionInputArguments = *HTMLdocumentationFunctionInputArguments + "<table border=\"1\">\n\t\t<tr><th>" + "name" + "</th><th>" + "type" + "</th><th>" + "description" + "</th></tr>\n";
-
+	#endif
+}
+void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationFunctionOrClassArgumentsFromFunctionNameFull(const bool classDataOrFunctionArguments, const string* functionNameFull, string* HTMLdocumentationFunctionInputArguments)
+{
 	int startPositionOfFunctionBrackets = functionNameFull->find(CHAR_OPEN_BRACKET);
 	int endPositionOfFunctionBrackets = functionNameFull->find(CHAR_CLOSE_BRACKET);
 	bool functionHasArguments = false;
@@ -380,51 +420,143 @@ void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationFunctionInputArg
 	}
 	if(functionHasArguments)
 	{
-
 		int startPositionOfFunctionArguments = startPositionOfFunctionBrackets+1;
 		int endPositionOfFunctionArguments = endPositionOfFunctionBrackets;
 		string functionArgumentsRaw = functionNameFull->substr(startPositionOfFunctionArguments, endPositionOfFunctionArguments-startPositionOfFunctionArguments+1);
-
-		bool stillParsingArguments = true;
-		int startPositionOfArgument = 0;
-		while(stillParsingArguments)
-		{
-			bool lastArgument = false;
-			int endPositionOfArgument = CSreferenceContainerClass.findEndPositionOfArgument(&functionArgumentsRaw, startPositionOfArgument, &lastArgument);
-			if(lastArgument)
-			{
-				stillParsingArguments = false;
-			}
-
-			string currentArgument = functionArgumentsRaw.substr(startPositionOfArgument, endPositionOfArgument-startPositionOfArgument);
-
-			int startPositionOfArgumentName = currentArgument.rfind(CHAR_SPACE) + 1;	//last space
-			if(startPositionOfArgumentName == CPP_STRING_FIND_RESULT_FAIL_VALUE)
-			{
-				cerr << "generateHTMLdocumentationFunctionInputArguments{} error: (startPositionOfArgumentName == CPP_STRING_FIND_RESULT_FAIL_VALUE)" << endl;
-				exit(EXIT_ERROR);
-			}
-			string currentArgumentName = currentArgument.substr(startPositionOfArgumentName, endPositionOfArgument-startPositionOfArgumentName);
-			string currentArgumentType = currentArgument.substr(0, startPositionOfArgumentName);
-			string currentArgumentDescription = createDescriptionFromCaseSensitiveMultiwordString(currentArgumentName);
-
-
-			currentArgumentName = ensureHTMLTagSafe(currentArgumentName);
-			currentArgumentType = ensureHTMLTagSafe(currentArgumentType);
-			currentArgumentDescription = ensureHTMLTagSafe(currentArgumentDescription);
-
-			string HTMLdocumentationFunctionInputArgumentsRow = "\t\t<tr><td>" + currentArgumentName + "</td><td>" + currentArgumentType + "</td><td>" + currentArgumentDescription + "</td></tr>\n";
-			*HTMLdocumentationFunctionInputArguments = *HTMLdocumentationFunctionInputArguments + HTMLdocumentationFunctionInputArgumentsRow;
-
-			startPositionOfArgument = endPositionOfArgument+1;
-		}
+	
+		CSgenerateHTMLdocumentationClass::generateHTMLdocumentationFunctionOrClassArgumentsFromString(classDataOrFunctionArguments, functionArgumentsRaw, HTMLdocumentationFunctionInputArguments);
+	}
+}
+void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationFunctionOrClassArgumentsFromString(const bool classDataOrFunctionArguments, const string functionArgumentsRaw, string* HTMLdocumentationFunctionInputArguments)
+{
+	*HTMLdocumentationFunctionInputArguments = "";
+	if(classDataOrFunctionArguments)
+	{
+		*HTMLdocumentationFunctionInputArguments = *HTMLdocumentationFunctionInputArguments + "\t<h5>Class Data</h5>";
 	}
 	else
 	{
+		*HTMLdocumentationFunctionInputArguments = *HTMLdocumentationFunctionInputArguments + "\t<h5>Function Arguments</h5>";
 	}
+	*HTMLdocumentationFunctionInputArguments = *HTMLdocumentationFunctionInputArguments + "<table border=\"1\">\n\t\t<tr><th>" + "name" + "</th><th>" + "type" + "</th><th>" + "description" + "</th></tr>\n";
 
+	bool stillParsingArguments = true;
+	int startPositionOfArgument = 0;
+	while(stillParsingArguments)
+	{
+		bool lastArgument = false;
+		int endPositionOfArgument = CSreferenceContainerClass.findEndPositionOfArgument(&functionArgumentsRaw, startPositionOfArgument, &lastArgument);
+		if(lastArgument)
+		{
+			stillParsingArguments = false;
+		}
+
+		string currentArgument = functionArgumentsRaw.substr(startPositionOfArgument, endPositionOfArgument-startPositionOfArgument);
+
+		int startPositionOfArgumentName = currentArgument.rfind(CHAR_SPACE) + 1;	//last space
+		if(startPositionOfArgumentName == CPP_STRING_FIND_RESULT_FAIL_VALUE)
+		{
+			cerr << "generateHTMLdocumentationFunctionInputArguments{} error: (startPositionOfArgumentName == CPP_STRING_FIND_RESULT_FAIL_VALUE)" << endl;
+			exit(EXIT_ERROR);
+		}
+		string currentArgumentName = currentArgument.substr(startPositionOfArgumentName, endPositionOfArgument-startPositionOfArgumentName);
+		string currentArgumentType = currentArgument.substr(0, startPositionOfArgumentName);
+		string currentArgumentDescription = createDescriptionFromCaseSensitiveMultiwordString(currentArgumentName);
+
+		currentArgumentName = ensureHTMLTagSafe(currentArgumentName);
+		currentArgumentType = ensureHTMLTagSafe(currentArgumentType);
+		currentArgumentDescription = ensureHTMLTagSafe(currentArgumentDescription);
+
+		string HTMLdocumentationFunctionInputArgumentsRow = "\t\t<tr><td>" + currentArgumentName + "</td><td>" + currentArgumentType + "</td><td>" + currentArgumentDescription + "</td></tr>\n";
+		*HTMLdocumentationFunctionInputArguments = *HTMLdocumentationFunctionInputArguments + HTMLdocumentationFunctionInputArgumentsRow;
+
+		startPositionOfArgument = endPositionOfArgument+1;
+	}
+	
 	*HTMLdocumentationFunctionInputArguments = *HTMLdocumentationFunctionInputArguments + "\t</table>\n";
 }
+
+
+#ifdef CS_SUPPORT_GENERATED_CPP_CODE_IDENTIFY_CLASS_PARAMETERS
+void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationFunctionOrClassArgumentsFromParameterList(const bool classDataOrFunctionArguments, vector<CSparameter*>* parameterList, string* HTMLdocumentationParameterList)
+{
+	*HTMLdocumentationParameterList = "";
+	
+	if(classDataOrFunctionArguments)
+	{
+		*HTMLdocumentationParameterList = *HTMLdocumentationParameterList + "\t<b>Class Data</b><br />";
+	}
+	else
+	{
+		*HTMLdocumentationParameterList = *HTMLdocumentationParameterList + "\t<b>Function Arguments</b><br />";
+	}
+	#ifdef CS_GENERATE_CLASS_HTML_DOCUMENTATION_AUTOMATICALLY_CLASS_PARAMETER_FUNCTIONS
+	*HTMLdocumentationParameterList = *HTMLdocumentationParameterList + "<table border=\"1\">\n\t\t<tr><th>" + "name" + "</th><th>" + "type" + "</th><th>" + "description" + "</th><th>" + "functionArguments" + "</th></tr>\n";
+	#else
+	*HTMLdocumentationParameterList = *HTMLdocumentationParameterList + "<table border=\"1\">\n\t\t<tr><th>" + "name" + "</th><th>" + "type" + "</th><th>" + "description" + "</th></tr>\n";
+	#endif
+	
+	for(int i=0; i<parameterList->size(); i++)
+	{
+		CSparameter* parameterObject = (*parameterList)[i];
+		
+		bool parameterTypeCorrect = true;
+		if(classDataOrFunctionArguments)
+		{
+			#ifdef CS_SUPPORT_GENERATED_CPP_CODE_IDENTIFY_CLASS_PARAMETERS_FUNCTIONS
+			#ifndef CS_GENERATE_CLASS_HTML_DOCUMENTATION_AUTOMATICALLY_CLASS_PARAMETER_FUNCTIONS
+			if(parameterObject->isFunction)
+			{
+				parameterTypeCorrect = false;
+			}
+			#endif
+			#endif
+		}
+		else
+		{
+			//assume parameter list only contains functions
+		}
+		if(parameterTypeCorrect)
+		{
+			string currentParameterName = parameterObject->name;
+			string currentParameterType = parameterObject->type;
+			string currentParameterDescription = createDescriptionFromCaseSensitiveMultiwordString(currentParameterName);
+			string currentParameterFunctionArguments = "";
+			
+			currentParameterName = ensureHTMLTagSafe(currentParameterName);
+			currentParameterType = ensureHTMLTagSafe(currentParameterType);
+			currentParameterDescription = ensureHTMLTagSafe(currentParameterDescription);
+
+			#ifdef CS_GENERATE_CLASS_HTML_DOCUMENTATION_AUTOMATICALLY_CLASS_PARAMETER_FUNCTIONS
+			if(parameterObject->isFunction)
+			{
+				currentParameterName = currentParameterName + CS_GENERATE_CLASS_HTML_DOCUMENTATION_FUNCTION_NAME_APPEND;	//indicate that the class parameter is a function
+				
+				bool firstFunctionArgument = true;
+				for(int j=0;j<parameterObject->functionArgumentsParameterList.size(); j++)
+				{
+					if(!firstFunctionArgument)
+					{
+						currentParameterFunctionArguments = currentParameterFunctionArguments + STRING_COMMA;	
+					}
+					CSparameter* functionArgument = (parameterObject->functionArgumentsParameterList)[j];
+					currentParameterFunctionArguments = currentParameterFunctionArguments + functionArgument->type + STRING_SPACE + functionArgument->name;
+				}
+				
+				currentParameterFunctionArguments = ensureHTMLTagSafe(currentParameterFunctionArguments);
+			}
+			string HTMLdocumentationParameterListRow = "\t\t<tr><td>" + currentParameterName + "</td><td>" + currentParameterType + "</td><td>" + currentParameterDescription + "</td><td>" + currentParameterFunctionArguments + "</td></tr>\n";	
+			#else
+			string HTMLdocumentationParameterListRow = "\t\t<tr><td>" + currentParameterName + "</td><td>" + currentParameterType + "</td><td>" + currentParameterDescription + "</td></tr>\n";	
+			#endif
+
+			*HTMLdocumentationParameterList = *HTMLdocumentationParameterList + HTMLdocumentationParameterListRow;	
+		}	
+	}
+
+	*HTMLdocumentationParameterList = *HTMLdocumentationParameterList + "\t</table>\n";
+}
+#endif
 
 
 string CSgenerateHTMLdocumentationClass::ensureHTMLTagSafe(const string str)
@@ -506,7 +638,7 @@ void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationFunctionReferenc
 	//generate list
 
 	*HTMLdocumentationFunctionReferenceList = "";
-	*HTMLdocumentationFunctionReferenceList = *HTMLdocumentationFunctionReferenceList + "\t<p><b>Function reference List</b><br />\n";
+	*HTMLdocumentationFunctionReferenceList = *HTMLdocumentationFunctionReferenceList + "\t<p><h5>Function reference List</h5>\n";
 	CSfunction* currentReferenceInFunctionReferenceListRepeats = function->firstReferenceInFunctionReferenceListRepeats;
 	string HTMLdocumentationFunctionObjectListBody = "\t<ul>\n";
 	#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_REFERENCE_LIST_WITH_INDENTATION_ADVANCED
@@ -604,7 +736,7 @@ void CSgenerateHTMLdocumentationClass::generateHTMLdocumentationFunctionReferenc
 
 string CSgenerateHTMLdocumentationClass::generateHTMLdocumentationImagePlaceHolder(const string* traceImageFileName, const string imageTitle)
 {
-	string HTMLdocumentationFunctionTraceImagePlaceHolder = "\t<br /><b>" + imageTitle + "</b><br /><img width=\"1300px\" src=\"" +* traceImageFileName  + "\">\n";
+	string HTMLdocumentationFunctionTraceImagePlaceHolder = "\t<br /><h4>" + imageTitle + "</h4><br /><img width=\"1300px\" src=\"" +* traceImageFileName  + "\">\n";
 	return HTMLdocumentationFunctionTraceImagePlaceHolder;
 }
 
@@ -733,7 +865,6 @@ void CSgenerateHTMLdocumentationClass::generateFileDiagramFunctionsHeirachy(CSfi
 }
 
 #ifdef CS_GENERATE_CLASS_HTML_DOCUMENTATION_FROM_CUSTOM_CSCLASS_FORMAT
-
 void CSgenerateHTMLdocumentationClass::generateClassHTMLdocumentationFromCustomCSclassFormat()
 {
 	bool result = true;
@@ -751,9 +882,9 @@ void CSgenerateHTMLdocumentationClass::generateClassHTMLdocumentationFromCustomC
 			result = false;
 		}
 		else
-		{
-			string HTMLdocumentationFileBody = "";
-
+		{	
+			vector<string> CSclassFileContents;
+						
 			string currentClassBeingParsed = "";
 			bool finishedParsingObject = false;
 			char currentToken;
@@ -761,22 +892,8 @@ void CSgenerateHTMLdocumentationClass::generateClassHTMLdocumentationFromCustomC
 			{
 				if(currentToken == CHAR_NEWLINE)
 				{
-					string className = getFunctionNameFromFunctionNameFull(&currentClassBeingParsed);
-
-					string HTMLdocumentationClassDescription = createDescriptionFromCaseSensitiveMultiwordString(className);
-
-					string HTMLdocumentationClassParameters = "";
-					string functionNameNOTUSED = "";
-					generateHTMLdocumentationFunctionInputArguments(&functionNameNOTUSED, &currentClassBeingParsed, &HTMLdocumentationClassParameters);
+					CSclassFileContents.push_back(currentClassBeingParsed);
 					currentClassBeingParsed = "";
-
-					string HTMLdocumentationClassTitle = "";
-					HTMLdocumentationClassTitle = HTMLdocumentationClassTitle + "<h4>Class " + className + "</h4>\n";
-					string HTMLdocumentationClassHeader = "";
-					HTMLdocumentationClassHeader = HTMLdocumentationClassHeader + "<p><b>Class description:</b> " + HTMLdocumentationClassDescription + "</p>\n";
-
-					HTMLdocumentationFileBody = HTMLdocumentationFileBody + HTMLdocumentationClassTitle + HTMLdocumentationClassHeader + HTMLdocumentationClassParameters;
-
 				}
 				else
 				{
@@ -784,18 +901,7 @@ void CSgenerateHTMLdocumentationClass::generateClassHTMLdocumentationFromCustomC
 				}
 			}
 
-			CSclassFileObject.close();
-
-			string HTMLdocumentationFileHeader = generateHTMLdocumentationHeader(CSclassFileName, true, false);
-			string HTMLdocumentationFileFooter = generateHTMLdocumentationFooter(true);
-			string HTMLdocumentationFile = "";
-			HTMLdocumentationFile = HTMLdocumentationFile + HTMLdocumentationFileHeader + HTMLdocumentationFileBody + HTMLdocumentationFileFooter;
-
-			string outputHTMLfileName = CSclassFileName + HTML_EXTENSION;
-			ofstream writeFileObjectHTML(outputHTMLfileName.c_str());
-			writeStringPointerToFileObject(&HTMLdocumentationFile, &writeFileObjectHTML);
-
-
+			generateClassHTMLdocumentationFromCustomCSclassFormat(CSclassFileName, &CSclassFileContents);
 		}
 	}
 }
@@ -821,9 +927,82 @@ string CSgenerateHTMLdocumentationClass::getFunctionNameFromFunctionNameFull(con
 	return functionName;
 }
 
+void CSgenerateHTMLdocumentationClass::generateClassHTMLdocumentationFromCustomCSclassFormat(const string CSclassFileName, const vector<string>* CSclassFileContents)
+{
+	bool result = true;
+
+	string HTMLdocumentationFileBody = "";
+
+	for(int i=0; i<CSclassFileContents.size(); i++)
+	{
+		string currentClassBeingParsed = CSclassFileContents[i];
+		string className = getFunctionNameFromFunctionNameFull(&currentClassBeingParsed);
+
+		string HTMLdocumentationClassDescription = createDescriptionFromCaseSensitiveMultiwordString(className);
+
+		string HTMLdocumentationClassParameters = "";
+		string functionNameNOTUSED = "";
+		generateHTMLdocumentationFunctionOrClassArgumentsFromFunctionNameFull(true, &currentClassBeingParsed, &HTMLdocumentationClassParameters);
+
+		string HTMLdocumentationClassTitle = "";
+		HTMLdocumentationClassTitle = HTMLdocumentationClassTitle + "<h4>Class " + className + "</h4>\n";
+		string HTMLdocumentationClassHeader = "";
+		HTMLdocumentationClassHeader = HTMLdocumentationClassHeader + "<p><b>Class description:</b> " + HTMLdocumentationClassDescription + "</p>\n";
+
+		HTMLdocumentationFileBody = HTMLdocumentationFileBody + HTMLdocumentationClassTitle + HTMLdocumentationClassHeader + HTMLdocumentationClassParameters;	
+	}
+
+	CSclassFileObject.close();
+
+	string HTMLdocumentationFileHeader = generateHTMLdocumentationHeader(CSclassFileName, true, false);
+	string HTMLdocumentationFileFooter = generateHTMLdocumentationFooter(true);
+	string HTMLdocumentationFile = "";
+	HTMLdocumentationFile = HTMLdocumentationFile + HTMLdocumentationFileHeader + HTMLdocumentationFileBody + HTMLdocumentationFileFooter;
+
+	string outputHTMLfileName = CSclassFileName + HTML_EXTENSION;
+	ofstream writeFileObjectHTML(outputHTMLfileName.c_str());
+	writeStringPointerToFileObject(&HTMLdocumentationFile, &writeFileObjectHTML);
+	
+}
 #endif
 
+#ifdef CS_GENERATE_CLASS_HTML_DOCUMENTATION_AUTOMATICALLY
+void CSgenerateHTMLdocumentationClass::generateClassHTMLdocumentationFromCSclassList(const string CSclassesFileName, const vector<CSclass*>* classObjectList)
+{
+	bool result = true;
 
+	string HTMLdocumentationFileBody = "";
+	
+	for(int i=0; i<classObjectList->size(); i++)
+	{
+		CSclass* classObject = (*classObjectList)[i];
+		
+		string className = classObject->name;
+
+		string HTMLdocumentationClassDescription = createDescriptionFromCaseSensitiveMultiwordString(className);
+
+		string HTMLdocumentationClassParameters = "";
+		string functionNameNOTUSED = "";
+		generateHTMLdocumentationFunctionOrClassArgumentsFromParameterList(true, &(classObject->parameterList), &HTMLdocumentationClassParameters);
+
+		string HTMLdocumentationClassTitle = "";
+		HTMLdocumentationClassTitle = HTMLdocumentationClassTitle + "<h4>Class " + className + "</h4>\n";
+		string HTMLdocumentationClassHeader = "";
+		HTMLdocumentationClassHeader = HTMLdocumentationClassHeader + "<p><b>Class description:</b> " + HTMLdocumentationClassDescription + "</p>\n";
+		
+		HTMLdocumentationFileBody = HTMLdocumentationFileBody + HTMLdocumentationClassTitle + HTMLdocumentationClassHeader + HTMLdocumentationClassParameters;	
+	}
+	
+	string HTMLdocumentationFileHeader = generateHTMLdocumentationHeader(CSclassesFileName, true, false);
+	string HTMLdocumentationFileFooter = generateHTMLdocumentationFooter(true);
+	string HTMLdocumentationFile = "";
+	HTMLdocumentationFile = HTMLdocumentationFile + HTMLdocumentationFileHeader + HTMLdocumentationFileBody + HTMLdocumentationFileFooter;
+
+	string outputHTMLfileName = CSclassesFileName + HTML_EXTENSION;
+	ofstream writeFileObjectHTML(outputHTMLfileName.c_str());
+	writeStringPointerToFileObject(&HTMLdocumentationFile, &writeFileObjectHTML);
+}
+#endif
 
 
 

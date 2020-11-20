@@ -260,13 +260,15 @@
 		<file name="CSdataflow.hpp" x="3" y="2" />
 		<file name="CSdraw.hpp" x="2" y="4" />
 		<file name="CSexecflow.hpp" x="1" y="2" />
-		<file name="CSglobalDefs.hpp" x="1" y="7" />
+		<file name="CSglobalDefs.hpp" x="1" y="9" />
 		<file name="CSmain.hpp" x="2" y="1" />
 		<file name="CSoperations.hpp" x="1" y="3" />
 		<file name="CSpreprocessorFilter.hpp" x="4" y="2" />
 		<file name="CSreferenceContainerClass.hpp" x="1" y="5" />
 		<file name="CSfileClass.hpp" x="1" y="6" />
 		<file name="CSfunctionClass.hpp" x="2" y="6" />
+		<file name="CSclassClass.hpp" x="1" y="7" />
+		<file name="CSparameterClass.hpp" x="2" y="8" />
 		<file name="CSgenerateHTMLdocumentation.hpp" x="2" y="3" />
 		<file name="CSgenerateObjectOrientedCode.hpp" x="3" y="3" />
 		<file name="CSgenerateConstFunctionArgumentCode.hpp" x="4" y="3" />

@@ -23,7 +23,7 @@
 
 /*******************************************************************************
  *
- * File Name: CSdataflow.cpp
+ * File Name: CSclassClass.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
  * Project Version: 3o4b 17-November-2020
@@ -31,4 +31,17 @@
  *******************************************************************************/
 
 
-#include "CSdataflow.hpp"
+#include "CSclassClass.hpp"
+
+
+CSclass::CSclass(void)
+{
+	name = "";
+	//classList = null
+	#ifdef CS_SUPPORT_GENERATED_CPP_CODE_IDENTIFY_CLASS_PARAMETERS_FUNCTIONS_IGNORE_PRIMARY_FILE_CLASS
+	primaryFileClass = false;
+	#endif
+}
+CSclass::~CSclass(void)
+{
+}

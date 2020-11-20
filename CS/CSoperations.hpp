@@ -26,7 +26,7 @@
  * File Name: CSoperations.hpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3o4a 17-November-2020
+ * Project Version: 3o4b 17-November-2020
  * /
  *******************************************************************************/
 
@@ -50,7 +50,7 @@ class CSoperationsClass
 		private: bool fileIsHeader(string parseFileName);
 		#endif
 		private: bool findFileObjectInFileObjectContainerList(constEffective CSfileContainer* firstReferenceContainerInLevel, const string fileReferenceName, constEffective CSfile** fileReferenceFound);
-		private: bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfunction* firstFunctionInFunctionList, const string topLevelFileName, const int level);
+		private: bool getFunctionNamesFromFunctionDeclarationsInHfile(CSfile* fileObject, const string topLevelFileName, const int level);
 		private: void getFunctionObjectNamesFromFunctionsInCfile(const CSfile* firstFileInIncludeFileList, CSfunction* firstFunctionInFunctionList, const CSfile* aboveLevelObject, const string topLevelFileName, const int level);
 			private: bool searchFunctionStringForFunctionReferencesRecursive(const CSfile* firstFileInIncludeFileList, const CSfileContainer* firstFileNameInLayerContainingFunctionReferencesToSearchFor, CSfunction** currentReferenceInFunctionReferenceList, CSfunction** currentReferenceInFunctionReferenceListRepeats, string* functionContentsString);
 			#ifdef CS_OPTIMISE_PREVENT_DUPLICATE_FUNCTION_CONNECTIONS
@@ -79,6 +79,12 @@ CSfile* findReferenceInIncludeFileList(CSfile* firstReferenceInAboveLevelBelowLi
 	
 	#ifdef CS_GENERATE_HTML_DOCUMENTATION_PRINT_FUNCTION_REFERENCES_WITH_CLASS
 	private: string generateFunctionString(const CSfunction* currentFunction, const bool externalFunction);
+	#endif
+	
+	private: vector<CSparameter*> createParameterList(const string* functionArgumentsRaw);
+
+	#ifdef CS_SUPPORT_GENERATED_CPP_CODE
+	private: bool getClassNameBase(const string className, string* classNameBase);
 	#endif
 
 };

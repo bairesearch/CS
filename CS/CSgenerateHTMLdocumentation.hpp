@@ -26,7 +26,7 @@
  * File Name: CSgenerateHTMLdocumentation.hpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3o4a 17-November-2020
+ * Project Version: 3o4b 17-November-2020
  * /
  *******************************************************************************/
 
@@ -60,12 +60,17 @@ class CSgenerateHTMLdocumentationClass
 	private: SHAREDvarsClass SHAREDvars;
 	public: void generateHTMLdocumentationFunctions(XMLparserTag* firstTagInSVGFile, CSfileContainer* firstObjectInTopLevelBelowListContainer, int generateHTMLdocumentationMode, const bool useOutputHTMLfile, const bool traceFunctionUpwards, bool usePredefinedGrid, const string outputHTMLfileName);
 		private: string generateHTMLdocumentationHeader(const string name, const bool htmlHeader, const bool isFile);
+			private: string generateHTMLdocumentationHeader(const string titleName, const string fileName, const bool htmlHeader, const bool isFile);
 		private: string generateHTMLdocumentationFooter(const bool htmlFileFooter);
 		private: void generateHTMLdocumentationForAllFunctions(CSfileContainer* firstObjectInAboveLevelBelowListContainer, LDreference* currentReferenceInPrintList, CSfileContainer* firstObjectInTopLevelBelowListContainer, int generateHTMLdocumentationMode, const bool useOutputHTMLfile, string* HTMLdocumentationBody, const XMLparserTag* firstTagInSVGFile, XMLparserTag* lastTagInSVGFile, const bool traceFunctionUpwards, bool usePredefinedGrid);
 			public: void generateHTMLdocumentationForFunction(LDreference* currentReferenceInPrintList, CSfileContainer* firstObjectInTopLevelBelowListContainer, CSfunction* bottomLevelFunctionToTraceUpwards, const string fileNameHoldingFunction, XMLparserTag** currentTag, int generateHTMLdocumentationMode, string* HTMLdocumentationFunctionBody, const string* outputSVGfileNameFunction, const bool useOutputHTMLfile, const string outputHTMLfileName, const bool traceFunctionUpwards);
 				private: void generateHTMLdocumentationFunctionSummary(const CSfunction* currentFunction, string* HTMLdocumentationFunctionSummary);
 				private: void generateHTMLdocumentationFunctionInputArguments(const CSfunction* currentFunction, string* HTMLdocumentationFunctionInputArguments);
-					private: void generateHTMLdocumentationFunctionInputArguments(const string* functionName, const string* functionNameFull, string* HTMLdocumentationFunctionInputArguments);
+					private: void generateHTMLdocumentationFunctionOrClassArgumentsFromFunctionNameFull(const bool classDataOrFunctionArguments, const string* functionNameFull, string* HTMLdocumentationFunctionInputArguments);
+						private: void generateHTMLdocumentationFunctionOrClassArgumentsFromString(const bool classDataOrFunctionArguments, const string functionArgumentsRaw, string* HTMLdocumentationFunctionInputArguments);
+				#ifdef CS_SUPPORT_GENERATED_CPP_CODE_IDENTIFY_CLASS_PARAMETERS
+				private: void generateHTMLdocumentationFunctionOrClassArgumentsFromParameterList(const bool classDataOrFunctionArguments, vector<CSparameter*>* parameterList, string* HTMLdocumentationParameterList);
+				#endif
 					private: string ensureHTMLTagSafe(const string str);
 					private: string createDescriptionFromCaseSensitiveMultiwordString(string str);
 				private: void generateHTMLdocumentationFunctionReferenceList(CSfunction* function, string* HTMLdocumentationFunctionReferenceList);
@@ -78,6 +83,10 @@ class CSgenerateHTMLdocumentationClass
 	#ifdef CS_GENERATE_CLASS_HTML_DOCUMENTATION_FROM_CUSTOM_CSCLASS_FORMAT
 	public: void generateClassHTMLdocumentationFromCustomCSclassFormat();
 	private: string getFunctionNameFromFunctionNameFull(const string* functionNameFull);
+	private: void generateClassHTMLdocumentationFromCustomCSclassFormat(const string CSclassFileName, const vector<string>* CSclassFileContents);
+	#endif
+	#ifdef CS_GENERATE_CLASS_HTML_DOCUMENTATION_AUTOMATICALLY
+	private: void generateClassHTMLdocumentationFromCSclassList(const string CSclassesFileName, const vector<CSclass*>* classObjectList);
 	#endif
 
 	#ifdef CS_CONVERT_INDENTED_LIST_TO_HTML_LIST

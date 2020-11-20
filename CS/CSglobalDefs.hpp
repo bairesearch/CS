@@ -26,7 +26,7 @@
  * File Name: CSglobalsDefs.hpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3o4a 17-November-2020
+ * Project Version: 3o4b 17-November-2020
  * Description: CS specific global definitions
  * /
  *******************************************************************************/
@@ -70,6 +70,37 @@
 #define CS_SUPPORT_GENERATED_CPP_CODE	//added CS3o2a (assume CS_GENERATE_CPP_CLASSES:generateOO has already been executed on input code)
 #ifdef CS_SUPPORT_GENERATED_CPP_CODE
 
+	//#define CS_USE_FUNCTION_ARGUMENTS_PARAMETER_LIST	//CS3o4b	//requires testing
+	#ifndef CS_USE_FUNCTION_ARGUMENTS_PARAMETER_LIST
+		//#define CS_USE_FUNCTION_ARGUMENTS_STRING	//CS3o4b	//requires testing	use function arguments string rather than reparsing functionNameFull
+	#endif
+	
+	#define CS_SUPPORT_GENERATED_CPP_CODE_IDENTIFY_CLASSES		//CS3o4b
+	#ifdef CS_SUPPORT_GENERATED_CPP_CODE_IDENTIFY_CLASSES
+		#define CS_SUPPORT_GENERATED_CPP_CODE_IDENTIFY_CLASS_PARAMETERS
+		#ifdef CS_SUPPORT_GENERATED_CPP_CODE_IDENTIFY_CLASS_PARAMETERS	
+			#define CS_SUPPORT_GENERATED_CPP_CODE_IDENTIFY_CLASS_CONSTRUCTORS	//this is required
+			#ifdef CS_SUPPORT_GENERATED_CPP_CODE_IDENTIFY_CLASS_CONSTRUCTORS
+				#define CS_SUPPORT_GENERATED_CPP_CODE_IDENTIFY_CLASS_CONSTRUCTORS_IGNORE
+				//#define CS_SUPPORT_GENERATED_CPP_CODE_IDENTIFY_CLASS_CONSTRUCTORS_TYPE "Constructor"
+				#define CS_SUPPORT_GENERATED_CPP_CODE_IDENTIFY_CLASS_PARAMETERS_FUNCTIONS	//not currently used/required by BAI source
+			#endif
+			#define CS_GENERATE_CLASS_HTML_DOCUMENTATION
+			#ifdef CS_GENERATE_CLASS_HTML_DOCUMENTATION
+				#define CS_GENERATE_CLASS_HTML_DOCUMENTATION_AUTOMATICALLY	
+				#ifdef CS_GENERATE_CLASS_HTML_DOCUMENTATION_AUTOMATICALLY
+					#define CS_GENERATE_CLASS_HTML_DOCUMENTATION_AUTOMATICALLY_COMBINED	//use project wide CSclass (as aopposed to file specific CSclass)
+					#ifdef CS_SUPPORT_GENERATED_CPP_CODE_IDENTIFY_CLASS_PARAMETERS_FUNCTIONS
+						#define CS_SUPPORT_GENERATED_CPP_CODE_IDENTIFY_CLASS_PARAMETERS_FUNCTIONS_IGNORE_PRIMARY_FILE_CLASS	//recommended for BAI source
+						//#define CS_GENERATE_CLASS_HTML_DOCUMENTATION_AUTOMATICALLY_CLASS_PARAMETER_FUNCTIONS	//disable this to restrict HTML output to original .CSclass format (otherwise class functions will also be printed)
+					#endif
+				#endif
+			#endif
+		#endif
+	#endif
+	#define CS_GENERATE_CLASS_HTML_DOCUMENTATION_FUNCTION_NAME_APPEND "()"
+	
+		
 	#define CS_GENERATE_HTML_DOCUMENTATION_PRINT_FUNCTION_NAME_WITH_CLASS	//CS3o4a
 	#ifdef CS_GENERATE_HTML_DOCUMENTATION_PRINT_FUNCTION_NAME_WITH_CLASS
 		//#define CS_GENERATE_HTML_DOCUMENTATION_PRINT_FUNCTION_LIST_WITH_CLASS
@@ -87,7 +118,11 @@
 			#define CS_GENERATE_CODE_GENERIC_RESTRICT_HEADER_FILE_TYPE_STRICT	//only support either .h or .hpp headers (depending on CS_SUPPORT_GENERATED_CPP_CODE)
 		#endif
 	#endif
-	#define CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIERS	//e.g. private: private: bool functionName();
+	#define CS_SUPPORT_FUNCTION_ACCESS_SPECIFIERS
+	#ifdef CS_SUPPORT_FUNCTION_ACCESS_SPECIFIERS
+		#define CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIERS	//e.g. private: bool functionName();	//always true
+		#define CS_SUPPORT_FUNCTION_ACCESS_SPECIFIER_UNKNOWN 0
+	#endif
 	#define CS_CLASS_TYPE "class"
 	#define CS_CLASS_DELIMITER "::"
 	#define CS_OBJECT_DELIMITER "."
@@ -225,9 +260,7 @@
 	#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_OBJECT_REFERENCE_DELIMITER "->"
 	#define CS_GENERATE_CONST_FUNCTION_ARGUMENTS_TEXT_FUNCTION_ARGUMENT_DELIMITER ','
 
-	#ifndef CS_SUPPORT_GENERATED_CPP_CODE
-		#define CS_GENERATE_CPP_CLASSES	//added 3e1a/27-August-2014
-	#endif
+	#define CS_GENERATE_CPP_CLASSES	//added 3e1a/27-August-2014	//generateOOcode
 	#ifdef CS_GENERATE_CPP_CLASSES
 		//#define CS_GENERATE_CPP_CLASSES_DISABLE_OUTPUT	//safe for debug (no source/header file overwrites)
 		#define CS_GENERATE_CPP_CLASSES_TEXT_FUNCTION_PRIVATE "private: "
@@ -265,9 +298,16 @@
 
 //#define CS_CONVERT_INDENTED_LIST_TO_HTML_LIST					//temporary compile condition for class HTML documentation generation
 
-//#define CS_GENERATE_CLASS_HTML_DOCUMENTATION_FROM_CUSTOM_CSCLASS_FORMAT	//temporary compile condition for class HTML documentation generation
-#ifdef CS_GENERATE_CLASS_HTML_DOCUMENTATION_FROM_CUSTOM_CSCLASS_FORMAT
-	#define CS_GENERATE_CLASS_HTML_DOCUMENTATION_FROM_CUSTOM_CSCLASS_FORMAT_COMBINED	//use project wide CSclass files
+
+//old implementation (manually generated CSclass files):
+//#define CS_GENERATE_CLASS_HTML_DOCUMENTATION
+#ifdef CS_GENERATE_CLASS_HTML_DOCUMENTATION
+	#ifndef CS_GENERATE_CLASS_HTML_DOCUMENTATION_AUTOMATICALLY
+		//#define CS_GENERATE_CLASS_HTML_DOCUMENTATION_FROM_CUSTOM_CSCLASS_FORMAT	//temporary compile condition for class HTML documentation generation
+		#ifdef CS_GENERATE_CLASS_HTML_DOCUMENTATION_FROM_CUSTOM_CSCLASS_FORMAT
+			#define CS_GENERATE_CLASS_HTML_DOCUMENTATION_FROM_CUSTOM_CSCLASS_FORMAT_COMBINED	//use project wide CSclass files (as aopposed to file specific CSclass files)
+		#endif
+	#endif
 #endif
 
 

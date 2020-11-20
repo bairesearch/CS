@@ -26,7 +26,7 @@
  * File Name: CSfileClass.hpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3o4a 17-November-2020
+ * Project Version: 3o4b 17-November-2020
  * /
  *******************************************************************************/
 
@@ -35,8 +35,11 @@
 #define HEADER_CS_FILE_CLASS
 
 #include "CSglobalDefs.hpp"
+#include "CSclassClass.hpp"
+
 
 #define MAX_INCLUDE_DEPTH_FILE (20)	//file
+
 
 class CSfunction;
 class CSfileContainer;
@@ -46,7 +49,7 @@ private:
 public:
 
 	CSfile(void); // constructor declaration
-	~CSfile();	//  and destructor.
+	~CSfile(void);	//  and destructor.
 
 	//file/function [shared]
 	int id;			//file/function id
@@ -93,6 +96,10 @@ public:
 	#endif
 	#ifdef CS_OPTIMISE_FUNCTION_REFERENCE_TARGET_SEARCH
 	bool functionReferenceTargetSearched;
+	#endif
+	
+	#ifdef CS_SUPPORT_GENERATED_CPP_CODE_IDENTIFY_CLASSES
+	vector<CSclass*> classList;
 	#endif
 };
 

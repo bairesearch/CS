@@ -26,7 +26,7 @@
  * File Name: CSmain.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3o4a 17-November-2020
+ * Project Version: 3o4b 17-November-2020
  * /
  *******************************************************************************/
 
@@ -90,10 +90,10 @@ static char knownLimitationsMsg[] = "CS_SUPPORT_GENERATED_CPP_CODE:"
 "\n* CS_SUPPORT_GENERATED_CPP_CODE: functions in .cpp files can be defined with respect to their class owner: e.g. bool PROJfileClass::functionName()"
 "\n* function definitions in .cpp files must not have leading white space, and should be contained on a single line"
 "\n* function definitions in .cpp files must end with a } without any leading white space"
-#ifdef CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIERS
-"\n* CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIERS: function declarations for functions that wish to be parsed/added to tree must be contained in .hpp files within their respective class (e.g. class PROJfileClass), can have preceding white space and access specifiers (public:/private:/protected:), but must be contained on a single line: e.g. private: bool functionName();"
+#ifdef CS_SUPPORT_FUNCTION_ACCESS_SPECIFIERS
+"\n* CS_SUPPORT_FUNCTION_ACCESS_SPECIFIERS: function declarations for functions that wish to be parsed/added to tree must be contained in .hpp files within their respective class (e.g. class PROJfileClass), can have preceding white space and access specifiers (public:/private:/protected:), but must be contained on a single line: e.g. private: bool functionName();"
 #else
-"\n* !CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIERS: function declarations for functions that wish to be parsed/added to tree must be contained in .hpp files within their respective class (e.g. class PROJfileClass), can have preceding white space, but must be contained on a single line: e.g. bool functionName();"
+"\n* !CS_SUPPORT_FUNCTION_ACCESS_SPECIFIERS: function declarations for functions that wish to be parsed/added to tree must be contained in .hpp files within their respective class (e.g. class PROJfileClass), can have preceding white space, but must be contained on a single line: e.g. bool functionName();"
 #endif
 "\n* CS does not support relative paths in #include"
 "\n* CS requires include/header files that wish to be parsed/added to tree to be delimited with \" \" rather than < >"
@@ -341,7 +341,7 @@ int main(const int argc, const char** argv)
 
 	if(SHAREDvarsClass().argumentExists(argc, argv, "-version"))
 	{
-		cout << "CS.exe - Project Version: 3o4a 17-November-2020" << endl;
+		cout << "CS.exe - Project Version: 3o4b 17-November-2020" << endl;
 		exit(EXIT_OK);
 	}
 

@@ -26,7 +26,7 @@
  * File Name: CSoperations.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3o4a 17-November-2020
+ * Project Version: 3o4b 17-November-2020
  * /
  *******************************************************************************/
 
@@ -294,7 +294,7 @@ bool CSoperationsClass::getIncludeFileNamesFromCorHfile(CSfileContainer* firstRe
 											currentReferenceInIncludeFileList->firstFunctionInFunctionList = newfirstReferenceInFunctionList;
 
 											//getFunctionNamesFromFunctionDeclarationsInHfile{}: this opens the .h file hashIncludeFileName and extracts its function declarations (hashIncludeFileName is the current filename being parsed by this instance of getIncludeFileNamesFromCorHfile, ie "x.h" in "#include x.h")
-											bool hFileFound2 = getFunctionNamesFromFunctionDeclarationsInHfile(currentReferenceInIncludeFileList->firstFunctionInFunctionList, referenceName, level);
+											bool hFileFound2 = getFunctionNamesFromFunctionDeclarationsInHfile(currentReferenceInIncludeFileList, referenceName, level);
 											if(hFileFound2)
 											{
 												//getFunctionObjectNamesFromFunctionsInCfile{}: this opens the .c file (hashIncludeFileName equivalent) and locates all the functions corresponding to those declared in its .h file
@@ -409,9 +409,11 @@ bool CSoperationsClass::findFileObjectInFileObjectContainerList(constEffective C
 }
 
 
-bool CSoperationsClass::getFunctionNamesFromFunctionDeclarationsInHfile(CSfunction* firstFunctionInFunctionList, const string topLevelFileName, const int level)
+bool CSoperationsClass::getFunctionNamesFromFunctionDeclarationsInHfile(CSfile* fileObject, const string topLevelFileName, const int level)
 {
 	bool fileFound = false;
+	
+	CSfunction* firstFunctionInFunctionList = fileObject->firstFunctionInFunctionList;
 	
 	string parseFileName = topLevelFileName;
 
@@ -438,12 +440,12 @@ bool CSoperationsClass::getFunctionNamesFromFunctionDeclarationsInHfile(CSfuncti
 		#ifdef CS_SUPPORT_GENERATED_CPP_CODE
 		bool readingFunctionAccessSpecifier = false;
 		string functionAccessSpecifier = "";
-		#ifdef CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIERS
-		int functionAccessSpecifierType = CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIER_UNKNOWN;
+		#ifdef CS_SUPPORT_FUNCTION_ACCESS_SPECIFIERS
+		int functionAccessSpecifierType = CS_SUPPORT_FUNCTION_ACCESS_SPECIFIER_UNKNOWN;
+		int functionAccessSpecifierTypeLast = CS_SUPPORT_FUNCTION_ACCESS_SPECIFIER_UNKNOWN;
 		#endif
 		bool readingClassType = false;
 		bool readingClassName = false;
-		string classType = "";
 		string className = "";
 		bool parsingClassContents = false;
 		bool firstCharacterOfLine = true;
@@ -461,6 +463,10 @@ bool CSoperationsClass::getFunctionNamesFromFunctionDeclarationsInHfile(CSfuncti
 		string functionArguments = "";
 		string functionNameFull = "";
 
+		#ifdef CS_SUPPORT_GENERATED_CPP_CODE_IDENTIFY_CLASSES
+		CSclass* currentClass = NULL;
+		#endif
+		
 		while(prepareNewLine || parseFileObject.get(c))
 		{
 			if(prepareNewLine)
@@ -473,12 +479,11 @@ bool CSoperationsClass::getFunctionNamesFromFunctionDeclarationsInHfile(CSfuncti
 				#endif
 				#ifdef CS_SUPPORT_GENERATED_CPP_CODE
 				functionAccessSpecifier = "";
-				#ifdef CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIERS
-				functionAccessSpecifierType = CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIER_UNKNOWN;
+				#ifdef CS_SUPPORT_FUNCTION_ACCESS_SPECIFIERS
+				functionAccessSpecifierType = CS_SUPPORT_FUNCTION_ACCESS_SPECIFIER_UNKNOWN;
 				#endif
 				readingClassType = false;
 				readingClassName = false;
-				classType = "";
 				//className = "";
 				firstCharacterOfLine = true;
 				validClassType = false;
@@ -572,6 +577,9 @@ bool CSoperationsClass::getFunctionNamesFromFunctionDeclarationsInHfile(CSfuncti
 							className = "";
 							parsingClassContents = false;
 							className = "";
+							#ifdef CS_SUPPORT_FUNCTION_ACCESS_SPECIFIERS
+							functionAccessSpecifierTypeLast = CS_SUPPORT_FUNCTION_ACCESS_SPECIFIER_UNKNOWN;
+							#endif
 						}
 					} else
 					#endif
@@ -623,10 +631,11 @@ bool CSoperationsClass::getFunctionNamesFromFunctionDeclarationsInHfile(CSfuncti
 							functionAccessSpecifier = "";
 							readingClassName = true;
 						}
-						#ifdef CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIERS
-						else if(SHAREDvars.textInTextArray(functionAccessSpecifier, functionAccessSpecifierNameArray, CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIER_NUMBER_OF_TYPES, &functionAccessSpecifierType))
+						#ifdef CS_SUPPORT_FUNCTION_ACCESS_SPECIFIERS
+						else if(SHAREDvars.textInTextArray(functionAccessSpecifier, functionAccessSpecifierNameArray, CS_SUPPORT_FUNCTION_ACCESS_SPECIFIER_NUMBER_OF_TYPES, &functionAccessSpecifierType))
 						{
 							//cout << "functionAccessSpecifierType = " << functionAccessSpecifierType << endl;
+							functionAccessSpecifierTypeLast = functionAccessSpecifierType;
 							readingFunctionType = true;
 							//functionNameFull = functionNameFull + c;	//do not add functionAccessSpecifier to functionNameFull
 						}
@@ -643,6 +652,23 @@ bool CSoperationsClass::getFunctionNamesFromFunctionDeclarationsInHfile(CSfuncti
 							readingFunctionName = true;
 						}
 					}
+					#ifdef CS_SUPPORT_GENERATED_CPP_CODE_IDENTIFY_CLASS_CONSTRUCTORS
+					else if(c == '(')	
+					{
+						readingFunctionAccessSpecifier = false;
+						
+						#ifdef CS_SUPPORT_GENERATED_CPP_CODE_IDENTIFY_CLASS_CONSTRUCTORS_IGNORE
+						waitingForNewLine = true;
+						#else
+						functionType = "";
+						functionName = functionAccessSpecifier;
+						functionNameFull = functionName;
+						functionArguments = functionArguments + c;
+						
+						readingFunctionArguments = true;
+						#endif
+					}
+					#endif
 					else if(c == '\n')
 					{
 						prepareNewLine = true;
@@ -718,6 +744,25 @@ bool CSoperationsClass::getFunctionNamesFromFunctionDeclarationsInHfile(CSfuncti
 					{
 						className = className + c;
 					}
+					
+					#ifdef CS_SUPPORT_GENERATED_CPP_CODE_IDENTIFY_CLASSES
+					if(parsingClassContents)
+					{
+						currentClass = new CSclass();
+						currentClass->name = className;
+						#ifdef CS_SUPPORT_GENERATED_CPP_CODE_IDENTIFY_CLASS_PARAMETERS_FUNCTIONS_IGNORE_PRIMARY_FILE_CLASS
+						string classNameBase = "";
+						if(getClassNameBase(currentClass->name, &classNameBase))
+						{
+							if(classNameBase == fileObject->nameBase)
+							{
+								currentClass->primaryFileClass = true;
+							}
+						}
+						#endif
+						fileObject->classList.push_back(currentClass);
+					}
+					#endif		
 				}
 				#endif
 				else if(readingFunctionType)
@@ -759,6 +804,25 @@ bool CSoperationsClass::getFunctionNamesFromFunctionDeclarationsInHfile(CSfuncti
 						readingFunctionName = false;
 						readingFunctionArguments = true;
 					}
+					#ifdef CS_SUPPORT_GENERATED_CPP_CODE_IDENTIFY_CLASS_PARAMETERS
+					else if(c == ';')
+					{
+						//class parameter identified
+						waitingForNewLine = true;
+						
+						if(parsingClassContents)
+						{
+							CSparameter* classParameter = new CSparameter();
+							classParameter->name = functionName;
+							classParameter->type = functionType;
+							classParameter->isFunction = false;
+							#ifdef CS_SUPPORT_FUNCTION_ACCESS_SPECIFIERS
+							classParameter->functionAccessSpecifierType = functionAccessSpecifierTypeLast;
+							#endif
+							currentClass->parameterList.push_back(classParameter);
+						}		
+					}
+					#endif
 					else if(c == '\n')
 					{
 						prepareNewLine = true;
@@ -801,8 +865,16 @@ bool CSoperationsClass::getFunctionNamesFromFunctionDeclarationsInHfile(CSfuncti
 							#ifdef CS_SUPPORT_GENERATED_CPP_CODE
 							if(parsingClassContents)
 							{
+								string functionTypePrepend = functionType + STRING_SPACE;
+								#ifdef CS_SUPPORT_GENERATED_CPP_CODE_IDENTIFY_CLASS_CONSTRUCTORS
+								if(functionType == "")
+								{
+									//constructor/destructor detected
+									functionTypePrepend = "";
+								}
+								#endif
 								currentReferenceInFunctionList->name = functionName;	//CHECKTHIS
-								currentReferenceInFunctionList->nameFull = functionType + STRING_SPACE + className + CS_CLASS_DELIMITER + functionName + functionArguments;	//full function name to search for in cpp files
+								currentReferenceInFunctionList->nameFull = functionTypePrepend + className + CS_CLASS_DELIMITER + functionName + functionArguments;	//full function name to search for in cpp files
 								//cout << "parsingClassContents: currentReferenceInFunctionList->nameFull = " << currentReferenceInFunctionList->nameFull << endl;	
 								currentReferenceInFunctionList->nameFullHeader = functionNameFull;
 								//currentReferenceInFunctionList->nameWithClass = className + CS_CLASS_DELIMITER + functionName;
@@ -819,13 +891,18 @@ bool CSoperationsClass::getFunctionNamesFromFunctionDeclarationsInHfile(CSfuncti
 							currentReferenceInFunctionList->name = functionName;
 							currentReferenceInFunctionList->nameFull = functionNameFull;
 							#endif
-							currentReferenceInFunctionList->functionType = functionType;	//not used
-							currentReferenceInFunctionList->functionArguments = functionArguments;	//not used
+							currentReferenceInFunctionList->functionType = functionType;
+							#ifdef CS_USE_FUNCTION_ARGUMENTS_STRING
+							currentReferenceInFunctionList->functionArgumentsString = functionArguments;
+							#endif
+							#ifdef CS_USE_FUNCTION_ARGUMENTS_PARAMETER_LIST
+							currentReferenceInFunctionList->functionArgumentsParameterList = createParameterList(functionArguments);
+							#endif
 							#ifdef CS_SUPPORT_GENERATED_CPP_CODE
 							currentReferenceInFunctionList->className = className;
 							#endif
-							#ifdef CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIERS
-							currentReferenceInFunctionList->functionAccessSpecifierType = functionAccessSpecifierType;
+							#ifdef CS_SUPPORT_FUNCTION_ACCESS_SPECIFIERS
+							currentReferenceInFunctionList->functionAccessSpecifierType = functionAccessSpecifierTypeLast;	//OLD CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIERS: functionAccessSpecifierType;
 							#endif
 							#ifdef CS_IDENTIFY_FUNCTION_DECLARATION_ARGUMENTS
 							identifyFunctionDeclarationArguments(currentReferenceInFunctionList, &functionNameFull);
@@ -837,25 +914,33 @@ bool CSoperationsClass::getFunctionNamesFromFunctionDeclarationsInHfile(CSfuncti
 							currentReferenceInFunctionList->next = newCSReference;
 
 							currentReferenceInFunctionList = currentReferenceInFunctionList->next;
+							
+							#ifdef CS_SUPPORT_GENERATED_CPP_CODE_IDENTIFY_CLASS_PARAMETERS_FUNCTIONS
+							if(parsingClassContents)
+							{
+								//class parameter identified
+								CSparameter* classParameter = new CSparameter();
+								classParameter->name = functionName;
+								classParameter->type = functionType;
+								classParameter->isFunction = true;
+								#ifdef CS_SUPPORT_FUNCTION_ACCESS_SPECIFIERS
+								classParameter->functionAccessSpecifierType = functionAccessSpecifierTypeLast;
+								#endif
+								classParameter->functionArgumentsParameterList = createParameterList(&functionArguments);
+								currentClass->parameterList.push_back(classParameter);
+							}		
+							#endif
+						
+							waitingForNewLine = true;
+						}
+						else if(newC == '\n')
+						{
+							prepareNewLine = true;
 						}
 						else
 						{
+							waitingForNewLine = true;
 						}
-						
-						prepareNewLine = true;
-						lineCount--;	//to account for prepareNewLine expecting new line already detected
-						/*
-						readingFunctionArguments = false;
-						readingWhitespace = true;
-						#ifdef CS_HTML_DOCUMENTATION_GENERATE_FUNCTION_LIST_WITH_INDENTATION
-						functionReferenceIndentationInHfileTemp = 0;
-						#endif
-						#ifdef CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIERS
-						functionAccessSpecifier = "";
-						functionAccessSpecifierType = CS_SUPPORT_INLINE_FUNCTION_ACCESS_SPECIFIER_UNKNOWN;
-						#endif
-						functionNameFull = "";
-						*/
 					}
 					else if(c == '\n')
 					{
@@ -1263,13 +1348,10 @@ bool CSoperationsClass::searchFunctionStringForFunctionReferences(const CSfile* 
 				//search for public (out of class) function executions:
 				if(currentFunction->className != "")
 				{
-					int classNameLength = (currentFunction->className).length();
-					string classNameAppendDetected = (currentFunction->className).substr(classNameLength-CS_CLASS_NAME_APPEND.length(),CS_CLASS_NAME_APPEND.length());
-					if(classNameAppendDetected == CS_CLASS_NAME_APPEND)
+					string classObjectNameBase = "";
+					if(getClassNameBase(currentFunction->className, &classObjectNameBase))
 					{
 						//function class name ends with "Class" (function is expected to have been referenced via a default class object of name format: variant1/variant2)
-
-						string classObjectNameBase = (currentFunction->className).substr(0, classNameLength-CS_CLASS_NAME_APPEND.length());
 
 						//variant 1; class object declaration: [fileName]Class [fileName], functionNameToFind = [classNameMinusClass].functionName(
 						string functionReferenceToFind = classObjectNameBase + CS_OBJECT_DELIMITER + currentFunction->name + CHAR_OPEN_BRACKET;
@@ -1837,4 +1919,61 @@ string CSoperationsClass::generateFunctionString(const CSfunction* currentFuncti
 }
 #endif
 		
-			
+		
+vector<CSparameter*> CSoperationsClass::createParameterList(const string* functionArgumentsRaw)
+{
+	vector<CSparameter*> parameterList;
+	
+	bool stillParsingArguments = true;
+	int startPositionOfArgument = 0;
+	while(stillParsingArguments)
+	{
+		bool lastArgument = false;
+		int endPositionOfArgument = CSreferenceContainerClass.findEndPositionOfArgument(functionArgumentsRaw, startPositionOfArgument, &lastArgument);
+		if(lastArgument)
+		{
+			stillParsingArguments = false;
+		}
+
+		string currentArgument = functionArgumentsRaw->substr(startPositionOfArgument, endPositionOfArgument-startPositionOfArgument);
+
+		int startPositionOfArgumentName = currentArgument.rfind(CHAR_SPACE) + 1;	//last space
+		if(startPositionOfArgumentName == CPP_STRING_FIND_RESULT_FAIL_VALUE)
+		{
+			cerr << "generateHTMLdocumentationFunctionInputArguments{} error: (startPositionOfArgumentName == CPP_STRING_FIND_RESULT_FAIL_VALUE)" << endl;
+			exit(EXIT_ERROR);
+		}
+		string currentArgumentName = currentArgument.substr(startPositionOfArgumentName, endPositionOfArgument-startPositionOfArgumentName);
+		string currentArgumentType = currentArgument.substr(0, startPositionOfArgumentName);
+
+		CSparameter* newParameter = new CSparameter();
+		newParameter->name = currentArgumentName;
+		newParameter->type = currentArgumentType;
+		newParameter->isFunction = false;
+		parameterList.push_back(newParameter);
+
+		startPositionOfArgument = endPositionOfArgument+1;
+	}
+	
+	return parameterList;
+}
+
+#ifdef CS_SUPPORT_GENERATED_CPP_CODE
+bool CSoperationsClass::getClassNameBase(const string className, string* classNameBase)
+{
+	bool result = false;
+	*classNameBase = "";
+	
+	int classNameLength = className.length();
+	string classNameAppendDetected = className.substr(classNameLength-CS_CLASS_NAME_APPEND.length(),CS_CLASS_NAME_APPEND.length());
+	if(classNameAppendDetected == CS_CLASS_NAME_APPEND)
+	{
+		//class name ends with "Class"
+
+		*classNameBase = className.substr(0, classNameLength-CS_CLASS_NAME_APPEND.length());
+		result = true;
+	}		
+	
+	return result;				
+}
+#endif								

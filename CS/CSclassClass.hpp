@@ -23,7 +23,7 @@
 
 /*******************************************************************************
  *
- * File Name: CSdataflow.cpp
+ * File Name: CSclassClass.hpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2020 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
  * Project Version: 3o4b 17-November-2020
@@ -31,4 +31,27 @@
  *******************************************************************************/
 
 
-#include "CSdataflow.hpp"
+#ifndef HEADER_CS_CLASS_CLASS
+#define HEADER_CS_CLASS_CLASS
+
+#include "CSglobalDefs.hpp"
+#include "CSparameterClass.hpp"
+
+
+class CSclass{
+private:
+	/*There are currently no private attributes of this class*/
+public:
+
+	CSclass(void); // constructor declaration
+	~CSclass(void);	//  and destructor.
+	
+	string name;
+	vector<CSparameter*> parameterList;
+	#ifdef CS_SUPPORT_GENERATED_CPP_CODE_IDENTIFY_CLASS_PARAMETERS_FUNCTIONS_IGNORE_PRIMARY_FILE_CLASS
+	bool primaryFileClass;
+	#endif
+};
+
+#endif
+
