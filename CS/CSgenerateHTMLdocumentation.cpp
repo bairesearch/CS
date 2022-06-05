@@ -1,23 +1,6 @@
-/*******************************************************************************
+ /*******************************************************************************
  *
- * No License
- * 
- * This work is under exclusive copyright (c) Baxter AI (baxterai.com). 
- * Nobody else can use, copy, distribute, or modify this work without being 
- * at risk of take-downs, shake-downs, or litigation. 
- * 
- * By publishing this source code in a public repository on GitHub, Terms of 
- * Service have been accepted by which Baxter AI have allowed others to view 
- * and fork their repository.
- * 
- * If you find software that doesn't have a license, that generally means you 
- * have no permission from the creators of the software to use, modify, or 
- * share the software. Although a code host such as GitHub may allow you to 
- * view and fork the code, this does not imply that you are permitted to use, 
- * modify, or share the software for any purpose.
- *
- * This notice has been derived from https://choosealicense.com/no-permission 
- * (https://web.archive.org/web/20180312144938/https://choosealicense.com/no-permission)
+ * License: GNU Affero General Public License version 3 (AGPLv3)
  *
  *******************************************************************************/
 
@@ -26,7 +9,7 @@
  * File Name: CSgenerateHTMLdocumentation.cpp
  * Author: Richard Bruce Baxter - Copyright (c) 2005-2022 Baxter AI (baxterai.com)
  * Project: Code Structure viewer
- * Project Version: 3p5a 14-March-2022
+ * Project Version: 3q1a 05-June-2022
  * /
  *******************************************************************************/
 
@@ -85,7 +68,7 @@ string CSgenerateHTMLdocumentationClass::generateHTMLdocumentationHeader(const s
 		
 	if(htmlHeader)
 	{
-		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + titleName + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + titleName + " Documentation</h3><p>Automatically generated with Code Structure Viewer (CS), Project Version: 3p5a 14-March-2022</p>\n";
+		HTMLdocumentationHeader = HTMLdocumentationHeader + "<html><head><title>" + titleName + " Documentation</title><style type=\"text/css\">TD { font-size:75%; } </style></head><body><h3>" + titleName + " Documentation</h3><p>Automatically generated with Code Structure Viewer (CS), Project Version: 3q1a 05-June-2022</p>\n";
 		#ifdef CS_GENERATE_CLASS_HTML_DOCUMENTATION_ADD_COPYRIGHT
 		HTMLdocumentationHeader = HTMLdocumentationHeader + "<p>Copyright &copy; 2020, BAI Research. All Rights Reserved.</p>\n";
 		#endif
